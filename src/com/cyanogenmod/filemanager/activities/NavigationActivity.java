@@ -26,6 +26,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -82,6 +84,7 @@ import com.cyanogenmod.filemanager.util.ExceptionUtil;
 import com.cyanogenmod.filemanager.util.FileHelper;
 import com.cyanogenmod.filemanager.util.StorageHelper;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -259,6 +262,8 @@ public class NavigationActivity extends Activity
 
     private View mOptionsAnchorView;
 
+    private NfcAdapter mNfcAdapter;
+
     /**
      * @hide
      */
@@ -287,6 +292,9 @@ public class NavigationActivity extends Activity
 
         //Set the main layout of the activity
         setContentView(R.layout.navigation);
+
+        //Initialize nfc adapter
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         //Request features
         if (!AndroidHelper.isTablet(this)) {
@@ -904,6 +912,20 @@ public class NavigationActivity extends Activity
     @Override
     public void onSelectionChanged(NavigationView navView, List<FileSystemObject> selectedItems) {
         this.mSelectionBar.setSelection(selectedItems);
+        if (selectedItems.size() > 0) {
+            List<Uri> fileUri = new ArrayList<Uri>();
+            for (FileSystemObject f : selectedItems) {
+                //Beam ignores folders and system files
+                if (!FileHelper.isDirectory(f) && !FileHelper.isSystemFile(f)) {
+                    fileUri.add(Uri.fromFile(new File(f.getFullPath())));
+                }
+            }
+            if (fileUri.size() > 0) {
+                mNfcAdapter.setBeamPushUris(fileUri.toArray(new Uri[fileUri.size()]), this);
+                return;
+            }
+        }
+        mNfcAdapter.setBeamPushUris(null, this);
     }
 
     /**
