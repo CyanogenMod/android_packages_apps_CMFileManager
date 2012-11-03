@@ -26,6 +26,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
+import android.nfc.NfcEvent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -82,6 +87,7 @@ import com.cyanogenmod.filemanager.util.ExceptionUtil;
 import com.cyanogenmod.filemanager.util.FileHelper;
 import com.cyanogenmod.filemanager.util.StorageHelper;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -287,6 +293,30 @@ public class NavigationActivity extends Activity
 
         //Set the main layout of the activity
         setContentView(R.layout.navigation);
+
+        //Initialize nfc adapter
+        NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        mNfcAdapter.setBeamPushUrisCallback(new NfcAdapter.CreateBeamUrisCallback() {
+            @Override
+            public Uri[] createBeamUris(NfcEvent event) {
+                List<FileSystemObject> selectedFiles = getNavigationView(NavigationActivity.
+                        this.mCurrentNavigationView).getSelectedFiles();
+                if (selectedFiles.size() > 0) {
+                    List<Uri> fileUri = new ArrayList<Uri>();
+                    for (FileSystemObject f : selectedFiles) {
+                        //Beam ignores folders and system files
+                        if (!FileHelper.isDirectory(f) && !FileHelper.isSystemFile(f)) {
+                            System.out.println(f.toString());
+                            fileUri.add(Uri.fromFile(new File(f.getFullPath())));
+                        }
+                    }
+                    if (fileUri.size() > 0) {
+                        return fileUri.toArray(new Uri[fileUri.size()]);
+                    }
+                }
+                return null;
+            }
+        }, this);
 
         //Request features
         if (!AndroidHelper.isTablet(this)) {
