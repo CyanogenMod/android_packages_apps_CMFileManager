@@ -200,7 +200,7 @@
     <string name="actions_menu_select">Selecionar</string>
     <string name="actions_menu_deselect">Deselecionar</string>
     <string name="actions_menu_paste_selection">Colar seleção</string>
-    <string name="actions_menu_move_selection">Movar seleção</string>
+    <string name="actions_menu_move_selection">Mover seleção</string>
     <string name="actions_menu_delete_selection">Excluir seleção</string>
     <string name="actions_menu_compress_selection">Comprimir seleção</string>
     <string name="actions_menu_create_link">Criar atalho</string>
