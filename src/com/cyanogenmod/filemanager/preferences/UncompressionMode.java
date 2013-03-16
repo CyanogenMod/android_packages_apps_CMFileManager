@@ -63,7 +63,11 @@ public enum UncompressionMode {
     /**
      * Uncompress using Unix compress algorithm
      */
-    C_UNXZ("xz", false); //$NON-NLS-1$
+    C_UNXZ("xz", false), //$NON-NLS-1$
+    /**
+     * Uncompress using Rar algorithm
+     */
+    C_UNRAR("rar", true); //$NON-NLS-1$
 
     /**
      * The file extension

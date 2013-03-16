@@ -615,6 +615,7 @@
   <string name="compression_mode_tar_bzip" translatable="false">Tar/bzip (tar.bz2)</string>
   <string name="compression_mode_gzip" translatable="false">Gzip (gz)</string>
   <string name="compression_mode_bzip" translatable="false">Bzip (bz2)</string>
+  <string name="compression_mode_zip" translatable="false">Zip (zip)</string>
 
   <!-- Shortcut. Failed to handle the shortcut -->
   <string name="shortcut_failed_msg">Failed to handle the shortcut.</string>

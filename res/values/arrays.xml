@@ -85,6 +85,7 @@
     <item>@string/compression_mode_tar_bzip</item>
     <item>@string/compression_mode_gzip</item>
     <item>@string/compression_mode_bzip</item>
+    <item>@string/compression_mode_zip</item>
   </string-array>
 
   <!-- The default theme definition -->

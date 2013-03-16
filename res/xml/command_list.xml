@@ -92,6 +92,7 @@
   <command commandId="tar" commandPath="/system/xbin/tar" commandArgs="-C%1$s -%2$scvf %3$s [@]" />
   <command commandId="gzip" commandPath="/system/bin/gzip" commandArgs="%1$s" />
   <command commandId="bzip" commandPath="/system/xbin/bzip2" commandArgs="-f %1$s" />
+  <command commandId="zip" commandPath="cd" commandArgs="%1$s &amp;&amp; ( /system/xbin/zip -9 -r -y %2$s [@] || cd /)" />
 
   <!-- Uncompress -->
   <command commandId="untar" commandPath="/system/bin/mkdir" commandArgs="-p %2$s &amp;&amp; /system/xbin/tar -C %2$s -%1$sxvf %3$s" />
@@ -101,5 +102,6 @@
   <command commandId="unlzma" commandPath="/system/xbin/unlzma" commandArgs="-f %1$s" />
   <command commandId="uncompress" commandPath="/system/xbin/uncompress" commandArgs="-f %1$s" />
   <command commandId="unxz" commandPath="/system/xbin/unxz" commandArgs="-f %1$s" />
+  <command commandId="unrar" commandPath="/system/xbin/unrar" commandArgs="x -ry -c- -cfg- -kb -p- -o+ %2$s %1$s" />
 
 </CommandList>

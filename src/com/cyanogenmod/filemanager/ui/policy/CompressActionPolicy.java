@@ -109,9 +109,10 @@ public final class CompressActionPolicy extends ActionsPolicy {
         final List<FileSystemObject> selection = onSelectionListener.onRequestSelectedFiles();
         if (selection != null && selection.size() > 0) {
             // Show a dialog to allow the user make the compression mode choice
+            final String[] labels = getSupportedCompressionModesLabels(ctx, selection);
             AlertDialog dialog = DialogHelper.createSingleChoiceDialog(
                     ctx, R.string.compression_mode_title,
-                    getSupportedCompressionModesLabels(ctx, selection),
+                    labels,
                     CompressionMode.AC_GZIP.ordinal(),
                     new DialogHelper.OnSelectChoiceListener() {
                         @Override
@@ -119,7 +120,7 @@ public final class CompressActionPolicy extends ActionsPolicy {
                             // Do the compression
                             compress(
                                     ctx,
-                                    getCompressionModeFromUserChoice(choice),
+                                    getCompressionModeFromUserChoice(ctx, labels, choice),
                                     selection,
                                     onSelectionListener,
                                     onRequestRefreshListener);
@@ -151,6 +152,7 @@ public final class CompressActionPolicy extends ActionsPolicy {
         items.add(fso);
 
         // Show a dialog to allow the user make the compression mode choice
+        final String[] labels = getSupportedCompressionModesLabels(ctx, items);
         AlertDialog dialog = DialogHelper.createSingleChoiceDialog(
                 ctx, R.string.compression_mode_title,
                 getSupportedCompressionModesLabels(ctx, items),
@@ -161,7 +163,7 @@ public final class CompressActionPolicy extends ActionsPolicy {
                         // Do the compression
                         compress(
                                 ctx,
-                                getCompressionModeFromUserChoice(choice),
+                                getCompressionModeFromUserChoice(ctx, labels, choice),
                                 items,
                                 onSelectionListener,
                                 onRequestRefreshListener);
@@ -402,6 +404,7 @@ public final class CompressActionPolicy extends ActionsPolicy {
 
 
                 // Any exception?
+                Thread.sleep(100L);
                 if (this.mListener.mCause != null) {
                     throw this.mListener.mCause;
                 }
@@ -656,6 +659,7 @@ public final class CompressActionPolicy extends ActionsPolicy {
 
 
                 // Any exception?
+                Thread.sleep(100L);
                 if (this.mListener.mCause != null) {
                     throw this.mListener.mCause;
                 }
@@ -774,14 +778,29 @@ public final class CompressActionPolicy extends ActionsPolicy {
     private static String[] getSupportedCompressionModesLabels(
                                 Context ctx, List<FileSystemObject> fsos) {
         String[] labels = ctx.getResources().getStringArray(R.array.compression_modes_labels);
+        // If more than a file are requested, compression is not available
+        // The same applies if the unique item is a folder
         if (fsos.size() > 1 || (fsos.size() == 1 && FileHelper.isDirectory(fsos.get(0)))) {
-            // If more that a file is requested, compression is not available
-            // The same applies if the unique item is a folder
             ArrayList<String> validLabels = new ArrayList<String>();
             CompressionMode[] values = CompressionMode.values();
             int cc = values.length;
             for (int i = 0; i < cc; i++) {
                 if (values[i].mArchive) {
+                    if (values[i].mCommandId == null ||
+                        FileManagerApplication.hasOptionalCommand(values[i].mCommandId)) {
+                        validLabels.add(labels[i]);
+                    }
+                }
+            }
+            labels = validLabels.toArray(new String[]{});
+        } else {
+            // Remove optional commands
+            ArrayList<String> validLabels = new ArrayList<String>();
+            CompressionMode[] values = CompressionMode.values();
+            int cc = values.length;
+            for (int i = 0; i < cc; i++) {
+                if (values[i].mCommandId == null ||
+                    FileManagerApplication.hasOptionalCommand(values[i].mCommandId)) {
                     validLabels.add(labels[i]);
                 }
             }
@@ -793,14 +812,19 @@ public final class CompressActionPolicy extends ActionsPolicy {
     /**
      * Method that returns the compression mode from the user choice
      *
+     * @param ctx The current context
+     * @param labels The dialog labels
      * @param choice The choice of the user
      * @return CompressionMode The compression mode
      */
-    static CompressionMode getCompressionModeFromUserChoice(int choice) {
+    static CompressionMode getCompressionModeFromUserChoice(
+            Context ctx, String[] labels, int choice) {
+        String label = labels[choice];
+        String[] allLabels = ctx.getResources().getStringArray(R.array.compression_modes_labels);
         CompressionMode[] values = CompressionMode.values();
-        int cc = values.length;
+        int cc = allLabels.length;
         for (int i = 0; i < cc; i++) {
-            if (values[i].ordinal() == choice) {
+            if (allLabels[i].compareTo(label) == 0) {
                 return values[i];
             }
         }

@@ -40,6 +40,8 @@ import com.cyanogenmod.filemanager.util.MimeTypeHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -53,6 +55,8 @@ public final class FileManagerApplication extends Application {
 
     private static boolean DEBUG = false;
     private static Properties sSystemProperties;
+
+    private static Map<String, Boolean> sOptionalCommandsMap;
 
     /**
      * A constant that contains the main process name.
@@ -234,6 +238,9 @@ public final class FileManagerApplication extends Application {
         // Check if the device is rooted
         sIsDeviceRooted = areShellCommandsPresent();
 
+        // Check optional commands
+        loadOptionalCommands();
+
         //Sets the default preferences if no value is set yet
         Preferences.loadDefaults();
 
@@ -298,6 +305,19 @@ public final class FileManagerApplication extends Application {
      */
     public static boolean isDeviceRooted() {
         return sIsDeviceRooted;
+    }
+
+    /**
+     * Method that returns if a command is present in the system
+     *
+     * @param commandId The command key
+     * @return boolean If the command is present
+     */
+    public static boolean hasOptionalCommand(String commandId) {
+        if (!sOptionalCommandsMap.containsKey(commandId)){
+            return false;
+        }
+        return sOptionalCommandsMap.get(commandId).booleanValue();
     }
 
     /**
@@ -470,5 +490,38 @@ public final class FileManagerApplication extends Application {
                     "Failed to read shell commands.", e); //$NON-NLS-1$
         }
         return false;
+    }
+
+    @SuppressWarnings("boxing")
+    private void loadOptionalCommands() {
+        try {
+            sOptionalCommandsMap = new HashMap<String, Boolean>();
+
+            String shellCommands = getString(R.string.shell_optional_commands);
+            String[] commands = shellCommands.split(","); //$NON-NLS-1$
+            int cc = commands.length;
+            if (cc == 0) {
+                Log.w(TAG, "No optional commands."); //$NON-NLS-1$
+                return;
+            }
+            for (int i = 0; i < cc; i++) {
+                String c = commands[i].trim();
+                String key = c.substring(0, c.indexOf("=")).trim(); //$NON-NLS-1$
+                c = c.substring(c.indexOf("=")+1).trim(); //$NON-NLS-1$
+                if (c.length() == 0) continue;
+                File cmd = new File(c);
+                Boolean found = Boolean.valueOf(cmd.exists() && cmd.isFile());
+                sOptionalCommandsMap.put(key, found);
+                if (DEBUG) {
+                    Log.w(TAG,
+                            String.format(
+                                    "Optional command %s %s.", //$NON-NLS-1$
+                                    c, found ? "found" : "not found")); //$NON-NLS-1$ //$NON-NLS-2$
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG,
+                    "Failed to read optional shell commands.", e); //$NON-NLS-1$
+        }
     }
 }

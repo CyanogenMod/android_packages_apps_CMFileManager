@@ -1289,9 +1289,18 @@ public final class CommandHelper {
             wrapperListener.mUnmount = unmount;
             wrapperListener.mMountPoint = executable2.getDstWritableMountPoint();
 
-            //- Compress
-            execute(context, executable1, c);
-            return executable1;
+            // Some archive modes requires a new file. Ensure that the created
+            // file doesn't exists
+            DeleteFileExecutable executable3 =
+                                c.getExecutableFactory().
+                                    newCreator().
+                                        createDeleteFileExecutable(compressOutFile);
+            writableExecute(context, executable3, c, true);
+            if(executable3.getResult().booleanValue()){
+                //- Compress
+                execute(context, executable1, c);
+                return executable1;
+            }
         }
         throw new ExecutionException(
                 String.format("Fail to create file %s", compressOutFile)); //$NON-NLS-1$

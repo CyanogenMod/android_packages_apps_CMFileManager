@@ -868,7 +868,13 @@ public final class FileHelper {
         final String[] VALID =
                 {
                     "tar", "tgz", "tar.gz", "tar.bz2", "tar.lzma",
-                    "zip", "gz", "bz2", "lzma", "xz", "Z"
+                    "zip", "gz", "bz2", "lzma", "xz", "Z", "rar"
+                };
+        // Null values for required commands
+        final String[] OPT_KEYS =
+                {
+                    null, null, null, null, null,
+                    "unzip", null, null, "unlzma", "unxz", "uncompress", "unrar"
                 };
 
         // Check that have a valid file
@@ -883,7 +889,12 @@ public final class FileHelper {
             int cc = VALID.length;
             for (int i = 0; i < cc; i++) {
                 if (VALID[i].compareToIgnoreCase(ext) == 0) {
-                    return true;
+                    // Is the command present
+                    if (OPT_KEYS[i] != null &&
+                        FileManagerApplication.hasOptionalCommand(OPT_KEYS[i])) {
+                        return true;
+                    }
+                    return false;
                 }
             }
         }

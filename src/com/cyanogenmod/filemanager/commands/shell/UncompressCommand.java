@@ -85,7 +85,11 @@ public class UncompressCommand extends AsyncResultProgram implements UncompressE
         /**
          * Uncompress using Unix compress algorithm
          */
-        C_UNXZ(UNXZ_ID, "", UncompressionMode.C_UNXZ); //$NON-NLS-1$
+        C_UNXZ(UNXZ_ID, "", UncompressionMode.C_UNXZ), //$NON-NLS-1$
+        /**
+         * Uncompress using Rar algorithm
+         */
+        A_UNRAR(UNRAR_ID, "", UncompressionMode.C_UNRAR); //$NON-NLS-1$
 
         final String mId;
         final String mFlag;
@@ -112,12 +116,13 @@ public class UncompressCommand extends AsyncResultProgram implements UncompressE
     private static final String UNLZMA_ID = "unlzma"; //$NON-NLS-1$
     private static final String UNCOMPRESS_ID = "uncompress"; //$NON-NLS-1$
     private static final String UNXZ_ID = "unxz"; //$NON-NLS-1$
+    private static final String UNRAR_ID = "unrar"; //$NON-NLS-1$
 
     private Boolean mResult;
     private String mPartial;
 
     private final String mOutFile;
-    private final boolean mIsArchive;
+    private final Mode mMode;
 
     /**
      * Constructor of <code>UncompressCommand</code>.<br/>
@@ -146,6 +151,7 @@ public class UncompressCommand extends AsyncResultProgram implements UncompressE
             throw new InvalidCommandDefinitionException(
                             "Unsupported uncompress mode"); //$NON-NLS-1$
         }
+        this.mMode = mode;
 
         // Retrieve information about the uncompress process
         if (dst != null) {
@@ -153,7 +159,6 @@ public class UncompressCommand extends AsyncResultProgram implements UncompressE
         } else {
             this.mOutFile = resolveOutputFile(src);
         }
-        this.mIsArchive = mode.mMode.mArchive;
     }
 
     /**
@@ -173,7 +178,10 @@ public class UncompressCommand extends AsyncResultProgram implements UncompressE
         // Send the last partial data
         if (this.mPartial != null && this.mPartial.length() > 0) {
             if (getAsyncResultListener() != null) {
-                getAsyncResultListener().onPartialResult(this.mPartial);
+                String data = processPartialResult(this.mPartial);
+                if (data != null) {
+                    getAsyncResultListener().onPartialResult(data);
+                }
             }
         }
         this.mPartial = ""; //$NON-NLS-1$
@@ -194,14 +202,20 @@ public class UncompressCommand extends AsyncResultProgram implements UncompressE
         // Return all the lines, except the last
         for (int i = 0; i < lines.length-1; i++) {
             if (getAsyncResultListener() != null) {
-                getAsyncResultListener().onPartialResult(lines[i]);
+                String data = processPartialResult(lines[i]);
+                if (data != null) {
+                    getAsyncResultListener().onPartialResult(data);
+                }
             }
         }
 
         // Return the last line?
         if (endsWithNewLine) {
             if (getAsyncResultListener() != null) {
-                getAsyncResultListener().onPartialResult(lines[lines.length-1]);
+                String data = processPartialResult(lines[lines.length-1]);
+                if (data != null) {
+                    getAsyncResultListener().onPartialResult(data);
+                }
             }
             this.mPartial = ""; //$NON-NLS-1$
         } else {
@@ -263,7 +277,36 @@ public class UncompressCommand extends AsyncResultProgram implements UncompressE
      */
     @Override
     public boolean IsArchive() {
-        return this.mIsArchive;
+        return this.mMode.mMode.mArchive;
+    }
+
+    /**
+     * Method that processes a line to determine if it's a valid partial result
+     *
+     * @param line The line to process
+     * @return String The processed line
+     */
+    private String processPartialResult(String line) {
+        if (this.mMode.compareTo(Mode.A_UNRAR) == 0) {
+            if (line.startsWith("Extracting  ")) { //$NON-NLS-1$
+                int pos = line.indexOf((char)8);
+                if (pos != -1) {
+                    // Remove progress
+                    return line.substring(12, pos).trim();
+                }
+                return line.substring(12).trim();
+            }
+            return null;
+        }
+
+        if (this.mMode.compareTo(Mode.A_UNZIP) == 0) {
+            if (line.startsWith("  inflating: ")) { //$NON-NLS-1$
+                return line.substring(13).trim();
+            }
+            return null;
+        }
+
+        return line;
     }
 
     /**
@@ -303,6 +346,7 @@ public class UncompressCommand extends AsyncResultProgram implements UncompressE
                     return new String[]{mode.mFlag, out, src};
 
                 case A_UNZIP:
+                case A_UNRAR:
                     return new String[]{out, src};
 
                 case C_GUNZIP:

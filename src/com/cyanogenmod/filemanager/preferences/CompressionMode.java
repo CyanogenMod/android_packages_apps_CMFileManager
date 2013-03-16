@@ -23,27 +23,31 @@ public enum CompressionMode {
     /**
      * Archive using Tar algorithm
      */
-    A_TAR("tar", true), //$NON-NLS-1$
+    A_TAR("tar", true, null), //$NON-NLS-1$
     /**
      * Archive and compress using Gzip algorithm
      */
-    AC_GZIP("tar.gz", true), //$NON-NLS-1$
+    AC_GZIP("tar.gz", true, null), //$NON-NLS-1$
     /**
      * Archive and compress using Gzip algorithm
      */
-    AC_GZIP2("tgz", true), //$NON-NLS-1$
+    AC_GZIP2("tgz", true, null), //$NON-NLS-1$
     /**
      * Archive and compress using Bzip algorithm
      */
-    AC_BZIP("tar.bz2", true), //$NON-NLS-1$
+    AC_BZIP("tar.bz2", true, null), //$NON-NLS-1$
     /**
      * Compress using Gzip algorithm
      */
-    C_GZIP("gz", false), //$NON-NLS-1$
+    C_GZIP("gz", false, null), //$NON-NLS-1$
     /**
      * Compress using Bzip algorithm
      */
-    C_BZIP("bz2", false); //$NON-NLS-1$
+    C_BZIP("bz2", false, null), //$NON-NLS-1$
+    /**
+     * Archive using Zip algorithm
+     */
+    A_ZIP("zip", true, "zip"); //$NON-NLS-1$ //$NON-NLS-2$
 
     /**
      * The file extension
@@ -53,6 +57,10 @@ public enum CompressionMode {
      * If the file is an archive or archive-compressed (true) or a compressed file (false)
      */
     public final boolean mArchive;
+    /**
+     * If the compress mode requires the present of an optional file (null == required)
+     */
+    public final String mCommandId;
 
     /**
      * Constructor of <code>CompressionMode</code>
@@ -60,8 +68,9 @@ public enum CompressionMode {
      * @param extension The output extension
      * @param archive If the output is an archive or archive-compressed
      */
-    private CompressionMode(String extension, boolean archive) {
+    private CompressionMode(String extension, boolean archive, String commandId) {
         this.mExtension = extension;
         this.mArchive = archive;
+        this.mCommandId = commandId;
     }
 }
