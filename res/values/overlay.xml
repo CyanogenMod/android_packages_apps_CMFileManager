@@ -68,7 +68,9 @@
     /system/xbin/unlzma,
     /system/xbin/unxz,
     /system/xbin/unzip,
-    /system/xbin/xargs
+    /system/xbin/xargs,
+    /system/xbin/md5sum,
+    /system/xbin/sha1sum
   </string>
 
   <!-- The mounts file -->

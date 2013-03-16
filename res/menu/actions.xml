@@ -139,6 +139,10 @@
       android:showAsAction="ifRoom"
       android:title="@string/actions_menu_add_shortcut"/>
     <item
+      android:id="@+id/mnu_actions_compute_checksum"
+      android:showAsAction="ifRoom"
+      android:title="@string/actions_menu_compute_checksum"/>
+    <item
       android:id="@+id/mnu_actions_open_parent_folder"
       android:showAsAction="ifRoom"
       android:title="@string/actions_menu_open_parent_folder"/>

@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.cyanogenmod.filemanager.listeners.OnRequestRefreshListener;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
+import com.cyanogenmod.filemanager.ui.dialogs.ComputeChecksumDialog;
 import com.cyanogenmod.filemanager.ui.dialogs.FsoPropertiesDialog;
 import com.cyanogenmod.filemanager.util.DialogHelper;
 
@@ -68,4 +69,17 @@ public final class InfoActionPolicy extends ActionsPolicy {
         dialog.show();
     }
 
+    /**
+     * Method that show a new dialog for compute checksum of a {@link FileSystemObject}.
+     *
+     * @param ctx The current context
+     * @param fso The file system object
+     * of the {@link FileSystemObject} were changed (optional)
+     */
+    public static void showComputeChecksumDialog(
+            final Context ctx, final FileSystemObject fso) {
+        //Show a the filesystem info dialog
+        final ComputeChecksumDialog dialog = new ComputeChecksumDialog(ctx, fso);
+        dialog.show();
+    }
 }

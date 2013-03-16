@@ -38,6 +38,7 @@ import com.cyanogenmod.filemanager.adapters.TwoColumnsMenuListAdapter;
 import com.cyanogenmod.filemanager.listeners.OnRequestRefreshListener;
 import com.cyanogenmod.filemanager.listeners.OnSelectionListener;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
+import com.cyanogenmod.filemanager.model.Symlink;
 import com.cyanogenmod.filemanager.model.SystemFile;
 import com.cyanogenmod.filemanager.preferences.AccessMode;
 import com.cyanogenmod.filemanager.ui.ThemeManager;
@@ -394,6 +395,11 @@ public class ActionsDialog implements OnItemClickListener, OnItemLongClickListen
                 IntentsActionPolicy.createShortcut(this.mContext, this.mFso);
                 break;
 
+            //- Compute checksum
+            case R.id.mnu_actions_compute_checksum:
+                InfoActionPolicy.showComputeChecksumDialog(this.mContext, this.mFso);
+                break;
+
             //- Properties
             case R.id.mnu_actions_properties:
             case R.id.mnu_actions_properties_current_folder:
@@ -613,6 +619,11 @@ public class ActionsDialog implements OnItemClickListener, OnItemLongClickListen
             MimeTypeCategory category = MimeTypeHelper.getCategory(this.mContext, this.mFso);
             if (category.compareTo(MimeTypeCategory.EXEC) != 0) {
                 menu.removeItem(R.id.mnu_actions_execute);
+            }
+
+            //- Checksum (only supported for files)
+            if (FileHelper.isDirectory(this.mFso) || this.mFso instanceof Symlink) {
+                menu.removeItem(R.id.mnu_actions_compute_checksum);
             }
         }
 

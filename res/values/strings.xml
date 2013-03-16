@@ -62,6 +62,10 @@
   <string name="cancelled_message">Cancelled.</string>
   <!-- Error message -->
   <string name="error_message">Error.</string>
+  <!-- Copy text content description -->
+  <string name="copy_text_cd">Tap to copy text to clipboard</string>
+  <!-- Copy text content message -->
+  <string name="copy_text_msg">Text copied to clipboard</string>
 
   <!-- Warning dialog title -->
   <string name="warning_title">Warning</string>
@@ -522,6 +526,8 @@
   <string name="actions_menu_add_shortcut">Add shortcut</string>
   <!-- Actions Dialog * Menu * Open parent folder -->
   <string name="actions_menu_open_parent_folder">Open parent</string>
+  <!-- Actions Dialog * Menu * Compute checksum -->
+  <string name="actions_menu_compute_checksum">Compute checksum</string>
 
   <!-- Actions * Ask user prior to do an undone operation. Dialog message -->
   <string name="actions_ask_undone_operation_msg">
@@ -567,6 +573,17 @@
   <!-- Execution console * The script execution time seconds string -->
   <string name="execution_console_script_execution_time_text">
     <xliff:g id="seconds">%1$s</xliff:g> sec.</string>
+
+  <!-- Compute checksum * Title -->
+  <string name="compute_checksum_title">Compute checksum</string>
+  <!-- Compute checksum * The file name label -->
+  <string name="compute_checksum_filename_label">File:</string>
+  <!-- Compute checksum * The MD5 label -->
+  <string name="compute_checksum_md5_label" translatable="false">MD5:</string>
+  <!-- Compute checksum * The SHA1 label -->
+  <string name="compute_checksum_sha1_label" translatable="false">SHA-1:</string>
+  <!-- Compute checksum * The computing checksum message-->
+  <string name="compute_checksum_computing_checksum_msg">Computing checksum\u2026</string>
 
   <!-- Mime/Types * Folder -->
   <string name="mime_folder">Folder</string>

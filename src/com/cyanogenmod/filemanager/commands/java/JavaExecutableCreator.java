@@ -20,6 +20,7 @@ import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.commands.AsyncResultListener;
 import com.cyanogenmod.filemanager.commands.ChangeOwnerExecutable;
 import com.cyanogenmod.filemanager.commands.ChangePermissionsExecutable;
+import com.cyanogenmod.filemanager.commands.ChecksumExecutable;
 import com.cyanogenmod.filemanager.commands.CompressExecutable;
 import com.cyanogenmod.filemanager.commands.CopyExecutable;
 import com.cyanogenmod.filemanager.commands.CreateDirExecutable;
@@ -388,6 +389,16 @@ public class JavaExecutableCreator implements ExecutableCreator {
             AsyncResultListener asyncResultListener)
             throws CommandNotFoundException {
         throw new CommandNotFoundException("Not implemented"); //$NON-NLS-1$
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ChecksumExecutable createChecksumExecutable(
+            String src, AsyncResultListener asyncResultListener)
+            throws CommandNotFoundException {
+        return new ChecksumCommand(src, asyncResultListener);
     }
 
 }

@@ -19,6 +19,7 @@ package com.cyanogenmod.filemanager.commands.shell;
 import com.cyanogenmod.filemanager.commands.AsyncResultListener;
 import com.cyanogenmod.filemanager.commands.ChangeOwnerExecutable;
 import com.cyanogenmod.filemanager.commands.ChangePermissionsExecutable;
+import com.cyanogenmod.filemanager.commands.ChecksumExecutable;
 import com.cyanogenmod.filemanager.commands.CompressExecutable;
 import com.cyanogenmod.filemanager.commands.CopyExecutable;
 import com.cyanogenmod.filemanager.commands.CreateDirExecutable;
@@ -48,6 +49,8 @@ import com.cyanogenmod.filemanager.commands.SendSignalExecutable;
 import com.cyanogenmod.filemanager.commands.UncompressExecutable;
 import com.cyanogenmod.filemanager.commands.WriteExecutable;
 import com.cyanogenmod.filemanager.console.CommandNotFoundException;
+import com.cyanogenmod.filemanager.console.InsufficientPermissionsException;
+import com.cyanogenmod.filemanager.console.NoSuchFileOrDirectory;
 import com.cyanogenmod.filemanager.console.shell.ShellConsole;
 import com.cyanogenmod.filemanager.model.Group;
 import com.cyanogenmod.filemanager.model.MountPoint;
@@ -517,6 +520,21 @@ public class ShellExecutableCreator implements ExecutableCreator {
             return new UncompressCommand(src, dst, asyncResultListener);
         } catch (InvalidCommandDefinitionException icdEx) {
             throw new CommandNotFoundException("UncompressCommand", icdEx); //$NON-NLS-1$
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ChecksumExecutable createChecksumExecutable(
+            String src, AsyncResultListener asyncResultListener)
+            throws CommandNotFoundException, NoSuchFileOrDirectory,
+            InsufficientPermissionsException {
+        try {
+            return new ChecksumCommand(src, asyncResultListener);
+        } catch (InvalidCommandDefinitionException icdEx) {
+            throw new CommandNotFoundException("ChecksumCommand", icdEx); //$NON-NLS-1$
         }
     }
 

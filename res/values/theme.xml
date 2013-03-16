@@ -124,6 +124,7 @@
   <drawable name="ic_usb_drawable">@drawable/ic_holo_light_usb</drawable>
   <drawable name="ic_user_defined_bookmark_drawable">@drawable/ic_holo_light_user_defined_bookmark</drawable>
   <drawable name="ic_history_search_drawable">@drawable/ic_holo_light_history_search</drawable>
+  <drawable name="ic_copy_drawable">@drawable/ic_holo_light_copy</drawable>
 
   <!-- Disk usage graph -->
   <color name="disk_usage_total_color">@color/disk_usage_total</color>

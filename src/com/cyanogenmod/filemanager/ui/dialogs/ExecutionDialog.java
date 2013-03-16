@@ -146,29 +146,17 @@ public class ExecutionDialog implements DialogInterface.OnClickListener {
         LayoutInflater li =
                 (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ViewGroup layout = (ViewGroup)li.inflate(R.layout.execution_dialog, null);
-        View tvScriptNameLabel = layout.findViewById(R.id.execution_script_name_label);
         TextView tvScriptName = (TextView)layout.findViewById(R.id.execution_script_name);
         tvScriptName.setText(fso.getFullPath());
-        View tvTimeLabel = layout.findViewById(R.id.execution_time_label);
         this.mTvTime = (TextView)layout.findViewById(R.id.execution_time);
         this.mTvTime.setText("-"); //$NON-NLS-1$
-        View tvExitCodeLabel = layout.findViewById(R.id.execution_exitcode_label);
         this.mTvExitCode = (TextView)layout.findViewById(R.id.execution_exitcode);
         this.mTvExitCode.setText("-"); //$NON-NLS-1$
         this.mTvOutput = (TextView)layout.findViewById(R.id.execution_output);
         this.mTvOutput.setMovementMethod(new ScrollingMovementMethod());
 
-        // Apply the current theme
-        Theme theme = ThemeManager.getCurrentTheme(context);
-        theme.setBackgroundDrawable(context, layout, "background_drawable"); //$NON-NLS-1$
-        theme.setTextColor(context, (TextView)tvScriptNameLabel, "text_color"); //$NON-NLS-1$
-        theme.setTextColor(context, tvScriptName, "text_color"); //$NON-NLS-1$
-        theme.setTextColor(context, (TextView)tvTimeLabel, "text_color"); //$NON-NLS-1$
-        theme.setTextColor(context, this.mTvTime, "text_color"); //$NON-NLS-1$
-        theme.setTextColor(context, (TextView)tvExitCodeLabel, "text_color"); //$NON-NLS-1$
-        theme.setTextColor(context, this.mTvExitCode, "text_color"); //$NON-NLS-1$
-        theme.setBackgroundColor(context, this.mTvOutput, "console_bg_color"); //$NON-NLS-1$
-        theme.setTextColor(context, this.mTvOutput, "console_fg_color"); //$NON-NLS-1$
+        // Apply the theme
+        applyTheme(context, layout);
 
         //Create the dialog
         String title = context.getString(R.string.execution_console_title);
@@ -367,6 +355,30 @@ public class ExecutionDialog implements DialogInterface.OnClickListener {
                 tv.scrollBy(0, 0);
             }
         }
+    }
+
+    /**
+     * Method that applies the current theme to the dialog
+     *
+     * @param ctx The current context
+     * @param root The root view
+     */
+    private void applyTheme(Context ctx, ViewGroup root) {
+        // Apply the current theme
+        Theme theme = ThemeManager.getCurrentTheme(ctx);
+        theme.setBackgroundDrawable(ctx, root, "background_drawable"); //$NON-NLS-1$
+        View v = root.findViewById(R.id.execution_time_label);
+        theme.setTextColor(ctx, (TextView)v, "text_color"); //$NON-NLS-1$
+        v = root.findViewById(R.id.execution_script_name);
+        theme.setTextColor(ctx, (TextView)v, "text_color"); //$NON-NLS-1$
+        v = root.findViewById(R.id.execution_time_label);
+        theme.setTextColor(ctx, (TextView)v, "text_color"); //$NON-NLS-1$
+        theme.setTextColor(ctx, this.mTvTime, "text_color"); //$NON-NLS-1$
+        v = root.findViewById(R.id.execution_exitcode_label);
+        theme.setTextColor(ctx, (TextView)v, "text_color"); //$NON-NLS-1$
+        theme.setTextColor(ctx, this.mTvExitCode, "text_color"); //$NON-NLS-1$
+        theme.setBackgroundColor(ctx, this.mTvOutput, "console_bg_color"); //$NON-NLS-1$
+        theme.setTextColor(ctx, this.mTvOutput, "console_fg_color"); //$NON-NLS-1$
     }
 
 }

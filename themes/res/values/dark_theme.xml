@@ -118,6 +118,7 @@
   <drawable name="dark_ic_usb_drawable">@drawable/ic_holo_dark_usb</drawable>
   <drawable name="dark_ic_user_defined_bookmark_drawable">@drawable/ic_holo_dark_user_defined_bookmark</drawable>
   <!--<drawable name="dark_ic_history_search_drawable">@null</drawable> -->
+  <drawable name="dark_ic_copy_drawable">@drawable/ic_holo_dark_copy</drawable>
 
   <!-- Disk usage graph -->
   <color name="dark_disk_usage_total_color">#7ecccccc</color>

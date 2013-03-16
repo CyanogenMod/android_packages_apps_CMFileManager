@@ -80,6 +80,7 @@
   <!-- Misc -->
   <command commandId="dirname" commandPath="/system/xbin/dirname" commandArgs="%1$s" />
   <command commandId="echo" commandPath="/system/xbin/echo" commandArgs="%1$s" />
+  <command commandId="checksum" commandPath="/system/xbin/md5sum" commandArgs="%1$s &amp;&amp; /system/xbin/sha1sum %1$s" />
 
   <!-- Process control and info -->
   <command commandId="pid_shell" commandPath="/system/xbin/echo" commandArgs="$$" />

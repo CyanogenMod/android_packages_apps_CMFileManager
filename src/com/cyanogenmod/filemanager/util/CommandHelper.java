@@ -21,6 +21,7 @@ import android.content.Context;
 import com.cyanogenmod.filemanager.commands.AsyncResultListener;
 import com.cyanogenmod.filemanager.commands.ChangeOwnerExecutable;
 import com.cyanogenmod.filemanager.commands.ChangePermissionsExecutable;
+import com.cyanogenmod.filemanager.commands.ChecksumExecutable;
 import com.cyanogenmod.filemanager.commands.CompressExecutable;
 import com.cyanogenmod.filemanager.commands.CopyExecutable;
 import com.cyanogenmod.filemanager.commands.CreateDirExecutable;
@@ -1432,6 +1433,41 @@ public final class CommandHelper {
         }
         throw new ExecutionException(
                 String.format("Fail to uncompress to %s", compressOutFile)); //$NON-NLS-1$
+    }
+
+    /**
+     * Method that calculates the checksum of a file system object.
+     *
+     * @param context The current context (needed if console == null)
+     * @param src The source file
+     * @param asyncResultListener The partial result listener
+     * @param console The console in which execute the program.
+     * <code>null</code> to attach to the default console
+     * @return WriteExecutable The command executed in background
+     * @throws FileNotFoundException If the initial directory not exists
+     * @throws IOException If initial directory couldn't be checked
+     * @throws InvalidCommandDefinitionException If the command has an invalid definition
+     * @throws NoSuchFileOrDirectory If the file or directory was not found
+     * @throws ConsoleAllocException If the console can't be allocated
+     * @throws InsufficientPermissionsException If an operation requires elevated permissions
+     * @throws CommandNotFoundException If the command was not found
+     * @throws OperationTimeoutException If the operation exceeded the maximum time of wait
+     * @throws ExecutionException If the operation returns a invalid exit code
+     * @see WriteExecutable
+     */
+    public static ChecksumExecutable checksum(
+            Context context, String src,
+            AsyncResultListener asyncResultListener, Console console)
+            throws FileNotFoundException, IOException, ConsoleAllocException,
+            NoSuchFileOrDirectory, InsufficientPermissionsException,
+            CommandNotFoundException, OperationTimeoutException,
+            ExecutionException, InvalidCommandDefinitionException {
+        Console c = ensureConsole(context, console);
+        ChecksumExecutable executable =
+                c.getExecutableFactory().newCreator().
+                    createChecksumExecutable(src, asyncResultListener);
+        execute(context, executable, c);
+        return executable;
     }
 
     /**
