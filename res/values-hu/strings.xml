@@ -187,7 +187,9 @@
     <string name="menu_search">Keresés</string>
     <string name="menu_settings">Beállítások</string>
     <string name="menu_clear_history">Előzmények törlése</string>
+    <string name="menu_no_suggestions">Nincs javaslat</string>
     <string name="menu_word_wrap">Sortörés</string>
+    <string name="menu_syntax_highlight">Szintaxis kiemelése</string>
     <string name="create_copy_regexp"><xliff:g id="name">%1$s</xliff:g> - másolás<xliff:g id="extension">%2$s</xliff:g></string>
     <string name="create_new_compress_file_regexp"><xliff:g id="name">%1$s</xliff:g> - új<xliff:g id="extension">%2$s</xliff:g></string>
     <string name="waiting_dialog_msg">Művelet végrehajtása\u2026</string>
@@ -322,7 +324,23 @@
     <string name="pref_remove_saved_search_terms_summary">Érintse meg az összes keresési feltételek törléséhez</string>
     <string name="pref_remove_saved_search_terms_msg">Az összes keresési feltétel törölve.</string>
     <string name="pref_editor_behaviour_category">Viselkedés</string>
+    <string name="pref_no_suggestions">Nincs javaslat</string>
+    <string name="pref_no_suggestions_desc">Fájl szerkesztéskor ne legyenek szótár javalatok</string>
     <string name="pref_word_wrap">Sortörés</string>
+
+    <string name="pref_hexdump">Hexdump binary files</string>
+    <string name="pref_hexdump_desc">When opening a binary file, generate an hexdump of the file
+    and open it in the hex viewer.</string>
+    <string name="pref_editor_syntax_highlight_category">Syntax highlight</string>
+    <string name="pref_syntax_highlight">Syntax highlight</string>
+    <string name="pref_syntax_highlight_desc">Highlight the syntax of the file displayed in
+    the editor (only when a syntax highlight processor is available for the type of file)</string>
+    <string name="pref_syntax_highlight_color_scheme">Színséma</string>
+    <string name="pref_syntax_highlight_color_scheme_desc">Tap to select the syntax highlight color scheme</string>
+    <string name="pref_syntax_sh_use_theme_default">Use theme default</string>
+    <string name="pref_syntax_sh_use_theme_default_desc">Use the default syntax highlight of the current theme</string>
+    <string name="pref_editor_sh_item_category">Items</string>
+
     <string name="pref_themes_selection_category">Témák</string>
     <string name="pref_themes_set_theme">Téma beállítása</string>
     <string name="pref_themes_no_preview">Nincs előnézeti kép</string>
@@ -332,6 +350,18 @@
     <string name="theme_default_name">Világos téma</string>
     <string name="theme_default_description">Világos téma a CyanogenMod Fájlkezelőhöz.</string>
     <string name="themes_author">CyanogenMod</string>
+    <string name="color_picker_alpha_slider_text">Alfa</string>
+    <string name="color_picker_current_text">Jelenlegi:</string>
+    <string name="color_picker_new_text">Új:</string>
+    <string name="color_picker_color">Szín:</string>
+    <string name="ash_reset_color_scheme">Érintse meg az alapértelmezett színséma visszaállításához</string>
+    <string name="ash_text">Szöveg</string>
+    <string name="ash_assignment">Hozzárendelés</string>
+    <string name="ash_singleline_comment">Egysoros megjegyzés</string>
+    <string name="ash_multiline_comment">Többsoros megjegyzés</string>
+    <string name="ash_keyword">Kulcsszó</string>
+    <string name="ash_quoted_string">Idézett karakterlánc</string>
+    <string name="ash_variable">Változó</string>
     <string name="security_warning_extract">Figyelem!\n\nAz archív fájl relatív vagy abszolút elérési úttal történő kicsomagolása kárt okozhat a készülékben azáltal, hogy felülírja rendszerfájlokat.\n\nBiztosan folytatni kívánja?</string>
     <string name="changelog_title">Változások</string>
     <string name="welcome_title">Üdvözöljük</string>
