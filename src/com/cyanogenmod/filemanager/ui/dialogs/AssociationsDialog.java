@@ -208,21 +208,25 @@ public class AssociationsDialog implements OnItemClickListener {
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        deselectAll();
-        ((ViewGroup)view).setSelected(true);
-
-        // Internal editors can be associated
-        boolean isPlatformSigned = AndroidHelper.isAppPlatformSignature(this.mContext);
-        if (isPlatformSigned && this.mAllowPreferred) {
-            ResolveInfo ri = getSelected();
-            this.mRemember.setVisibility(
-                    IntentsActionPolicy.isInternalEditor(ri) ?
-                           View.INVISIBLE :
-                           View.VISIBLE);
-        }
-
-        // Enable action button
-        this.mDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+    	if(((ViewGroup)view).isSelected()) {
+    		this.mDialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
+    	} else {
+	        deselectAll();
+	        ((ViewGroup)view).setSelected(true);
+	
+	        // Internal editors can be associated
+	        boolean isPlatformSigned = AndroidHelper.isAppPlatformSignature(this.mContext);
+	        if (isPlatformSigned && this.mAllowPreferred) {
+	            ResolveInfo ri = getSelected();
+	            this.mRemember.setVisibility(
+	                    IntentsActionPolicy.isInternalEditor(ri) ?
+	                           View.INVISIBLE :
+	                           View.VISIBLE);
+	        }
+	
+	        // Enable action button
+	        this.mDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+    	}
     }
 
     /**
