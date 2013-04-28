@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+  <!-- The name of the application -->
+  <string name="app_name">Dosya Yöneticisi</string>
+  <!-- The description of the application -->
+  <string name="app_description">CyanogenMod Dosya Yöneticisi.</string>
+
+  <!-- Human readable sizes -->
+  <string name="size_bytes" translatable="false">B</string>
+  <string name="size_kilobytes" translatable="false">kB</string>
+  <string name="size_megabytes" translatable="false">MB</string>
+  <string name="size_gigabytes" translatable="false">GB</string>
+
+  <!-- Devices types -->
+  <string name="device_blockdevice">Block device</string>
+  <string name="device_characterdevice">Character device</string>
+  <string name="device_namedpipe">Named pipe</string>
+  <string name="device_domainsocket">Domain soket</string>
+
+  <!-- Mount Point States -->
+  <string name="mount_point_readonly">RO</string>
+  <string name="mount_point_readwrite">RW</string>
+
+  <!-- Default buttons -->
+  <string name="ok" translatable="false">@android:string/ok</string>
+  <string name="cancel" translatable="false">@android:string/cancel</string>
+  <string name="yes">Evet</string>
+  <string name="no">Hayır</string>
+  <string name="all">Hepsi</string>
+  <string name="overwrite">Üzerine yaz</string>
+
+  <!-- The root directory name -->
+  <string name="root_directory_name"><![CDATA[<Root folder>]]></string>
+  <!-- The search result name -->
+  <string name="search_result_name">Arama: <xliff:g id="terms">%1$s</xliff:g></string>
+
+  <!-- Loading waiting message -->
+  <string name="loading_message">Yükleniyor\u2026</string>
+  <!-- Computing message -->
+  <string name="computing_message" translatable="false"><xliff:g id="data">%1$s</xliff:g></string>
+  <!-- Computing new line message -->
+  <string name="computing_message_ln" translatable="false"><xliff:g id="data">%1$s</xliff:g></string>
+  <!-- Cancelled message -->
+  <string name="cancelled_message">İptal edildi.</string>
+  <!-- Error message -->
+  <string name="error_message">Hata.</string>
+
+  <!-- Warning dialog title -->
+  <string name="warning_title">Dikkat</string>
+  <!-- Error dialog title -->
+  <string name="error_title">Hata algılandı.</string>
+  <!-- Confirm operation dialog title -->
+  <string name="confirm_operation">İşlemi onayla</string>
+  <!-- Confirm overwrite dialog title -->
+  <string name="confirm_overwrite">Üzerine yazmayı onayla</string>
+  <!-- Confirm deletion dialog title -->
+  <string name="confirm_deletion">Silmeyi onayla</string>
+
+  <!--  A console couldn't be created. Ask the user to change the access mode. Dialog Title -->
+  <string name="msgs_change_to_prompt_access_mode_title">Confirm switch</string>
+  <!--  A console couldn't be created. Ask the user to change the access mode. Dialog Message -->
+  <string name="msgs_change_to_prompt_access_mode_msg">
+    Unable to run in Root Access mode. Changing to Safe mode.\n\nApply this change?</string>
+
+  <!-- A console couldn't be created. Without privileges, the application won't work -->
+  <string name="msgs_cant_create_console">Unable to gain the required privileges to function.</string>
+  <!-- The message shown when an allocation of a privileged console fails, and a non
+       privileged is allocated -->
+  <string name="msgs_privileged_console_alloc_failed">Unable to run in Root Access mode.
+    Changing to Safe mode.</string>
+  <!-- The selected setting was not applied or stored -->
+  <string name="msgs_settings_save_failure">The setting could not be applied or stored.</string>
+  <!-- The initial directory has an invalid or inaccessible reference -->
+  <string name="msgs_settings_invalid_initial_directory">The initial folder
+    "<xliff:g id="initial_dir">%1$s</xliff:g>" is invalid. Changing to root folder.</string>
+
+  <!-- Success -->
+  <string name="msgs_success">The operation was completed successfully.</string>
+  <!-- Unknown error -->
+  <string name="msgs_unknown">An error was detected. The operation was unsuccessful.</string>
+  <!-- When an operation requires elevated privileged (normally caused for the use of a
+       non-privileged console) -->
+  <string name="msgs_insufficient_permissions">This operation requires elevated permissions. Try
+    changing to Root Access mode.</string>
+  <!-- The file or directory was not found -->
+  <string name="msgs_file_not_found">The file or folder was not found.</string>
+  <!-- The command reference couldn't be created (not found or invalid definition)
+       (normally caused by a development error) -->
+  <string name="msgs_command_not_found">The operation\'s command was not found or has an
+    invalid definition.</string>
+  <!-- I/O exception -->
+  <string name="msgs_io_failed">Read/write failure.</string>
+  <!-- Operation timeout detected -->
+  <string name="msgs_operation_timeout">The operation timed out.</string>
+  <!-- The operation returns an invalid exit code -->
+  <string name="msgs_operation_failure">The operation failed.</string>
+  <!-- A console couldn't be allocated -->
+  <string name="msgs_console_alloc_failure">An internal error occurred.</string>
+  <!-- An operation can't be cancelled -->
+  <string name="msgs_operation_can_not_be_cancelled">The operation cannot be cancelled.</string>
+  <!-- The operation requieres mount the file system prior to execute the command -->
+  <string name="msgs_read_only_filesystem">The file system is read-only. Try to mount the
+    file system as read-write before attepting the operation.</string>
+  <!-- Illegal argument (normally caused by a development error when calling internal api) -->
+  <string name="msgs_illegal_argument">Illegal argument. Invocation failed.</string>
+  <!-- The operation will cause inconsistencies -->
+  <string name="msgs_unresolved_inconsistencies">
+    The operation is not permitted because it would create inconsistencies.</string>
+  <!-- Operation not permitted in current directory -->
+  <string name="msgs_operation_not_allowed_in_current_directory">
+    The operation is not permitted in current folder.\n\nDestination folder cannot be subfolder
+    of source or be same as source.</string>
+
+  <!-- The advice message prior to exit the application -->
+  <string name="msgs_push_again_to_exit">Press again to exit.</string>
+
+  <!-- There is no registered application that can handle the mime-type -->
+  <string name="msgs_not_registered_app">There is no application registered to handle
+    the type of file selected.</string>
+
+  <!-- Overwrite files? -->
+  <string name="msgs_overwrite_files">
+    Some of the files already exist in the destination folder.\n\nOverwrite?</string>
+
+  <!-- The association of an action to the application failed -->
+  <string name="msgs_action_association_failed">Associating the action to the
+    application failed.</string>
+
+  <!-- An operation requires elevated privileged. Ask the user. -->
+  <string name="advise_insufficient_permissions">The operation requires elevated privileges.\n\n
+    Do you want to change to Root Access mode?</string>
+
+
+  <!-- The parent directory of the current directory in navigation view -->
+  <string name="parent_dir">Parent folder</string>
+  <!-- External storage descripton -->
+  <string name="external_storage">Harici Hafıza</string>
+  <!-- Usb storage descripton -->
+  <string name="usb_storage">USB Hafıza</string>
+
+  <!-- ActionBar Buttons * FileSystem -->
+  <string name="actionbar_button_filesystem_cd">Dosya Sistemi Bilgisi</string>
+  <!-- ActionBar Buttons * Sort Mode -->
+  <string name="actionbar_button_sort_mode_cd">Sıralama Modu</string>
+  <!-- ActionBar Buttons * Layout Mode -->
+  <string name="actionbar_button_layout_mode_cd">Layout mode</string>
+  <!-- ActionBar Buttons * Other View Options -->
+  <string name="actionbar_button_other_view_options_cd">Diğer Görünüm Ayarları</string>
+  <!-- ActionBar Buttons * Done -->
+  <string name="actionbar_button_selection_done_cd">Tamam</string>
+  <!-- ActionBar Buttons * Actions -->
+  <string name="actionbar_button_actions_cd">Actions</string>
+  <!-- ActionBar Buttons * History -->
+  <string name="actionbar_button_history_cd">Geçmiş</string>
+  <!-- ActionBar Buttons * Bookmarks -->
+  <string name="actionbar_button_bookmarks_cd">Bookmarks</string>
+  <!-- ActionBar Buttons * Search -->
+  <string name="actionbar_button_search_cd">Arama</string>
+  <!-- ActionBar Buttons * Overflow -->
+  <string name="actionbar_button_overflow_cd">Diğer ayarlar</string>
+  <!-- ActionBar Buttons * Storage volumes -->
+  <string name="actionbar_button_storage_cd">Storage volumes</string>
+  <!-- ActionBar Buttons * Save -->
+  <string name="actionbar_button_save_cd">Kaydet</string>
+
+  <!-- Navigation View * Sort * Sort by name (ascending) -->
+  <string name="sort_by_name_asc">İsime göre &#x25B2;</string>
+  <!-- Navigation View * Sort * Sort by name (descending) -->
+  <string name="sort_by_name_desc">İsime göre &#x25BC;</string>
+  <!-- Navigation View * Sort * Sort by date (ascending) -->
+  <string name="sort_by_date_asc">Tarihe göre &#x25B2;</string>
+  <!-- Navigation View * Sort * Sort by date (descending) -->
+  <string name="sort_by_date_desc">Tarihe göre &#x25BC;</string>
+
+  <!-- Navigation View * Layout * Icons -->
+  <string name="layout_icons">İkonlar</string>
+  <!-- Navigation View * Layout * Simple -->
+  <string name="layout_simple">Simple</string>
+  <!-- Navigation View * Layout * Details -->
+  <string name="layout_details">Detaylar</string>
+
+  <!-- Navigation View * View * Show folders first -->
+  <string name="cm_filemanager_show_dirs_first">Show folders first</string>
+  <!-- Navigation View * View * Show hidden files option -->
+  <string name="cm_filemanager_show_hidden">Gizli dosyaları göster</string>
+  <!-- Navigation View * View * Show system files option -->
+  <string name="cm_filemanager_show_system">Sistem dosyalarını göster</string>
+  <!-- Navigation View * View * Show symlinks option -->
+  <string name="cm_filemanager_show_symlinks">Sembolik bağları göster</string>
+
+  <!-- Filesystem Info (no data). Dialog title -->
+  <string name="filesystem_info_warning_title">No information</string>
+  <!-- Filesystem Info (no data). Dialog message -->
+  <string name="filesystem_info_warning_msg">There is no information available for the file system.</string>
+  <!-- Filesystem Info * Filesystem couldn't be mounted -->
+  <string name="filesystem_info_cant_be_mounted_msg">
+    The file system cannot be mounted/unmounted.</string>
+  <!-- Filesystem Info * Not allowed message -->
+  <string name="filesystem_info_mount_not_allowed_msg">File system mounting operations are not allowed
+    in Safe mode. Tap to change to Root Access mode.</string>
+  <!-- Filesystem Info * Mount failed -->
+  <string name="filesystem_info_mount_failed_msg">File system mounting operation failed.
+    Some file systems, like SD cards, cannot be mounted/unmounted because
+    they are built-in as read-only file systems.</string>
+  <!-- Filesystem Info Dialog * Title -->
+  <string name="filesystem_info_dialog_title">File system information</string>
+  <!-- Filesystem Info Dialog * Tab * Info -->
+  <string name="filesystem_info_dialog_tab_info">Bilgi</string>
+  <!-- Filesystem Info Dialog * Tab * Disk Usage -->
+  <string name="filesystem_info_dialog_tab_disk_usage">Hafıza Kullanımı</string>
+  <!-- Filesystem Info Dialog * Status Label -->
+  <string name="filesystem_info_dialog_status">Durum:</string>
+  <!-- Filesystem Info Dialog * Mount Point Label -->
+  <string name="filesystem_info_dialog_mount_point">Mount point:</string>
+  <!-- Filesystem Info Dialog * Device Label -->
+  <string name="filesystem_info_dialog_device">Cihaz:</string>
+  <!-- Filesystem Info Dialog * Type Label -->
+  <string name="filesystem_info_dialog_type">Tip:</string>
+  <!-- Filesystem Info Dialog * Options Label -->
+  <string name="filesystem_info_dialog_options">Ayarlar:</string>
+  <!-- Filesystem Info Dialog * Dump/Pass Label -->
+  <string name="filesystem_info_dialog_dump_pass">Dump / Pass:</string>
+  <!-- Filesystem Info Dialog * Total Disk Usage -->
+  <string name="filesystem_info_dialog_total_disk_usage">Toplam:</string>
+  <!-- Filesystem Info Dialog * Used Disk Usage -->
+  <string name="filesystem_info_dialog_used_disk_usage">Kullanılan:</string>
+  <!-- Filesystem Info Dialog * Free Disk Usage -->
+  <string name="filesystem_info_dialog_free_disk_usage">Boş:</string>
+
+
+  <!-- Fso Properties * Not allowed message -->
+  <string name="fso_properties_permissions_not_allowed_msg">Permissions operations are not allowed
+    in Safe mode. Tap to change to Root Access mode.</string>
+  <!-- Fso Properties * Failed to change owner to fso -->
+  <string name="fso_properties_failed_to_change_owner_msg">The change of owner operation failed.\n\n
+    For security reasons, some file systems, like SD cards, do not allow the changing of ownership.</string>
+  <!-- Fso Properties * Failed to change group to fso -->
+  <string name="fso_properties_failed_to_change_group_msg">The change of group operation failed.\n\n
+    For security reasons, some file systems, like SD cards, do not allow the changing of groups.</string>
+  <!-- Fso Properties * Failed to change group to fso -->
+  <string name="fso_properties_failed_to_change_permission_msg">The change of permissions
+    operation failed.\n\nFor security reasons, some file systems, like SD cards, do not allow the changing of permissions.</string>
+  <!-- Fso Properties Dialog * Title -->
+  <string name="fso_properties_dialog_title">Özellikler</string>
+  <!-- Fso Properties Dialog * Tab * Info -->
+  <string name="fso_properties_dialog_tab_info">Bilgi</string>
+  <!-- Fso Properties Dialog * Tab * Permissions -->
+  <string name="fso_properties_dialog_tab_permissions">Permissions</string>
+  <!-- Fso Properties Dialog * Name Label -->
+  <string name="fso_properties_dialog_name">İsim:</string>
+  <!-- Fso Properties Dialog * Parent Folder Label -->
+  <string name="fso_properties_dialog_parent">Parent:</string>
+  <!-- Fso Properties Dialog * Type Label -->
+  <string name="fso_properties_dialog_type">Tip:</string>
+  <!-- Fso Properties Dialog * Category Label -->
+  <string name="fso_properties_dialog_category">Kategori:</string>
+  <!-- Fso Properties Dialog * Link Label -->
+  <string name="fso_properties_dialog_link">Link:</string>
+  <!-- Fso Properties Dialog * Size Label -->
+  <string name="fso_properties_dialog_size">Boyut:</string>
+  <!-- Fso Properties Dialog * Contains Label -->
+  <string name="fso_properties_dialog_contains">Contains:</string>
+  <!-- Fso Properties Dialog * Last Accessed Time Label -->
+  <string name="fso_properties_dialog_last_accessed_date">Accessed:</string>
+  <!-- Fso Properties Dialog * Last Modified Time Label -->
+  <string name="fso_properties_dialog_last_modified_date">Modified:</string>
+  <!-- Fso Properties Dialog * Last Changed Time -->
+  <string name="fso_properties_dialog_last_changed_date">Changed:</string>
+  <!-- Fso Properties Dialog * Owner Label -->
+  <string name="fso_properties_dialog_owner">Sahip:</string>
+  <!-- Fso Properties Dialog * Group Label -->
+  <string name="fso_properties_dialog_group">Grup:</string>
+  <!-- Fso Properties Dialog * Others Label -->
+  <string name="fso_properties_dialog_others">Diğer:</string>
+  <!-- Fso Properties Dialog * Special Label -->
+  <string name="fso_properties_dialog_special" translatable="false">S</string>
+  <!-- Fso Properties Dialog * Read Label -->
+  <string name="fso_properties_dialog_read" translatable="false">R</string>
+  <!-- Fso Properties Dialog * Write Label -->
+  <string name="fso_properties_dialog_write" translatable="false">W</string>
+  <!-- Fso Properties Dialog * Execute Label -->
+  <string name="fso_properties_dialog_execute" translatable="false">X</string>
+  <!-- Fso Properties Dialog * Execute Label -->
+  <string name="fso_properties_dialog_folder_items" translatable="false">
+    <xliff:g id="folders">%1$s</xliff:g> / <xliff:g id="files">%2$s</xliff:g></string>
+  <!-- Fso Properties Dialog * Folders -->
+  <plurals name="fso_properties_dialog_folders">
+    <item quantity="zero">0 klasör</item>
+    <item quantity="one">1 klasör</item>
+    <item quantity="other"><xliff:g id="folders">%1$d</xliff:g> folders</item>
+  </plurals>
+  <!-- Fso Properties Dialog * Files -->
+  <plurals name="fso_properties_dialog_files">
+    <item quantity="zero">0 dosya</item>
+    <item quantity="one">1 dosya</item>
+    <item quantity="other"><xliff:g id="files">%1$d</xliff:g> dosya</item>
+  </plurals>
+
+  <!-- History * History activity title -->
+  <string name="history">Geçmiş</string>
+  <!-- History * The history is empty -->
+  <string name="msgs_history_empty">Geçmiş temizlendi.</string>
+  <!-- History * The history reference is not in the actual history list -->
+  <string name="msgs_history_unknown">Bilinmeyen geçmiş dosyası.</string>
+
+  <!-- Search * Search activity title -->
+  <string name="search">Search results</string>
+  <!-- Search * Search hint message -->
+  <string name="search_hint">Aranacak kelimeyi girin</string>
+  <!-- Search * Voice search hint message -->
+  <string name="search_voice_hint">Aramak için konuş</string>
+  <!-- Search * Search error message -->
+  <string name="search_error_msg">An error occurred while searching. No results found.</string>
+  <!-- Search * Search no results message -->
+  <string name="search_no_results_msg">Sonuç bulunamadı.</string>
+  <!-- Search * Search found items -->
+  <plurals name="search_found_items">
+    <item quantity="zero">Sonuç bulunamadı</item>
+    <item quantity="one">1 sonuç bulundu</item>
+    <item quantity="other"><xliff:g id="count">%d</xliff:g> sonuç bulundu</item>
+  </plurals>
+  <!-- Search * Number of items found in directory -->
+  <string name="search_found_items_in_directory"><xliff:g id="items">%1$s</xliff:g> in
+    <xliff:g id="path">%2$s</xliff:g></string>
+  <!-- Search * Search query terms -->
+  <string name="search_terms"><![CDATA[<b>Terms:</b>]]> <xliff:g id="terms">%1$s</xliff:g></string>
+  <!-- Search * Confirm search -->
+  <string name="search_few_characters_title">Confirm search</string>
+  <!-- Search * Some terms of the search are too small. The operation could be very costly -->
+  <string name="search_few_characters_msg">Some of the search terms has a small number of characters. The
+      operation could be very costly in time and system resources.\n\nDo you want to continue?</string>
+  <!-- Search * Searching dialog title -->
+  <string name="searching">Please wait\u2026</string>
+  <!-- Search * Searching label -->
+  <string name="searching_action_label">Searching in progress</string>
+
+  <!-- Picker Activity -->
+  <string name="picker" translatable="false">@string/app_name</string>
+  <!-- Picker Activity * Dialog title -->
+  <string name="picker_title">Bir dosya seçin</string>
+
+  <!-- Editor * Editor activity title -->
+  <string name="editor">Düzenleyici</string>
+  <!-- Editor * Invalid file message -->
+  <string name="editor_invalid_file_msg">Bilinmeyen dosya.</string>
+  <!-- Editor * File not found message -->
+  <string name="editor_file_not_found_msg">Dosya bulunamadı.</string>
+  <!-- Editor * File size exceed the limit -->
+  <string name="editor_file_exceed_size_msg">The file is too big to be open inside this device.</string>
+  <!-- Editor * Editor is dirty, ask the user * Dialog title -->
+  <string name="editor_dirty_ask_title">Çıkışı onayla</string>
+  <!-- Editor * Editor is dirty, ask the user * Dialog message -->
+  <string name="editor_dirty_ask_msg">There are unsaved changes.\n\nExit without saving?</string>
+  <!-- Editor * Save operation success -->
+  <string name="editor_successfully_saved">The file was successfully saved.</string>
+  <!-- Editor * Read-only file mode -->
+  <string name="editor_read_only_mode">The file is opened in read-only mode.</string>
+
+  <!-- Bookmarks * Bookmarks activity title -->
+  <string name="bookmarks">Bookmarks</string>
+  <!-- Bookmarks * Bookmark name * Home -->
+  <string name="bookmarks_home">Ev</string>
+  <!-- Bookmarks * Bookmark name * Root folder -->
+  <string name="bookmarks_root_folder">Root dosyası</string>
+  <!-- Bookmarks * Bookmark name * System folder -->
+  <string name="bookmarks_system_folder">System dosyası</string>
+  <!-- Bookmarks * Bookmark name * Button * Initial directory content description -->
+  <string name="bookmarks_button_config_cd">Set the initial folder.</string>
+  <!-- Bookmarks * Bookmark name * Button * Remove bookmark content description -->
+  <string name="bookmarks_button_remove_bookmark_cd">Remove the bookmark.</string>
+  <!-- Bookmarks * Bookmarks * Actions * Bookmark successfully added -->
+  <string name="bookmarks_msgs_add_success">The bookmark was added successfully.</string>
+
+  <!-- Initial directory dialog title -->
+  <string name="initial_directory_dialog_title">Initial folder</string>
+  <!-- Initial directory label -->
+  <string name="initial_directory_label">Choose the initial folder:</string>
+  <!-- Initial directory is relative -->
+  <string name="initial_directory_relative_msg">Relative paths are not allowed.</string>
+  <!-- Initial directory error message -->
+  <string name="initial_directory_error_msg">An error occurred while saving the initial folder.</string>
+
+  <!-- Menu * Navigation * History -->
+  <string name="menu_history">Geçmiş</string>
+  <!-- Menu * Navigation * Bookmarks -->
+  <string name="menu_bookmarks">Bookmarks</string>
+  <!-- Menu * Navigation * Search -->
+  <string name="menu_search">Arama</string>
+  <!-- Menu * Navigation * Settings -->
+  <string name="menu_settings">Ayarlar</string>
+  <!-- Menu * History * Clear history -->
+  <string name="menu_clear_history">Geçmişi temizle</string>
+
+  <!-- Regular expression for create copy action -->
+  <string name="create_copy_regexp">
+    <xliff:g id="name">%1$s</xliff:g> - copy<xliff:g id="extension">%2$s</xliff:g></string>
+  <!-- Regular expression for new compressed file -->
+  <string name="create_new_compress_file_regexp">
+    <xliff:g id="name">%1$s</xliff:g> - new<xliff:g id="extension">%2$s</xliff:g></string>
+
+  <!-- Waiting dialog * Performing operation message -->
+  <string name="waiting_dialog_msg">Performing operation\u2026</string>
+  <!-- Waiting dialog * Copying title -->
+  <string name="waiting_dialog_copying_title">Copying\u2026</string>
+  <!-- Waiting dialog * Copying message -->
+  <string name="waiting_dialog_copying_msg">
+    <![CDATA[<b>From</b>]]> <xliff:g id="from">%1$s</xliff:g><![CDATA[<br/>]]>
+    <![CDATA[<b>To</b>]]> <xliff:g id="to">%2$s</xliff:g></string>
+  <!-- Waiting dialog * Moving title -->
+  <string name="waiting_dialog_moving_title">Moving\u2026</string>
+  <!-- Waiting dialog * Moving message -->
+  <string name="waiting_dialog_moving_msg">
+    <![CDATA[<b>From</b>]]> <xliff:g id="from">%1$s</xliff:g><![CDATA[<br/>]]>
+    <![CDATA[<b>To</b>]]> <xliff:g id="to">%2$s</xliff:g></string>
+  <!-- Waiting dialog * Deleting title -->
+  <string name="waiting_dialog_deleting_title">Deleting\u2026</string>
+  <!-- Waiting dialog * Deleting message -->
+  <string name="waiting_dialog_deleting_msg">
+    <![CDATA[<b>File</b>]]> <xliff:g id="file">%1$s</xliff:g></string>
+  <!-- Waiting dialog * Extracting title -->
+  <string name="waiting_dialog_extracting_title">Extracting\u2026</string>
+  <!-- Waiting dialog * Extracting message -->
+  <string name="waiting_dialog_extracting_msg">
+    <![CDATA[<b>File</b>]]> <xliff:g id="file">%1$s</xliff:g></string>
+  <!-- Waiting dialog * Extracting title -->
+  <string name="waiting_dialog_compressing_title">Compressing\u2026</string>
+  <!-- Waiting dialog * Extracting message -->
+  <string name="waiting_dialog_compressing_msg">
+    <![CDATA[<b>File</b>]]> <xliff:g id="file">%1$s</xliff:g></string>
+  <!-- Waiting dialog * Initializing the dialog -->
+  <string name="waiting_dialog_analizing_msg">
+    <![CDATA[<b>Analyzing\u2026</b>]]></string>
+  <!-- Extracting * Success message -->
+  <string name="msgs_extracting_success">
+    The extracting operation was completed successfully. The data was extracted to
+    <xliff:g id="destination">%1$s</xliff:g>.</string>
+  <!-- Compressing * Success message -->
+  <string name="msgs_compressing_success">
+    The compressing operation was completed successfully. The data was compressed to
+    <xliff:g id="destination">%1$s</xliff:g>.</string>
+
+  <!-- Actions Dialog * Title -->
+  <string name="actions_dialog_title">Actions</string>
+  <!-- Actions Dialog * Menu * Properties of current folder -->
+  <string name="actions_menu_properties_current_folder">Properties</string>
+  <!-- Actions Dialog * Menu * Refresh -->
+  <string name="actions_menu_refresh">Refresh</string>
+  <!-- Actions Dialog * Menu * New directory -->
+  <string name="actions_menu_new_directory">Yeni klasör</string>
+  <!-- Actions Dialog * Menu * New file -->
+  <string name="actions_menu_new_file">Yeni dosya</string>
+  <!-- Actions Dialog * Menu * Select all -->
+  <string name="actions_menu_select_all">Hepsini seç</string>
+  <!-- Actions Dialog * Menu * Deselect all -->
+  <string name="actions_menu_deselect_all">Hiçbirini seçme</string>
+  <!-- Actions Dialog * Menu * Select -->
+  <string name="actions_menu_select">Seç</string>
+  <!-- Actions Dialog * Menu * Deselect -->
+  <string name="actions_menu_deselect">Seçilenleri kaldır</string>
+  <!-- Actions Dialog * Menu * Paste selection -->
+  <string name="actions_menu_paste_selection">Seçileni buraya yapıştır</string>
+  <!-- Actions Dialog * Menu * Move selection -->
+  <string name="actions_menu_move_selection">Seçileni buraya taşı</string>
+  <!-- Actions Dialog * Menu * Delete selection -->
+  <string name="actions_menu_delete_selection">Seçileni sil</string>
+  <!-- Actions Dialog * Menu * Compress selection -->
+  <string name="actions_menu_compress_selection">Seçileni sıkıştır</string>
+  <!-- Actions Dialog * Menu * Create link -->
+  <string name="actions_menu_create_link">Link oluştur</string>
+  <!-- Actions Dialog * Menu * Open -->
+  <string name="actions_menu_open">Aç</string>
+  <!-- Actions Dialog * Menu * Open with -->
+  <string name="actions_menu_open_with">Farklı aç</string>
+  <!-- Actions Dialog * Menu * Execute -->
+  <string name="actions_menu_execute">Execute</string>
+  <!-- Actions Dialog * Menu * Send -->
+  <string name="actions_menu_send">Gönder</string>
+  <!-- Actions Dialog * Menu * Compress -->
+  <string name="actions_menu_compress">Sıkıştır</string>
+  <!-- Actions Dialog * Menu * Extract -->
+  <string name="actions_menu_extract">Extract</string>
+  <!-- Actions Dialog * Menu * Delete -->
+  <string name="actions_menu_delete">Sil</string>
+  <!-- Actions Dialog * Menu * Rename -->
+  <string name="actions_menu_rename">Yeniden adlandır</string>
+  <!-- Actions Dialog * Menu * Create copy -->
+  <string name="actions_menu_create_copy">Kopya oluştur</string>
+  <!-- Actions Dialog * Menu * Properties -->
+  <string name="actions_menu_properties">Özellikler</string>
+  <!-- Actions Dialog * Menu * Add to bookmarks -->
+  <string name="actions_menu_add_to_bookmarks">Add to bookmarks</string>
+  <!-- Actions Dialog * Menu * Add shortcut -->
+  <string name="actions_menu_add_shortcut">Add shortcut</string>
+  <!-- Actions Dialog * Menu * Open parent folder -->
+  <string name="actions_menu_open_parent_folder">Open parent</string>
+
+  <!-- Actions * Ask user prior to do an undone operation. Dialog message -->
+  <string name="actions_ask_undone_operation_msg">
+    This action cannot be undone. Do you want to continue?</string>
+
+  <!-- Enter Name Dialog * Label -->
+  <string name="input_name_dialog_label">İsim:</string>
+  <!-- Enter Name Dialog * Message * Empty name -->
+  <string name="input_name_dialog_message_empty_name">The name cannot be empty.</string>
+  <!-- Enter Name Dialog * Message * Invalid name -->
+  <string name="input_name_dialog_message_invalid_path_name">Invalid name. The characters
+    \'<xliff:g id="invalid_characters">%1$s</xliff:g>\' are not allowed.</string>
+  <!-- Enter Name Dialog * Message * Invalid name -->
+  <string name="input_name_dialog_message_invalid_name">Invalid name. The names \'.\' and
+    \'..\' are not allowed.</string>
+  <!-- Enter Name Dialog * Message * Name exists -->
+  <string name="input_name_dialog_message_name_exists">The name already exists.</string>
+
+  <!-- Associations Dialog * Title -->
+  <string name="associations_dialog_title">Associations</string>
+  <!-- Associations Dialog * Remember the user action -->
+  <string name="associations_dialog_remember">Remember selection</string>
+  <!-- Associations Dialog * Open with Title -->
+  <string name="associations_dialog_openwith_title">Open with</string>
+    <!-- Associations Dialog * Open action (button title) -->
+  <string name="associations_dialog_openwith_action">Aç</string>
+  <!-- Associations Dialog * Send with Title -->
+  <string name="associations_dialog_sendwith_title">Send with</string>
+    <!-- Associations Dialog * Send action (button title) -->
+  <string name="associations_dialog_sendwith_action">Gönder</string>
+
+  <!-- Inline Autocomplete Widget * Tab message nothing to complete -->
+  <string name="inline_autocomplete_tab_nothing_to_complete_msg">Nothing to complete.</string>
+
+  <!-- Execution console * Title -->
+  <string name="execution_console_title">Console</string>
+  <!-- Execution console * The script name label -->
+  <string name="execution_console_script_name_label">Script:</string>
+  <!-- Execution console * The script execution time label -->
+  <string name="execution_console_script_execution_time_label">Time:</string>
+  <!-- Execution console * The script exit code label -->
+  <string name="execution_console_script_exitcode_label">Exit code:</string>
+  <!-- Execution console * The script execution time seconds string -->
+  <string name="execution_console_script_execution_time_text">
+    <xliff:g id="seconds">%1$s</xliff:g> sec.</string>
+
+  <!-- Mime/Types * Folder -->
+  <string name="mime_folder">Klasör</string>
+  <!-- Mime/Types * Symlink -->
+  <string name="mime_symlink">Symlink</string>
+  <!-- Mime/Types * Unknown -->
+  <string name="mime_unknown">Bilinmeyen</string>
+
+  <!-- Selection. All possibilities. [1 folder; >1 folders; 1 file; >1 files;
+     >1 folders and 1 file; 1 folder and >1 files; >1 folders and >1 files]
+     Avoid using plural item because is more complex to achieved all strings -->
+  <string name="selection_one_folder"><xliff:g id="folders">%1$s</xliff:g> folder selected.</string>
+  <string name="selection_other_folders"><xliff:g id="folders">%1$s</xliff:g> folders selected.</string>
+  <string name="selection_one_file"><xliff:g id="files">%1$s</xliff:g> file selected.</string>
+  <string name="selection_other_files"><xliff:g id="files">%1$s</xliff:g> files selected.</string>
+  <string name="selection_other_folders_one_file"><xliff:g id="folders">%1$s</xliff:g> folders and
+    <xliff:g id="files">%2$s</xliff:g> file selected.</string>
+  <string name="selection_one_folder_other_files"><xliff:g id="folder2">%1$s</xliff:g> folder and
+    <xliff:g id="file2">%2$s</xliff:g> files selected.</string>
+  <string name="selection_other_folders_other_files"><xliff:g id="folder2">%1$s</xliff:g> folders
+    and <xliff:g id="files">%2$s</xliff:g> files selected.</string>
+
+  <!-- Category descriptions -->
+  <string name="category_system">SİSTEM</string>
+  <string name="category_app">UYGULAMA</string>
+  <string name="category_binary">BINARY</string>
+  <string name="category_text">YAZI</string>
+  <string name="category_document">DÖKÜMAN</string>
+  <string name="category_ebook">EBOOK</string>
+  <string name="category_mail">MAIL</string>
+  <string name="category_compress">COMPRESS</string>
+  <string name="category_exec">EXECUTABLE</string>
+  <string name="category_database">DATABASE</string>
+  <string name="category_font">FONT</string>
+  <string name="category_image">RESİM</string>
+  <string name="category_audio">SES</string>
+  <string name="category_video">VIDYO</string>
+  <string name="category_security">GÜVENLİK</string>
+
+  <!-- Compression * Compression modes dialog title -->
+  <string name="compression_mode_title">Sıkıştırma modu</string>
+  <!-- Compression * Supported archive and compression modes -->
+  <string name="compression_mode_tar" translatable="false">Tar (tar)</string>
+  <string name="compression_mode_tar_gzip" translatable="false">Tar/gzip (tar.gz)</string>
+  <string name="compression_mode_tar_gzip2" translatable="false">Tar/gzip (tgz)</string>
+  <string name="compression_mode_tar_bzip" translatable="false">Tar/bzip (tar.bz2)</string>
+  <string name="compression_mode_gzip" translatable="false">Gzip (gz)</string>
+  <string name="compression_mode_bzip" translatable="false">Bzip (bz2)</string>
+
+  <!-- Shortcut. Failed to handle the shortcut -->
+  <string name="shortcut_failed_msg">Failed to handle the shortcut.</string>
+  <!-- Shortcut. The shortcut was created -->
+  <string name="shortcut_creation_success_msg">Shortcut created successfully.</string>
+  <!-- Shortcut. The shortcut wasn't created -->
+  <string name="shortcut_creation_failed_msg">Shortcut creation failed.</string>
+
+  <!-- Preferences title -->
+  <string name="pref">Ayarlar</string>
+  <!-- Preferences * General title -->
+  <string name="pref_general">Genel ayarlar</string>
+  <!-- Preferences * Search title -->
+  <string name="pref_search">Search options</string>
+  <!-- Preferences * Themes title -->
+  <string name="pref_themes">Temalar</string>
+  <!-- Preferences * About title -->
+  <string name="pref_about">Hakkında</string>
+  <!-- Preferences * About summary -->
+  <string name="pref_about_summary">File Manager v<xliff:g id="version">%1$s</xliff:g>
+    \nCopyright \u00A9 2012 The CyanogenMod Project</string>
+
+  <!-- Preferences * General * Behaviour category -->
+  <string name="pref_general_behaviour_category">Genel</string>
+  <!-- Preferences * General * Case sensitive sort title -->
+  <string name="pref_case_sensitive_sort">Use case-sensitive sorting</string>
+  <!-- Preferences * General *Disk usage warning level title -->
+  <string name="pref_disk_usage_warning_level">Hafıza kullanımı uyarısı</string>
+  <!-- Preferences * General * Disk usage warning level summary -->
+  <!-- FIXME Use "percent" instead of "%" symbol, because it make crash the app on getSummary
+       of ListPreference. This should be fixed in frameworks base prior to be added here. -->
+  <string name="pref_disk_usage_warning_level_summary" formatted="false">Display a different
+    color in disk usage widgets when they reach <xliff:g id="level">%1$s</xliff:g> percent
+    of free disk space</string>
+  <!-- Preferences * General * Compute folder statistics title -->
+  <string name="pref_compute_folder_statistics">Compute folder statistics</string>
+  <!-- Preferences * General * Compute folder statistics summary on -->
+  <string name="pref_compute_folder_statistics_on">Warning! The computation of folder statistics is costly in time and
+    system resources</string>
+  <!-- Preferences * General * Use flinger detection -->
+  <string name="pref_use_flinger">Use swipe gestures</string>
+  <!-- Preferences * General * Use flinger detection summary -->
+  <string name="pref_use_flinger_summary">Use swipe left to right gesture detection to delete files or folders.</string>
+  <!-- Preferences * General * Advanced settings category -->
+  <string name="pref_general_advanced_settings_category">Gelişmiş</string>
+  <!-- Preferences * General * Access mode -->
+  <string name="pref_access_mode">Yetki Seçimi</string>
+  <!-- Preferences * General * Safe mode -->
+  <string name="pref_access_mode_safe">Güvenli Mod</string>
+  <!-- Preferences * General * Safe mode summary -->
+  <string name="pref_access_mode_safe_summary">Safe mode\n\nThe app is running without
+    privileges and the only accessible file systems are the storage volumes (SD cards and USB)</string>
+  <!-- Preferences * General * Prompt user mode -->
+  <string name="pref_access_mode_prompt">Kullancıya Sor</string>
+  <!-- Preferences * General * Prompt user mode summary -->
+  <string name="pref_access_mode_prompt_summary">Prompt User mode\n\nThe app is running
+    with full access to the file system but will prompt for permission prior to executing
+    any privileged actions</string>
+  <!-- Preferences * General * Root access mode -->
+  <string name="pref_access_mode_root">Root  Mod</string>
+  <!-- Preferences * General * Root access mode summary -->
+  <string name="pref_access_mode_root_summary">Root Access mode\n\nWarning! This mode allows operations that could break
+    your device. It\'s your responsibility to ensure that an operation is safe</string>
+  <!-- Preferences * Search * Results category -->
+  <string name="pref_search_results_category">Results</string>
+  <!-- Preferences * Search * Show relevance widget -->
+  <string name="pref_show_relevance_widget">Show relevance widget</string>
+  <!-- Preferences * Search * Highlight search terms -->
+  <string name="pref_highlight_terms">Highlight search terms</string>
+  <!-- Preferences * Search * Sort results mode -->
+  <string name="pref_sort_search_results_mode">Sort results mode</string>
+  <!-- Preferences * Search * Sort results mode. None -->
+  <string name="pref_sort_search_results_mode_none">Sıralama yok</string>
+  <!-- Preferences * Search * Sort results mode. None -->
+  <string name="pref_sort_search_results_mode_name">İsime göre</string>
+  <!-- Preferences * Search * Sort results mode. Relevance -->
+  <string name="pref_sort_search_results_mode_relevance">By relevance</string>
+  <!-- Preferences * Search * Privacity category -->
+  <string name="pref_search_privacity_category">Privacy</string>
+  <!-- Preferences * Search * Save search terms -->
+  <string name="pref_save_search_terms">Save search terms</string>
+  <!-- Preferences * Search * Save search terms summary on -->
+  <string name="pref_save_search_terms_on">Search terms will be saved and used as suggestions
+      in future searches</string>
+  <!-- Preferences * Search * Save search terms summary off -->
+  <string name="pref_save_search_terms_off">Search terms will not be saved</string>
+  <!-- Preferences * Search * Remove saved search terms -->
+  <string name="pref_remove_saved_search_terms">Remove saved search terms</string>
+  <!-- Preferences * Search * Remove saved search terms summary -->
+  <string name="pref_remove_saved_search_terms_summary">Tap to remove all the saved search terms</string>
+  <!-- Preferences * Search * Suggestions were truncated -->
+  <string name="pref_remove_saved_search_terms_msg">Kaydedilen tüm arama terimleri çıkarıldı.</string>
+  <!-- Preferences * Themes * Themes selection category -->
+  <string name="pref_themes_selection_category">Temalar</string>
+  <!-- Preferences * Themes * Set theme button -->
+  <string name="pref_themes_set_theme">Tema Ayarı</string>
+  <!-- Preferences * Themes * No preview -->
+  <string name="pref_themes_no_preview">No preview\navailable</string>
+  <!-- Preferences * Themes * Confirmation message -->
+  <string name="pref_themes_confirmation">Tema ayarlandı.</string>
+  <!-- Preferences * Themes * Theme not found message -->
+  <string name="pref_themes_not_found">Tema bulunamadı.</string>
+
+  <!-- Preferences * Debug * Capture debug traces -->
+  <string name="pref_debug_traces">Log debugging information</string>
+
+  <!-- Themes * Default theme name -->
+  <string name="theme_default_name">Açık Renk Tema</string>
+  <!-- Themes * Default theme description -->
+  <string name="theme_default_description">CyanogenMod Dosya Yöneticisi için Açık Renli Tema.</string>
+  <!-- Themes * Default theme author -->
+  <string name="themes_author">CyanogenMod</string>
+
+  <!-- Security * Extract relative or absolute files -->
+  <string name="security_warning_extract">Warning!\n\n
+      Extracting an archive file with relative or absolute paths may cause damage to your device
+      by overwriting system files.\n\n
+      Do you want to continue?</string>
+
+  <!-- ChangeLog * Dialog title -->
+  <string name="changelog_title">Yenilikler</string>
+
+  <!-- Welcome Dialog * Title -->
+  <string name="welcome_title">Hoşgeldiniz</string>
+  <!-- Welcome Dialog * Message -->
+  <string name="welcome_msg">
+    Welcome to the CyanogenMod file manager.
+    \n\nThis app allows you to explore the file system and do operations that could break
+    your device. To prevent damage, the app will start in a safe, low-privileged mode.
+    \n\nYou can access the advanced, full-privileged mode via Settings. It\'s your
+    responsibility to ensure that an operation doesn\'t break your system.
+    \n\nThe CyanogenMod Team.\n</string>
+
+</resources>
