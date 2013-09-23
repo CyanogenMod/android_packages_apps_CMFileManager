@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+	 
+	 Translation backport by M. Kucharskov from 10.2 branch
+ -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+  <string name="app_name">Menedżer plików</string>
+  <string name="app_description">Menedżer plików CyanogenMod</string>
+
+  <string name="device_blockdevice">Urządzenie blokowe</string>
+  <string name="device_characterdevice">Urządzenie znakowe</string>
+  <string name="device_namedpipe">Nazwany potok</string>
+  <string name="device_domainsocket">Gniazdo domeny</string>
+
+  <string name="mount_point_readonly">Odczyt</string>
+  <string name="mount_point_readwrite">Zapis/Odczyt</string>
+
+  <string name="yes">Tak</string>
+  <string name="no">Nie</string>
+  <string name="all">Wszystko</string>
+  <string name="overwrite">Nadpisz</string>
+
+  <string name="root_directory_name"><![CDATA[<Folder główny>]]></string>
+  <string name="search_result_name">Szukaj: <xliff:g id="terms">%1$s</xliff:g></string>
+
+  <string name="loading_message">Wczytywanie\u2026</string>
+  <string name="cancelled_message">Anulowano.</string>
+  <string name="error_message">Błąd.</string>
+
+  <string name="warning_title">Uwaga</string>
+  <string name="error_title">Napotkano błąd</string>
+  <string name="confirm_operation">Potwierdź operację</string>
+  <string name="confirm_overwrite">Potwierdź nadpisanie</string>
+  <string name="confirm_deletion">Potwierdź usunięcie</string>
+
+  <string name="msgs_change_to_prompt_access_mode_title">Potwierdź zmianę</string>
+  <string name="msgs_change_to_prompt_access_mode_msg">Nie można uruchomić w trybie dostępu do roota. Aktywowany zostanie tryb bezpieczny.\n\nAkceptujesz tę zmianę?</string>
+
+  <string name="msgs_cant_create_console">Nie można uzyskać potrzebnych uprawnień do funkcjonowania.</string>
+  <string name="msgs_privileged_console_alloc_failed">Nie można uruchomić w trybie dostępu do roota. Aktywowany zostanie tryb bezpieczny.</string>
+  <string name="msgs_settings_save_failure">Ustawienie nie może zostać aktywowane lub zachowane.</string>
+  <string name="msgs_settings_invalid_initial_directory">Początkowy folder "<xliff:g id="initial_dir">%1$s</xliff:g>" jest nieprawidłowy. Zmieniono na folder główny.</string>
+
+  <string name="msgs_success">Operacja zakończyła się sukcesem.</string>
+  <string name="msgs_unknown">Napotkano błąd. Operacja się nie powiodła.</string>
+  <string name="msgs_insufficient_permissions">Ta operacja wymaga podwyższonych uprawnień. Spróbuj po aktywacji trybu dostępu do roota.</string>
+  <string name="msgs_file_not_found">Nie znaleziono pliku lub folderu.</string>
+  <string name="msgs_command_not_found">Nie znaleziono polecenia operacji lub ma ono nieprawidłową definicję.</string>
+  <string name="msgs_io_failed">Niepowodzenie zapisu/odczytu.</string>
+  <string name="msgs_operation_timeout">Operacja przekroczyła limit czasu.</string>
+  <string name="msgs_operation_failure">Operacja nie powiodła się.</string>
+  <string name="msgs_console_alloc_failure">Wystąpił błąd wewnętrzny.</string>
+  <string name="msgs_operation_can_not_be_cancelled">Operacja nie może zostać anulowana.</string>
+  <string name="msgs_read_only_filesystem">System plików jest dostępny tylko do odczytu. Przed ponowieniem operacji	spróbuj zamontować system plików w trybie zapisu.</string>
+  <string name="msgs_illegal_argument">Niedozwolony argument. Wywołanie nie powiodło się.</string>
+  <string name="msgs_unresolved_inconsistencies">Operacja nie jest możliwa, ponieważ spowodowałaby niespójności.</string>
+  <string name="msgs_operation_not_allowed_in_current_directory">Operacja nie jest dozwolona w bieżącym folderze.\n\nDocelowy folder nie może być podfolderem źródła lub taki sam jak źródło.</string>
+
+  <string name="msgs_push_again_to_exit">Naciśnij ponownie, aby wyjść.</string>
+  <string name="msgs_not_registered_app">Nie znaleziono żadnej aplikacji zdolnej do uruchomienia wskazanego typu pliku.</string>
+  <string name="msgs_overwrite_files">Niektóre pliki już istnieją w folderze docelowym.\n\nNadpisać?</string>
+ 
+  <string name="msgs_action_association_failed">Przypisywanie czynności do aplikacji nie powiodło się.</string>
+  <string name="advise_insufficient_permissions">Operacja wymaga podwyższonych uprawnień.\n\nCzy chcesz aktywować tryb dostępu do roota?</string>
+
+
+  <string name="parent_dir">Folder nadrzędny</string>
+  <string name="external_storage">Pamięć zewnętrzna</string>
+  <string name="usb_storage">Pamięć USB</string>
+
+  <string name="actionbar_button_filesystem_cd">Informacje o systemie plików</string>
+  <string name="actionbar_button_sort_mode_cd">Tryb sortowania</string>
+  <string name="actionbar_button_layout_mode_cd">Tryb widoku</string>
+  <string name="actionbar_button_other_view_options_cd">Inne opcje wyświetlania</string>
+  <string name="actionbar_button_selection_done_cd">Wykonano</string>
+  <string name="actionbar_button_actions_cd">Polecenia</string>
+  <string name="actionbar_button_history_cd">Historia</string>
+  <string name="actionbar_button_bookmarks_cd">Zakładki</string>
+  <string name="actionbar_button_search_cd">Wyszukiwanie</string>
+  <string name="actionbar_button_overflow_cd">Więcej opcji</string>
+  <string name="actionbar_button_storage_cd">Woluminy pamięci</string>
+  <string name="actionbar_button_save_cd">Zapisz</string>
+
+  <string name="sort_by_name_asc">Wg nazwy &#x25B2;</string>
+  <string name="sort_by_name_desc">Wg nazwy &#x25BC;</string>
+  <string name="sort_by_date_asc">Wg daty &#x25B2;</string>
+  <string name="sort_by_date_desc">Wg daty &#x25BC;</string>
+
+  <string name="layout_icons">Ikony</string>
+  <string name="layout_simple">Prosty</string>
+  <string name="layout_details">Szczegółowy</string>
+
+  <string name="cm_filemanager_show_dirs_first">Pokaż najpierw foldery</string>
+  <string name="cm_filemanager_show_hidden">Pokaż ukryte pliki</string>
+  <string name="cm_filemanager_show_system">Pokaż pliki systemowe</string>
+  <string name="cm_filemanager_show_symlinks">Pokaż dowiązania</string>
+
+  <string name="filesystem_info_warning_title">Brak informacji</string>
+  <string name="filesystem_info_warning_msg">Nie ma żadnych informacji na temat systemu plików</string>
+  <string name="filesystem_info_cant_be_mounted_msg">System plików nie może zostać zamontowany/odmontowany.</string>
+  <string name="filesystem_info_mount_not_allowed_msg">Montowanie systemu plików jest niemożliwe w trybie bezpiecznym. Aktywuj tryb dostępu do roota.</string>
+  <string name="filesystem_info_mount_failed_msg">Montowanie systemu plików nie powiodło się. Niektóre systemy plików, jak karty pamięci, mogą nie umożliwiać montowania, ponieważ są zbudowane w trybie tylko do odczytu.</string>
+  <string name="filesystem_info_dialog_title">Informacje o systemie plików</string>
+  <string name="filesystem_info_dialog_tab_info">Informacje</string>
+  <string name="filesystem_info_dialog_tab_disk_usage">Użycie dysku</string>
+  <string name="filesystem_info_dialog_status">Status:</string>
+  <string name="filesystem_info_dialog_mount_point">Punkt montowania:</string>
+  <string name="filesystem_info_dialog_device">Urządzenie:</string>
+  <string name="filesystem_info_dialog_type">Typ:</string>
+  <string name="filesystem_info_dialog_options">Opcje:</string>
+  <string name="filesystem_info_dialog_dump_pass">Luka / przejście:</string>
+  <string name="filesystem_info_dialog_total_disk_usage">Łącznie:</string>
+  <string name="filesystem_info_dialog_used_disk_usage">Zajęte:</string>
+  <string name="filesystem_info_dialog_free_disk_usage">Wolne:</string>
+
+  <string name="fso_properties_permissions_not_allowed_msg">Zmiana uprawnień nie jest możliwa w trybie bezpiecznym. Aktywuj tryb dostępu do roota</string>
+  <string name="fso_properties_failed_to_change_owner_msg">Nie udało się zmienić właściciela.\n\nZe względu na bezpieczeństwo, niektóre systemy plików, takie jak karty pamięci, nie pozwalają na zmianę właściciela.</string>
+  <string name="fso_properties_failed_to_change_group_msg">Nie udało się zmienić grupy.\n\nZe względu na bezpieczeństwo, niektóre systemy plików, takie jak karty pamięci, nie pozwalają na zmianę właściciela.</string>
+  <string name="fso_properties_failed_to_change_permission_msg">Nie udało się zmienić uprawnień.\n\nZe względu na bezpieczeństwo, niektóre systemy plików, takie jak karty pamięci, nie pozwalają na zmianę uprawnień.</string>
+  <string name="fso_properties_dialog_title">Właściwości</string>
+  <string name="fso_properties_dialog_tab_info">Informacje</string>
+  <string name="fso_properties_dialog_tab_permissions">Uprawnienia</string>
+  <string name="fso_properties_dialog_name">Nazwa:</string>
+  <string name="fso_properties_dialog_parent">Folder nadrzędny:</string>
+  <string name="fso_properties_dialog_type">Typ:</string>
+  <string name="fso_properties_dialog_category">Kategoria:</string>
+  <string name="fso_properties_dialog_link">Łącze:</string>
+  <string name="fso_properties_dialog_size">Rozmiar:</string>
+  <string name="fso_properties_dialog_contains">Zawiera:</string>
+  <string name="fso_properties_dialog_last_accessed_date">Otworzono:</string>
+  <string name="fso_properties_dialog_last_modified_date">Zmodyfikowano:</string>
+  <string name="fso_properties_dialog_last_changed_date">Zmieniono:</string>
+  <string name="fso_properties_dialog_owner">Właściciel:</string>
+  <string name="fso_properties_dialog_group">Grupa:</string>
+  <string name="fso_properties_dialog_others">Inni:</string>
+ 
+  <plurals name="fso_properties_dialog_folders">
+    <item quantity="zero">0 folderów</item>
+    <item quantity="one">1 folder</item>
+    <item quantity="other"><xliff:g id="folders">%1$d</xliff:g> folderów</item>
+  </plurals>
+
+  <plurals name="fso_properties_dialog_files">
+    <item quantity="zero">0 plików</item>
+    <item quantity="one">1 pilk</item>
+    <item quantity="other"><xliff:g id="files">%1$d</xliff:g> pilków</item>
+  </plurals>
+
+  <string name="history">Historia</string>
+  <string name="msgs_history_empty">Historia jest pusta.</string>
+  <string name="msgs_history_unknown">Nieznany element historii.</string>
+
+  <string name="search">Wyniki wyszukiwania</string>
+  <string name="search_hint">Wpisz frazę wyszukiwania</string>
+  <string name="search_voice_hint">Wypowiedz frazę wyszukiwania</string>
+  <string name="search_error_msg">Napotkano błąd w trakcie wyszukiwania. Nie znaleziono wyników.</string>
+  <string name="search_no_results_msg">Nie znaleziono wyników.</string>
+  <plurals name="search_found_items">
+    <item quantity="zero">Nie znaleziono plików</item>
+    <item quantity="one">Znaleziono 1 plik</item>
+    <item quantity="other">Znaleziono <xliff:g id="count">%d</xliff:g> plików</item>
+  </plurals>
+  <string name="search_found_items_in_directory"><xliff:g id="items">%1$s</xliff:g> w
+    <xliff:g id="path">%2$s</xliff:g></string>
+  <string name="search_terms"><![CDATA[<b>Warunki:</b>]]> <xliff:g id="terms">%1$s</xliff:g></string>
+  <string name="search_few_characters_title">Potwierdź wyszukiwanie</string>
+  <string name="search_few_characters_msg">Wyszukiwane frazy mają małą liczbę znaków. Operacja może wymagać dużo czasu oraz zasobów systemowych.\n\nCzy chcesz kontynuować?</string>
+  <string name="searching">Proszę czekać\u2026</string>
+  <string name="searching_action_label">Wyszukiwanie w toku</string>
+
+  <string name="picker_title">Wybierz plik</string>
+
+  <string name="editor">Edytor</string>
+  <string name="editor_invalid_file_msg">Nieprawidłowy plik.</string>
+  <string name="editor_file_not_found_msg">Nie znaleziono pliku.</string>
+  <string name="editor_file_exceed_size_msg">Plik jest za duży, by go otworzyć na tym urządzeniu.</string>
+  <string name="editor_dirty_ask_title">Potwierdź wyjście</string>
+  <string name="editor_dirty_ask_msg">Nie zapisano zmian.\n\nWyjść bez zapisywania?</string>
+  <string name="editor_successfully_saved">Plik został pomyślnie zapisany.</string>
+  <string name="editor_read_only_mode">Plik jest otwarty w trybie tylko do odczytu.</string>
+
+  <string name="bookmarks">Zakładki</string>
+  <string name="bookmarks_home">Folder domowy</string>
+  <string name="bookmarks_root_folder">Folder główny</string>
+  <string name="bookmarks_system_folder">Folder systemowy</string>
+  <string name="bookmarks_button_config_cd">Ustaw folder początkowy.</string>
+  <string name="bookmarks_button_remove_bookmark_cd">Usuń zakładkę.</string>
+  <string name="bookmarks_msgs_add_success">Zakładka została dodana pomyślnie.</string>
+  
+  <string name="initial_directory_dialog_title">Folder początkowy</string>
+  <string name="initial_directory_label">Wybierz folder początkowy:</string>
+  <string name="initial_directory_relative_msg">Ścieżki względne nie są dozwolone.</string>
+  <string name="initial_directory_error_msg">Wystąpił błąd podczas zapisywania folderu początkowego.</string>
+
+  <string name="menu_history">Historia</string>
+  <string name="menu_bookmarks">Zakładki</string>
+  <string name="menu_search">Wyszukiwanie</string>
+  <string name="menu_settings">Ustawienia</string>
+  <string name="menu_clear_history">Wyczyść historię</string>
+
+  <string name="create_copy_regexp">
+    <xliff:g id="name">%1$s</xliff:g> - kopiuj<xliff:g id="extension">%2$s</xliff:g></string>
+  <string name="create_new_compress_file_regexp">
+    <xliff:g id="name">%1$s</xliff:g> - nowy<xliff:g id="extension">%2$s</xliff:g></string>
+
+  <string name="waiting_dialog_msg">Operacja jest wykonywana\u2026</string>
+  <string name="waiting_dialog_copying_title">Kopiowanie\u2026</string>
+  <string name="waiting_dialog_copying_msg">
+    <![CDATA[<b>Z</b>]]> <xliff:g id="from">%1$s</xliff:g><![CDATA[<br/>]]>
+    <![CDATA[<b>Do</b>]]> <xliff:g id="to">%2$s</xliff:g></string>
+  <string name="waiting_dialog_moving_title">Przenoszenie\u2026</string>
+  <string name="waiting_dialog_moving_msg">
+    <![CDATA[<b>Z</b>]]> <xliff:g id="from">%1$s</xliff:g><![CDATA[<br/>]]>
+    <![CDATA[<b>Do</b>]]> <xliff:g id="to">%2$s</xliff:g></string>
+  <string name="waiting_dialog_deleting_title">Usuwanie\u2026</string>
+  <string name="waiting_dialog_deleting_msg">
+    <![CDATA[<b>Plik</b>]]> <xliff:g id="file">%1$s</xliff:g></string>
+  <string name="waiting_dialog_extracting_title">Wyodrębnianie\u2026</string>
+  <string name="waiting_dialog_extracting_msg">
+    <![CDATA[<b>Plik</b>]]> <xliff:g id="file">%1$s</xliff:g></string>
+  <string name="waiting_dialog_compressing_title">Kompresowanie\u2026</string>
+  <string name="waiting_dialog_compressing_msg">
+    <![CDATA[<b>Plik</b>]]> <xliff:g id="file">%1$s</xliff:g></string>
+  <string name="waiting_dialog_analizing_msg">
+    <![CDATA[<b>Analiza\u2026</b>]]></string>
+  <string name="msgs_extracting_success">Wyodrębnianie zakończone sukcesem. Dane zostały wyodrębnione do <xliff:g id="destination">%1$s</xliff:g>.</string>
+  <string name="msgs_compressing_success">Kompresja zakończona sukcesem. Dane zostały skompresowane do <xliff:g id="destination">%1$s</xliff:g>.</string>
+
+  <string name="actions_dialog_title">Polecenia</string>
+  <string name="actions_menu_properties_current_folder">Właściwości</string>
+  <string name="actions_menu_refresh">Odśwież</string>
+  <string name="actions_menu_new_directory">Nowy folder</string>
+  <string name="actions_menu_new_file">Nowy plik</string>
+  <string name="actions_menu_select_all">Wybierz wszystko</string>
+  <string name="actions_menu_deselect_all">Odznacz wszystko</string>
+  <string name="actions_menu_select">Wybierz</string>
+  <string name="actions_menu_deselect">Odznacz</string>
+  <string name="actions_menu_paste_selection">Kopiuj wybrane tutaj</string>
+  <string name="actions_menu_move_selection">Przenieś wybrane tutaj</string>
+  <string name="actions_menu_delete_selection">Usuń wybrane</string>
+  <string name="actions_menu_compress_selection">Skompresuj wybrane</string>
+  <string name="actions_menu_create_link">Utwórz łącze</string>
+  <string name="actions_menu_open">Otwórz</string>
+  <string name="actions_menu_open_with">Otwórz za pomocą</string>
+  <string name="actions_menu_execute">Wykonaj</string>
+  <string name="actions_menu_send">Wyślij</string>
+  <string name="actions_menu_send_selection">Wyślij wybrane</string>
+  <string name="actions_menu_compress">Skompresuj</string>
+  <string name="actions_menu_extract">Wyodrębnij</string>
+  <string name="actions_menu_delete">Usuń</string>
+  <string name="actions_menu_rename">Zmień nazwę</string>
+  <string name="actions_menu_create_copy">Utwórz kopię</string>
+  <string name="actions_menu_properties">Właściwości</string>
+  <string name="actions_menu_add_to_bookmarks">Dodaj do zakładek</string>
+  <string name="actions_menu_add_shortcut">Utwórz skrót</string>
+  <string name="actions_menu_open_parent_folder">Otwórz folder nadrzędny</string>
+
+  <string name="actions_ask_undone_operation_msg">Ta czynność nie może zostać cofnięta. Czy chcesz kontynuować?</string>
+
+  <string name="input_name_dialog_label">Nazwa:</string>
+  <string name="input_name_dialog_message_empty_name">Nazwa nie może być pusta.</string>
+  <string name="input_name_dialog_message_invalid_path_name">Nieprawidłowa nazwa. Znaki \'<xliff:g id="invalid_characters">%1$s</xliff:g>\' są niedozwolone.</string>
+  <string name="input_name_dialog_message_invalid_name">Nieprawidłowa nazwa. Nazwy \'.\' i \'..\' są niedozwolone.</string>
+  <string name="input_name_dialog_message_name_exists">Nazwa już istnieje.</string>
+
+  <string name="associations_dialog_title">Skojarzenia</string>
+  <string name="associations_dialog_remember">Zapamiętaj wybór</string>
+  <string name="associations_dialog_openwith_title">Otwórz za pomocą</string>
+  <string name="associations_dialog_openwith_action">Otwórz</string>
+  <string name="associations_dialog_sendwith_title">Wyślij z</string>
+  <string name="associations_dialog_sendwith_action">Wyślij</string>
+
+  <string name="inline_autocomplete_tab_nothing_to_complete_msg">Nic do dokończenia.</string>
+
+  <string name="execution_console_title">Konsola</string>
+  <string name="execution_console_script_name_label">Skrypt:</string>
+  <string name="execution_console_script_execution_time_label">Czas:</string>
+  <string name="execution_console_script_exitcode_label">Kod wyjścia:</string>
+  <string name="execution_console_script_execution_time_text"><xliff:g id="seconds">%1$s</xliff:g> s</string>
+
+  <string name="mime_folder">Folder</string>
+  <string name="mime_symlink">Dowiązanie</string>
+  <string name="mime_unknown">Nieznane</string>
+
+  <string name="selection_one_folder">Zaznaczono <xliff:g id="folders">%1$s</xliff:g> folder.</string>
+  <string name="selection_other_folders">Zaznaczono <xliff:g id="folders">%1$s</xliff:g> folderów.</string>
+  <string name="selection_one_file">Zaznaczony <xliff:g id="files">%1$s</xliff:g> plik.</string>
+  <string name="selection_other_files">Zaznaczono <xliff:g id="files">%1$s</xliff:g> plików.</string>
+  <string name="selection_other_folders_one_file">Zaznaczono <xliff:g id="folders">%1$s</xliff:g> folderów i <xliff:g id="files">%2$s</xliff:g> plik.</string>
+  <string name="selection_one_folder_other_files">Zaznaczono <xliff:g id="folder2">%1$s</xliff:g> folder i <xliff:g id="file2">%2$s</xliff:g> plików.</string>
+  <string name="selection_other_folders_other_files">Zaznaczono <xliff:g id="folder2">%1$s</xliff:g> folderów i <xliff:g id="files">%2$s</xliff:g> plików.</string>
+
+
+  <string name="category_system">SYSTEM</string>
+  <string name="category_app">APLIKACJE</string>
+  <string name="category_binary">PLIKI BINARNE</string>
+  <string name="category_text">TEKST</string>
+  <string name="category_document">DOKUMENTY</string>
+  <string name="category_ebook">EBOOKI</string>
+  <string name="category_mail">E-MAILE</string>
+  <string name="category_compress">ARCHIWA</string>
+  <string name="category_exec">WYKONYWALNE</string>
+  <string name="category_database">BAZY DANYCH</string>
+  <string name="category_font">CZCIONKI</string>
+  <string name="category_image">OBRAZY</string>
+  <string name="category_audio">PLIKI AUDIO</string>
+  <string name="category_video">PLIKI WIDEO</string>
+  <string name="category_security">ZABEZPIECZENIA</string>
+
+  <string name="compression_mode_title">Tryb kompresji</string>
+
+  <string name="shortcut_failed_msg">Nie udało się wykonać skrótu.</string>
+  <string name="shortcut_creation_success_msg">Skrót utworzony pomyślnie.</string>
+  <string name="shortcut_creation_failed_msg">Utworzenie skrótu nie powiodło się.</string>
+
+  <string name="pref">Ustawienia</string>
+  <string name="pref_general">Główne ustawienia</string>
+  <string name="pref_search">Opcje wyszukiwania</string>
+  <string name="pref_themes">Motywy</string>
+  <string name="pref_about">O aplikacji</string>
+  <string name="pref_about_summary">Menedżer plików v<xliff:g id="version">%1$s</xliff:g>\nCopyright \u00A9 2013 Projekt CyanogenMod</string>
+
+  <string name="pref_general_behaviour_category">Generalne</string>
+  <string name="pref_case_sensitive_sort">Uwzględnianie wielkości liter</string>
+  <string name="pref_case_sensitive_sort_summary">Uwzględniaj wielkość liter w trakcie nawigacji i sortowania wyników wyszukiwania</string>
+  <string name="pref_disk_usage_warning_level">Ostrzeżenie o zapełnieniu dysku</string>
+  <string name="pref_disk_usage_warning_level_summary" formatted="false">Wyświetlaj widżet użycia dysku w innym kolorze po przekroczeniu <xliff:g id="level">%1$s</xliff:g> procent zapełnienia wolnej przestrzeni.</string>
+  <string name="pref_compute_folder_statistics">Obliczaj statystyki folderów</string>
+  <string name="pref_compute_folder_statistics_on">Uwaga! Obliczanie statystyk folderów wymaga dużo czasu oraz zasobów systemowych</string>
+  <string name="pref_use_flinger">Używaj gestów przewijania</string>
+  <string name="pref_use_flinger_summary">Usuwaj pliki i foldery za pomocą gestów przewijania od lewej do prawej.</string>
+  <string name="pref_general_advanced_settings_category">Zaawansowane</string>
+  <string name="pref_access_mode">Tryb dostępu</string>
+  <string name="pref_access_mode_safe">Tryb bezpieczny</string>
+  <string name="pref_access_mode_safe_summary">Tryb bezpieczny\n\nAplikacja działa bez podniesionych uprawnień i jedynymi dostępnymi systemami plików są woluminy danych (karty pamięci i USB)</string>
+  <string name="pref_access_mode_prompt">Tryb powiadamiania</string>
+  <string name="pref_access_mode_prompt_summary">Tryb powiadamiania\n\nAplikacja ma pełny dostęp do systemu plików, ale będzie prosiła o pozwolenie przed wykonaniem każdej uprzywilejowanej akcji.</string>
+  <string name="pref_access_mode_root">Tryb dostępu do roota</string>
+  <string name="pref_access_mode_root_summary">Tryb dostępu do roota\n\Uwaga! Tryb ten pozwala na wykonywanie operacji, które mogą uszkodzić urządzenie. Ponosisz odpowiedzialność za upewnienie się, że dana akcja jest bezpieczna.</string>
+  <string name="pref_search_results_category">Wyniki</string>
+  <string name="pref_show_relevance_widget">Pokaż wskaźnik trafności</string>
+  <string name="pref_highlight_terms">Podświetl wyszukiwane frazy</string>
+  <string name="pref_sort_search_results_mode">Tryb sortowania wyników</string>
+  <string name="pref_sort_search_results_mode_none">Nie sortuj</string>
+  <string name="pref_sort_search_results_mode_name">Wg nazwy</string>
+  <string name="pref_sort_search_results_mode_relevance">Wg trafności</string>
+  <string name="pref_search_privacity_category">Prywatność</string>
+  <string name="pref_save_search_terms">Zapisuj wyszukiwane frazy</string>
+  <string name="pref_save_search_terms_on">Wyszukiwane frazy będą zapisywane i używane jako podpowiedzi w przyszłości</string>
+  <string name="pref_save_search_terms_off">Wyszukiwane frazy nie będą zapisywane</string>
+  <string name="pref_remove_saved_search_terms">Usuń zapisane wyszukiwane frazy</string>
+  <string name="pref_remove_saved_search_terms_summary">Wybierz by usunąć wszystkie zapisane wyszukiwane frazy</string>
+  <string name="pref_remove_saved_search_terms_msg">Wszystkie zapisane wyszukiwane frazy zostały usunięte.</string>
+  <string name="pref_themes_selection_category">Motywy</string>
+  <string name="pref_themes_set_theme">Zastosuj motyw</string>
+  <string name="pref_themes_no_preview">Brak podglądu</string>
+  <string name="pref_themes_confirmation">Motyw został zastosowany.</string>
+  <string name="pref_themes_not_found">Nie znaleziono motywu.</string>
+
+  <string name="pref_debug_traces">Zapisuj informacje debugowania</string>
+
+  <string name="theme_default_name">Jasny motyw</string>
+  <string name="theme_default_description">Jasny motyw dla Menedżera plików CyanogenMod.</string>
+  <string name="themes_author">CyanogenMod</string>
+
+  <string name="security_warning_extract">Uwaga!\n\n
+    Wyodrębnienie pliku archiwum z ścieżkami względnymi lub bezwzględnymi może spowodować uszkodzenie urządzenia poprzez nadpisanie plików systemowych.\n\n
+    Czy chcesz kontynuować?</string>
+
+  <string name="changelog_title">Lista zmian</string>
+
+  <string name="welcome_title">Witaj</string>
+  <string name="welcome_msg">
+    Witaj w Menedżerze plików CyanogenMod.
+    \n\nAplikacja ta pozwala Ci przeglądać pliki systemowe i wykonywać czynności, które mogą uszkodzić urządzenie. Aby zapobiec ewentualnym szkodom, aplikacja zostanie uruchomiona w bezpiecznym trybie bez podwyższonych uprawnień.
+    \n\nTryb z pełnymi uprawnieniami możesz aktywować w ustawieniach aplikacji. Ponosisz odpowiedzialność za to, by swoimi działaniami nie doprowadzić do uszkodzenia systemu.
+    \n\nZespół CyanogenMod.\n</string>
+
+</resources>
