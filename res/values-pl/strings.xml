@@ -335,17 +335,19 @@
 
   <string name="pref_general_behaviour_category">Generalne</string>
   <string name="pref_case_sensitive_sort">Uwzględnianie wielkości liter</string>
-  <string name="pref_case_sensitive_sort_summary">Uwzględniaj wielkość liter w trakcie nawigacji i sortowania wyników wyszukiwania</string>
+  <string name="pref_case_sensitive_sort_summary">Uwzględniaj wielkość liter w trakcie nawigacji i sortowania wyników wyszukiwania.</string>
   <string name="pref_disk_usage_warning_level">Ostrzeżenie o zapełnieniu dysku</string>
   <string name="pref_disk_usage_warning_level_summary" formatted="false">Wyświetlaj widżet użycia dysku w innym kolorze po przekroczeniu <xliff:g id="level">%1$s</xliff:g> procent zapełnienia wolnej przestrzeni.</string>
   <string name="pref_compute_folder_statistics">Obliczaj statystyki folderów</string>
   <string name="pref_compute_folder_statistics_on">Uwaga! Obliczanie statystyk folderów wymaga dużo czasu oraz zasobów systemowych</string>
+  <string name="pref_display_thumbs">Podgląd</string>
+  <string name="pref_display_thumbs_summary">Pokazuj miniaturki aplikacji, muzyki, zdjęć i plików wideo.</string>
   <string name="pref_use_flinger">Używaj gestów przewijania</string>
   <string name="pref_use_flinger_summary">Usuwaj pliki i foldery za pomocą gestów przewijania od lewej do prawej.</string>
   <string name="pref_general_advanced_settings_category">Zaawansowane</string>
   <string name="pref_access_mode">Tryb dostępu</string>
   <string name="pref_access_mode_safe">Tryb bezpieczny</string>
-  <string name="pref_access_mode_safe_summary">Tryb bezpieczny\n\nAplikacja działa bez podniesionych uprawnień i jedynymi dostępnymi systemami plików są woluminy danych (karty pamięci i USB)</string>
+  <string name="pref_access_mode_safe_summary">Tryb bezpieczny\n\nAplikacja działa bez podniesionych uprawnień i jedynymi dostępnymi systemami plików są woluminy danych (karty pamięci i USB).</string>
   <string name="pref_access_mode_prompt">Tryb powiadamiania</string>
   <string name="pref_access_mode_prompt_summary">Tryb powiadamiania\n\nAplikacja ma pełny dostęp do systemu plików, ale będzie prosiła o pozwolenie przed wykonaniem każdej uprzywilejowanej akcji.</string>
   <string name="pref_access_mode_root">Tryb dostępu do roota</string>
