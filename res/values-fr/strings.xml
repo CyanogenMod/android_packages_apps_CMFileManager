@@ -53,22 +53,22 @@
   <string name="msgs_settings_save_failure">Impossible d\'appliquer ou d\'enregistrer le réglage</string>
   <string name="msgs_settings_invalid_initial_directory">Le dossier d\'accueil \"<xliff:g id="initial_dir">%1$s</xliff:g>\" est invalide. Changement vers le dossier racine.</string>
   <string name="msgs_success">Opération réussie</string>
-  <string name="msgs_unknown">Une erreur a été détectée. L\'opération a échoué</string>
+  <string name="msgs_unknown">Une erreur a été détectée. L\'opération a échouée</string>
   <string name="msgs_insufficient_permissions">Cette opération nécessite une élévation des droits. Tentative d\'accès Root.</string>
   <string name="msgs_file_not_found">Fichier ou dossier introuvable</string>
   <string name="msgs_command_not_found">Commande introuvable ou définition invalide</string>
-  <string name="msgs_io_failed">Lecture/Ecriture échouée</string>
+  <string name="msgs_io_failed">Lecture/Écriture échouée</string>
   <string name="msgs_operation_timeout">Opération expirée</string>
   <string name="msgs_operation_failure">Opération échouée</string>
   <string name="msgs_console_alloc_failure">Erreur interne</string>
   <string name="msgs_operation_can_not_be_cancelled">Impossible d\'annuler l\'opération</string>
-  <string name="msgs_read_only_filesystem">Le système de fichiers est en lecture seul. Essayez de monter le système de fichiers en lecture-écriture avant de retenter l\'opération.</string>
+  <string name="msgs_read_only_filesystem">Le système de fichiers est en lecture seule. Essayez de monter le système de fichiers en lecture-écriture avant de retenter l\'opération.</string>
   <string name="msgs_illegal_argument">Argument illégal. Invocation échouée.</string>
   <string name="msgs_unresolved_inconsistencies">Opération non autorisée pour cause d\'incohérences</string>
   <string name="msgs_operation_not_allowed_in_current_directory">Opération non autorisée dans le dossier actuel</string>
   <string name="msgs_push_again_to_exit">Appuyer encore pour sortir</string>
   <string name="msgs_not_registered_app">Aucune application disponible pour ouvrir le fichier sélectionné</string>
-  <string name="msgs_overwrite_files">Certains fichiers existent déjà dans le dossier de destination.\n\nEcraser\u00A0?</string>
+  <string name="msgs_overwrite_files">Certains fichiers existent déjà dans le dossier de destination.\n\nÉcraser\u00A0?</string>
   <string name="msgs_action_association_failed">Impossible d\'associer l\'action à l\'application</string>
   <string name="advise_insufficient_permissions">L\'opération nécessite une élévation des privilèges.\n\nVoulez-vous passer en mode Root\u00A0?</string>
   <string name="parent_dir">Dossier parent</string>
