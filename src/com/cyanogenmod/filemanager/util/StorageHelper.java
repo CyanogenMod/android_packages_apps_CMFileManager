@@ -18,10 +18,10 @@ package com.cyanogenmod.filemanager.util;
 import android.content.Context;
 import android.os.Environment;
 import android.os.storage.StorageManager;
-import android.os.storage.StorageVolume;
 
 import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
+import com.cyanogenmod.filemanager.compat.StorageVolume;
 
 import java.io.File;
 import java.lang.reflect.Constructor;

@@ -19,10 +19,12 @@ package com.cyanogenmod.filemanager.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.Process;
 import android.os.UserHandle;
 import android.util.Log;
 
 import com.cyanogenmod.filemanager.FileManagerApplication;
+import com.cyanogenmod.filemanager.compat.CompatUtils;
 import com.cyanogenmod.filemanager.util.AndroidHelper;
 
 import java.io.File;
@@ -145,8 +147,8 @@ public final class Preferences {
     private static File getWorldReadablePropertiesFile(Context context) {
         String dataDir = context.getApplicationInfo().dataDir;
         if (AndroidHelper.isSecondaryUser(context)) {
-            dataDir = dataDir.replace(String.valueOf(UserHandle.myUserId()),
-                    String.valueOf(UserHandle.USER_OWNER));
+            dataDir = dataDir.replace(String.valueOf(CompatUtils.getClsHideIntStaticMethod(UserHandle.class, "myUserId", Process.myUid())),
+                    String.valueOf(CompatUtils.getClsHideIntStaticField(UserHandle.class, "USER_OWNER", 0)));
         }
         return new File(dataDir, SHARED_PROPERTIES_FILENAME);
     }
