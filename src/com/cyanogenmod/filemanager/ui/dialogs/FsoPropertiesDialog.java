@@ -532,7 +532,7 @@ public class FsoPropertiesDialog
                 if (superuser) {
                     this.mInfoMsgView.setOnClickListener(null);
                     this.mInfoMsgView.setVisibility(View.GONE);
-                    this.mInfoMsgView.setBackground(null);
+                    this.mInfoMsgView.setBackgroundDrawable(null);
 
                     // Enable controls
                     this.mSpnOwner.setEnabled(true);

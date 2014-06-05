@@ -469,12 +469,6 @@
             <LinearLayout
               android:layout_width="wrap_content"
               android:layout_height="wrap_content">
-              <CheckBox
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/default_margin"
-                android:layout_marginBottom="@dimen/default_margin"
-                android:visibility="invisible" />
               <TextView
                 android:id="@+id/fso_properties_permissions_owner_label"
                 android:layout_width="wrap_content"
@@ -487,12 +481,6 @@
             <LinearLayout
               android:layout_width="wrap_content"
               android:layout_height="wrap_content">
-              <CheckBox
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/default_margin"
-                android:layout_marginBottom="@dimen/default_margin"
-                android:visibility="invisible" />
               <TextView
                 android:id="@+id/fso_properties_permissions_group_label"
                 android:layout_width="wrap_content"
@@ -505,12 +493,6 @@
             <LinearLayout
               android:layout_width="wrap_content"
               android:layout_height="wrap_content">
-              <CheckBox
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/default_margin"
-                android:layout_marginBottom="@dimen/default_margin"
-                android:visibility="invisible" />
               <TextView
                 android:id="@+id/fso_properties_permissions_others_label"
                 android:layout_width="wrap_content"

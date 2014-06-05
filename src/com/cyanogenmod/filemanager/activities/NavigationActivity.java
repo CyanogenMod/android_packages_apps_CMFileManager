@@ -365,29 +365,29 @@ public class NavigationActivity extends Activity
         setContentView(R.layout.navigation);
 
         //Initialize nfc adapter
-        NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        if (mNfcAdapter != null) {
-            mNfcAdapter.setBeamPushUrisCallback(new NfcAdapter.CreateBeamUrisCallback() {
-                @Override
-                public Uri[] createBeamUris(NfcEvent event) {
-                    List<FileSystemObject> selectedFiles =
-                            getCurrentNavigationView().getSelectedFiles();
-                    if (selectedFiles.size() > 0) {
-                        List<Uri> fileUri = new ArrayList<Uri>();
-                        for (FileSystemObject f : selectedFiles) {
-                            //Beam ignores folders and system files
-                            if (!FileHelper.isDirectory(f) && !FileHelper.isSystemFile(f)) {
-                                fileUri.add(Uri.fromFile(new File(f.getFullPath())));
-                            }
-                        }
-                        if (fileUri.size() > 0) {
-                            return fileUri.toArray(new Uri[fileUri.size()]);
-                        }
-                    }
-                    return null;
-                }
-            }, this);
-        }
+//        NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+//        if (mNfcAdapter != null) {
+//            mNfcAdapter.setBeamPushUrisCallback(new NfcAdapter.CreateBeamUrisCallback() {
+//                @Override
+//                public Uri[] createBeamUris(NfcEvent event) {
+//                    List<FileSystemObject> selectedFiles =
+//                            getCurrentNavigationView().getSelectedFiles();
+//                    if (selectedFiles.size() > 0) {
+//                        List<Uri> fileUri = new ArrayList<Uri>();
+//                        for (FileSystemObject f : selectedFiles) {
+//                            //Beam ignores folders and system files
+//                            if (!FileHelper.isDirectory(f) && !FileHelper.isSystemFile(f)) {
+//                                fileUri.add(Uri.fromFile(new File(f.getFullPath())));
+//                            }
+//                        }
+//                        if (fileUri.size() > 0) {
+//                            return fileUri.toArray(new Uri[fileUri.size()]);
+//                        }
+//                    }
+//                    return null;
+//                }
+//            }, this);
+//        }
 
         //Initialize activity
         init();

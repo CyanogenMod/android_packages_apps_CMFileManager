@@ -17,12 +17,14 @@
 package afzkl.development.mColorPicker.views;
 
 import afzkl.development.mColorPicker.views.ColorPickerView.OnColorChangedListener;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.os.Build;
+import android.support.v4.view.ViewCompat;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -104,6 +106,7 @@ public class ColorDialogView extends RelativeLayout
      * Method that initializes the view. This method loads all the necessary
      * information and create an appropriate layout for the view
      */
+    @SuppressLint("NewApi") 
     private void init() {
         // To fight color branding.
         ((Activity)getContext()).getWindow().setFormat(PixelFormat.RGBA_8888);
@@ -111,7 +114,9 @@ public class ColorDialogView extends RelativeLayout
         // Create the scrollview over the dialog
         final int dlgMarging = (int)convertDpToPixel(DEFAULT_MARGIN_DP);
         ScrollView sv = new ScrollView(getContext());
-        sv.setId(generateViewId());
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
+        	sv.setId(generateViewId());
+        }
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                 android.view.ViewGroup.LayoutParams.MATCH_PARENT,
                 android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -121,7 +126,9 @@ public class ColorDialogView extends RelativeLayout
 
         // Now the vertical layout
         LinearLayout ll = new LinearLayout(getContext());
-        ll.setId(generateViewId());
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
+        	ll.setId(generateViewId());
+        }
         lp = new RelativeLayout.LayoutParams(
                 android.view.ViewGroup.LayoutParams.MATCH_PARENT,
                 android.view.ViewGroup.LayoutParams.MATCH_PARENT);
@@ -150,6 +157,7 @@ public class ColorDialogView extends RelativeLayout
      *
      * @param parent The parent layout
      */
+    @SuppressLint("NewApi")
     private int createColorInput(ViewGroup parent) {
         final int dlgMarging = (int)convertDpToPixel(DEFAULT_MARGIN_DP);
         LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(
@@ -199,7 +207,9 @@ public class ColorDialogView extends RelativeLayout
         this.etColor.addTextChangedListener(this);
 
         LinearLayout ll1 = new LinearLayout(getContext());
-        ll1.setId(generateViewId());
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
+        	ll1.setId(generateViewId());
+        }
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                 android.view.ViewGroup.LayoutParams.MATCH_PARENT,
                 android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -220,10 +230,13 @@ public class ColorDialogView extends RelativeLayout
      * @param belowOf The anchor view
      * @return id The layout id
      */
+    @SuppressLint("NewApi") 
     private int createColorPicker(ViewGroup parent, int belowOf) {
         final int dlgMarging = (int)convertDpToPixel(DEFAULT_MARGIN_DP);
         this.mPickerView = new ColorPickerView(getContext());
-        this.mPickerView.setId(generateViewId());
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
+        	this.mPickerView.setId(generateViewId());
+        }
         this.mPickerView.setOnColorChangedListener(this);
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                 android.view.ViewGroup.LayoutParams.MATCH_PARENT,
@@ -242,6 +255,7 @@ public class ColorDialogView extends RelativeLayout
      * @param belowOf The anchor view
      * @return id The layout id
      */
+    @SuppressLint("NewApi")
     private int createColorsPanel(ViewGroup parent, int belowOf) {
         final int dlgMarging = (int)convertDpToPixel(DEFAULT_MARGIN_DP);
         final int panelHeight = (int)convertDpToPixel(DEFAULT_PANEL_HEIGHT_DP);
@@ -274,7 +288,9 @@ public class ColorDialogView extends RelativeLayout
         sep1.setTextSize(TypedValue.COMPLEX_UNIT_SP, DEFAULT_TEXT_SIZE_SP);
 
         LinearLayout ll1 = new LinearLayout(getContext());
-        ll1.setId(generateViewId());
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
+        	ll1.setId(generateViewId());
+        }
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                 android.view.ViewGroup.LayoutParams.MATCH_PARENT,
                 android.view.ViewGroup.LayoutParams.WRAP_CONTENT);

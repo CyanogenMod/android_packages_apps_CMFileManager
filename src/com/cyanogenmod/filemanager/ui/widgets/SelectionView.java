@@ -16,8 +16,10 @@
 
 package com.cyanogenmod.filemanager.ui.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,11 +29,9 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.util.FileHelper;
-
 import java.util.List;
 
 /**
@@ -85,10 +85,15 @@ public class SelectionView extends LinearLayout {
         // Obtain the height of the view for use in expand/collapse animation
         getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @SuppressLint("NewApi") 
                     @Override
                     public void onGlobalLayout() {
                         SelectionView.this.mViewHeight = getHeight();
-                        getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+                        	getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        }else{
+                        	getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                        }
                         setVisibility(View.GONE);
                         LayoutParams params = (LayoutParams)SelectionView.this.getLayoutParams();
                         params.height = 0;

@@ -16,9 +16,11 @@
 
 package com.cyanogenmod.filemanager.preferences;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.Build;
 import android.os.Process;
 import android.os.UserHandle;
 import android.util.Log;
@@ -144,9 +146,10 @@ public final class Preferences {
                 SETTINGS_FILENAME, Context.MODE_PRIVATE);
     }
 
+    @SuppressLint("NewApi")
     private static File getWorldReadablePropertiesFile(Context context) {
         String dataDir = context.getApplicationInfo().dataDir;
-        if (AndroidHelper.isSecondaryUser(context)) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && AndroidHelper.isSecondaryUser(context)) {
             dataDir = dataDir.replace(String.valueOf(CompatUtils.getClsHideIntStaticMethod(UserHandle.class, "myUserId", Process.myUid())),
                     String.valueOf(CompatUtils.getClsHideIntStaticField(UserHandle.class, "USER_OWNER", 0)));
         }

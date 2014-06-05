@@ -16,11 +16,13 @@
 
 package com.cyanogenmod.filemanager.compat;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.Log;
 import android.view.ActionProvider;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -462,8 +464,9 @@ public final class MenuItemImpl implements MenuItem {
         }
     }
     
+    @SuppressLint("NewApi") 
     public boolean isVisible() {
-        if (mActionProvider != null && mActionProvider.overridesItemVisibility()) {
+        if (mActionProvider != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH && mActionProvider.overridesItemVisibility()) {
             return (mFlags & HIDDEN) == 0 && mActionProvider.isVisible();
         }
         return (mFlags & HIDDEN) == 0;
@@ -580,11 +583,16 @@ public final class MenuItemImpl implements MenuItem {
         return this;
     }
 
+    @SuppressLint("NewApi") 
     public View getActionView() {
         if (mActionView != null) {
             return mActionView;
         } else if (mActionProvider != null) {
-            mActionView = mActionProvider.onCreateActionView(this);
+        	if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+        		mActionView = mActionProvider.onCreateActionView(this);
+        	}else{
+        		mActionView = mActionProvider.onCreateActionView();
+        	}
             return mActionView;
         } else {
             return null;
@@ -595,14 +603,15 @@ public final class MenuItemImpl implements MenuItem {
         return mActionProvider;
     }
 
+    @SuppressLint("NewApi") 
     public MenuItem setActionProvider(ActionProvider actionProvider) {
-        if (mActionProvider != null) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH && mActionProvider != null) {
             mActionProvider.setVisibilityListener(null);
         }
         mActionView = null;
         mActionProvider = actionProvider;
         mMenu.onItemsChanged(true); // Measurement can be changed
-        if (mActionProvider != null) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH && mActionProvider != null) {
             mActionProvider.setVisibilityListener(new ActionProvider.VisibilityListener() {
                 @Override public void onActionProviderVisibilityChanged(boolean isVisible) {
                     mMenu.onItemVisibleChanged(MenuItemImpl.this);
@@ -656,6 +665,7 @@ public final class MenuItemImpl implements MenuItem {
         return this;
     }
 
+    @SuppressLint("NewApi") 
     public boolean hasCollapsibleActionView() {
         if ((mShowAsAction & SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW) != 0) {
             if (mActionView == null && mActionProvider != null) {

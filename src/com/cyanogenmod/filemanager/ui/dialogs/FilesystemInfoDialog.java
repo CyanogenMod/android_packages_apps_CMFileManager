@@ -305,7 +305,7 @@ public class FilesystemInfoDialog implements OnClickListener, OnCheckedChangeLis
                     boolean mountAllowed = MountPointHelper.isMountAllowed(this.mMountPoint);
                     if (mountAllowed) {
                         this.mInfoMsgView.setVisibility(View.GONE);
-                        this.mInfoMsgView.setBackground(null);
+                        this.mInfoMsgView.setBackgroundDrawable(null);
                         this.mSwStatus.setEnabled(true);
                         this.mIsMountAllowed = true;
                         break;
