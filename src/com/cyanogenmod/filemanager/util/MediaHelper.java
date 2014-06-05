@@ -19,6 +19,7 @@ package com.cyanogenmod.filemanager.util;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Process;
 import android.os.UserHandle;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
@@ -28,6 +29,8 @@ import android.text.TextUtils;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.cyanogenmod.filemanager.compat.CompatUtils;
 
 /**
  * A helper class with useful methods to extract media data.
@@ -238,7 +241,8 @@ public final class MediaHelper {
         }
         // We need to convert EXTERNAL_STORAGE -> EMULATED_STORAGE_TARGET / userId
         if (path.startsWith(EXTERNAL_STORAGE)) {
-            final String userId = String.valueOf(UserHandle.myUserId());
+        	final String userId = String.valueOf(CompatUtils.getClsHideIntStaticMethod(UserHandle.class, "myUserId", Process.myUid()));
+//            final String userId = String.valueOf(UserHandle.myUserId());
             final String target = new File(EMULATED_STORAGE_TARGET, userId).getAbsolutePath();
             path = path.replace(EXTERNAL_STORAGE, target);
         }

@@ -18,10 +18,10 @@ package com.cyanogenmod.filemanager.util;
 import android.content.Context;
 import android.os.Environment;
 import android.os.storage.StorageManager;
-import android.os.storage.StorageVolume;
 
 import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
+import com.cyanogenmod.filemanager.compat.StorageVolume;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -51,7 +51,7 @@ public final class StorageHelper {
             try {
                 StorageManager sm = (StorageManager) ctx.getSystemService(Context.STORAGE_SERVICE);
                 Method method = sm.getClass().getMethod("getVolumeList"); //$NON-NLS-1$
-                sStorageVolumes = (StorageVolume[])method.invoke(sm);
+                sStorageVolumes = StorageVolume.fromNative((Object[])method.invoke(sm));
 
             } catch (Exception ex) {
                 //Ignore. Android SDK StorageManager class doesn't have this method
@@ -82,6 +82,7 @@ public final class StorageHelper {
                     sStorageVolumes = new StorageVolume[]{sv};
                 } catch (Exception ex2) {
                     /**NON BLOCK**/
+                	ex2.printStackTrace();
                 }
             }
             if (sStorageVolumes == null) {

@@ -20,12 +20,14 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Process;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.util.DisplayMetrics;
 import android.view.ViewConfiguration;
 
 import com.cyanogenmod.filemanager.R;
+import com.cyanogenmod.filemanager.compat.CompatUtils;
 
 /**
  * A helper class with useful methods for deal with android.
@@ -104,11 +106,12 @@ public final class AndroidHelper {
     }
 
     public static boolean hasSupportForMultipleUsers(Context context) {
-        return UserManager.supportsMultipleUsers();
+        return CompatUtils.getClsHideBooleanStaticMethod(UserManager.class, "supportsMultipleUsers", true);
+//        return UserManager.supportsMultipleUsers();
     }
 
     public static boolean isUserOwner() {
-        return UserHandle.myUserId() == UserHandle.USER_OWNER;
+        return CompatUtils.getClsHideIntStaticMethod(UserHandle.class, "myUserId", Process.myUid()) == CompatUtils.getClsHideIntStaticField(UserHandle.class, "USER_OWNER", 0);
     }
 
     public static boolean isSecondaryUser(Context context) {
