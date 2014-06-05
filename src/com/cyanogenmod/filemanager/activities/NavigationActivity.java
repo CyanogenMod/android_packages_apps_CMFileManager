@@ -57,13 +57,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.internal.util.XmlUtils;
 import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.activities.preferences.SettingsPreferences;
 import com.cyanogenmod.filemanager.adapters.HighlightedSimpleMenuListAdapter;
 import com.cyanogenmod.filemanager.adapters.MenuSettingsAdapter;
 import com.cyanogenmod.filemanager.adapters.SimpleMenuListAdapter;
+import com.cyanogenmod.filemanager.compat.XmlUtils;
 import com.cyanogenmod.filemanager.console.Console;
 import com.cyanogenmod.filemanager.console.ConsoleAllocException;
 import com.cyanogenmod.filemanager.console.ConsoleBuilder;
