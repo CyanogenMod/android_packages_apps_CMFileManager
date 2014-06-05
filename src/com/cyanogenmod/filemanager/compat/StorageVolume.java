@@ -69,6 +69,29 @@ public class StorageVolume implements Parcelable {
         mMaxFileSize = maxFileSize;
         mOwner = owner;
     }
+    
+    public static StorageVolume[] fromNative(Object[] objs){
+    	if(objs != null){
+    		int len = objs.length;
+    		StorageVolume[] result = new StorageVolume[len];
+    		for(int i=0; i<len; i++){
+    			Object obj = objs[i];
+    			File path = (File) CompatUtils.getObjectObjectMethod(obj, "getPathFile");
+    			int descriptionId = (Integer) CompatUtils.getObjectObjectMethod(obj, "getDescriptionId");
+    			boolean primary = (Boolean) CompatUtils.getObjectObjectMethod(obj, "isPrimary");
+    			boolean removable = (Boolean) CompatUtils.getObjectObjectMethod(obj, "isRemovable");
+    			boolean emulated = (Boolean) CompatUtils.getObjectObjectMethod(obj, "isEmulated");
+    			int mtpReserveSpace = (Integer) CompatUtils.getObjectObjectMethod(obj, "getMtpReserveSpace");
+    			boolean allowMassStorage = (Boolean) CompatUtils.getObjectObjectMethod(obj, "allowMassStorage");
+    			long maxFileSize = (Long) CompatUtils.getObjectObjectMethod(obj, "getMaxFileSize");
+    			UserHandle owner = (UserHandle) CompatUtils.getObjectObjectMethod(obj, "getOwner");
+    			StorageVolume volume = new StorageVolume(path, descriptionId, primary, removable, emulated, mtpReserveSpace, allowMassStorage, maxFileSize, owner);
+    			result[i] = volume;
+    		}
+    		return result;
+    	}
+    	return null;
+    }
 
     private StorageVolume(Parcel in) {
         mStorageId = in.readInt();

@@ -51,7 +51,7 @@ public final class StorageHelper {
             try {
                 StorageManager sm = (StorageManager) ctx.getSystemService(Context.STORAGE_SERVICE);
                 Method method = sm.getClass().getMethod("getVolumeList"); //$NON-NLS-1$
-                sStorageVolumes = (StorageVolume[])method.invoke(sm);
+                sStorageVolumes = StorageVolume.fromNative((Object[])method.invoke(sm));
 
             } catch (Exception ex) {
                 //Ignore. Android SDK StorageManager class doesn't have this method
