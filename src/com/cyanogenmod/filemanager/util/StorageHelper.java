@@ -82,6 +82,7 @@ public final class StorageHelper {
                     sStorageVolumes = new StorageVolume[]{sv};
                 } catch (Exception ex2) {
                     /**NON BLOCK**/
+                	ex2.printStackTrace();
                 }
             }
             if (sStorageVolumes == null) {
