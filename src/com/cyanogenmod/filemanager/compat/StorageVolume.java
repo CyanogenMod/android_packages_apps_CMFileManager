@@ -17,12 +17,15 @@
 package com.cyanogenmod.filemanager.compat;
 
 import android.content.Context;
+import android.os.Environment;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.UserHandle;
+import android.util.Log;
 
 import java.io.CharArrayWriter;
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Description of a storage volume and its capabilities, including the
@@ -73,9 +76,14 @@ public class StorageVolume implements Parcelable {
     public static StorageVolume[] fromNative(Object[] objs){
     	if(objs != null){
     		int len = objs.length;
-    		StorageVolume[] result = new StorageVolume[len];
+    		ArrayList<StorageVolume> list = new ArrayList<StorageVolume>();
     		for(int i=0; i<len; i++){
     			Object obj = objs[i];
+    			Log.d(EXTRA_STORAGE_VOLUME, obj.toString());
+    			String state = (String) CompatUtils.getObjectObjectMethod(obj, "getState");
+				if (!Environment.MEDIA_MOUNTED.equals(state)) {
+					continue;
+				}
     			File path = (File) CompatUtils.getObjectObjectMethod(obj, "getPathFile");
     			int descriptionId = (Integer) CompatUtils.getObjectObjectMethod(obj, "getDescriptionId");
     			boolean primary = (Boolean) CompatUtils.getObjectObjectMethod(obj, "isPrimary");
@@ -86,9 +94,11 @@ public class StorageVolume implements Parcelable {
     			long maxFileSize = (Long) CompatUtils.getObjectObjectMethod(obj, "getMaxFileSize");
     			UserHandle owner = (UserHandle) CompatUtils.getObjectObjectMethod(obj, "getOwner");
     			StorageVolume volume = new StorageVolume(path, descriptionId, primary, removable, emulated, mtpReserveSpace, allowMassStorage, maxFileSize, owner);
-    			result[i] = volume;
+    			volume.setState(state);
+    			list.add(volume);
     		}
-    		return result;
+    		StorageVolume[] result = new StorageVolume[list.size()];
+    		return list.toArray(result);
     	}
     	return null;
     }
