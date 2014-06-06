@@ -24,7 +24,7 @@ import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 
 import java.util.Iterator;
 import java.util.Map;

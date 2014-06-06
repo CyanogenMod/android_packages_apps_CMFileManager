@@ -29,7 +29,7 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.util.FileHelper;
 import java.util.List;

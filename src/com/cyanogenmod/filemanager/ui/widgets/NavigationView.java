@@ -34,7 +34,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.cyanogenmod.filemanager.FileManagerApplication;
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 import com.cyanogenmod.filemanager.adapters.FileSystemObjectAdapter;
 import com.cyanogenmod.filemanager.adapters.FileSystemObjectAdapter.OnSelectionChangedListener;
 import com.cyanogenmod.filemanager.compat.StorageVolume;

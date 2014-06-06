@@ -18,7 +18,7 @@ package com.cyanogenmod.filemanager.util;
 
 import android.content.res.Resources;
 
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 
 import java.lang.reflect.Field;
 

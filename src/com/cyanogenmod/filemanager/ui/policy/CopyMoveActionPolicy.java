@@ -22,7 +22,7 @@ import android.content.DialogInterface;
 import android.text.Html;
 import android.text.Spanned;
 
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 import com.cyanogenmod.filemanager.console.NoSuchFileOrDirectory;
 import com.cyanogenmod.filemanager.console.RelaunchableException;
 import com.cyanogenmod.filemanager.listeners.OnRequestRefreshListener;

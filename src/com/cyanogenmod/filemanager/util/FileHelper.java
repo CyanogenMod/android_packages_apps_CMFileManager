@@ -22,7 +22,7 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.cyanogenmod.filemanager.FileManagerApplication;
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 import com.cyanogenmod.filemanager.commands.SyncResultExecutable;
 import com.cyanogenmod.filemanager.commands.shell.ResolveLinkCommand;
 import com.cyanogenmod.filemanager.console.Console;

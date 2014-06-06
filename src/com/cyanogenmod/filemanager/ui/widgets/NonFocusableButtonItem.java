@@ -19,7 +19,7 @@ package com.cyanogenmod.filemanager.ui.widgets;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 
 /**
  * A class that represents a button from an action bar that can't gain focus.

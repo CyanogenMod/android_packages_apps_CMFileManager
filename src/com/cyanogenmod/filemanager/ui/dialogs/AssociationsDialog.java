@@ -39,7 +39,7 @@ import android.widget.CheckBox;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 import com.cyanogenmod.filemanager.adapters.AssociationsAdapter;
 import com.cyanogenmod.filemanager.ui.ThemeManager;
 import com.cyanogenmod.filemanager.ui.ThemeManager.Theme;

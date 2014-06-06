@@ -53,7 +53,7 @@ import android.widget.TextView;
 import android.widget.TextView.BufferType;
 import android.widget.Toast;
 
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 import com.cyanogenmod.filemanager.activities.preferences.EditorPreferenceFragment;
 import com.cyanogenmod.filemanager.activities.preferences.EditorSHColorSchemePreferenceFragment;
 import com.cyanogenmod.filemanager.activities.preferences.SettingsPreferences;

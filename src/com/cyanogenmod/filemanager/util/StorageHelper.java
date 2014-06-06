@@ -20,7 +20,7 @@ import android.os.Environment;
 import android.os.storage.StorageManager;
 
 import com.cyanogenmod.filemanager.FileManagerApplication;
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 import com.cyanogenmod.filemanager.compat.StorageVolume;
 
 import java.io.File;

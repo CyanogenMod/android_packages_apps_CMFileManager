@@ -27,7 +27,7 @@ import android.os.UserHandle;
 import android.os.UserManager;
 import android.util.DisplayMetrics;
 import android.view.ViewConfiguration;
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 import com.cyanogenmod.filemanager.compat.CompatUtils;
 
 /**

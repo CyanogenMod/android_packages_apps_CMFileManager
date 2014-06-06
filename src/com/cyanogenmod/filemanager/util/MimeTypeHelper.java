@@ -21,7 +21,7 @@ import android.content.res.Resources;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 import com.cyanogenmod.filemanager.model.BlockDevice;
 import com.cyanogenmod.filemanager.model.CharacterDevice;
 import com.cyanogenmod.filemanager.model.Directory;

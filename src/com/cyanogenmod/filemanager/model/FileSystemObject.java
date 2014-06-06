@@ -16,7 +16,7 @@
 
 package com.cyanogenmod.filemanager.model;
 
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 import com.cyanogenmod.filemanager.util.FileHelper;
 
 import java.io.File;

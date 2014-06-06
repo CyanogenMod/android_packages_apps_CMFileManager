@@ -42,7 +42,7 @@ import android.widget.FrameLayout;
 import android.widget.ListPopupWindow;
 import android.widget.Toast;
 
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 import com.cyanogenmod.filemanager.adapters.CheckableListAdapter;
 import com.cyanogenmod.filemanager.adapters.CheckableListAdapter.CheckableItem;
 import com.cyanogenmod.filemanager.compat.StorageVolume;

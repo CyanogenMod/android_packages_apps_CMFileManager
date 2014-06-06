@@ -57,7 +57,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cyanogenmod.filemanager.FileManagerApplication;
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 import com.cyanogenmod.filemanager.activities.preferences.SettingsPreferences;
 import com.cyanogenmod.filemanager.adapters.HighlightedSimpleMenuListAdapter;
 import com.cyanogenmod.filemanager.adapters.MenuSettingsAdapter;

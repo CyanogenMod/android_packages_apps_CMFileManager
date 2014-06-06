@@ -20,7 +20,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.cyanogenmod.filemanager.FileManagerApplication;
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 import com.cyanogenmod.filemanager.model.Query;
 import com.cyanogenmod.filemanager.model.SearchResult;
 

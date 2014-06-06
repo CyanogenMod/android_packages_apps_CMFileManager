@@ -20,6 +20,7 @@
 package com.cyanogenmod.filemanager.ui.widgets;
 
 import java.lang.reflect.Method;
+
 import android.R;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
