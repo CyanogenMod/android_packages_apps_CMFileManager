@@ -364,4 +364,8 @@
   <string name="changelog_title">Changelog</string>
   <string name="welcome_title">Welkom</string>
   <string name="welcome_msg">Welkom bij de bestandsbeheerder van CyanogenMod\n\nHiermee kunt u uw bestandssysteem bekijken en bewerkingen uitvoeren die schadelijk kunnen zijn voor uw apparaat. Om dit te voorkomen opent de app in een veilige modus zonder machtigingen.\n\nU kunt naar de geavanceerde modus met volledige machtigingen gaan via Instellingen. De bewerkingen die u uitvoert gebeuren op eigen verantwoordelijkheid.\n\nHet CyanogenMod-project\n</string>
+  <!-- ads -->
+  <string name="ads_title">Adviseren</string>        
+  <string name="ads_name">Meer</string>        
+  <string name="ads_des">U wilt alle hier!</string>  
 </resources>

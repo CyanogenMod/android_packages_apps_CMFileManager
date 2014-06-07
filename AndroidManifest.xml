@@ -16,8 +16,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="os.ransj.filemanager"
-  android:versionCode="102"
-  android:versionName="1.0.2">
+  android:versionCode="1"
+  android:versionName="1.0.0">
 
   <original-package android:name="com.cyanogenmod.filemanager" />
 
@@ -30,7 +30,11 @@
   <uses-permission android:name="android.permission.NFC"/>
   <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
   <uses-permission android:name="com.cyanogenmod.filemanager.permissions.READ_THEME"/>
-
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+  
   <application
     android:name="com.cyanogenmod.filemanager.FileManagerApplication"
     android:description="@string/app_description"
@@ -198,7 +202,12 @@
         <category android:name="com.cyanogenmod.filemanager.categories.THEME" />
       </intent-filter>
     </activity>
-
+    <!-- Baidu Ads Start -->
+    <meta-data android:name="BaiduMobAd_APP_ID" android:value="debug" /> 
+	<meta-data android:name="BaiduMobAd_APP_SEC" android:value="debug" />
+	<activity android:name="com.baidu.mobads.appoffers.OffersActivity" 
+		android:configChanges="keyboard|keyboardHidden|orientation" />
+    <!-- Baidu Ads End -->
   </application>
 
 </manifest>

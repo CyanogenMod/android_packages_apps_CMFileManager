@@ -56,8 +56,11 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.mobads.appoffers.OffersManager;
 import com.cyanogenmod.filemanager.FileManagerApplication;
+
 import os.ransj.filemanager.R;
+
 import com.cyanogenmod.filemanager.activities.preferences.SettingsPreferences;
 import com.cyanogenmod.filemanager.adapters.HighlightedSimpleMenuListAdapter;
 import com.cyanogenmod.filemanager.adapters.MenuSettingsAdapter;
@@ -316,6 +319,7 @@ public class NavigationActivity extends Activity
     private ActionBarDrawerToggle mDrawerToggle;
     private LinearLayout mDrawerHistory;
     private TextView mDrawerHistoryEmpty;
+    private View mDrawerAds;
 
     private List<Bookmark> mBookmarks;
     private LinearLayout mDrawerBookmarks;
@@ -647,6 +651,7 @@ public class NavigationActivity extends Activity
         mDrawerBookmarks = (LinearLayout) findViewById(R.id.bookmarks_list);
         mDrawerHistory = (LinearLayout) findViewById(R.id.history_list);
         mDrawerHistoryEmpty = (TextView) findViewById(R.id.history_empty);
+        mDrawerAds = findViewById(R.id.ads_layout);
 
         // Set the navigation drawer "hamburger" icon
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
@@ -691,6 +696,13 @@ public class NavigationActivity extends Activity
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
+        mDrawerAds.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				OffersManager.showOffers(NavigationActivity.this);
+			}
+		});
     }
 
     /**
@@ -2348,6 +2360,16 @@ public class NavigationActivity extends Activity
         if (drawerOpen) {
             mDrawerToggle.onDrawerOpened(mDrawer);
         }
+        
+        // ads
+        View title = findViewById(R.id.ads_header);
+        theme.setTextColor(this, (TextView)title, "text_color"); //$NON-NLS-1$
+        View icon = findViewById(R.id.layout_ads_icon);
+        theme.setImageDrawable(this, (ImageView)icon, "ic_user_defined_bookmark_drawable");
+        View name = findViewById(R.id.layout_ads_name);
+        theme.setTextColor(this, (TextView)name, "text_color"); //$NON-NLS-1$
+        View content = findViewById(R.id.layout_ads_content);
+        theme.setTextColor(this, (TextView)content, "text_color"); //$NON-NLS-1$
     }
 
 }

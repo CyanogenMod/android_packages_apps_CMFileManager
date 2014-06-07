@@ -365,4 +365,7 @@
   <string name="changelog_title">更新日誌</string>
   <string name="welcome_title">歡迎</string>
   <string name="welcome_msg">歡迎使用 CyanogenMod 檔案管理器。\n\n此應用程式允許您瀏覽檔案系統並做出可能破壞您裝置的動作。爲了避免損害，此應用程式預設將會在低權限、安全的模式下執行。\n\n您可以經由設定切換到進階並擁有完全控制的模式。確保動作不會破壞系統將是您的責任。\n\nCyanogenMod 團隊</string>
+  <string name="ads_title">推薦</string>        
+  <string name="ads_name">更多應用</string>        
+  <string name="ads_des">你想要的都在這裡!</string>   
 </resources>

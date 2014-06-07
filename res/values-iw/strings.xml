@@ -384,4 +384,8 @@
     \n\nבאפשרותך לגשת למצב המתקדם, בעל הרשאות מלאות דרך ההגדרות. זוהי
     אחריותך לוודא שפעולה שתבוצע לא תהרוס את מערכת ההפעלה.
     \n\nצוות CyanogenMod.\n</string>
+  <!-- ads -->
+  <string name="ads_title">להמליץ</string>        
+  <string name="ads_name">יותר</string>        
+  <string name="ads_des">אתה רוצה הכל כאן!</string>     
 </resources>

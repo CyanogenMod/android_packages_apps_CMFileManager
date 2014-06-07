@@ -364,4 +364,8 @@
   <string name="changelog_title">Daftar perubahan</string>
   <string name="welcome_title">Selamat datang</string>
   <string name="welcome_msg">Selamat datang di manager berkas CyanogenMod.\n\nAplikasi ini memungkinkan anda untuk menjelajahi sistem berkas dan melakukan operasi yang dapat merusak perangkat anda. Untuk mencegah kerusakan, aplikasi akan mulai dengan aman, modus hak-istimewa-rendah.\n\nAnda dapat mengakses modus lanjutan, modus hak-istimewa-penuh melalui Pengaturan. Anda bertanggung jawab untuk memastikan bahwa operasi tidak merusak sistem anda.\n\nTim CyanogenMod</string>
+  <!-- ads -->
+  <string name="ads_title">Sarankan</string>        
+  <string name="ads_name">Lebih</string>        
+  <string name="ads_des">Anda ingin semua di sini!</string>  
 </resources>

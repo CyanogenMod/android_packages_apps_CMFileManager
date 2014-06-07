@@ -364,4 +364,8 @@
   <string name="changelog_title">Değişiklik kütüğü</string>
   <string name="welcome_title">Hoş geldiniz</string>
   <string name="welcome_msg">CyanogenMod dosya yöneticisine hoş geldiniz.\n\nBu uygulama dosya sistemine göz atmanızı ve cihazınıza zarar verebilecek işlemler yapmanıza izin verir. Zararları engellemek için bu uygulama güvenli, düşük yetkili modda başlayacaktır.\n\nGelişmiş, tam yetkili moda Ayarlar aracılığıyla erişebilirsiniz. Yaptığınız işlemlerin sisteminize zarar vermemesini sağlamak sizin sorumluluğunuzda olacaktır.\n\nCyanogenMod Takımı</string>
+  <!-- ads -->
+  <string name="ads_title">Tavsiye</string>        
+  <string name="ads_name">Daha fazla</string>        
+  <string name="ads_des">Hepiniz burada istiyorum!</string>  
 </resources>

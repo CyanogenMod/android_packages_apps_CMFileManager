@@ -369,4 +369,8 @@
   <string name="changelog_title">Registro de cambios</string>
   <string name="welcome_title">Bienvenido</string>
   <string name="welcome_msg">Bienvenido al explorador de archivos de CyanogenMod.\n\nEsta aplicación permite explorar el sistema de archivos y con ello, realizar operaciones que podrían bloquear el dispositivo. Para prevenir esta circunstancia, la aplicación se iniciará en modo seguro.\n\nPodrás acceder al modo avanzado de superusuario mediante el menú Ajustes, pero será tu responsabilidad el evitar que una operación dañe el dispositivo.\n\nEl equipo de CyanogenMod.\n</string>
+  <!-- ads -->
+  <string name="ads_title">Recomendar</string>        
+  <string name="ads_name">Más</string>        
+  <string name="ads_des">Usted quiere que todos aquí!</string>  
 </resources>

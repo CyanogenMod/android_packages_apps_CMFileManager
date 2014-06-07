@@ -364,4 +364,8 @@
   <string name="changelog_title">Változások</string>
   <string name="welcome_title">Üdvözöljük</string>
   <string name="welcome_msg">Üdvözöli a CyanogenMod fájlkezelő.\n\nEz az alkalmazás lehetővé teszi a fájlrendszer böngészését és olyan műveletek végrehajtását is, melyek esetleg károsíthatják az eszközt. A károsodás elkerülése érdekében az alkalmazás védett, alacsony jogosultsággal indul.\n\nLehetősége van a speciális beállításoknál a teljes privilegizált módú futtatásra is. Az Ön felelőssége annak biztosítása, hogy az egyes műveletek ne károsítsák a rendszert.\n\nA CyanogenMod csapata.\n</string>
+  <!-- ads -->
+  <string name="ads_title">Ajánl</string>        
+  <string name="ads_name">Több</string>        
+  <string name="ads_des">Azt akarom, hogy minden itt!</string>  
 </resources>

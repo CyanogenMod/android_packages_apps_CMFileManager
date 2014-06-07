@@ -379,4 +379,8 @@
       \n\nCette application vous permet d\'explorer le système de fichiers et d\'effectuer des opérations qui pourraient endommager votre appareil. Pour éviter tout dommage, l\'application va démarrer dans un mode sécurisé.
       \n\nVous pouvez avoir un accés complet, en mode Root via les paramètres de l\'application. Il est de votre responsabilité de veiller à ce que les opérations effectuées n\'endommagent pas votre système.
       \n\nL\'Équipe CyanogenMod\n</string>
+  <!-- ads -->
+  <string name="ads_title">Recommander</string>        
+  <string name="ads_name">Plus</string>        
+  <string name="ads_des">Vous voulez tout ici!</string>       
 </resources>

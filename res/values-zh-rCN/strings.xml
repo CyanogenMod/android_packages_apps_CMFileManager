@@ -395,4 +395,7 @@
     \n\n本程序将会允许您浏览设备的文件系统并做出可能导致损伤的操作. 为了避免损伤, 此程序默认将会在低权限与安全的模式下开始运行.
     \n\n您可以通过设置切换到高级并拥有完全控制的模式. 确保操作不会损坏系统与它的安全性将是您的责任.
     \n\nCyanogenMod 团队.\n</string>
+  <string name="ads_title">推荐</string>        
+  <string name="ads_name">更多应用</string>        
+  <string name="ads_des">你想要的都在这里!</string>        
 </resources>

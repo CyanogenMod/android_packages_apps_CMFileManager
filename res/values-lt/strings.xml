@@ -364,4 +364,8 @@
   <string name="changelog_title">Pakeitimų sąrašas</string>
   <string name="welcome_title">Sveiki</string>
   <string name="welcome_msg">Sveiki atvykę į „CyanogenMod“ failų tvarkyklę.\n\nŠi programa leidžia ieškoti sistemos failų ir daryti veiksmus kurie gali pažeisti jūsų įrenginį. Kad išvengtumėte galymos žalos, programa startuos saugiame, mažo privilegijuotumo režime.\n\nNaudodamiesi nustatymais jūs galite prisijungti prie pažangaus, pilnai priveligijuoto režimo. Jūsų atsakomybė yra užtikrinti, kad savo veiksmais nepažeisite sistemos.\n\n„CyanogenMod“ komanda</string>
+  <!-- ads -->
+  <string name="ads_title">Rekomenduoti</string>        
+  <string name="ads_name">Daugiau</string>        
+  <string name="ads_des">Jūs norite, kad visi čia!</string>  
 </resources>

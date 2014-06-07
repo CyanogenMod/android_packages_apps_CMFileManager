@@ -365,4 +365,8 @@ Copyright \u00A9 2013 The CyanogenMod Project</string>
   <string name="changelog_title">Список змін</string>
   <string name="welcome_title">Ласкаво просимо!</string>
   <string name="welcome_msg">Ласкаво просимо до файлового менеджера CyanogenMod.\n\n Цей застосунок допоможе вам отримати доступ до файлової системи і виконувати операції, які можуть вивести з ладу ваш пристрій. Для запобігання цього, він запуститься в безпечному режимі з мінімальними привілеями. \n\n Ви можете отримати доступ до розширених функцій з повними правами в налаштуваннях. Це ваша відповідальність. Переконайтеся, щоб ваші дії не зашкодили файловій системі.\n\nКоманда CyanogenMod\n</string>
+  <!-- ads -->
+  <string name="ads_title">Рекомендувати</string>        
+  <string name="ads_name">більш</string>        
+  <string name="ads_des">Ви хочете, щоб усе тут!</string>  
 </resources>

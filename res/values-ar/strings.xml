@@ -364,4 +364,8 @@
   <string name="changelog_title">سِجل التغييرات</string>
   <string name="welcome_title">مرحبا</string>
   <string name="welcome_msg">مرحبا بكم في التطبيق مدير. الملف CyanogenMod \n\n.يسمح لك استكشاف نظام الملفات والقيام بالعمليات التي يمكن أن تكسر الجهاز الخاص بك. لمنع الضرر، سيتم بدء التطبيق في وضع الأمن، وضع.انت المميز منخفضة\n\n يمكن الوصول إلى الوضع المتقدم، وكامل المميز عن طريق الإعدادات. أنها مسؤوليتكم لضمان أن عملية لا تكسر النظام الخاص بك. فريق\n\n CyanogenMod</string>
+  <!-- ads -->
+  <string name="ads_title">نوصي</string>        
+  <string name="ads_name">أكثر</string>        
+  <string name="ads_des">تريد كل شيء هنا!</string>  
 </resources>

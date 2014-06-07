@@ -384,4 +384,8 @@
     \n\nМожете доступити напредном режиму са свим привилегијама путем
     подешавања. Тада је ваша одговорност да не покварите свој систем.
     \n\nCyanogenMod тим.\n</string>
+  <!-- ads -->
+  <string name="ads_title">препоручити</string>        
+  <string name="ads_name">више</string>        
+  <string name="ads_des">Хоћеш све овде!</string>    
 </resources>

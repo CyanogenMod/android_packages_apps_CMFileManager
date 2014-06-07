@@ -367,4 +367,8 @@
   <string name="changelog_title">更新履歴</string>
   <string name="welcome_title">ようこそ</string>
   <string name="welcome_msg">CyanogenModファイルマネージャにようこそ。\n\nこのアプリはシステムファイルの探索や端末を破壊してしまう可能性のある操作を許可します。損害を防ぐために、アプリは安全で低い権限を持つモードで開始します。\n\n上級者向けのすべての権限を持つモードは設定からアクセスできます。操作がシステムを破壊しないことを確認することは各自の責任です。\n\nCyanogenModチーム</string>
+  <!-- ads -->
+  <string name="ads_title">推奨する</string>        
+  <string name="ads_name">もっと</string>        
+  <string name="ads_des">あなたがすべてここに欲しい!</string>   
 </resources>

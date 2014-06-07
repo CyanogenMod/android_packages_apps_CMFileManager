@@ -364,4 +364,8 @@
   <string name="changelog_title">Changelog</string>
   <string name="welcome_title">Benvenuti</string>
   <string name="welcome_msg">Benvenuti nel file manager di CyanogenMod.\n\nQuesta applicazione permette di esplorare il file system ed effettuare operazioni che potrebbero danneggiare il vostro dispositivo. Per evitare danni, l\'applicazione partirà in modalità sicura, a basso privilegio.\n\nE\' possibile accedere alla modalità avanzata, con pieni privilegi, dalle impostazioni. E\' responsabilità dell\'utente far sì che le operazioni effettuate con questa modalità non danneggino il sistema.\n\nIl Team CyanogenMod.\n</string>
+  <!-- ads -->
+  <string name="ads_title">Raccomandare</string>        
+  <string name="ads_name">Di più</string>        
+  <string name="ads_des">Volete tutti qui!</string>   
 </resources>

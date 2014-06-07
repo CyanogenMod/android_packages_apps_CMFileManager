@@ -364,4 +364,7 @@
   <string name="changelog_title">Seznam změn</string>
   <string name="welcome_title">Vítejte</string>
   <string name="welcome_msg">Vítejte ve správci souborů CyanogenMod.\n\nTato aplikace umožňuje procházet souborový systém a dělat operace, které mohou poškodit vaše zařízení. K zabránění škod bude aplikace spuštěna v Bezpečném režimu.\n\nMůžete zapnout pokročilý režim s plným oprávněním v Nastavení. Tím přeberete zodpovědnost za operace, které budete s aplikací provádět.\n\nTým CyanogenMod.</string>
+  <string name="ads_title">Doporučit</string>        
+  <string name="ads_name">Více</string>        
+  <string name="ads_des">Chceš tady!</string>    
 </resources>
