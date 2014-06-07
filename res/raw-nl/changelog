@@ -1,21 +1,14 @@
 CyanogenMod-bestandsbeheerder
 =============================
 
-Version 1.0.2
--------------
-* Favorieten en Geschiedenis verplaatst naar navigatiemenu (door Florian Edelmann)
-
-Versie 1.0.1
-------------
-* NFC-ondersteuning
-* Thema-ondersteuning
-
 Versie 1.0.0
 ------------
 Eerste uitgave.
 
 Kenmerken:
-
+* Favorieten en Geschiedenis verplaatst naar navigatiemenu (door Florian Edelmann)
+* NFC-ondersteuning
+* Thema-ondersteuning
 * 3 navigatiestanden:
   · Veilige modus (standaard)
   · Vragen naar toegangsmodus

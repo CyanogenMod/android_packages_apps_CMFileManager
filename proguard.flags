@@ -1,5 +1,14 @@
 #configuration
 
+#keep preference's classes
+-keep public class * extends android.preference.PreferenceFragment {
+  public <init>(...);
+}
+
+-keep public class * extends android.preference.Preference {
+  public <init>(...);
+}
+
 -keep class com.baidu.mobads.** {
   public protected *;
 }

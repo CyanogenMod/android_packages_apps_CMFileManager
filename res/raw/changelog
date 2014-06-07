@@ -1,14 +1,6 @@
 CyanogenMod File Manager
 ========================
 
-Version 1.0.2
--------------
-* move bookmarks and history into a navigation drawer (by Florian Edelmann)
-
-Version 1.0.1
--------------
-* NFC support
-* Themes support
 
 Version 1.0.0
 -------------
@@ -16,6 +8,9 @@ Initial release.
 
 Features:
 
+* move bookmarks and history into a navigation drawer (by Florian Edelmann)
+* NFC support
+* Themes support
 * 3 navigation modes:
   · Safe mode (by default)
   · Prompt user mode
