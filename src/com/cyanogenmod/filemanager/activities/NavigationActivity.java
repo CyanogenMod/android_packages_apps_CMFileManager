@@ -56,9 +56,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baidu.mobads.appoffers.OffersManager;
 import com.cyanogenmod.filemanager.FileManagerApplication;
 
+import os.ransj.ads.WallAds;
 import os.ransj.filemanager.R;
 
 import com.cyanogenmod.filemanager.activities.preferences.SettingsPreferences;
@@ -340,6 +340,7 @@ public class NavigationActivity extends Activity
      * @hide
      */
     Handler mHandler;
+    private WallAds mWallAds;
 
     /**
      * {@inheritDoc}
@@ -441,6 +442,8 @@ public class NavigationActivity extends Activity
 
         //Save state
         super.onCreate(state);
+        mWallAds = new WallAds();
+        mWallAds.initWalls(this);
     }
 
     @Override
@@ -499,6 +502,7 @@ public class NavigationActivity extends Activity
         }
 
         //All destroy. Continue
+        mWallAds.release();
         super.onDestroy();
     }
 
@@ -700,7 +704,7 @@ public class NavigationActivity extends Activity
 			
 			@Override
 			public void onClick(View v) {
-				OffersManager.showOffers(NavigationActivity.this);
+				mWallAds.showWalls(NavigationActivity.this);
 			}
 		});
     }
@@ -2371,5 +2375,5 @@ public class NavigationActivity extends Activity
         View content = findViewById(R.id.layout_ads_content);
         theme.setTextColor(this, (TextView)content, "text_color"); //$NON-NLS-1$
     }
-
+    
 }

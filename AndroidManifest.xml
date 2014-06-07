@@ -203,11 +203,16 @@
       </intent-filter>
     </activity>
     <!-- Baidu Ads Start -->
-    <meta-data android:name="BaiduMobAd_APP_ID" android:value="debug" /> 
-	<meta-data android:name="BaiduMobAd_APP_SEC" android:value="debug" />
 	<activity android:name="com.baidu.mobads.appoffers.OffersActivity" 
 		android:configChanges="keyboard|keyboardHidden|orientation" />
     <!-- Baidu Ads End -->
+    <!-- Ader Ads Start -->
+    <meta-data android:name="cid" android:value="9" />
+    <activity android:name="com.rrgame.RGActivity" 
+        android:configChanges="keyboard|keyboardHidden|orientation" />
+    <service android:name="com.rrgame.download.RGDownloadService"
+        android:exported="false" />
+    <!-- Ader Ads End -->
   </application>
 
 </manifest>
