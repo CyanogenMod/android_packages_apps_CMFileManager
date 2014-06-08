@@ -17,7 +17,6 @@
 package com.cyanogenmod.filemanager.activities;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
@@ -47,7 +46,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cyanogenmod.filemanager.FileManagerApplication;
+
 import os.ransj.filemanager.R;
+import os.ransj.tracker.TrackerActivity;
+
 import com.cyanogenmod.filemanager.activities.preferences.SearchPreferenceFragment;
 import com.cyanogenmod.filemanager.activities.preferences.SettingsPreferences;
 import com.cyanogenmod.filemanager.adapters.SearchResultAdapter;
@@ -92,7 +94,7 @@ import java.util.List;
 /**
  * An activity for search files and folders.
  */
-public class SearchActivity extends Activity
+public class SearchActivity extends TrackerActivity
     implements AsyncResultListener, OnItemClickListener,
                OnItemLongClickListener, OnRequestRefreshListener {
 

@@ -23,13 +23,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
 import os.ransj.filemanager.R;
+import os.ransj.tracker.TrackerPreferenceActivity;
+
 import com.cyanogenmod.filemanager.activities.ChangeLogActivity;
 import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
 import com.cyanogenmod.filemanager.ui.ThemeManager;
@@ -41,7 +41,7 @@ import java.util.List;
 /**
  * The {@link SettingsPreferences} preferences
  */
-public class SettingsPreferences extends PreferenceActivity {
+public class SettingsPreferences extends TrackerPreferenceActivity {
 
     private static final String TAG = "SettingsPreferences"; //$NON-NLS-1$
 

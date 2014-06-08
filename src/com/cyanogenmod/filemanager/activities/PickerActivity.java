@@ -41,8 +41,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.ListPopupWindow;
 import android.widget.Toast;
-
 import os.ransj.filemanager.R;
+import os.ransj.tracker.TrackerActivity;
+
 import com.cyanogenmod.filemanager.adapters.CheckableListAdapter;
 import com.cyanogenmod.filemanager.adapters.CheckableListAdapter.CheckableItem;
 import com.cyanogenmod.filemanager.compat.StorageVolume;
@@ -75,7 +76,7 @@ import java.util.Map;
  * The activity for allow to use a {@link NavigationView} like, to pick a file from other
  * application.
  */
-public class PickerActivity extends Activity
+public class PickerActivity extends TrackerActivity
         implements OnCancelListener, OnDismissListener, OnFilePickedListener, OnDirectoryChangedListener {
 
     private static final String TAG = "PickerActivity"; //$NON-NLS-1$

@@ -60,6 +60,7 @@ import com.cyanogenmod.filemanager.FileManagerApplication;
 
 import os.ransj.ads.WallAds;
 import os.ransj.filemanager.R;
+import os.ransj.tracker.TrackerActivity;
 
 import com.cyanogenmod.filemanager.activities.preferences.SettingsPreferences;
 import com.cyanogenmod.filemanager.adapters.HighlightedSimpleMenuListAdapter;
@@ -133,7 +134,7 @@ import java.util.Locale;
  * {@link Activity#onRestoreInstanceState(Bundle)} are not implemented, and every time
  * the app is killed, is restarted from his initial state.
  */
-public class NavigationActivity extends Activity
+public class NavigationActivity extends TrackerActivity
     implements OnHistoryListener, OnRequestRefreshListener,
     OnNavigationRequestMenuListener, OnNavigationSelectionChangedListener {
 
@@ -704,6 +705,7 @@ public class NavigationActivity extends Activity
 			
 			@Override
 			public void onClick(View v) {
+				trackBtnClick("DrawerAds");
 				mWallAds.showWalls(NavigationActivity.this);
 			}
 		});
