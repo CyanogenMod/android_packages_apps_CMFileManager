@@ -18,3 +18,7 @@
 -dontwarn com.rrgame.** 
 -keep public class com.rrgame.**
 
+// tapjoy
+-keep class com.tapjoy.** { *; }
+-keepattributes JavascriptInterface
+

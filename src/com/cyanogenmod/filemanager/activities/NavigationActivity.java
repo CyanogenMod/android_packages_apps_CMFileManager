@@ -443,8 +443,8 @@ public class NavigationActivity extends TrackerActivity
 
         //Save state
         super.onCreate(state);
-        mWallAds = new WallAds();
-        mWallAds.initWalls(this);
+        mWallAds = WallAds.getInstance();
+        mWallAds.initWalls(this, WallAds.WALL_TAPJOY);
     }
 
     @Override
@@ -503,7 +503,7 @@ public class NavigationActivity extends TrackerActivity
         }
 
         //All destroy. Continue
-        mWallAds.release();
+        mWallAds.releaseWalls();
         super.onDestroy();
     }
 
