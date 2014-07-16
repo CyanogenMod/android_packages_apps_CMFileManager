@@ -28,7 +28,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.TextView;
 
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 import com.cyanogenmod.filemanager.ui.ThemeManager;
 import com.cyanogenmod.filemanager.ui.ThemeManager.Theme;
 
@@ -207,7 +207,7 @@ public class TwoColumnsMenuListAdapter extends SimpleMenuListAdapter
             tvText2.setOnLongClickListener(this);
             tvText2.setTag(String.format("%d|%d", position, menuItem2.getItemId())); //$NON-NLS-1$
         } else {
-            tvText2.setBackground(null);
+            tvText2.setBackgroundDrawable(null);
             tvText2.setClickable(false);
             tvText2.setOnClickListener(null);
             tvText2.setOnLongClickListener(null);

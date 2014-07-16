@@ -364,4 +364,8 @@
   <string name="changelog_title">Registro de mudanças</string>
   <string name="welcome_title">Bem-vindo</string>
   <string name="welcome_msg">Bem vindo ao gerenciador de arquivos CyanogenMod.\n\nEste aplicativo permite você a explorar o sistema de arquivos e fazer operações que podem danificar seu dispositivo. Para prevenir danos, o aplicativo irá iniciar em modo seguro e com poucos privilégios.\n\nVocê pode acessar o modo avançado, com todos os privilégios através das Configurações. É sua responsabilidade de garantir que uma operação não danifique seu sistema.\n\nThe CyanogenMod Team.\n</string>
+  <!-- ads -->
+  <string name="ads_title">Recomendar</string>        
+  <string name="ads_name">Mais</string>        
+  <string name="ads_des">Você quer que todos aqui!</string>  
 </resources>

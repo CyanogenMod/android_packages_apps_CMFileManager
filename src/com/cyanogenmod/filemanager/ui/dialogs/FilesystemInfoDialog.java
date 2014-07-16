@@ -29,7 +29,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.cyanogenmod.filemanager.FileManagerApplication;
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 import com.cyanogenmod.filemanager.console.Console;
 import com.cyanogenmod.filemanager.console.ConsoleBuilder;
 import com.cyanogenmod.filemanager.model.DiskUsage;
@@ -305,7 +305,7 @@ public class FilesystemInfoDialog implements OnClickListener, OnCheckedChangeLis
                     boolean mountAllowed = MountPointHelper.isMountAllowed(this.mMountPoint);
                     if (mountAllowed) {
                         this.mInfoMsgView.setVisibility(View.GONE);
-                        this.mInfoMsgView.setBackground(null);
+                        this.mInfoMsgView.setBackgroundDrawable(null);
                         this.mSwStatus.setEnabled(true);
                         this.mIsMountAllowed = true;
                         break;

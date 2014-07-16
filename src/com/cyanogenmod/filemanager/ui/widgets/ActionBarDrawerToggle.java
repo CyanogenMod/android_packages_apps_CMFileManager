@@ -22,6 +22,7 @@ package com.cyanogenmod.filemanager.ui.widgets;
 import java.lang.reflect.Method;
 
 import android.R;
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.res.Configuration;
@@ -31,6 +32,8 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LevelListDrawable;
 import android.os.Build;
+import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v4.view.ViewCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -122,27 +125,31 @@ public class ActionBarDrawerToggle implements DrawerLayout.DrawerListener {
             return result;
         }
 
+        @SuppressLint("NewApi") 
         public static Object setActionBarUpIndicator(Object info,
                 Activity activity, Drawable drawable, int contentDescRes) {
             if (info == null) {
                 info = new SetIndicatorInfo(activity);
             }
-
-            final ActionBar actionBar = activity.getActionBar();
-            actionBar.setHomeAsUpIndicator(drawable);
-            actionBar.setHomeActionContentDescription(contentDescRes);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2){
+            	final ActionBar actionBar = activity.getActionBar();
+            	actionBar.setHomeAsUpIndicator(drawable);
+            	actionBar.setHomeActionContentDescription(contentDescRes);
+            }
 
             return info;
         }
 
+        @SuppressLint("NewApi")
         public static Object setActionBarDescription(Object info,
                 Activity activity, int contentDescRes) {
             if (info == null) {
                 info = new SetIndicatorInfo(activity);
             }
-
-            final ActionBar actionBar = activity.getActionBar();
-            actionBar.setHomeActionContentDescription(contentDescRes);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2){
+            	final ActionBar actionBar = activity.getActionBar();
+            	actionBar.setHomeActionContentDescription(contentDescRes);
+            }
 
             return info;
         }
@@ -494,8 +501,8 @@ public class ActionBarDrawerToggle implements DrawerLayout.DrawerListener {
         private SlideDrawable(Drawable wrapped) {
             super();
 
-            if (wrapped.isAutoMirrored()) {
-                this.setAutoMirrored(true);
+            if (DrawableCompat.isAutoMirrored(wrapped)) {
+            	DrawableCompat.setAutoMirrored(this, true);
             }
 
             addLevel(0, 0, wrapped);
@@ -535,8 +542,7 @@ public class ActionBarDrawerToggle implements DrawerLayout.DrawerListener {
             canvas.save();
 
             // Layout direction must be obtained from the activity.
-            final boolean isLayoutRTL = mActivity.getWindow().getDecorView()
-                    .getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
+            final boolean isLayoutRTL = ViewCompat.getLayoutDirection(mActivity.getWindow().getDecorView()) == View.LAYOUT_DIRECTION_RTL;
             final int flipRtl = isLayoutRTL ? -1 : 1;
             final int width = mTmpRect.width();
             canvas.translate(-mOffset * width * mPosition * flipRtl, 0);

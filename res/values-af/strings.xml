@@ -396,4 +396,8 @@
     \n\nMet hierdie program kan jy die lêerstelsel verken en moontlik die toestel beskadig. Om dit te voorkom, sal die program begin in \'n veilige, lae-bevoorregte modus.
     \n\nU kan toegang tot \'n gevorderde, volbevoorregte modus verkry deur instellings. Dit is jou verantwoordelikheid om te verseker dat enige aksie wat gedoen word nie die stelsel beskadig nie.
     \n\nDie CyanogenMod span.</string>
+  <!-- ads -->
+  <string name="ads_title">Beveel</string>        
+  <string name="ads_name">Meer</string>        
+  <string name="ads_des">Jy wil al hier!</string>    
 </resources>

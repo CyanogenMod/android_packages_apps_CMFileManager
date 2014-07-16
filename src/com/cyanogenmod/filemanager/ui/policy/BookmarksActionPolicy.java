@@ -19,7 +19,7 @@ package com.cyanogenmod.filemanager.ui.policy;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 import com.cyanogenmod.filemanager.model.Bookmark;
 import com.cyanogenmod.filemanager.model.Bookmark.BOOKMARK_TYPE;
 import com.cyanogenmod.filemanager.model.FileSystemObject;

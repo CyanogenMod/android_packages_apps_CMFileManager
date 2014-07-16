@@ -52,9 +52,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 import android.widget.Toast;
+import os.ransj.filemanager.R;
+import os.ransj.tracker.TrackerActivity;
 
-import com.android.internal.util.HexDump;
-import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.activities.preferences.EditorPreferenceFragment;
 import com.cyanogenmod.filemanager.activities.preferences.EditorSHColorSchemePreferenceFragment;
 import com.cyanogenmod.filemanager.activities.preferences.SettingsPreferences;
@@ -66,6 +66,7 @@ import com.cyanogenmod.filemanager.ash.SyntaxHighlightFactory;
 import com.cyanogenmod.filemanager.ash.SyntaxHighlightProcessor;
 import com.cyanogenmod.filemanager.commands.AsyncResultListener;
 import com.cyanogenmod.filemanager.commands.WriteExecutable;
+import com.cyanogenmod.filemanager.compat.HexDump;
 import com.cyanogenmod.filemanager.console.ConsoleBuilder;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
@@ -92,7 +93,7 @@ import java.util.UUID;
 /**
  * An internal activity for view and edit files.
  */
-public class EditorActivity extends Activity implements TextWatcher {
+public class EditorActivity extends TrackerActivity implements TextWatcher {
 
     private static final String TAG = "EditorActivity"; //$NON-NLS-1$
 

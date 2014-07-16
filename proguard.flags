@@ -1,59 +1,24 @@
 #configuration
--optimizationpasses 5
--dontusemixedcaseclassnames
--dontskipnonpubliclibraryclasses
--dontpreverify
--verbose
--optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
-
-#keep common classes
--keep public class * extends android.app.Activity
--keep public class * extends android.app.Application
--keep public class * extends android.app.Service
--keep public class * extends android.content.BroadcastReceiver
--keep public class * extends android.content.ContentProvider
-
-#keep all classes that might be used in XML layouts
--keep public class * extends android.view.View {
-    public <init>(android.content.Context);
-    public <init>(android.content.Context, android.util.AttributeSet);
-    public <init>(android.content.Context, android.util.AttributeSet, int);
-    public void set*(...);
-}
--keepclasseswithmembers class * {
-    public <init>(android.content.Context, android.util.AttributeSet);
-}
--keepclasseswithmembers class * {
-    public <init>(android.content.Context, android.util.AttributeSet, int);
-}
-
-#keep callback methods (onClick, onOption...)
--keepclassmembers class * extends android.content.Context {
-   public void *(android.view.View);
-   public void *(android.view.MenuItem);
-}
-
-#keep parcelable constructors
--keepclassmembers class * implements android.os.Parcelable {
-    static android.os.Parcelable$Creator CREATOR;
-}
-
-#keep all resource identifiers
--keep class **.R$*
--keepclassmembers class **.R$* {
-    public static <fields>;
-}
-
-#keep StorageManager access
--keep public class android.os.storage.StorageManager {
-    android.os.storage.StorageVolume[] getVolumeList();
-}
 
 #keep preference's classes
 -keep public class * extends android.preference.PreferenceFragment {
   public <init>(...);
 }
+
 -keep public class * extends android.preference.Preference {
   public <init>(...);
 }
+
+// baidu
+-keep class com.baidu.mobads.** {
+  public protected *;
+}
+
+// ader
+-dontwarn com.rrgame.** 
+-keep public class com.rrgame.**
+
+// tapjoy
+-keep class com.tapjoy.** { *; }
+-keepattributes JavascriptInterface
 

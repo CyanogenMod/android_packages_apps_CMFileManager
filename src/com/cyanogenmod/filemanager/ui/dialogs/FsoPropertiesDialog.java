@@ -39,7 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cyanogenmod.filemanager.FileManagerApplication;
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 import com.cyanogenmod.filemanager.commands.AsyncResultListener;
 import com.cyanogenmod.filemanager.commands.FolderUsageExecutable;
 import com.cyanogenmod.filemanager.console.ConsoleBuilder;
@@ -532,7 +532,7 @@ public class FsoPropertiesDialog
                 if (superuser) {
                     this.mInfoMsgView.setOnClickListener(null);
                     this.mInfoMsgView.setVisibility(View.GONE);
-                    this.mInfoMsgView.setBackground(null);
+                    this.mInfoMsgView.setBackgroundDrawable(null);
 
                     // Enable controls
                     this.mSpnOwner.setEnabled(true);

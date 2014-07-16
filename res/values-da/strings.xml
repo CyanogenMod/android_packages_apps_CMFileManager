@@ -378,4 +378,8 @@
   <string name="changelog_title">Ændringslog</string>
   <string name="welcome_title">Velkommen</string>
   <string name="welcome_msg">Velkommen til CyanogenMods filstyring.\n\nDenne app tillader dig at udforske filsystemet og udføre handlinger, som kan ødelægge din enhed. For at forebygge skader vil denne app starte i en tilstand med få rettigheder.\n\nDu kan tilgå den avancerede tilstand med alle rettigheder i Indstillinger. Det er dit ansvar at sikre, at en handling ikke ødelægger dit system.\n\nHoldet bag CyanogenMod.\n</string>
+  <!-- ads -->
+  <string name="ads_title">Anbefal</string>        
+  <string name="ads_name">Mere</string>        
+  <string name="ads_des">Du ønsker alle her!</string>  
 </resources>

@@ -366,4 +366,8 @@
   <string name="changelog_title">ความเปลี่ยนแปลง</string>
   <string name="welcome_title">ยินดีต้อนรับ</string>
   <string name="welcome_msg">ยินดีต้อนรับสู่ตัวจัดการไฟล์ของ CyanogenMod\n\nแอปนี้อนุญาติให้คุณสำรวจระบบไฟล์และใช้คำสั่งที่สามารถทำอันตรายต่ออุปกรณ์คุณได้ เพื่อหลีกเลี่ยงความเสียหา แอปจะเปิดในรูปแบบปลอดภัย\n\nคุณสามารถใช้สิทธิการเข้าถึงแบบเต็มได้ในการตั้งค่า มันเป็นความรับผิดชอบของคุณเพื่อให้แน่ใจว่าการดำเนินการไม่ทำลายระบบของคุณ\n\nทีมงาน CyanogenMod</string>
+  <!-- ads -->
+  <string name="ads_title">แนะนำ</string>        
+  <string name="ads_name">ขึ้น</string>        
+  <string name="ads_des">คุณต้องการทั้งหมดที่นี่!</string>    
 </resources>

@@ -16,7 +16,7 @@
 -->
 
 <com.cyanogenmod.filemanager.ui.widgets.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:filemanager="http://schemas.android.com/apk/res/com.cyanogenmod.filemanager"
+    xmlns:filemanager="http://schemas.android.com/apk/res/os.ransj.filemanager"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >

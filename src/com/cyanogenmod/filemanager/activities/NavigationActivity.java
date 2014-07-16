@@ -37,7 +37,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.os.storage.StorageVolume;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -57,13 +56,18 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.internal.util.XmlUtils;
 import com.cyanogenmod.filemanager.FileManagerApplication;
-import com.cyanogenmod.filemanager.R;
+
+import os.ransj.ads.WallAds;
+import os.ransj.filemanager.R;
+import os.ransj.tracker.TrackerActivity;
+
 import com.cyanogenmod.filemanager.activities.preferences.SettingsPreferences;
 import com.cyanogenmod.filemanager.adapters.HighlightedSimpleMenuListAdapter;
 import com.cyanogenmod.filemanager.adapters.MenuSettingsAdapter;
 import com.cyanogenmod.filemanager.adapters.SimpleMenuListAdapter;
+import com.cyanogenmod.filemanager.compat.StorageVolume;
+import com.cyanogenmod.filemanager.compat.XmlUtils;
 import com.cyanogenmod.filemanager.console.Console;
 import com.cyanogenmod.filemanager.console.ConsoleAllocException;
 import com.cyanogenmod.filemanager.console.ConsoleBuilder;
@@ -130,7 +134,7 @@ import java.util.Locale;
  * {@link Activity#onRestoreInstanceState(Bundle)} are not implemented, and every time
  * the app is killed, is restarted from his initial state.
  */
-public class NavigationActivity extends Activity
+public class NavigationActivity extends TrackerActivity
     implements OnHistoryListener, OnRequestRefreshListener,
     OnNavigationRequestMenuListener, OnNavigationSelectionChangedListener {
 
@@ -316,6 +320,7 @@ public class NavigationActivity extends Activity
     private ActionBarDrawerToggle mDrawerToggle;
     private LinearLayout mDrawerHistory;
     private TextView mDrawerHistoryEmpty;
+    private View mDrawerAds;
 
     private List<Bookmark> mBookmarks;
     private LinearLayout mDrawerBookmarks;
@@ -336,6 +341,7 @@ public class NavigationActivity extends Activity
      * @hide
      */
     Handler mHandler;
+    private WallAds mWallAds;
 
     /**
      * {@inheritDoc}
@@ -365,29 +371,29 @@ public class NavigationActivity extends Activity
         setContentView(R.layout.navigation);
 
         //Initialize nfc adapter
-        NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        if (mNfcAdapter != null) {
-            mNfcAdapter.setBeamPushUrisCallback(new NfcAdapter.CreateBeamUrisCallback() {
-                @Override
-                public Uri[] createBeamUris(NfcEvent event) {
-                    List<FileSystemObject> selectedFiles =
-                            getCurrentNavigationView().getSelectedFiles();
-                    if (selectedFiles.size() > 0) {
-                        List<Uri> fileUri = new ArrayList<Uri>();
-                        for (FileSystemObject f : selectedFiles) {
-                            //Beam ignores folders and system files
-                            if (!FileHelper.isDirectory(f) && !FileHelper.isSystemFile(f)) {
-                                fileUri.add(Uri.fromFile(new File(f.getFullPath())));
-                            }
-                        }
-                        if (fileUri.size() > 0) {
-                            return fileUri.toArray(new Uri[fileUri.size()]);
-                        }
-                    }
-                    return null;
-                }
-            }, this);
-        }
+//        NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+//        if (mNfcAdapter != null) {
+//            mNfcAdapter.setBeamPushUrisCallback(new NfcAdapter.CreateBeamUrisCallback() {
+//                @Override
+//                public Uri[] createBeamUris(NfcEvent event) {
+//                    List<FileSystemObject> selectedFiles =
+//                            getCurrentNavigationView().getSelectedFiles();
+//                    if (selectedFiles.size() > 0) {
+//                        List<Uri> fileUri = new ArrayList<Uri>();
+//                        for (FileSystemObject f : selectedFiles) {
+//                            //Beam ignores folders and system files
+//                            if (!FileHelper.isDirectory(f) && !FileHelper.isSystemFile(f)) {
+//                                fileUri.add(Uri.fromFile(new File(f.getFullPath())));
+//                            }
+//                        }
+//                        if (fileUri.size() > 0) {
+//                            return fileUri.toArray(new Uri[fileUri.size()]);
+//                        }
+//                    }
+//                    return null;
+//                }
+//            }, this);
+//        }
 
         //Initialize activity
         init();
@@ -437,6 +443,8 @@ public class NavigationActivity extends Activity
 
         //Save state
         super.onCreate(state);
+        mWallAds = WallAds.getInstance();
+        mWallAds.initWalls(this, WallAds.WALL_TAPJOY);
     }
 
     @Override
@@ -495,6 +503,7 @@ public class NavigationActivity extends Activity
         }
 
         //All destroy. Continue
+        mWallAds.releaseWalls();
         super.onDestroy();
     }
 
@@ -647,6 +656,7 @@ public class NavigationActivity extends Activity
         mDrawerBookmarks = (LinearLayout) findViewById(R.id.bookmarks_list);
         mDrawerHistory = (LinearLayout) findViewById(R.id.history_list);
         mDrawerHistoryEmpty = (TextView) findViewById(R.id.history_empty);
+        mDrawerAds = findViewById(R.id.ads_layout);
 
         // Set the navigation drawer "hamburger" icon
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
@@ -691,6 +701,14 @@ public class NavigationActivity extends Activity
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
+        mDrawerAds.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				trackBtnClick("DrawerAds");
+				mWallAds.showWalls(NavigationActivity.this);
+			}
+		});
     }
 
     /**
@@ -2348,6 +2366,16 @@ public class NavigationActivity extends Activity
         if (drawerOpen) {
             mDrawerToggle.onDrawerOpened(mDrawer);
         }
+        
+        // ads
+        View title = findViewById(R.id.ads_header);
+        theme.setTextColor(this, (TextView)title, "text_color"); //$NON-NLS-1$
+        View icon = findViewById(R.id.layout_ads_icon);
+        theme.setImageDrawable(this, (ImageView)icon, "ic_user_defined_bookmark_drawable");
+        View name = findViewById(R.id.layout_ads_name);
+        theme.setTextColor(this, (TextView)name, "text_color"); //$NON-NLS-1$
+        View content = findViewById(R.id.layout_ads_content);
+        theme.setTextColor(this, (TextView)content, "text_color"); //$NON-NLS-1$
     }
-
+    
 }

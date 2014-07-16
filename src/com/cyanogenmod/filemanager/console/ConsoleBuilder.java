@@ -21,7 +21,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.cyanogenmod.filemanager.FileManagerApplication;
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 import com.cyanogenmod.filemanager.commands.shell.InvalidCommandDefinitionException;
 import com.cyanogenmod.filemanager.console.java.JavaConsole;
 import com.cyanogenmod.filemanager.console.shell.NonPriviledgeConsole;

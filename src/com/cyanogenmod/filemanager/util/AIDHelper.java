@@ -22,7 +22,7 @@ import android.content.pm.PackageManager;
 import android.util.Log;
 import android.util.SparseArray;
 
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 import com.cyanogenmod.filemanager.model.AID;
 
 import java.util.Iterator;

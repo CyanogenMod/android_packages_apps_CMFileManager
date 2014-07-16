@@ -193,7 +193,7 @@ public enum FileManagerSettings {
      * @hide
      */
     SETTINGS_THEME("cm_filemanager_theme", //$NON-NLS-1$
-                        "com.cyanogenmod.filemanager:light"); //$NON-NLS-1$
+                        "os.ransj.filemanager:light"); //$NON-NLS-1$
 
     /**
      * A broadcast intent that is sent when a setting was changed

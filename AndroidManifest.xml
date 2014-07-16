@@ -15,25 +15,29 @@
  -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.cyanogenmod.filemanager"
-  android:versionCode="102"
-  android:versionName="1.0.2">
+  package="os.ransj.filemanager"
+  android:versionCode="1"
+  android:versionName="1.0.0">
 
   <original-package android:name="com.cyanogenmod.filemanager" />
 
-  <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="19" />
+  <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="19" />
 
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-  <uses-permission android:name="android.permission.SET_PREFERRED_APPLICATIONS" />
   <uses-permission android:name="android.permission.ACCESS_SUPERUSER"/>
   <uses-permission android:name="android.permission.NFC"/>
   <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
   <uses-permission android:name="com.cyanogenmod.filemanager.permissions.READ_THEME"/>
-
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />  
   <application
-    android:name="FileManagerApplication"
+    android:name="com.cyanogenmod.filemanager.FileManagerApplication"
     android:description="@string/app_description"
     android:icon="@drawable/ic_launcher"
     android:label="@string/app_name"
@@ -45,17 +49,17 @@
       android:value=".activities.NavigationActivity" />
 
     <provider
-      android:name=".providers.RecentSearchesContentProvider"
+      android:name="com.cyanogenmod.filemanager.providers.RecentSearchesContentProvider"
       android:authorities="com.cyanogenmod.filemanager.providers.recentsearches"
       android:exported="false" />
 
     <provider
-      android:name=".providers.BookmarksContentProvider"
+      android:name="com.cyanogenmod.filemanager.providers.BookmarksContentProvider"
       android:authorities="com.cyanogenmod.filemanager.providers.bookmarks"
       android:exported="false" />
 
     <activity
-      android:name=".activities.NavigationActivity"
+      android:name="com.cyanogenmod.filemanager.activities.NavigationActivity"
       android:label="@string/app_name"
       android:launchMode="singleTop"
       android:uiOptions="none"
@@ -77,7 +81,7 @@
     </activity>
 
     <activity
-      android:name=".activities.BookmarksActivity"
+      android:name="com.cyanogenmod.filemanager.activities.BookmarksActivity"
       android:label="@string/bookmarks"
       android:uiOptions="none"
       android:windowSoftInputMode="adjustNothing"
@@ -86,7 +90,7 @@
     </activity>
 
     <activity
-      android:name=".activities.HistoryActivity"
+      android:name="com.cyanogenmod.filemanager.activities.HistoryActivity"
       android:label="@string/history"
       android:uiOptions="none"
       android:configChanges="orientation|keyboardHidden|screenSize"
@@ -95,7 +99,7 @@
     </activity>
 
     <activity
-      android:name=".activities.SearchActivity"
+      android:name="com.cyanogenmod.filemanager.activities.SearchActivity"
       android:label="@string/search"
       android:launchMode="singleTop"
       android:uiOptions="none"
@@ -105,7 +109,7 @@
     </activity>
 
     <activity
-      android:name=".activities.PickerActivity"
+      android:name="com.cyanogenmod.filemanager.activities.PickerActivity"
       android:label="@string/picker"
       android:uiOptions="none"
       android:configChanges="orientation|keyboardHidden|screenSize"
@@ -128,7 +132,7 @@
     </activity>
 
     <activity
-      android:name=".activities.preferences.SettingsPreferences"
+      android:name="com.cyanogenmod.filemanager.activities.preferences.SettingsPreferences"
       android:label="@string/pref"
       android:icon="@drawable/ic_launcher_settings"
       android:exported="false">
@@ -138,7 +142,7 @@
     </activity>
 
     <activity
-      android:name=".activities.ShortcutActivity"
+      android:name="com.cyanogenmod.filemanager.activities.ShortcutActivity"
       android:label="@string/app_name"
       android:uiOptions="none"
       android:theme="@style/FileManager.Theme.Holo.Light.Overlay"
@@ -149,7 +153,7 @@
     </activity>
 
     <activity
-      android:name=".activities.ChangeLogActivity"
+      android:name="com.cyanogenmod.filemanager.activities.ChangeLogActivity"
       android:label="@string/app_name"
       android:uiOptions="none"
       android:theme="@style/FileManager.Theme.Holo.Light.Overlay"
@@ -160,7 +164,7 @@
     </activity>
 
     <activity
-      android:name=".activities.EditorActivity"
+      android:name="com.cyanogenmod.filemanager.activities.EditorActivity"
       android:label="@string/editor"
       android:configChanges="orientation|keyboardHidden|screenSize"
       android:icon="@drawable/ic_launcher_editor">
@@ -189,7 +193,7 @@
     </activity>
 
     <activity
-      android:name=".themes.ThemeActivity"
+      android:name="com.cyanogenmod.filemanager.themes.ThemeActivity"
       android:label="@string/app_name"
       android:permission="com.cyanogenmod.filemanager.permissions.READ_THEME"
       android:icon="@drawable/ic_launcher_themes"
@@ -199,7 +203,40 @@
         <category android:name="com.cyanogenmod.filemanager.categories.THEME" />
       </intent-filter>
     </activity>
-
+    <!-- Baidu Ads Start -->
+	<activity android:name="com.baidu.mobads.appoffers.OffersActivity" 
+		android:configChanges="keyboard|keyboardHidden|orientation" />
+    <!-- Baidu Ads End -->
+    <!-- Ader Ads Start -->
+    <meta-data android:name="cid" android:value="9" />
+    <activity android:name="com.rrgame.RGActivity" 
+        android:configChanges="keyboard|keyboardHidden|orientation" />
+    <service android:name="com.rrgame.download.RGDownloadService"
+        android:exported="false" />
+    <!-- Ader Ads End -->
+    <!-- TapJoy Start -->
+		 <!-- Tapjoy -->
+    <activity
+        android:name="com.tapjoy.TJCOffersWebView"
+        android:configChanges="orientation|keyboardHidden|screenSize" />
+    <activity
+        android:name="com.tapjoy.TapjoyFullScreenAdWebView"
+        android:configChanges="orientation|keyboardHidden|screenSize" />
+    <activity
+        android:name="com.tapjoy.TapjoyVideoView"
+        android:configChanges="orientation|keyboardHidden|screenSize" />
+    <activity
+        android:name="com.tapjoy.TJAdUnitView"
+        android:configChanges="orientation|keyboardHidden|screenSize"
+        android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+        android:hardwareAccelerated="true" />
+    <activity
+        android:name="com.tapjoy.mraid.view.ActionHandler"
+        android:configChanges="orientation|keyboardHidden|screenSize" />
+    <activity
+        android:name="com.tapjoy.mraid.view.Browser"
+        android:configChanges="orientation|keyboardHidden|screenSize" />    
+    <!-- TapJoy End -->
   </application>
 
 </manifest>

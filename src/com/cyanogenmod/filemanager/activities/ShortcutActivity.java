@@ -16,7 +16,6 @@
 
 package com.cyanogenmod.filemanager.activities;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -27,8 +26,9 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+import os.ransj.filemanager.R;
+import os.ransj.tracker.TrackerActivity;
 
-import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.console.ConsoleBuilder;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
@@ -42,7 +42,7 @@ import com.cyanogenmod.filemanager.util.ExceptionUtil;
 /**
  * The activity for handle the desktop shortcuts create by the app.
  */
-public class ShortcutActivity extends Activity implements OnCancelListener, OnDismissListener {
+public class ShortcutActivity extends TrackerActivity implements OnCancelListener, OnDismissListener {
 
     private static final String TAG = "ShortcutActivity"; //$NON-NLS-1$
 

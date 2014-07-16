@@ -36,6 +36,15 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/ads_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ads_title"
+            style="@style/drawer_header" />
+        <include 
+            android:id="@+id/ads_layout"
+            layout="@layout/layout_ads"/>
+        <TextView
             android:id="@+id/history_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

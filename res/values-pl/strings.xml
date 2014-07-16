@@ -374,4 +374,8 @@ Copyright \u00A9 2013 Projekt CyanogenMod</string>
   <string name="changelog_title">Lista zmian</string>
   <string name="welcome_title">Witaj</string>
   <string name="welcome_msg">\n    Witaj w Menedżerze plików CyanogenMod.\n    \n\nAplikacja ta pozwala Ci przeglądać pliki systemowe i wykonywać czynności, które mogą uszkodzić urządzenie. Aby zapobiec ewentualnym szkodom, aplikacja zostanie uruchomiona w bezpiecznym trybie bez podwyższonych uprawnień.\n    \n\nTryb z pełnymi uprawnieniami możesz aktywować w ustawieniach aplikacji. Ponosisz odpowiedzialność za to, by swoimi działaniami nie doprowadzić do uszkodzenia systemu.\n    \n\nZespół CyanogenMod.\n</string>
+  <!-- ads -->
+  <string name="ads_title">Polecić</string>        
+  <string name="ads_name">Więcej</string>        
+  <string name="ads_des">Chcesz wszystko tutaj!</string>  
 </resources>

@@ -33,6 +33,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.widget.ImageView;
 
+import com.cyanogenmod.filemanager.compat.CompatUtils;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.ui.ThemeManager.Theme;
 import com.cyanogenmod.filemanager.util.FileHelper;
@@ -281,9 +282,9 @@ public class IconHolder {
          * @return Drawable The drawable or null if cannot be extracted
          */
         private Drawable getImageDrawable(String file) {
-            Bitmap thumb = ThumbnailUtils.createImageThumbnail(
+            Bitmap thumb = (Bitmap) CompatUtils.getClsHideObjectStaticMethod(ThumbnailUtils.class, "createImageThumbnail",
                     MediaHelper.normalizeMediaPath(file),
-                    ThumbnailUtils.TARGET_SIZE_MICRO_THUMBNAIL);
+                    CompatUtils.getClsHideIntStaticField(ThumbnailUtils.class, "TARGET_SIZE_MICRO_THUMBNAIL", 96));
             if (thumb == null) {
                 return null;
             }
@@ -299,7 +300,7 @@ public class IconHolder {
         private Drawable getVideoDrawable(String file) {
             Bitmap thumb = ThumbnailUtils.createVideoThumbnail(
                     MediaHelper.normalizeMediaPath(file),
-                    ThumbnailUtils.TARGET_SIZE_MICRO_THUMBNAIL);
+                    CompatUtils.getClsHideIntStaticField(ThumbnailUtils.class, "TARGET_SIZE_MICRO_THUMBNAIL", 96));
             if (thumb == null) {
                 return null;
             }
@@ -317,8 +318,10 @@ public class IconHolder {
             if (path == null) {
                 return null;
             }
-            Bitmap thumb = ThumbnailUtils.createImageThumbnail(path,
-                    ThumbnailUtils.TARGET_SIZE_MICRO_THUMBNAIL);
+            Bitmap thumb = (Bitmap) CompatUtils.getClsHideObjectStaticMethod(ThumbnailUtils.class, "createImageThumbnail", path,
+                    CompatUtils.getClsHideIntStaticField(ThumbnailUtils.class, "TARGET_SIZE_MICRO_THUMBNAIL", 96));
+//            Bitmap thumb = ThumbnailUtils.createImageThumbnail(path,
+//            		ThumbnailUtils.TARGET_SIZE_MICRO_THUMBNAIL);
             if (thumb == null) {
                 return null;
             }

@@ -32,7 +32,7 @@ import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
 
 /**
  * A {@link Preference} that allow to select/pick a color in a new window dialog.

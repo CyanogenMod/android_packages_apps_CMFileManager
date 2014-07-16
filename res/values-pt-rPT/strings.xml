@@ -397,4 +397,8 @@
     \n\nPode aceder às definições mais avançadas via Definições. É sua a responsabilidade de garantir
     que uma operação não afete a estabilidade do seu sistema.
     \n\nA Equipa CyanogenMod.\n</string>
+  <!-- ads -->
+  <string name="ads_title">Recomendar</string>        
+  <string name="ads_name">Mais</string>        
+  <string name="ads_des">Você quer que todos aqui!</string>    
 </resources>

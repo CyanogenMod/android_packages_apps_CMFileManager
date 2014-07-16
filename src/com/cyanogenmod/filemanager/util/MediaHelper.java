@@ -16,18 +16,21 @@
 
 package com.cyanogenmod.filemanager.util;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Process;
 import android.os.UserHandle;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
 import android.text.TextUtils;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import com.cyanogenmod.filemanager.compat.CompatUtils;
 
 /**
  * A helper class with useful methods to extract media data.
@@ -224,6 +227,7 @@ public final class MediaHelper {
      * @param path The path to normalize
      * @return String The normalized media path
      */
+    @SuppressLint("NewApi")
     public static String normalizeMediaPath(String path) {
         // Retrieve all the paths and check that we have this environment vars
         if (TextUtils.isEmpty(EMULATED_STORAGE_SOURCE) ||
@@ -237,8 +241,9 @@ public final class MediaHelper {
             path = path.replace(EMULATED_STORAGE_SOURCE, EMULATED_STORAGE_TARGET);
         }
         // We need to convert EXTERNAL_STORAGE -> EMULATED_STORAGE_TARGET / userId
-        if (path.startsWith(EXTERNAL_STORAGE)) {
-            final String userId = String.valueOf(UserHandle.myUserId());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && path.startsWith(EXTERNAL_STORAGE)) {
+        	final String userId = String.valueOf(CompatUtils.getClsHideIntStaticMethod(UserHandle.class, "myUserId", Process.myUid()));
+//            final String userId = String.valueOf(UserHandle.myUserId());
             final String target = new File(EMULATED_STORAGE_TARGET, userId).getAbsolutePath();
             path = path.replace(EXTERNAL_STORAGE, target);
         }

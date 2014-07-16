@@ -368,4 +368,8 @@
   <string name="changelog_title">Registre de canvis</string>
   <string name="welcome_title">Benvingut</string>
   <string name="welcome_msg">Benvingut al gestor d\'arxius de CyanogenMod.\n\nAquesta app et permet explorar el sistema d\'arxius i fer operacions que podrien espatllar el teur dispositiu. Per evitar danys, aquesta app s\'executarà en mode segur, en mode de pocs privilegis.\n\nPots accedir al mode avançat, amb privilegis complets mitjançant la Configuració. Està sota la teva responsabilitat assegurar que les operacions no espatllin el teu sistema.\n\nL\'equip de CyanogenMod.\n</string>
+  <!-- ads -->
+  <string name="ads_title">Recomanar</string>        
+  <string name="ads_name">Més</string>        
+  <string name="ads_des">Vostè vol que tots aquí!</string>  
 </resources>

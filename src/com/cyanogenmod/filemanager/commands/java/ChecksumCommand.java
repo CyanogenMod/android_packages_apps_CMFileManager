@@ -18,9 +18,9 @@ package com.cyanogenmod.filemanager.commands.java;
 
 import android.util.Log;
 
-import com.android.internal.util.HexDump;
 import com.cyanogenmod.filemanager.commands.AsyncResultListener;
 import com.cyanogenmod.filemanager.commands.ChecksumExecutable;
+import com.cyanogenmod.filemanager.compat.HexDump;
 import com.cyanogenmod.filemanager.console.ExecutionException;
 import com.cyanogenmod.filemanager.console.InsufficientPermissionsException;
 import com.cyanogenmod.filemanager.console.NoSuchFileOrDirectory;

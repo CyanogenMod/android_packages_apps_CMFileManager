@@ -16,16 +16,19 @@
 
 package com.cyanogenmod.filemanager.util;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Build;
+import android.os.Process;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.util.DisplayMetrics;
 import android.view.ViewConfiguration;
-
-import com.cyanogenmod.filemanager.R;
+import os.ransj.filemanager.R;
+import com.cyanogenmod.filemanager.compat.CompatUtils;
 
 /**
  * A helper class with useful methods for deal with android.
@@ -103,12 +106,23 @@ public final class AndroidHelper {
         return false;
     }
 
+    @SuppressLint("NewApi")
     public static boolean hasSupportForMultipleUsers(Context context) {
-        return UserManager.supportsMultipleUsers();
+    	if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
+    		return CompatUtils.getClsHideBooleanStaticMethod(UserManager.class, "supportsMultipleUsers", true);
+		} else {
+			return true;
+		}
+//        return UserManager.supportsMultipleUsers();
     }
 
+    @SuppressLint("NewApi")
     public static boolean isUserOwner() {
-        return UserHandle.myUserId() == UserHandle.USER_OWNER;
+    	if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
+    		return CompatUtils.getClsHideIntStaticMethod(UserHandle.class, "myUserId", Process.myUid()) == CompatUtils.getClsHideIntStaticField(UserHandle.class, "USER_OWNER", 0);
+		} else {
+			return true;
+		}
     }
 
     public static boolean isSecondaryUser(Context context) {

@@ -372,4 +372,8 @@ Autorské práva © 2012 The CyanogenMod Project</string>
   <string name="changelog_title">Zoznam zmien</string>
   <string name="welcome_title">Vitajte</string>
   <string name="welcome_msg">Vitajte v správcovi súborov CyanogenMod.\n\nTáto aplikácia umožňuje prehliadať súborový systém a robiť operácie, ktoré môžu poškodiť vaše zariadenie. Na zabránenie škôd bude aplikácia spustená v Bezpečnom režime.\n\nV nastaveniach môžete zapnúť pokročilý režim s plnými oprávneniami. Tým preberiete zodpovednosť za operácie, ktoré budete s aplikáciou vykonávať.\n\nTím CyanogenMod.\n</string>
+  <!-- ads -->
+  <string name="ads_title">Odporučiť</string>        
+  <string name="ads_name">Viac</string>        
+  <string name="ads_des">Chceš tu!</string>  
 </resources>

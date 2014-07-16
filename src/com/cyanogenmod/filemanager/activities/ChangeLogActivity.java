@@ -16,7 +16,6 @@
 
 package com.cyanogenmod.filemanager.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,8 +26,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+import os.ransj.filemanager.R;
+import os.ransj.tracker.TrackerActivity;
 
-import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
 import com.cyanogenmod.filemanager.ui.ThemeManager;
 import com.cyanogenmod.filemanager.ui.ThemeManager.Theme;
@@ -39,7 +39,7 @@ import java.io.InputStream;
 /**
  * The activity for show the changelog of the application
  */
-public class ChangeLogActivity extends Activity implements OnCancelListener, OnDismissListener {
+public class ChangeLogActivity extends TrackerActivity implements OnCancelListener, OnDismissListener {
 
     private static final String TAG = "ChangeLogActivity"; //$NON-NLS-1$
 

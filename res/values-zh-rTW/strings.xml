@@ -159,4 +159,7 @@
   <string name="themes_author">CyanogenMod</string>
   <string name="security_warning_extract">警告！\n\n解壓一個使用相對或絕對路徑的壓縮檔案將會覆寫系統檔案，並對你的裝置造成損壞。\n\n您確定要繼續嗎？</string>
   <string name="welcome_title">歡迎</string>
+  <string name="ads_title">推薦</string>        
+  <string name="ads_name">更多應用</string>        
+  <string name="ads_des">你想要的都在這裡!</string>  
 </resources>
