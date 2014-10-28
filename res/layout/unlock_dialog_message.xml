@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- Dialog  -->
+    <TextView
+        android:id="@+id/unlock_dialog_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/double_margin"
+        android:layout_marginLeft="@dimen/extra_large_margin"
+        android:layout_marginRight="@dimen/extra_large_margin"
+        android:textAppearance="@style/primary_text_appearance" />
+
+    <!-- Password -->
+    <LinearLayout
+        android:id="@+id/unlock_old_password_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/double_margin"
+        android:layout_marginLeft="@dimen/extra_large_margin"
+        android:layout_marginRight="@dimen/extra_large_margin"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/unlock_old_password_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/primary_text_appearance"
+            android:text="@string/secure_storage_unlock_old_key_title"
+            android:textStyle="normal"/>
+        <EditText
+            android:id="@+id/unlock_old_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:textStyle="normal"
+            android:maxLines="1" />
+    </LinearLayout>
+
+    <!-- Password -->
+    <LinearLayout
+        android:id="@+id/unlock_password_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/double_margin"
+        android:layout_marginLeft="@dimen/extra_large_margin"
+        android:layout_marginRight="@dimen/extra_large_margin"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/unlock_password_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/primary_text_appearance"
+            android:text="@string/secure_storage_unlock_key_title"
+            android:textStyle="normal"/>
+        <EditText
+            android:id="@+id/unlock_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:textStyle="normal"
+            android:maxLines="1" />
+    </LinearLayout>
+
+    <!-- Repeat Password -->
+    <LinearLayout
+        android:id="@+id/unlock_repeat_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/double_margin"
+        android:layout_marginLeft="@dimen/extra_large_margin"
+        android:layout_marginRight="@dimen/extra_large_margin"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/unlock_repeat_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/primary_text_appearance"
+            android:text="@string/secure_storage_unlock_repeat_title"
+            android:textStyle="normal"/>
+        <EditText
+            android:id="@+id/unlock_repeat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:textStyle="normal"
+            android:maxLines="1" />
+    </LinearLayout>
+
+    <!-- Validation message -->
+    <TextView
+        android:id="@+id/unlock_validation_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/extra_large_margin"
+        android:layout_marginRight="@dimen/extra_large_margin"
+        android:background="@drawable/holo_selector"
+        android:contentDescription="@null"
+        android:drawableLeft="@drawable/ic_holo_light_fs_warning"
+        android:drawablePadding="@dimen/default_margin"
+        android:gravity="left|center_vertical"
+        android:singleLine="false"
+        android:textSize="@dimen/note_text_size"
+        android:visibility="invisible" />
+
+</LinearLayout>

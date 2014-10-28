@@ -29,7 +29,7 @@ import java.text.ParseException;
  */
 public class Permissions implements Serializable, Comparable<Permissions> {
 
-    private static final long serialVersionUID = -8268598363293965341L;
+    private static final long serialVersionUID = -3995246732859872806L;
 
     private UserPermission mUser;
     private GroupPermission mGroup;
@@ -242,6 +242,30 @@ public class Permissions implements Serializable, Comparable<Permissions> {
 
         //Return octal string
         return String.format("%d%d%d%d", b, u, g, o); //$NON-NLS-1$
+    }
+
+    /**
+     * Method that returns the default permissions for folder
+     *
+     * @return Permissions The default permissions for folder
+     */
+    public static Permissions createDefaultFolderPermissions() {
+        return new Permissions(
+                new UserPermission(true, true, true, false),
+                new GroupPermission(true, false, true, false),
+                new OthersPermission(false, false, false, false));
+    }
+
+    /**
+     * Method that returns the default permissions for folder
+     *
+     * @return Permissions The default permissions for folder
+     */
+    public static Permissions createDefaultFilePermissions() {
+        return new Permissions(
+                new UserPermission(true, true, false, false),
+                new GroupPermission(true, true, false, false),
+                new OthersPermission(false, false, false, false));
     }
 
     /**

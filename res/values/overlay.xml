@@ -26,6 +26,9 @@
     <!-- The system directory -->
     <string name="system_dir" translatable="false">/system</string>
 
+    <!-- The virtual storage directory (virtual filesystem are listed here) -->
+    <string name="virtual_storage_dir" translatable="false">/storage</string>
+
     <!-- The shell commands used by this application. All of this commands should
          exist to allow the use of a shell console (and access to root). If any
          of this commands are not present in the system, then app will start in
@@ -85,8 +88,8 @@
     <!-- The system properties -->
     <string name="system_props_file" translatable="false">/system/build.prop</string>
 
-    <!-- The size of the buffers use by the console (in bytes). Default: 4k -->
-    <integer name="buffer_size">4096</integer>
+    <!-- The size of the buffers use by the console (in bytes) -->
+    <integer name="buffer_size">8192</integer>
 
     <!-- The number of lines to show in the console dialog -->
     <integer name="console_max_lines">80</integer>

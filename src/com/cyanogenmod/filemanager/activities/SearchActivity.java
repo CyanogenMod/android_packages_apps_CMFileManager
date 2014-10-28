@@ -52,7 +52,7 @@ import com.cyanogenmod.filemanager.activities.preferences.SearchPreferenceFragme
 import com.cyanogenmod.filemanager.activities.preferences.SettingsPreferences;
 import com.cyanogenmod.filemanager.adapters.SearchResultAdapter;
 import com.cyanogenmod.filemanager.commands.AsyncResultExecutable;
-import com.cyanogenmod.filemanager.commands.AsyncResultListener;
+import com.cyanogenmod.filemanager.commands.ConcurrentAsyncResultListener;
 import com.cyanogenmod.filemanager.console.NoSuchFileOrDirectory;
 import com.cyanogenmod.filemanager.console.RelaunchableException;
 import com.cyanogenmod.filemanager.listeners.OnRequestRefreshListener;
@@ -93,8 +93,7 @@ import java.util.List;
  * An activity for search files and folders.
  */
 public class SearchActivity extends Activity
-    implements AsyncResultListener, OnItemClickListener,
-               OnItemLongClickListener, OnRequestRefreshListener {
+    implements OnItemClickListener, OnItemLongClickListener, OnRequestRefreshListener {
 
     private static final String TAG = "SearchActivity"; //$NON-NLS-1$
 
@@ -208,6 +207,89 @@ public class SearchActivity extends Activity
                 ExceptionUtil.translateException(SearchActivity.this, e, true, false);
                 responder.cancel();
             }
+        }
+    };
+
+    private ConcurrentAsyncResultListener mAsyncListener = new ConcurrentAsyncResultListener() {
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void onConcurrentAsyncStart() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    SearchActivity.this.toggleResults(false, false);
+                }
+            });
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void onConcurrentAsyncEnd(boolean cancelled) {
+            mSearchListView.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        //Dismiss the dialog
+                        if (SearchActivity.this.mDialog != null) {
+                            SearchActivity.this.mDialog.dismiss();
+                        }
+
+                        // Resolve the symlinks
+                        FileHelper.resolveSymlinks(
+                                    SearchActivity.this, SearchActivity.this.mResultList);
+
+                        // Draw the results
+                        drawResults();
+
+                    } catch (Throwable ex) {
+                        Log.e(TAG, "onAsyncEnd method fails", ex); //$NON-NLS-1$
+                    }
+                }
+            });
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @SuppressWarnings("unchecked")
+        public void onConcurrentPartialResult(final Object partialResults) {
+            //Saved in the global result list, for save at the end
+            if (partialResults instanceof FileSystemObject) {
+                SearchActivity.this.mResultList.add((FileSystemObject)partialResults);
+            } else {
+                SearchActivity.this.mResultList.addAll((List<FileSystemObject>)partialResults);
+            }
+
+            //Notify progress
+            mSearchListView.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (SearchActivity.this.mDialog != null) {
+                        int progress = SearchActivity.this.mResultList.size();
+                        setProgressMsg(progress);
+                    }
+                }
+            });
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void onConcurrentAsyncExitCode(int exitCode) {/**NON BLOCK**/}
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void onConcurrentException(Exception cause) {
+            //Capture the exception
+            ExceptionUtil.translateException(SearchActivity.this, cause);
         }
     };
 
@@ -670,13 +752,13 @@ public class SearchActivity extends Activity
                             });
                     SearchActivity.this.mDialog.show();
 
-                    //Execute the query (search are process in background)
+                    // Execute the query (search in background)
                     SearchActivity.this.mExecutable =
                             CommandHelper.findFiles(
                                     SearchActivity.this,
                                     searchDirectory,
-                                    SearchActivity.this.mQuery,
-                                    SearchActivity.this,
+                                    mQuery,
+                                    mAsyncListener,
                                     null);
 
                 } catch (Throwable ex) {
@@ -1000,6 +1082,14 @@ public class SearchActivity extends Activity
      * {@inheritDoc}
      */
     @Override
+    public void onRequestBookmarksRefresh() {
+        // Ignore
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void onRequestRemove(Object o, boolean clearSelection) {
         if (o instanceof FileSystemObject) {
             removeItem((FileSystemObject)o);
@@ -1027,17 +1117,18 @@ public class SearchActivity extends Activity
      */
     void back(final boolean cancelled, FileSystemObject item, boolean isChecked) {
         final Context ctx = SearchActivity.this;
-        final Intent intent =  new Intent();
         boolean finish = true;
         if (cancelled) {
+            final Intent intent =  new Intent();
             if (SearchActivity.this.mDrawingSearchResultTask != null
                     && SearchActivity.this.mDrawingSearchResultTask.isRunning()) {
                 SearchActivity.this.mDrawingSearchResultTask.cancel(true);
             }
             if (this.mRestoreState != null) {
-                intent.putExtra(
-                        NavigationActivity.EXTRA_SEARCH_LAST_SEARCH_DATA,
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(NavigationActivity.EXTRA_SEARCH_LAST_SEARCH_DATA,
                         (Parcelable)this.mRestoreState);
+                intent.putExtras(bundle);
             }
             setResult(RESULT_CANCELED, intent);
         } else {
@@ -1047,7 +1138,7 @@ public class SearchActivity extends Activity
                 if (!isChecked) {
                     fso = CommandHelper.getFileInfo(ctx, item.getFullPath(), null);
                 }
-                finish = navigateTo(fso, intent);
+                finish = navigateTo(fso);
 
             } catch (Exception e) {
                 // Capture the exception
@@ -1055,7 +1146,7 @@ public class SearchActivity extends Activity
                 final OnRelaunchCommandResult relaunchListener = new OnRelaunchCommandResult() {
                     @Override
                     public void onSuccess() {
-                        if (navigateTo(fFso, intent)) {
+                        if (navigateTo(fFso)) {
                             exit();
                         }
                     }
@@ -1102,13 +1193,15 @@ public class SearchActivity extends Activity
      * @param intent The intent used to navigate to
      * @return boolean If the action implies finish this activity
      */
-    boolean navigateTo(FileSystemObject fso, Intent intent) {
+    boolean navigateTo(FileSystemObject fso) {
         if (fso != null) {
             if (FileHelper.isDirectory(fso)) {
-                intent.putExtra(NavigationActivity.EXTRA_SEARCH_ENTRY_SELECTION, fso);
-                intent.putExtra(
-                        NavigationActivity.EXTRA_SEARCH_LAST_SEARCH_DATA,
+                final Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(NavigationActivity.EXTRA_SEARCH_ENTRY_SELECTION, fso);
+                bundle.putParcelable(NavigationActivity.EXTRA_SEARCH_LAST_SEARCH_DATA,
                         (Parcelable)createSearchInfo());
+                intent.putExtras(bundle);
                 setResult(RESULT_OK, intent);
                 return true;
             }
@@ -1123,87 +1216,6 @@ public class SearchActivity extends Activity
             } catch (Exception ex) {/**NON BLOCK**/}
         }
         return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onAsyncStart() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                SearchActivity.this.toggleResults(false, false);
-            }
-        });
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onAsyncEnd(boolean cancelled) {
-        this.mSearchListView.post(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    //Dismiss the dialog
-                    if (SearchActivity.this.mDialog != null) {
-                        SearchActivity.this.mDialog.dismiss();
-                    }
-
-                    // Resolve the symlinks
-                    FileHelper.resolveSymlinks(
-                                SearchActivity.this, SearchActivity.this.mResultList);
-
-                    // Draw the results
-                    drawResults();
-
-                } catch (Throwable ex) {
-                    Log.e(TAG, "onAsyncEnd method fails", ex); //$NON-NLS-1$
-                }
-            }
-        });
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @SuppressWarnings("unchecked")
-    public void onPartialResult(final Object partialResults) {
-        //Saved in the global result list, for save at the end
-        if (partialResults instanceof FileSystemObject) {
-            SearchActivity.this.mResultList.add((FileSystemObject)partialResults);
-        } else {
-            SearchActivity.this.mResultList.addAll((List<FileSystemObject>)partialResults);
-        }
-
-        //Notify progress
-        this.mSearchListView.post(new Runnable() {
-            @Override
-            public void run() {
-                if (SearchActivity.this.mDialog != null) {
-                    int progress = SearchActivity.this.mResultList.size();
-                    setProgressMsg(progress);
-                }
-            }
-        });
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onAsyncExitCode(int exitCode) {/**NON BLOCK**/}
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onException(Exception cause) {
-        //Capture the exception
-        ExceptionUtil.translateException(this, cause);
     }
 
     /**
@@ -1232,11 +1244,10 @@ public class SearchActivity extends Activity
      * @return SearchInfoParcelable The search info reference
      */
     private SearchInfoParcelable createSearchInfo() {
-        SearchInfoParcelable parcel = new SearchInfoParcelable();
-        parcel.setSearchDirectory(this.mSearchDirectory);
-        parcel.setSearchResultList(
-                ((SearchResultAdapter)this.mSearchListView.getAdapter()).getData());
-        parcel.setSearchQuery(this.mQuery);
+        SearchInfoParcelable parcel = new SearchInfoParcelable(
+                mSearchDirectory,
+                ((SearchResultAdapter)this.mSearchListView.getAdapter()).getData(),
+                mQuery);
         return parcel;
     }
 

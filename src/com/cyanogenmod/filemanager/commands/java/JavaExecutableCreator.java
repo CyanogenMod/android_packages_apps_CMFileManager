@@ -22,6 +22,7 @@ import com.cyanogenmod.filemanager.commands.ChangeOwnerExecutable;
 import com.cyanogenmod.filemanager.commands.ChangePermissionsExecutable;
 import com.cyanogenmod.filemanager.commands.ChecksumExecutable;
 import com.cyanogenmod.filemanager.commands.CompressExecutable;
+import com.cyanogenmod.filemanager.commands.ConcurrentAsyncResultListener;
 import com.cyanogenmod.filemanager.commands.CopyExecutable;
 import com.cyanogenmod.filemanager.commands.CreateDirExecutable;
 import com.cyanogenmod.filemanager.commands.CreateFileExecutable;
@@ -180,7 +181,7 @@ public class JavaExecutableCreator implements ExecutableCreator {
      */
     @Override
     public FindExecutable createFindExecutable(
-            String directory, Query query, AsyncResultListener asyncResultListener)
+            String directory, Query query, ConcurrentAsyncResultListener asyncResultListener)
             throws CommandNotFoundException {
         return new FindCommand(directory, query, asyncResultListener);
     }

@@ -27,7 +27,7 @@ public class History implements Serializable, Comparable<History> {
 
     private static final long serialVersionUID = -8891185225878742265L;
 
-    private final int mPosition;
+    private int mPosition;
     private final HistoryNavigable mItem;
 
     /**
@@ -49,6 +49,15 @@ public class History implements Serializable, Comparable<History> {
      */
     public int getPosition() {
         return this.mPosition;
+    }
+
+    /**
+     * Method that sets the current position of the history
+     *
+     * @param position The current position
+     */
+    public void setPosition(int position) {
+        this.mPosition = position;
     }
 
     /**

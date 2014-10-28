@@ -20,13 +20,6 @@
     set android:visible="false" for every item as it should
     not be visible until the drawer gets opened
     -->
-
-    <!-- TODO: add functionality to set bookmark in NavigationActivity.java
-    <item
-        android:id="@+id/mnu_actions_add_to_bookmarks_current_folder"
-        android:showAsAction="never"
-        android:title="@string/actions_menu_add_to_bookmarks"
-        android:visible="false"/>-->
     <item
         android:id="@+id/mnu_clear_history"
         android:showAsAction="never"

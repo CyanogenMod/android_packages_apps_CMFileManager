@@ -196,7 +196,7 @@ public interface ExecutableCreator {
      * @throws InsufficientPermissionsException If an operation requires elevated permissions
      */
     FindExecutable createFindExecutable(
-            String directory, Query query, AsyncResultListener asyncResultListener)
+            String directory, Query query, ConcurrentAsyncResultListener asyncResultListener)
             throws CommandNotFoundException,
             NoSuchFileOrDirectory, InsufficientPermissionsException;
 

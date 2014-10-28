@@ -22,6 +22,9 @@
       android:fragment="com.cyanogenmod.filemanager.activities.preferences.SearchPreferenceFragment"
       android:title="@string/pref_search" />
     <header
+      android:fragment="com.cyanogenmod.filemanager.activities.preferences.StoragePreferenceFragment"
+      android:title="@string/pref_storage" />
+    <header
       android:fragment="com.cyanogenmod.filemanager.activities.preferences.EditorPreferenceFragment"
       android:title="@string/pref_editor" />
     <header

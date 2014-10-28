@@ -18,6 +18,7 @@ package com.cyanogenmod.filemanager.commands.shell;
 
 import com.cyanogenmod.filemanager.commands.AsyncResultExecutable;
 import com.cyanogenmod.filemanager.commands.AsyncResultListener;
+import com.cyanogenmod.filemanager.commands.ConcurrentAsyncResultListener;
 import com.cyanogenmod.filemanager.commands.SIGNAL;
 import com.cyanogenmod.filemanager.util.FileHelper;
 
@@ -93,6 +94,9 @@ public abstract class AsyncResultProgram
             throws InvalidCommandDefinitionException {
         super(id, prepare, args);
         this.mAsyncResultListener = asyncResultListener;
+        if (mAsyncResultListener instanceof ConcurrentAsyncResultListener) {
+            ((ConcurrentAsyncResultListener) mAsyncResultListener).onRegister();
+        }
         this.mPartialData = Collections.synchronizedList(new ArrayList<String>());
         this.mPartialDataType = Collections.synchronizedList(new ArrayList<Byte>());
         this.mTempBuffer = new StringBuffer();

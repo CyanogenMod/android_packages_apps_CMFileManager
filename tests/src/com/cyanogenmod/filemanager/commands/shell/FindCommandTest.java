@@ -20,7 +20,7 @@ import android.os.Environment;
 import android.test.suitebuilder.annotation.LargeTest;
 
 import com.cyanogenmod.filemanager.commands.AsyncResultExecutable;
-import com.cyanogenmod.filemanager.commands.AsyncResultListener;
+import com.cyanogenmod.filemanager.commands.ConcurrentAsyncResultListener;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.model.Query;
 import com.cyanogenmod.filemanager.util.CommandHelper;
@@ -77,29 +77,31 @@ public class FindCommandTest extends AbstractConsoleTest {
         Query query = new Query().setSlot(FIND_TERM_PARTIAL, 0);
         final List<FileSystemObject> files = new ArrayList<FileSystemObject>();
         AsyncResultExecutable cmd =
-                CommandHelper.findFiles(getContext(), FIND_PATH, query, new AsyncResultListener() {
+                CommandHelper.findFiles(getContext(), FIND_PATH,
+                        query, new ConcurrentAsyncResultListener() {
+
                         @Override
-                        public void onAsyncStart() {
+                        public void onConcurrentAsyncStart() {
                             /**NON BLOCK**/
                         }
                         @Override
-                        public void onAsyncEnd(boolean cancelled) {
+                        public void onConcurrentAsyncEnd(boolean cancelled) {
                             synchronized (FindCommandTest.this.mSync) {
                                 FindCommandTest.this.mNormalEnd = true;
                                 FindCommandTest.this.mSync.notify();
                             }
                         }
                         @Override
-                        public void onAsyncExitCode(int exitCode) {
+                        public void onConcurrentAsyncExitCode(int exitCode) {
                             /**NON BLOCK**/
                         }
                         @Override
-                        public void onException(Exception cause) {
+                        public void onConcurrentException(Exception cause) {
                             fail(String.valueOf(cause));
                         }
                         @Override
                         @SuppressWarnings("unchecked")
-                        public void onPartialResult(Object results) {
+                        public void onConcurrentPartialResult(Object results) {
                             FindCommandTest.this.mNewPartialData = true;
                             files.addAll((List<FileSystemObject>)results);
                         }

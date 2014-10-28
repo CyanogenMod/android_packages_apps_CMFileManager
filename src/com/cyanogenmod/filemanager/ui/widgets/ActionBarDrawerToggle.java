@@ -31,12 +31,10 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LevelListDrawable;
 import android.os.Build;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 /**
  * This class provides a handy way to tie together the functionality of
@@ -71,7 +69,6 @@ import android.widget.ImageView;
  * </p>
  */
 public class ActionBarDrawerToggle implements DrawerLayout.DrawerListener {
-    private static final String TAG = "ActionBarDrawerToggle";
 
     /**
      * Allows an implementing Activity to return an
@@ -148,16 +145,13 @@ public class ActionBarDrawerToggle implements DrawerLayout.DrawerListener {
         }
     }
 
+    @SuppressWarnings("unused")
     private static class SetIndicatorInfo {
-        public Method setHomeAsUpIndicator;
-        public Method setHomeActionContentDescription;
-        public ImageView upIndicatorView;
-
         SetIndicatorInfo(Activity activity) {
             try {
-                setHomeAsUpIndicator = ActionBar.class.getDeclaredMethod(
+                Method setHomeAsUpIndicator = ActionBar.class.getDeclaredMethod(
                         "setHomeAsUpIndicator", Drawable.class);
-                setHomeActionContentDescription = ActionBar.class
+                Method setHomeActionContentDescription = ActionBar.class
                         .getDeclaredMethod("setHomeActionContentDescription",
                                 Integer.TYPE);
 
@@ -185,15 +179,8 @@ public class ActionBarDrawerToggle implements DrawerLayout.DrawerListener {
             final View first = parent.getChildAt(0);
             final View second = parent.getChildAt(1);
             final View up = first.getId() == android.R.id.home ? second : first;
-
-            if (up instanceof ImageView) {
-                // Jackpot! (Probably...)
-                upIndicatorView = (ImageView) up;
-            }
         }
     }
-
-    private static final ActionBarDrawerToggleImpl IMPL = new ActionBarDrawerToggleImpl();
 
     /** Fraction of its total width by which to offset the toggle drawable. */
     private static final float TOGGLE_DRAWABLE_OFFSET = 1 / 3f;
@@ -462,7 +449,7 @@ public class ActionBarDrawerToggle implements DrawerLayout.DrawerListener {
         if (mActivityImpl != null) {
             return mActivityImpl.getThemeUpIndicator();
         }
-        return IMPL.getThemeUpIndicator(mActivity);
+        return ActionBarDrawerToggleImpl.getThemeUpIndicator(mActivity);
     }
 
     void setActionBarUpIndicator(Drawable upDrawable, int contentDescRes) {
@@ -470,7 +457,7 @@ public class ActionBarDrawerToggle implements DrawerLayout.DrawerListener {
             mActivityImpl.setActionBarUpIndicator(upDrawable, contentDescRes);
             return;
         }
-        mSetIndicatorInfo = IMPL.setActionBarUpIndicator(mSetIndicatorInfo,
+        mSetIndicatorInfo = ActionBarDrawerToggleImpl.setActionBarUpIndicator(mSetIndicatorInfo,
                 mActivity, upDrawable, contentDescRes);
     }
 
@@ -479,7 +466,7 @@ public class ActionBarDrawerToggle implements DrawerLayout.DrawerListener {
             mActivityImpl.setActionBarDescription(contentDescRes);
             return;
         }
-        mSetIndicatorInfo = IMPL.setActionBarDescription(mSetIndicatorInfo,
+        mSetIndicatorInfo = ActionBarDrawerToggleImpl.setActionBarDescription(mSetIndicatorInfo,
                 mActivity, contentDescRes);
     }
 

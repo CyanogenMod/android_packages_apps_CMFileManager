@@ -32,7 +32,7 @@ import java.util.List;
  */
 public class SearchInfoParcelable extends HistoryNavigable {
 
-    private static final long serialVersionUID = 3051428434374087971L;
+    private static final long serialVersionUID = -124315348462060329L;
 
     private String mSearchDirectory;
     private List<SearchResult> mSearchResultList;
@@ -43,8 +43,11 @@ public class SearchInfoParcelable extends HistoryNavigable {
     /**
      * Constructor of <code>SearchInfoParcelable</code>.
      */
-    public SearchInfoParcelable() {
+    public SearchInfoParcelable(String searchDirectory, List<SearchResult> searchResultList, Query searchQuery) {
         super();
+        mSearchDirectory = searchDirectory;
+        mSearchResultList = searchResultList;
+        mSearchQuery = searchQuery;
         setTitle();
     }
 
@@ -92,15 +95,6 @@ public class SearchInfoParcelable extends HistoryNavigable {
     }
 
     /**
-     * Method that sets the directory where to search.
-     *
-     * @param searchDirectory The directory where to search
-     */
-    public void setSearchDirectory(String searchDirectory) {
-        this.mSearchDirectory = searchDirectory;
-    }
-
-    /**
      * Method that returns the search result list.
      *
      * @return List<SearchResult> The search result list
@@ -110,31 +104,12 @@ public class SearchInfoParcelable extends HistoryNavigable {
     }
 
     /**
-     * Method that sets the search result list.
-     *
-     * @param searchResultList The search result list
-     */
-    public void setSearchResultList(List<SearchResult> searchResultList) {
-        this.mSearchResultList = searchResultList;
-    }
-
-    /**
      * Method that returns the query terms of the search.
      *
      * @return Query The query terms of the search
      */
     public Query getSearchQuery() {
         return this.mSearchQuery;
-    }
-
-    /**
-     * Method that sets the query terms of the search.
-     *
-     * @param searchQuery The query terms of the search
-     */
-    public void setSearchQuery(Query searchQuery) {
-        this.mSearchQuery = searchQuery;
-        setTitle();
     }
 
     /**
@@ -208,7 +183,8 @@ public class SearchInfoParcelable extends HistoryNavigable {
         //- 2
         int hasSearchQuery = in.readInt();
         if (hasSearchQuery == 1) {
-            this.mSearchQuery = (Query)in.readParcelable(getClass().getClassLoader());
+            this.mSearchQuery = (Query)in.readParcelable(
+                    SearchInfoParcelable.class.getClassLoader());
         }
         setTitle();
         //- 3

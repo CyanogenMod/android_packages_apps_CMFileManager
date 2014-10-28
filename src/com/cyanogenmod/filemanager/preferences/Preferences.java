@@ -282,6 +282,8 @@ public final class Preferences {
                 editor.putBoolean(pref.getId(), ((Boolean)value).booleanValue());
             } else if (value instanceof String && pref.getDefaultValue() instanceof String) {
                 editor.putString(pref.getId(), (String)value);
+            } else if (value instanceof Integer && pref.getDefaultValue() instanceof Integer) {
+                editor.putInt(pref.getId(), (Integer)value);
             } else if (value instanceof Set && pref.getDefaultValue() instanceof Set) {
                 editor.putStringSet(pref.getId(), (Set<String>)value);
             } else if (value instanceof ObjectIdentifier

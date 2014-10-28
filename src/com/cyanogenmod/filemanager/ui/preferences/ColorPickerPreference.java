@@ -229,7 +229,6 @@ public class ColorPickerPreference extends DialogPreference {
         /**
          * A class that generates instances of the <code>SavedState</code> class from a Parcel.
          */
-        @SuppressWarnings("hiding")
         public static final Parcelable.Creator<SavedState> CREATOR =
                 new Parcelable.Creator<SavedState>() {
 

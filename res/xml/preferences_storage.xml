@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Secure Storage -->
+    <PreferenceCategory
+      android:key="secure_storage"
+      android:title="@string/pref_secure_storage_category">
+
+      <!-- Reset password -->
+      <Preference
+        android:key="secure_storage_reset_password"
+        android:title="@string/pref_secure_storage_reset_password_title"/>
+
+      <!-- Drop storage -->
+      <Preference
+        android:key="secure_storage_drop_storage"
+        android:title="@string/pref_secure_storage_drop_storage_title"/>
+
+      <!-- Delayed synchronization -->
+      <CheckBoxPreference
+        android:key="cm_filemanager_secure_storage_delayed_sync"
+        android:title="@string/pref_secure_storage_delayed_sync_title"
+        android:summary="@string/pref_secure_storage_delayed_sync_summary"
+        android:persistent="true"
+        android:defaultValue="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

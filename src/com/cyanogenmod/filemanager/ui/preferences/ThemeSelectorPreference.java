@@ -306,7 +306,6 @@ public class ThemeSelectorPreference extends Preference implements OnClickListen
         /**
          * A class for create the saved state
          */
-        @SuppressWarnings("hiding")
         public static final Parcelable.Creator<SavedState> CREATOR =
                                         new Parcelable.Creator<SavedState>() {
             @Override

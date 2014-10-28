@@ -18,6 +18,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- The default background color -->
     <color name="default_background">@android:color/white</color>
+    <!-- The default dissabled background color -->
+    <color name="default_background_disabled">#f2f2f2</color>
 
     <!-- A black color with some transparency -->
     <color name="black_transparent">#99000000</color>

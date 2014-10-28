@@ -28,6 +28,7 @@ import com.cyanogenmod.filemanager.console.Console;
 import com.cyanogenmod.filemanager.console.ConsoleAllocException;
 import com.cyanogenmod.filemanager.console.ConsoleBuilder;
 import com.cyanogenmod.filemanager.console.ConsoleHolder;
+import com.cyanogenmod.filemanager.console.VirtualMountPointConsole;
 import com.cyanogenmod.filemanager.console.shell.PrivilegedConsole;
 import com.cyanogenmod.filemanager.preferences.AccessMode;
 import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
@@ -269,7 +270,9 @@ public final class FileManagerApplication extends Application {
         Theme theme = ThemeManager.getCurrentTheme(getApplicationContext());
         theme.setBaseTheme(getApplicationContext(), false);
 
-        //Create a console for background tasks
+        //Create a console for background tasks. Register the virtual console prior to
+        // the real console so mount point can be listed properly
+        VirtualMountPointConsole.registerVirtualConsoles(getApplicationContext());
         allocBackgroundConsole(getApplicationContext());
 
         //Force the load of mime types
