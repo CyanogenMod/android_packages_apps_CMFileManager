@@ -322,7 +322,7 @@ public final class ParseHelper {
 
 
             //Return the mount point
-            return new MountPoint(mountPoint, device, type, options, dump, pass);
+            return new MountPoint(mountPoint, device, type, options, dump, pass, false, false);
 
         } catch (Exception e) {
             throw new ParseException(e.getMessage(), 0);

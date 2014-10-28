@@ -19,12 +19,17 @@ package com.cyanogenmod.filemanager.util;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.os.Process;
 import android.util.Log;
 import android.util.SparseArray;
 
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.model.AID;
+import com.cyanogenmod.filemanager.model.Group;
+import com.cyanogenmod.filemanager.model.Identity;
+import com.cyanogenmod.filemanager.model.User;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -135,6 +140,20 @@ public final class AIDHelper {
             return aid.getName();
         }
         return null;
+    }
+
+    /**
+     * Method that return a virtual identity composed by the name of the current process
+     *
+     * @return Identity The virtual identity
+     */
+    public static Identity createVirtualIdentity() {
+        AID aid = AIDHelper.getAID(Process.myUid());
+        if (aid == null) return null;
+        return new Identity(
+                new User(aid.getId(), aid.getName()),
+                new Group(aid.getId(), aid.getName()),
+                new ArrayList<Group>());
     }
 
 }

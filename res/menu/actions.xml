@@ -74,6 +74,10 @@
       android:id="@+id/mnu_actions_add_shortcut_current_folder"
       android:showAsAction="ifRoom"
       android:title="@string/actions_menu_add_shortcut"/>
+    <item
+      android:id="@+id/mnu_actions_global_set_as_home"
+      android:showAsAction="ifRoom"
+      android:title="@string/actions_menu_set_as_home"/>
   </group>
 
   <!-- FileSystemObject Actions -->
@@ -150,6 +154,10 @@
       android:id="@+id/mnu_actions_open_parent_folder"
       android:showAsAction="ifRoom"
       android:title="@string/actions_menu_open_parent_folder"/>
+    <item
+      android:id="@+id/mnu_actions_set_as_home"
+      android:showAsAction="ifRoom"
+      android:title="@string/actions_menu_set_as_home"/>
   </group>
 
 </menu>

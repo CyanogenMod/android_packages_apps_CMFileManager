@@ -109,7 +109,7 @@ public abstract class Shell extends Command {
      * @throws ReadOnlyFilesystemException If the operation writes in a read-only filesystem
      * @hide
      */
-    @SuppressWarnings({ "static-method", "unused" })
+    @SuppressWarnings("static-method")
     public void checkStdErr(Program program, int exitCode, String err)
             throws InsufficientPermissionsException, NoSuchFileOrDirectory,
             CommandNotFoundException, ExecutionException, ReadOnlyFilesystemException {

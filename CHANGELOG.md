@@ -1,6 +1,15 @@
 CyanogenMod File Manager
 ========================
 
+Version 2.0.0
+-------------
+* Secure storage support
+* Print support
+
+Version 1.0.2
+-------------
+* Drawer navigation support (by Florian Edelmann)
+
 Version 1.0.1
 -------------
 * NFC support

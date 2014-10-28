@@ -145,7 +145,11 @@ public class Query implements Serializable, Parcelable {
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(this.mQUERIES);
+        int cc = this.mQUERIES.length;
+        dest.writeInt(cc);
+        for (int i = 0; i < cc; i++) {
+            dest.writeString(mQUERIES[i] != null ? mQUERIES[i] : "");
+        }
     }
 
     /**
@@ -154,11 +158,15 @@ public class Query implements Serializable, Parcelable {
      * @param in The parcel information to recreate the object
      */
     private void readFromParcel(Parcel in) {
-        String[] queries = in.readStringArray();
-        if (queries != null) {
-            int  count = Math.min(SLOTS_COUNT, queries.length);
-            for (int i = 0; i < count; i++) {
-                mQUERIES[i] = queries[i];
+        int len = mQUERIES.length;
+        int cc = in.readInt();
+        for (int i = 0; i < cc; i++) {
+            String query = in.readString();
+            if (i >= len) {
+                continue;
+            }
+            if (!TextUtils.isEmpty(query)) {
+                mQUERIES[i] = query;
             }
         }
     }

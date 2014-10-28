@@ -177,7 +177,6 @@ public abstract class Program extends Command implements Executable {
      * @throws ExecutionException If the another exception is detected in the standard error
      * @hide
      */
-    @SuppressWarnings("unused")
     public void checkStdErr(int exitCode, String err)
             throws InsufficientPermissionsException, NoSuchFileOrDirectory,
             CommandNotFoundException, ExecutionException {

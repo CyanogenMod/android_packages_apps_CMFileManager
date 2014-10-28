@@ -32,6 +32,8 @@ import java.io.Serializable;
  */
 public class Bookmark implements Serializable, Comparable<Bookmark>, Parcelable {
 
+    private static final long serialVersionUID = -2271268193370651368L;
+
     /**
      * Enumeration for types of bookmarks.
      */
@@ -53,12 +55,18 @@ public class Bookmark implements Serializable, Comparable<Bookmark>, Parcelable 
          */
         USB,
         /**
+         * An SECURE mount point.
+         */
+        SECURE,
+        /**
+         * An REMOTE mount point.
+         */
+        REMOTE,
+        /**
          * A bookmark added by the user.
          */
         USER_DEFINED
     }
-
-    private static final long serialVersionUID = -7524744999056506867L;
 
     /**
      * Columns of the database

@@ -23,7 +23,7 @@ import java.io.Serializable;
  */
 public class MountPoint implements Serializable, Comparable<MountPoint> {
 
-    private static final long serialVersionUID = 6283618345819358175L;
+    private static final long serialVersionUID = -2598921174356702897L;
 
     private final String mMountPoint;
     private final String mDevice;
@@ -31,6 +31,8 @@ public class MountPoint implements Serializable, Comparable<MountPoint> {
     private final String mOptions;
     private final int mDump;
     private final int mPass;
+    private boolean mSecure;
+    private boolean mRemote;
 
     /**
      * Constructor of <code>MountPoint</code>.
@@ -41,9 +43,12 @@ public class MountPoint implements Serializable, Comparable<MountPoint> {
      * @param options The mount options
      * @param dump The frequency to determine if the filesystem need to be dumped
      * @param pass The order in which filesystem checks are done at reboot time
+     * @param secure If the device is a secure virtual filesystem
+     * @param remote If the device is a remote virtual filesystem
      */
     public MountPoint(
-            String mountPoint, String device, String type, String options, int dump, int pass) {
+            String mountPoint, String device, String type, String options, int dump,
+            int pass, boolean secure, boolean remote) {
         super();
         this.mMountPoint = mountPoint;
         this.mDevice = device;
@@ -51,6 +56,8 @@ public class MountPoint implements Serializable, Comparable<MountPoint> {
         this.mOptions = options;
         this.mDump = dump;
         this.mPass = pass;
+        this.mSecure = secure;
+        this.mRemote = remote;
     }
 
     /**
@@ -109,18 +116,49 @@ public class MountPoint implements Serializable, Comparable<MountPoint> {
     }
 
     /**
+     * Method that returns if the mountpoint belongs to a virtual filesystem.
+     *
+     * @return boolean If the mountpoint belongs to a virtual filesystem.
+     */
+    public boolean isVirtual() {
+        return mSecure || mRemote;
+    }
+
+    /**
+     * Method that returns if the mountpoint belongs to a secure virtual filesystem.
+     *
+     * @return boolean If the mountpoint belongs to a secure virtual filesystem.
+     */
+    public boolean isSecure() {
+        return mSecure;
+    }
+
+    /**
+     * Method that returns if the mountpoint belongs to a remote virtual filesystem.
+     *
+     * @return boolean If the mountpoint belongs to a remote virtual filesystem.
+     */
+    public boolean isRemote() {
+        return mRemote;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + this.mDump;
-        result = prime * result + ((this.mDevice == null) ? 0 : this.mDevice.hashCode());
-        result = prime * result + ((this.mMountPoint == null) ? 0 : this.mMountPoint.hashCode());
-        result = prime * result + ((this.mOptions == null) ? 0 : this.mOptions.hashCode());
-        result = prime * result + this.mPass;
-        result = prime * result + ((this.mType == null) ? 0 : this.mType.hashCode());
+        result = prime * result + ((mDevice == null) ? 0 : mDevice.hashCode());
+        result = prime * result + mDump;
+        result = prime * result
+                + ((mMountPoint == null) ? 0 : mMountPoint.hashCode());
+        result = prime * result
+                + ((mOptions == null) ? 0 : mOptions.hashCode());
+        result = prime * result + mPass;
+        result = prime * result + (mRemote ? 1231 : 1237);
+        result = prime * result + (mSecure ? 1231 : 1237);
+        result = prime * result + ((mType == null) ? 0 : mType.hashCode());
         return result;
     }
 
@@ -129,50 +167,41 @@ public class MountPoint implements Serializable, Comparable<MountPoint> {
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
+        if (this == obj)
             return true;
-        }
-        if (obj == null) {
+        if (obj == null)
             return false;
-        }
-        if (getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass())
             return false;
-        }
         MountPoint other = (MountPoint) obj;
-        if (this.mDump != other.mDump) {
-            return false;
-        }
-        if (this.mDevice == null) {
-            if (other.mDevice != null) {
+        if (mDevice == null) {
+            if (other.mDevice != null)
                 return false;
-            }
-        } else if (!this.mDevice.equals(other.mDevice)) {
+        } else if (!mDevice.equals(other.mDevice))
             return false;
-        }
-        if (this.mMountPoint == null) {
-            if (other.mMountPoint != null) {
+        if (mDump != other.mDump)
+            return false;
+        if (mMountPoint == null) {
+            if (other.mMountPoint != null)
                 return false;
-            }
-        } else if (!this.mMountPoint.equals(other.mMountPoint)) {
+        } else if (!mMountPoint.equals(other.mMountPoint))
             return false;
-        }
-        if (this.mOptions == null) {
-            if (other.mOptions != null) {
+        if (mOptions == null) {
+            if (other.mOptions != null)
                 return false;
-            }
-        } else if (!this.mOptions.equals(other.mOptions)) {
+        } else if (!mOptions.equals(other.mOptions))
             return false;
-        }
-        if (this.mPass != other.mPass) {
+        if (mPass != other.mPass)
             return false;
-        }
-        if (this.mType == null) {
-            if (other.mType != null) {
+        if (mRemote != other.mRemote)
+            return false;
+        if (mSecure != other.mSecure)
+            return false;
+        if (mType == null) {
+            if (other.mType != null)
                 return false;
-            }
-        } else if (!this.mType.equals(other.mType)) {
+        } else if (!mType.equals(other.mType))
             return false;
-        }
         return true;
     }
 
@@ -181,11 +210,10 @@ public class MountPoint implements Serializable, Comparable<MountPoint> {
      */
     @Override
     public String toString() {
-        return "MountPoint [mountPoint=" + this.mMountPoint + ", device=" //$NON-NLS-1$//$NON-NLS-2$
-                + this.mDevice + ", type=" //$NON-NLS-1$
-                + this.mType + ", options=" + this.mOptions //$NON-NLS-1$
-                + ", dump=" + this.mDump + ", pass=" //$NON-NLS-1$//$NON-NLS-2$
-                + this.mPass + "]";   //$NON-NLS-1$
+        return "MountPoint [mMountPoint=" + mMountPoint + ", mDevice="
+                + mDevice + ", mType=" + mType + ", mOptions=" + mOptions
+                + ", mDump=" + mDump + ", mPass=" + mPass + ", mSecure="
+                + mSecure + ", mRemote=" + mRemote + "]";
     }
 
     /**

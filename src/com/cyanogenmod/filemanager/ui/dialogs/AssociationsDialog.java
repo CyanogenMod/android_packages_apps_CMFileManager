@@ -480,7 +480,7 @@ public class AssociationsDialog implements OnItemClickListener {
         if (intent != null) {
             // Capture security exceptions
             try {
-                this.mContext.startActivity(intent);
+                mContext.startActivity(intent);
             } catch (Exception e) {
                 ExceptionUtil.translateException(this.mContext, e);
             }

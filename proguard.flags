@@ -57,3 +57,10 @@
   public <init>(...);
 }
 
+#keep library packages
+-keep public class de.schlichtherle.truezip.** {
+  public protected *;
+}
+-keep public class libtruezip.** {
+  public protected *;
+}

@@ -213,13 +213,14 @@ public class FilesystemInfoDialog implements OnClickListener, OnCheckedChangeLis
         }
 
         //Configure status switch
+        boolean isVirtual = this.mMountPoint.isVirtual();
         boolean hasPrivileged = false;
         try {
             hasPrivileged = ConsoleBuilder.isPrivileged();
         } catch (Throwable ex) {/**NON BLOCK**/}
         boolean mountAllowed =
                 MountPointHelper.isMountAllowed(this.mMountPoint);
-        if (this.mIsAdvancedMode) {
+        if (!isVirtual || this.mIsAdvancedMode) {
             if (hasPrivileged) {
                 if (!mountAllowed) {
                     this.mInfoMsgView.setText(
@@ -236,7 +237,7 @@ public class FilesystemInfoDialog implements OnClickListener, OnCheckedChangeLis
             this.mInfoMsgView.setVisibility(View.GONE);
             this.mInfoMsgView.setOnClickListener(null);
         }
-        this.mIsMountAllowed = hasPrivileged && mountAllowed && this.mIsAdvancedMode;
+        this.mIsMountAllowed = isVirtual || (hasPrivileged && mountAllowed && this.mIsAdvancedMode);
         this.mSwStatus.setEnabled(this.mIsMountAllowed);
         this.mSwStatus.setChecked(MountPointHelper.isReadWrite(this.mMountPoint));
 
@@ -339,8 +340,7 @@ public class FilesystemInfoDialog implements OnClickListener, OnCheckedChangeLis
                     ret = CommandHelper.remount(
                             this.mContext,
                             this.mMountPoint, isChecked, null);
-
-                    if (ret) {
+                    if (ret && !mMountPoint.isSecure()) {
                         Console bgConsole = FileManagerApplication.getBackgroundConsole();
                         if (bgConsole != null) {
                             ret = CommandHelper.remount(
@@ -367,6 +367,8 @@ public class FilesystemInfoDialog implements OnClickListener, OnCheckedChangeLis
                     this.mInfoMsgView.setText(R.string.filesystem_info_mount_failed_msg);
                     this.mInfoMsgView.setVisibility(View.VISIBLE);
                     sw.setChecked(!isChecked);
+                } else if (mMountPoint.isSecure()) {
+                    mDialog.dismiss();
                 }
                 break;
 

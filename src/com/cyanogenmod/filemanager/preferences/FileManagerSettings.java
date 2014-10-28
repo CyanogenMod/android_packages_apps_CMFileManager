@@ -143,6 +143,13 @@ public enum FileManagerSettings {
     SETTINGS_SAVE_SEARCH_TERMS("cm_filemanager_save_search_terms", Boolean.TRUE), //$NON-NLS-1$
 
     /**
+     * When to delayed filesystem synchronization in secure storages
+     * @hide
+     */
+    SETTINGS_SECURE_STORAGE_DELAYED_SYNC("cm_filemanager_secure_storage_delayed_sync",
+            Boolean.TRUE), //$NON-NLS-1$
+
+    /**
      * When to show debug traces
      * @hide
      */
@@ -193,7 +200,16 @@ public enum FileManagerSettings {
      * @hide
      */
     SETTINGS_THEME("cm_filemanager_theme", //$NON-NLS-1$
-                        "com.cyanogenmod.filemanager:light"); //$NON-NLS-1$
+                        "com.cyanogenmod.filemanager:light"),
+
+    /**
+     * The current theme to use in the app
+     * @hide
+     */
+    USER_PREF_LAST_DRAWER_TAB("last_drawer_tab", //$NON-NLS-1$
+                        Integer.valueOf(0));
+
+
 
     /**
      * A broadcast intent that is sent when a setting was changed
@@ -206,6 +222,12 @@ public enum FileManagerSettings {
      */
     public final static String INTENT_THEME_CHANGED =
                         "com.cyanogenmod.filemanager.INTENT_THEME_CHANGED"; //$NON-NLS-1$
+
+    /**
+     * A broadcast intent that is sent when a setting was changed
+     */
+    public final static String INTENT_MOUNT_STATUS_CHANGED =
+                        "com.cyanogenmod.filemanager.INTENT_MOUNT_STATUS_CHANGED"; //$NON-NLS-1$
 
     /**
      * A broadcast intent that is sent when a file was changed
@@ -232,6 +254,16 @@ public enum FileManagerSettings {
      * The extra key with the identifier of theme that was changed
      */
     public final static String EXTRA_THEME_ID = "id"; //$NON-NLS-1$
+
+    /**
+     * The extra key with the identifier a mountpoint event
+     */
+    public final static String EXTRA_MOUNTPOINT = "mount_point"; //$NON-NLS-1$
+
+    /**
+     * The extra key with the notify the status of an object
+     */
+    public final static String EXTRA_STATUS = "status"; //$NON-NLS-1$
 
 
 

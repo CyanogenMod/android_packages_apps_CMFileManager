@@ -60,6 +60,8 @@
     <drawable name="dark_ab_save_drawable">@drawable/ic_holo_dark_save</drawable>
     <!-- The drawable for the tab action bar button -->
     <drawable name="dark_ab_tab_drawable">@drawable/ic_holo_dark_tab</drawable>
+    <!-- The drawable for the print action bar button -->
+    <drawable name="dark_ab_print_drawable">@drawable/ic_holo_dark_print</drawable>
 
     <!-- The close action drawable from the expander bar -->
     <drawable name="dark_expander_close_drawable">@drawable/ic_holo_dark_expander_close</drawable>
@@ -84,6 +86,11 @@
     <drawable name="dark_filesystem_unlocked_drawable">@drawable/ic_holo_dark_fs_unlocked</drawable>
     <!-- FileSystem warning drawable -->
     <drawable name="dark_filesystem_warning_drawable">@drawable/ic_holo_dark_fs_warning</drawable>
+
+    <!-- Secure FileSystem icon -->
+    <drawable name="dark_secure_filesystem_drawable">@drawable/ic_holo_dark_secure</drawable>
+    <!-- Remote FileSystem icon -->
+    <drawable name="dark_remote_filesystem_drawable">@drawable/ic_holo_dark_remote</drawable>
 
     <!-- The popup menu checkable selector drawable -->
     <drawable name="dark_popup_checkable_selector_drawable">@drawable/dark_checkable_selector</drawable>
@@ -116,6 +123,8 @@
     <drawable name="dark_ic_usb_drawable">@drawable/ic_holo_dark_usb</drawable>
     <drawable name="dark_ic_user_defined_bookmark_drawable">@drawable/ic_holo_dark_user_defined_bookmark</drawable>
     <drawable name="dark_ic_copy_drawable">@drawable/ic_holo_dark_copy</drawable>
+    <drawable name="dark_ic_secure_drawable">@drawable/ic_holo_dark_secure</drawable>
+    <drawable name="dark_ic_remote_drawable">@drawable/ic_holo_dark_remote</drawable>
 
     <!-- Disk usage graph -->
     <color name="dark_disk_usage_total_color">#7ecccccc</color>

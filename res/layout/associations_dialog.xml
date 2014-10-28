@@ -26,13 +26,17 @@
         android:stretchMode="columnWidth"
         android:scrollbars="vertical"
         android:horizontalSpacing="@dimen/default_margin"
+        android:layout_marginBottom="@dimen/extra_margin"
         android:numColumns="@integer/associations_items_per_row" />
 
     <CheckBox android:id="@+id/associations_remember"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/extra_margin"
+        android:layout_marginLeft="@dimen/extra_margin"
+        android:layout_marginRight="@dimen/extra_margin"
+        android:layout_marginBottom="@dimen/extra_margin"
         android:textAppearance="@style/secondary_text_appearance"
-        android:text="@string/associations_dialog_remember" />
+        android:text="@string/associations_dialog_remember"
+        android:visibility="gone" />
 
 </LinearLayout>

@@ -38,6 +38,7 @@ import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.adapters.FileSystemObjectAdapter;
 import com.cyanogenmod.filemanager.adapters.FileSystemObjectAdapter.OnSelectionChangedListener;
+import com.cyanogenmod.filemanager.console.CancelledOperationException;
 import com.cyanogenmod.filemanager.console.ConsoleAllocException;
 import com.cyanogenmod.filemanager.listeners.OnHistoryListener;
 import com.cyanogenmod.filemanager.listeners.OnRequestRefreshListener;
@@ -298,6 +299,9 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
                     } catch (Throwable ex2) {
                         /**NON BLOCK**/
                     }
+                }
+                if (ex instanceof CancelledOperationException) {
+                    return null;
                 }
 
                 //Capture exception (attach task, and use listener to do the anim)
@@ -973,6 +977,16 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
      * Method that changes the current directory of the view.
      *
      * @param newDir The new directory location
+     * @param addToHistory Add the directory to history
+     */
+    public void changeCurrentDir(final String newDir, boolean addToHistory) {
+        changeCurrentDir(newDir, addToHistory, false, false, null, null);
+    }
+
+    /**
+     * Method that changes the current directory of the view.
+     *
+     * @param newDir The new directory location
      * @param searchInfo The search information (if calling activity is {@link "SearchActivity"})
      */
     public void changeCurrentDir(final String newDir, SearchInfoParcelable searchInfo) {
@@ -1197,6 +1211,14 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
         if (clearSelection) {
             onDeselectAll();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onRequestBookmarksRefresh() {
+        // Ignore
     }
 
     /**

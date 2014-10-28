@@ -25,6 +25,14 @@
     android:layout_alignParentRight="true">
 
     <com.cyanogenmod.filemanager.ui.widgets.ButtonItem
+      android:id="@+id/ab_button0"
+      style="@style/breadcrumb_actionbar_buttom"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:onClick="onActionBarItemClick"
+      android:visibility="gone" />
+
+    <com.cyanogenmod.filemanager.ui.widgets.ButtonItem
       android:id="@+id/ab_button1"
       style="@style/breadcrumb_actionbar_buttom"
       android:layout_width="wrap_content"
@@ -51,7 +59,7 @@
     android:layout_marginRight="@dimen/extra_large_margin"
     android:textAppearance="@style/title_text_appearance"
     android:layout_alignParentLeft="true"
-    android:layout_toLeftOf="@id/ab_button1"
+    android:layout_toLeftOf="@id/ab_button0"
     android:layout_alignWithParentIfMissing="true"
     android:contentDescription="@null"
     android:gravity="left|center_vertical"

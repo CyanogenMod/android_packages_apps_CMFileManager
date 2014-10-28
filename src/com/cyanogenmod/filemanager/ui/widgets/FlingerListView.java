@@ -463,7 +463,7 @@ public class FlingerListView extends ListView {
 
             // What is the motion
             if (!this.mScrolling && this.mFlingingView != null) {
-                if(!this.mMoveStarted && !this.mLongPress) {
+                if (!this.mMoveStarted && !this.mLongPress) {
                     this.mFlingingView.removeCallbacks(this.mLongPressDetection);
                     this.mFlingingView.setPressed(true);
                     this.mFlingingViewPressed = true;

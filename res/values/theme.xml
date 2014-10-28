@@ -69,6 +69,8 @@
     <drawable name="ab_save_drawable">@drawable/ic_holo_light_save</drawable>
     <!-- The drawable for the tab action bar button -->
     <drawable name="ab_tab_drawable">@drawable/ic_holo_light_tab</drawable>
+    <!-- The drawable for the print action bar button -->
+    <drawable name="ab_print_drawable">@drawable/ic_holo_light_print</drawable>
 
     <!-- The close action drawable from the expander bar -->
     <drawable name="expander_close_drawable">@drawable/ic_holo_light_expander_close</drawable>
@@ -98,6 +100,11 @@
     <drawable name="filesystem_unlocked_drawable">@drawable/ic_holo_light_fs_unlocked</drawable>
     <!-- FileSystem warning drawable -->
     <drawable name="filesystem_warning_drawable">@drawable/ic_holo_light_fs_warning</drawable>
+
+    <!-- Secure FileSystem icon -->
+    <drawable name="secure_filesystem_drawable">@drawable/ic_holo_light_secure</drawable>
+    <!-- Remote FileSystem icon -->
+    <drawable name="remote_filesystem_drawable">@drawable/ic_holo_light_remote</drawable>
 
     <!-- The popup menu checkable selector drawable -->
     <drawable name="popup_checkable_selector_drawable">@drawable/checkable_selector</drawable>
@@ -131,6 +138,8 @@
     <drawable name="ic_user_defined_bookmark_drawable">@drawable/ic_holo_light_user_defined_bookmark</drawable>
     <drawable name="ic_history_search_drawable">@drawable/ic_holo_light_history_search</drawable>
     <drawable name="ic_copy_drawable">@drawable/ic_holo_light_copy</drawable>
+    <drawable name="ic_secure_drawable">@drawable/ic_holo_light_secure</drawable>
+    <drawable name="ic_remote_drawable">@drawable/ic_holo_light_remote</drawable>
 
     <!-- Disk usage graph -->
     <color name="disk_usage_total_color">@color/disk_usage_total</color>
@@ -180,6 +189,10 @@
     <drawable name="fso_type_system_drawable">@drawable/fso_type_system</drawable>
     <drawable name="fso_type_text_drawable">@drawable/fso_type_text</drawable>
     <drawable name="fso_type_video_drawable">@drawable/fso_type_video</drawable>
+
+    <!-- Overlay -->
+    <drawable name="ic_overlay_secure_drawable">@drawable/ic_overlay_secure</drawable>
+    <drawable name="ic_overlay_remote_drawable">@drawable/ic_overlay_remote</drawable>
 
     <!-- Syntax Highlight -->
     <color name="ash_text_color">@color/black_transparent</color>

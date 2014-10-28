@@ -66,6 +66,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * A helper class with useful methods for deal with files.
@@ -877,8 +878,12 @@ public final class FileHelper {
         // Check that have a valid file
         if (fso == null) return false;
 
-        //Only regular files
+        // Only regular files
         if (isDirectory(fso) || fso instanceof Symlink) {
+            return false;
+        }
+        // No in virtual filesystems
+        if (fso.isSecure() || fso.isRemote()) {
             return false;
         }
         String ext = getExtension(fso);
@@ -938,11 +943,9 @@ public final class FileHelper {
      */
     public static FileSystemObject createFileSystemObject(File file) {
         try {
-            // The user and group name of the files. In ChRoot, aosp give restrict access to
-            // this user and group.
-            final String USER = "system"; //$NON-NLS-1$
+            // The user and group name of the files. Use the defaults one for sdcards
+            final String USER = "root"; //$NON-NLS-1$
             final String GROUP = "sdcard_r"; //$NON-NLS-1$
-            final String PERMISSIONS = "----rwxr-x"; //$NON-NLS-1$
 
             // The user and group name of the files. In ChRoot, aosp give restrict access to
             // this user and group. This applies for permission also. This has no really much
@@ -951,7 +954,9 @@ public final class FileHelper {
             AID groupAID = AIDHelper.getAIDFromName(GROUP);
             User user = new User(userAID.getId(), userAID.getName());
             Group group = new Group(groupAID.getId(), groupAID.getName());
-            Permissions perm = Permissions.fromRawString(PERMISSIONS);
+            Permissions perm = file.isDirectory()
+                    ? Permissions.createDefaultFolderPermissions()
+                    : Permissions.createDefaultFilePermissions();
 
             // Build a directory?
             Date lastModified = new Date(file.lastModified());
@@ -1317,5 +1322,47 @@ public final class FileHelper {
         } else {
             return sDateFormat.format(filetime);
         }
+    }
+
+    /**
+     * Method that create a new temporary filename
+     *
+     * @param external If the file should be created in the external or the internal cache dir
+     */
+    public static synchronized File createTempFilename(Context context, boolean external) {
+        File tempDirectory = external ? context.getExternalCacheDir() : context.getCacheDir();
+        File tempFile;
+        do {
+            UUID uuid = UUID.randomUUID();
+            tempFile = new File(tempDirectory, uuid.toString());
+        } while (tempFile.exists());
+        return tempFile;
+    }
+
+    /**
+     * Method that delete a file or a folder
+     *
+     * @param src The file or folder to delete
+     * @return boolean If the operation was successfully
+     */
+    public static boolean deleteFileOrFolder(File src) {
+        if (src.isDirectory()) {
+            return FileHelper.deleteFolder(src);
+        }
+        return src.delete();
+    }
+
+    /**
+     * Method that checks if the source file passed belongs to (is under) the directory passed
+     *
+     * @param src The file to check
+     * @param dir The parent file to check
+     * @return boolean If the source belongs to the directory
+     */
+    public static boolean belongsToDirectory(File src, File dir) {
+        if (dir.isFile()) {
+            return false;
+        }
+        return src.getAbsolutePath().startsWith(dir.getAbsolutePath());
     }
 }

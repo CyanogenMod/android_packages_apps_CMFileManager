@@ -123,7 +123,7 @@ public class ComputeChecksumDialog implements
                                         title,
                                         layout);
         this.mDialog.setButton(
-                DialogInterface.BUTTON_NEUTRAL, context.getString(android.R.string.cancel), this);
+                DialogInterface.BUTTON_NEUTRAL, context.getString(android.R.string.ok), this);
 
         // Start checksum compute
         try {

@@ -167,6 +167,8 @@
     <string name="actionbar_button_storage_cd">Storage volumes</string>
     <!-- ActionBar Buttons - Save -->
     <string name="actionbar_button_save_cd">Save</string>
+    <!-- ActionBar Buttons - Print -->
+    <string name="actionbar_button_print_cd">Print</string>
 
     <!-- Navigation View - Sort - Sort by name (ascending) -->
     <string name="sort_by_name_asc">By name \u25B2</string>
@@ -221,6 +223,8 @@
     <string name="filesystem_info_dialog_options">Options:</string>
     <!-- Filesystem Info Dialog - Dump/Pass Label -->
     <string name="filesystem_info_dialog_dump_pass">Dump / Pass:</string>
+    <!-- Filesystem Info Dialog - Virtual Label -->
+    <string name="filesystem_info_dialog_virtual">Virtual:</string>
     <!-- Filesystem Info Dialog - Total Disk Usage -->
     <string name="filesystem_info_dialog_total_disk_usage">Total:</string>
     <!-- Filesystem Info Dialog - Used Disk Usage -->
@@ -353,6 +357,10 @@
     <string name="bookmarks_root_folder">Root folder</string>
     <!-- Bookmarks - Bookmark name - System folder -->
     <string name="bookmarks_system_folder">System folder</string>
+    <!-- Bookmarks - Bookmark name - Secure storage -->
+    <string name="bookmarks_secure">Secure storage</string>
+    <!-- Bookmarks - Bookmark name - Remote storage -->
+    <string name="bookmarks_remote">Remote storage</string>
     <!-- Bookmarks - Bookmark name - Button - Initial directory content description -->
     <string name="bookmarks_button_config_cd">Set the initial folder.</string>
     <!-- Bookmarks - Bookmark name - Button - Remove bookmark content description -->
@@ -476,6 +484,8 @@
     <string name="actions_menu_compute_checksum">Compute checksum</string>
     <!-- Actions Dialog - Menu - Print -->
     <string name="actions_menu_print">Print</string>
+    <!-- Actions Dialog - Menu - Set as home -->
+    <string name="actions_menu_set_as_home">Set as home</string>
 
     <!-- Actions - Ask user prior to do an undone operation. Dialog message -->
     <string name="actions_ask_undone_operation_msg">This action cannot be undone. Do you want to continue?</string>
@@ -547,6 +557,23 @@
     <!-- For example "2 folders and 1 file selected." -->
     <string name="selection_folders_and_files"><xliff:g id="folders">%1$s</xliff:g> and <xliff:g id="files">%2$s</xliff:g> selected.</string>
 
+    <!-- Category descriptions -->
+    <string name="category_system">SYSTEM</string>
+    <string name="category_app">APP</string>
+    <string name="category_binary">BINARY</string>
+    <string name="category_text">TEXT</string>
+    <string name="category_document">DOCUMENT</string>
+    <string name="category_ebook">EBOOK</string>
+    <string name="category_mail">MAIL</string>
+    <string name="category_compress">COMPRESS</string>
+    <string name="category_exec">EXECUTABLE</string>
+    <string name="category_database">DATABASE</string>
+    <string name="category_font">FONT</string>
+    <string name="category_image">IMAGE</string>
+    <string name="category_audio">AUDIO</string>
+    <string name="category_video">VIDEO</string>
+    <string name="category_security">SECURITY</string>
+
     <!-- Compression - Compression modes dialog title -->
     <string name="compression_mode_title">Compression mode</string>
     <!-- Compression - Supported archive and compression modes -->
@@ -571,6 +598,8 @@
     <string name="pref_general">General settings</string>
     <!-- Preferences - Search title -->
     <string name="pref_search">Search options</string>
+    <!-- Preferences - Storage title -->
+    <string name="pref_storage">Storage options</string>
     <!-- Preferences - Editor title -->
     <string name="pref_editor">Editor options</string>
     <!-- Preferences - Themes title -->
@@ -653,7 +682,20 @@
     <!-- Preferences - Search - Remove saved search terms summary -->
     <string name="pref_remove_saved_search_terms_summary">Tap to remove all the saved search terms</string>
     <!-- Preferences - Search - Suggestions were truncated -->
-    <string name="pref_remove_saved_search_terms_msg">All saved search terms were removed.</string>
+    <string name="pref_remove_saved_search_terms_msg">All saved search terms were removed</string>
+    <!-- Preferences - Storage - Secure Storage category -->
+    <string name="pref_secure_storage_category">Secure storage</string>
+    <!-- Preferences - Storage - Secure Storage - Delayed sync title -->
+    <string name="pref_secure_storage_delayed_sync_title">Delayed synchronization</string>
+    <!-- Preferences - Storage - Secure Storage - Delayed sync summary -->
+    <string name="pref_secure_storage_delayed_sync_summary">Synchronization of secure file systems
+        is costly operation. Enable this to allow a better time responses after every operation,
+        performing the synchronization when the filesystem isn\'t accessed, but at the expense of
+        lost pending information if the app crashes.</string>
+    <!-- Preferences - Storage - Secure Storage - Reset password title -->
+    <string name="pref_secure_storage_reset_password_title">Reset password</string>
+    <!-- Preferences - Storage - Secure Storage - Drop storage title -->
+    <string name="pref_secure_storage_drop_storage_title">Drop storage</string>
     <!-- Preferences - Editor - Behaviour category -->
     <string name="pref_editor_behaviour_category">Behaviour</string>
     <!-- Preferences - Editor - No suggestions -->
@@ -724,6 +766,46 @@
     <string name="ash_keyword">Keyword</string>
     <string name="ash_quoted_string">Quoted string</string>
     <string name="ash_variable">Variable</string>
+
+    <!-- Secure Storage -->
+    <!-- Secure Storage dialog title - Unlock -->
+    <string name="secure_storage_unlock_title">Unlock storage</string>
+    <!-- Secure Storage dialog title - Create -->
+    <string name="secure_storage_create_title">Create storage</string>
+    <!-- Secure Storage dialog title - Reset -->
+    <string name="secure_storage_reset_title">Reset password</string>
+    <!-- Secure Storage dialog title - Drop -->
+    <string name="secure_storage_drop_title">Drop storage</string>
+    <!-- Secure Storage unlock dialog message (secure storage exists) -->
+    <string name="secure_storage_unlock_key_prompt_msg">Type the password for unlock the secure storage filesystem.</string>
+    <!-- Secure Storage unlock dialog message (new secure storage) -->
+    <string name="secure_storage_unlock_key_new_msg">Type a password for create a new secure storage filesystem.</string>
+    <!-- Secure Storage unlock dialog message (reset the current password) -->
+    <string name="secure_storage_unlock_key_reset_msg">Type the password for reset the secure storage filesystem.</string>
+    <!-- Secure Storage unlock dialog message (drop the secure storage) -->
+    <string name="secure_storage_unlock_key_drop_msg">Type the password for drop the secure storage filesystem.</string>
+    <!-- Secure Storage unlock dialog old key title -->
+    <string name="secure_storage_unlock_old_key_title">Old password:</string>
+    <!-- Secure Storage unlock dialog key title -->
+    <string name="secure_storage_unlock_new_key_title">New Password:</string>
+    <!-- Secure Storage unlock dialog key title -->
+    <string name="secure_storage_unlock_key_title">Password:</string>
+    <!-- Secure Storage unlock dialog repeat key title-->
+    <string name="secure_storage_unlock_repeat_title">Repeat password:</string>
+    <!-- Secure Storage create button -->
+    <string name="secure_storage_create_button">Create</string>
+    <!-- Secure Storage unlock button -->
+    <string name="secure_storage_unlock_button">Unlock</string>
+    <!-- Secure Storage reset button -->
+    <string name="secure_storage_reset_button">Reset</string>
+    <!-- Secure Storage drop button -->
+    <string name="secure_storage_drop_button">Drop</string>
+    <!-- Secure Storage unlock failed toast -->
+    <string name="secure_storage_unlock_failed">Cannot unlock the storage</string>
+    <!-- Secure Storage unlock validation, length -->
+    <string name="secure_storage_unlock_validation_length">Password must have at least <xliff:g id="characters">%1$d</xliff:g> characters.</string>
+    <!-- Secure Storage unlock validation, equal -->
+    <string name="secure_storage_unlock_validation_equals">Passwords are not the same.</string>
 
     <!-- Print messages -->
     <!-- Unsupported document format -->

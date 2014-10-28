@@ -19,7 +19,11 @@ package com.cyanogenmod.filemanager.util;
 import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.UserHandle;
@@ -27,12 +31,20 @@ import android.os.UserManager;
 import android.util.DisplayMetrics;
 import android.view.ViewConfiguration;
 
-import com.cyanogenmod.filemanager.R;
+import com.android.internal.util.HexDump;
+
+import java.io.ByteArrayInputStream;
+import java.security.GeneralSecurityException;
+import java.security.MessageDigest;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 
 /**
  * A helper class with useful methods for deal with android.
  */
 public final class AndroidHelper {
+
+    private static Boolean sIsAppPlatformSigned;
 
     /**
      * Method that returns if the device is a tablet
@@ -91,18 +103,47 @@ public final class AndroidHelper {
      * @return boolean If the app is signed with the platform signature
      */
     public static boolean isAppPlatformSignature(Context ctx) {
-        // TODO This need to be improved, checking if the app is really with the platform signature
-        try {
-            // For now only check that the app is installed in system directory
-            PackageManager pm = ctx.getPackageManager();
-            String appDir = pm.getApplicationInfo(ctx.getPackageName(), 0).sourceDir;
-            String systemDir = ctx.getString(R.string.system_dir);
-            return appDir.startsWith(systemDir);
+        if (sIsAppPlatformSigned == null) {
+            try {
+                // First check that the app is installed as a system app
+                PackageManager pm = ctx.getPackageManager();
+                ApplicationInfo ai = pm.getApplicationInfo(ctx.getPackageName(),
+                        PackageManager.GET_SIGNATURES);
+                if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+                    sIsAppPlatformSigned = Boolean.FALSE;
+                } else {
+                    final MessageDigest sha1 = MessageDigest.getInstance("SHA1");
+                    final CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
-        } catch (Exception e) {
-            ExceptionUtil.translateException(ctx, e, true, false);
+                    // Get signature of the current package
+                    PackageInfo info = pm.getPackageInfo(ctx.getPackageName(),
+                            PackageManager.GET_SIGNATURES);
+                    Signature[] signatures = info.signatures;
+                    X509Certificate cert = (X509Certificate) cf.generateCertificate(
+                            new ByteArrayInputStream(signatures[0].toByteArray()));
+                    sha1.update(cert.getEncoded());
+                    String appHash = HexDump.toHexString(sha1.digest());
+
+                    // Get the signature of the settings package (which is supposed to be signed)
+                    info = pm.getPackageInfo("com.android.settings",
+                            PackageManager.GET_SIGNATURES);
+                    signatures = info.signatures;
+                    cert = (X509Certificate) cf.generateCertificate(
+                            new ByteArrayInputStream(signatures[0].toByteArray()));
+                    sha1.update(cert.getEncoded());
+                    String systemHash = HexDump.toHexString(sha1.digest());
+
+                    // Is platform signed?
+                    sIsAppPlatformSigned = appHash.equals(systemHash);
+                }
+
+            } catch (NameNotFoundException e) {
+                sIsAppPlatformSigned = Boolean.FALSE;
+            } catch (GeneralSecurityException e) {
+                sIsAppPlatformSigned = Boolean.FALSE;
+            }
         }
-        return false;
+        return sIsAppPlatformSigned.booleanValue();
     }
 
     public static boolean hasSupportForMultipleUsers(Context context) {
