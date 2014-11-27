@@ -506,7 +506,7 @@ public class SearchActivity extends Activity
         actionBar.setBackgroundDrawable(
                 getResources().getDrawable(R.drawable.bg_holo_titlebar));
         actionBar.setDisplayOptions(
-                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME);
+                ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setDisplayHomeAsUpEnabled(true);
         View customTitle = getLayoutInflater().inflate(R.layout.simple_customtitle, null, false);
 
@@ -1289,7 +1289,6 @@ public class SearchActivity extends Activity
         theme.setBaseTheme(this, false);
 
         //- ActionBar
-        theme.setTitlebarDrawable(this, getActionBar(), "titlebar_drawable"); //$NON-NLS-1$
         View v = getActionBar().getCustomView().findViewById(R.id.customtitle_title);
         theme.setTextColor(this, (TextView)v, "text_color"); //$NON-NLS-1$
         v = findViewById(R.id.ab_button1);

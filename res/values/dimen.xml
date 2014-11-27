@@ -119,4 +119,9 @@
     <dimen name="print_text_size">6sp</dimen>
     <!-- Print page margins -->
     <dimen name="print_page_margins">5dp</dimen>
+
+    <!-- Scrim layout elevation -->
+    <dimen name="scrim_layout_elevation">10dp</dimen>
+    <!-- Drawer margin for scrim inset padding -->
+    <dimen name="drawer_top_margin">110dp</dimen>
 </resources>

@@ -394,14 +394,14 @@ public final class ThemeManager {
             String resId = mId + "_base_theme"; //$NON-NLS-1$
             int id = this.mResources.getIdentifier(resId, "string", this.mPackage); //$NON-NLS-1$
             if (id != 0) {
-                String base = this.mResources.getString(id, "holo_light"); //$NON-NLS-1$
-                int themeId = base.compareTo("holo") == 0 ? //$NON-NLS-1$
-                                R.style.FileManager_Theme_Holo :
-                                R.style.FileManager_Theme_Holo_Light;
+                String base = this.mResources.getString(id, "material_light"); //$NON-NLS-1$
+                int themeId = base.compareTo("material") == 0 ? //$NON-NLS-1$
+                                R.style.FileManager_Theme_Material :
+                                R.style.FileManager_Theme_Material_Light;
                 if (overlay) {
-                    themeId = base.compareTo("holo") == 0 ? //$NON-NLS-1$
-                            R.style.FileManager_Theme_Holo_Overlay :
-                            R.style.FileManager_Theme_Holo_Light_Overlay;
+                    themeId = base.compareTo("material") == 0 ? //$NON-NLS-1$
+                            R.style.FileManager_Theme_Material_Overlay :
+                            R.style.FileManager_Theme_Material_Light_Overlay;
                 }
                 ctx.setTheme(themeId);
                 return;
@@ -410,15 +410,41 @@ public final class ThemeManager {
             // Default theme
             id = mDefaultTheme.mResources.getIdentifier(
                     "base_theme", "string", mDefaultTheme.mPackage); //$NON-NLS-1$ //$NON-NLS-2$
-            String base = this.mResources.getString(id, "holo_light"); //$NON-NLS-1$
-            int themeId = base.compareTo("holo") == 0 ? //$NON-NLS-1$
-                            R.style.FileManager_Theme_Holo :
-                            R.style.FileManager_Theme_Holo_Light;
+            String base = this.mResources.getString(id, "material_light"); //$NON-NLS-1$
+            int themeId = base.compareTo("material") == 0 ? //$NON-NLS-1$
+                            R.style.FileManager_Theme_Material :
+                            R.style.FileManager_Theme_Material_Light;
             if (overlay) {
-                themeId = base.compareTo("holo") == 0 ? //$NON-NLS-1$
-                        R.style.FileManager_Theme_Holo_Overlay :
-                        R.style.FileManager_Theme_Holo_Light_Overlay;
+                themeId = base.compareTo("material") == 0 ? //$NON-NLS-1$
+                        R.style.FileManager_Theme_Material_Overlay :
+                        R.style.FileManager_Theme_Material_Light_Overlay;
             }
+            ctx.setTheme(themeId);
+        }
+
+        /**
+         * Method that sets the base theme of the current context with no actionbar
+         *
+         * @param ctx
+         */
+        public void setBaseThemeNoActionBar(Context ctx) {
+            String resId = mId + "_base_theme"; //$NON-NLS-1$
+            int id = this.mResources.getIdentifier(resId, "string", this.mPackage); //$NON-NLS-1$
+            if (id != 0) {
+                String base = this.mResources.getString(id, "material_light"); //$NON-NLS-1$
+                int themeId = base.compareTo("material") == 0 ? //$NON-NLS-1$
+                        R.style.FileManager_Theme_Material_NoActionBar :
+                        R.style.FileManager_Theme_Material_Light_NoActionBar;
+                ctx.setTheme(themeId);
+            }
+
+            // Default theme
+            id = mDefaultTheme.mResources.getIdentifier(
+                    "base_theme", "string", mDefaultTheme.mPackage); //$NON-NLS-1$ //$NON-NLS-2$
+            String base = this.mResources.getString(id, "material_light"); //$NON-NLS-1$
+            int themeId = base.compareTo("material") == 0 ? //$NON-NLS-1$
+                    R.style.FileManager_Theme_Material_NoActionBar :
+                    R.style.FileManager_Theme_Material_Light_NoActionBar;
             ctx.setTheme(themeId);
         }
 

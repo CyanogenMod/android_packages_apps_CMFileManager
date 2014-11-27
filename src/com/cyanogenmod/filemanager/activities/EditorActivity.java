@@ -671,7 +671,7 @@ public class EditorActivity extends Activity implements TextWatcher {
         getActionBar().setBackgroundDrawable(
                 getResources().getDrawable(R.drawable.bg_holo_titlebar));
         getActionBar().setDisplayOptions(
-                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME);
+                ActionBar.DISPLAY_SHOW_CUSTOM);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         View customTitle = getLayoutInflater().inflate(R.layout.simple_customtitle, null, false);
         this.mTitle = (TextView)customTitle.findViewById(R.id.customtitle_title);

@@ -16,6 +16,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/navigation_statusbar_portrait_holder"
+    android:elevation="4dp"
     android:layout_width="match_parent"
     android:layout_height="@dimen/default_row_height"
     android:background="@drawable/bg_holo_statusbar"
