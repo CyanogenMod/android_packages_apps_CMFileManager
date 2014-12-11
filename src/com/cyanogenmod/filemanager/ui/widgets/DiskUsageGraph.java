@@ -17,14 +17,17 @@
 package com.cyanogenmod.filemanager.ui.widgets;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.cyanogenmod.filemanager.model.DiskUsage;
+import com.cyanogenmod.filemanager.model.DiskUsageCategory;
 import com.cyanogenmod.filemanager.ui.ThemeManager;
 import com.cyanogenmod.filemanager.ui.ThemeManager.Theme;
 
@@ -62,7 +65,7 @@ public class DiskUsageGraph extends View {
      * Constructor of <code>DiskUsageGraph</code>.
      *
      * @param context The current context
-     * @param attrs The attributes of the XML tag that is inflating the view.
+     * @param attrs   The attributes of the XML tag that is inflating the view.
      */
     public DiskUsageGraph(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -71,12 +74,12 @@ public class DiskUsageGraph extends View {
     /**
      * Constructor of <code>DiskUsageGraph</code>.
      *
-     * @param context The current context
-     * @param attrs The attributes of the XML tag that is inflating the view.
-     * @param defStyle The default style to apply to this view. If 0, no style
-     *        will be applied (beyond what is included in the theme). This may
-     *        either be an attribute resource, whose value will be retrieved
-     *        from the current theme, or an explicit style resource.
+     * @param context  The current context
+     * @param attrs    The attributes of the XML tag that is inflating the view.
+     * @param defStyle The default style to apply to this view. If 0, no style will be applied
+     *                 (beyond what is included in the theme). This may either be an attribute
+     *                 resource, whose value will be retrieved from the current theme, or an
+     *                 explicit style resource.
      */
     public DiskUsageGraph(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -94,8 +97,8 @@ public class DiskUsageGraph extends View {
     }
 
     /**
-     * Method that sets the free disk space percentage after the widget change his color
-     * to advise the user
+     * Method that sets the free disk space percentage after the widget change his color to advise
+     * the user
      *
      * @param percentage The free disk space percentage
      */
@@ -106,7 +109,7 @@ public class DiskUsageGraph extends View {
     /**
      * Method that draw the disk usage.
      *
-     * @param diskUsage The disk usage
+     * @param diskUsage {@link com.cyanogenmod.filemanager.model.DiskUsage} The disk usage params
      */
     public void drawDiskUsage(DiskUsage diskUsage) {
         // Clear if a current drawing exit
@@ -158,6 +161,23 @@ public class DiskUsageGraph extends View {
             this.mRunning = false;
         }
 
+        private void sleepyTime() {
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException ignored) {
+            }
+        }
+
+        private void redrawCanvas() {
+            //Redraw the canvas
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    invalidate();
+                }
+            });
+        }
+
         /**
          * {@inheritDoc}
          */
@@ -172,92 +192,143 @@ public class DiskUsageGraph extends View {
             rect.top += stroke / 2;
             rect.bottom -= stroke / 2;
 
-            float used = 0.0f;
-            if (this.mDiskUsage == null) {
-                used = 100.0f;
-            } else if (this.mDiskUsage.getTotal() != 0) {
+            float used = 100.0f;
+            if (this.mDiskUsage != null && this.mDiskUsage.getTotal() != 0) {
                 used = (this.mDiskUsage.getUsed() * 100) / this.mDiskUsage.getTotal();
             }
             //Translate to angle
             used = (360 * used) / 100;
 
-            synchronized (this.mSync) {
-                this.mRunning = true;
+            DrawingObject drawingObject = createDrawingObject(rect, "disk_usage_total_color",
+                    stroke);
+            mDrawingObjects.add(drawingObject);
+            while (drawingObject.mSweepAngle < 360) {
+                sleepyTime();
+                drawingObject.mSweepAngle++;
+                redrawCanvas();
             }
-            try {
-                boolean disk_warning = false;
-                while (this.mRunning) {
-                    //Get the current arc
-                    DrawingObject dwo = null;
-                    if (DiskUsageGraph.this.mDrawingObjects != null
-                            && DiskUsageGraph.this.mDrawingObjects.size() > this.mIndex) {
-                        dwo = DiskUsageGraph.this.mDrawingObjects.get(this.mIndex);
-                    }
 
-                    //Draw the total arc circle and then the used arc circle
-                    if (this.mIndex == 0 && dwo == null) {
-                        //Initialize the total arc circle
-                        DiskUsageGraph.this.mDrawingObjects.add(
-                                createDrawingObject(
-                                        rect, "disk_usage_total_color", stroke)); //$NON-NLS-1$
-                        continue;
-                    }
-                    if (this.mIndex == 1 && dwo == null) {
-                      //Initialize the used arc circle
-                        DiskUsageGraph.this.mDrawingObjects.add(
-                                createDrawingObject(
-                                        rect, "disk_usage_used_color", stroke)); //$NON-NLS-1$
-                        continue;
-                    }
+            drawingObject = createDrawingObject(rect, "disk_usage_used_color", stroke);
+            mDrawingObjects.add(drawingObject);
+            while (drawingObject.mSweepAngle < used) {
+                sleepyTime();
+                drawingObject.mSweepAngle++;
+                redrawCanvas();
+            }
 
-                    if (this.mIndex == 1 && !disk_warning &&
-                            dwo.mSweepAngle >= DiskUsageGraph.this.mDiskWarningAngle) {
-                        Theme theme = ThemeManager.getCurrentTheme(getContext());
-                        dwo.mPaint.setColor(
-                                theme.getColor(
-                                        getContext(),
-                                        "disk_usage_used_warning_color")); //$NON-NLS-1$
-                        disk_warning = true;
+            if (mDiskUsage != null) {
+                Log.i("TEST", "Starting to draw categories");
+                int lastSweepAngle = drawingObject.mSweepAngle;
+                float catUsed = 100.0f;
+                Log.i("TEST", "Size: " + mDiskUsage.getUsageCategoryList().size());
+                for (DiskUsageCategory category : mDiskUsage.getUsageCategoryList()) {
+                    Log.i("TEST", "Category: " + category.getCategory().name());
+                    catUsed = (category.getSizeBytes() * 100) / used; // calc percent
+                    catUsed = (360 * catUsed) / 100; // calc angle
+                    drawingObject = createDrawingObject(rect, "disk_usage_used_warning_color",
+                            stroke);
+                    drawingObject.mStartAngle = lastSweepAngle;
+                    mDrawingObjects.add(drawingObject);
+                    while (drawingObject.mSweepAngle < catUsed) {
+                        sleepyTime();
+                        drawingObject.mSweepAngle++;
+                        redrawCanvas();
                     }
-
-                    //Redraw the canvas
-                    post(new Runnable() {
-                        @Override
-                        public void run() {
-                            invalidate();
-                        }
-                    });
-
-                    //Next draw call
-                    dwo.mSweepAngle++;
-                    if (this.mIndex >= 1) {
-                        //Only fill until used
-                        if ((dwo.mSweepAngle >= used) || (this.mIndex > 1)) {
-                            synchronized (this.mSync) {
-                                break;  //End of the animation
-                            }
-                        }
-                    }
-                    if (dwo.mSweepAngle == 360) {
-                        this.mIndex++;
-                    }
-
-                    try {
-                        Thread.sleep(1L);
-                    } catch (Throwable ex) {
-                        /**NON BLOCK**/
-                    }
-                }
-            } finally {
-                try {
-                    synchronized (this.mSync) {
-                        this.mRunning = false;
-                        this.mSync.notify();
-                    }
-                } catch (Throwable ex) {
-                    /**NON BLOCK**/
+                    lastSweepAngle = drawingObject.mSweepAngle;
                 }
             }
+
+//            synchronized (this.mSync) {
+//                this.mRunning = true;
+//            }
+
+//            try {
+//                boolean disk_warning = false;
+//                while (this.mRunning) {
+//                    //Get the current arc
+//                    DrawingObject dwo = null;
+//                    if (DiskUsageGraph.this.mDrawingObjects != null
+//                            && DiskUsageGraph.this.mDrawingObjects.size() > this.mIndex) {
+//                        dwo = DiskUsageGraph.this.mDrawingObjects.get(this.mIndex);
+//                    }
+//
+//                    //Draw the total arc circle and then the used arc circle
+//                    if (this.mIndex == 0 && dwo == null) {
+//                        //Initialize the total arc circle
+//                        DiskUsageGraph.this.mDrawingObjects.add(
+//                                createDrawingObject(
+//                                        rect, "disk_usage_total_color", stroke)); //$NON-NLS-1$
+//                        continue;
+//                    }
+//                    if (this.mIndex == 1 && dwo == null) {
+//                        //Initialize the used arc circle
+//                        DiskUsageGraph.this.mDrawingObjects.add(
+//                                createDrawingObject(
+//                                        rect, "disk_usage_used_color", stroke)); //$NON-NLS-1$
+//                        continue;
+//                    }
+//
+//                    if (this.mIndex == 1 && !disk_warning &&
+//                            dwo.mSweepAngle >= DiskUsageGraph.this.mDiskWarningAngle) {
+//                        Theme theme = ThemeManager.getCurrentTheme(getContext());
+//                        dwo.mPaint.setColor(
+//                                theme.getColor(
+//                                        getContext(),
+//                                        "disk_usage_used_warning_color")); //$NON-NLS-1$
+//                        disk_warning = true;
+//                    }
+//
+//                    Log.i("TEST", "Adding 1");
+//                    if (this.mIndex == 2) {
+//                        Log.i("TEST", "Adding 2");
+//                        for (DiskUsageCategory category : mDiskUsage.getUsageCategoryList()) {
+//                            DrawingObject drawingObject = createDrawingObject(rect,
+//                                    "disk_usage_used_warning_color", stroke);
+//                            drawingObject.mStartAngle = dwo.mSweepAngle;
+//                            Log.i("TEST", "Adding 3");
+//                            mDrawingObjects.add(drawingObject);
+//                        }
+//                        continue;
+//                    }
+//
+//                    //Redraw the canvas
+//                    post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            invalidate();
+//                        }
+//                    });
+//
+//                    //Next draw call
+//                    dwo.mSweepAngle++;
+//                    if (this.mIndex >= 1) {
+//                        //Only fill until used
+//                        if ((dwo.mSweepAngle >= used) || (this.mIndex > 2)) {
+//                            synchronized (this.mSync) {
+//                                break;  //End of the animation
+//                            }
+//                        }
+//                    }
+//                    if (dwo.mSweepAngle == 360) {
+//                        this.mIndex++;
+//                    }
+//
+//                    try {
+//                        Thread.sleep(1L);
+//                    } catch (Throwable ex) {
+//                        /**NON BLOCK**/
+//                    }
+//                }
+//            } finally {
+//                try {
+//                    synchronized (this.mSync) {
+//                        this.mRunning = false;
+//                        this.mSync.notify();
+//                    }
+//                } catch (Throwable ex) {
+//                    /**NON BLOCK**/
+//                }
+//            }
         }
 
         /**
@@ -279,9 +350,10 @@ public class DiskUsageGraph extends View {
         /**
          * Method that creates the drawing object.
          *
-         * @param rect The area of drawing
+         * @param rect                 The area of drawing
          * @param colorResourceThemeId The theme resource identifier of the color
-         * @param stroke The stroke width
+         * @param stroke               The stroke width
+         *
          * @return DrawingObject The drawing object
          */
         private DrawingObject createDrawingObject(
@@ -304,6 +376,7 @@ public class DiskUsageGraph extends View {
      */
     private class DrawingObject {
         DrawingObject() {/**NON BLOCK**/}
+
         int mStartAngle = -180;
         int mSweepAngle = 0;
         Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);

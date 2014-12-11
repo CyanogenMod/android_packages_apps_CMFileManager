@@ -17,6 +17,8 @@
 package com.cyanogenmod.filemanager.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A class that holds information about the usage of a disk (total, used and free space).
@@ -25,6 +27,8 @@ public class DiskUsage implements Serializable {
 
     private static final long serialVersionUID = -4540446701543226294L;
 
+    private final List<DiskUsageCategory> mDiskUsageCategoryList =
+            new ArrayList<DiskUsageCategory>();
     private final String mMountPoint;
     private final long mTotal;
     private final long mUsed;
@@ -80,6 +84,30 @@ public class DiskUsage implements Serializable {
      */
     public long getFree() {
         return this.mFree;
+    }
+
+    /**
+     * Add a usage category
+     *
+     * @param category {@link com.cyanogenmod.filemanager.model.DiskUsageCategory} not null
+     *
+     * @throws IllegalArgumentException {@link java.lang.IllegalArgumentException}
+     */
+    public void addUsageCategory(DiskUsageCategory category) throws IllegalArgumentException {
+        if (category == null) {
+            throw new IllegalArgumentException("'category' cannot be null!");
+        }
+    }
+
+    public List<DiskUsageCategory> getUsageCategoryList() {
+        return mDiskUsageCategoryList;
+    }
+
+    /**
+     * Clears the list of usage categories
+     */
+    public void clearUsageCategories() {
+        mDiskUsageCategoryList.clear();
     }
 
     /**

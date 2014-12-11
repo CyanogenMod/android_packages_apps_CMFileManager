@@ -19,6 +19,7 @@ package com.cyanogenmod.filemanager.ui.dialogs;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,23 +34,82 @@ import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.console.Console;
 import com.cyanogenmod.filemanager.console.ConsoleBuilder;
 import com.cyanogenmod.filemanager.model.DiskUsage;
+import com.cyanogenmod.filemanager.model.DiskUsageCategory;
 import com.cyanogenmod.filemanager.model.MountPoint;
 import com.cyanogenmod.filemanager.preferences.AccessMode;
 import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
 import com.cyanogenmod.filemanager.preferences.Preferences;
+import com.cyanogenmod.filemanager.providers.MimeTypeIndexProvider;
+import com.cyanogenmod.filemanager.tasks.FetchStatsByTypeTask;
+import com.cyanogenmod.filemanager.tasks.FetchStatsByTypeTask.Listener;
 import com.cyanogenmod.filemanager.ui.ThemeManager;
 import com.cyanogenmod.filemanager.ui.ThemeManager.Theme;
 import com.cyanogenmod.filemanager.ui.widgets.DiskUsageGraph;
 import com.cyanogenmod.filemanager.util.CommandHelper;
 import com.cyanogenmod.filemanager.util.DialogHelper;
 import com.cyanogenmod.filemanager.util.FileHelper;
+import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
 import com.cyanogenmod.filemanager.util.MountPointHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A class that wraps a dialog for showing information about a mount point.<br />
  * This class display information like mount point name, device name, size, type, ...
  */
-public class FilesystemInfoDialog implements OnClickListener, OnCheckedChangeListener {
+public class FilesystemInfoDialog implements OnClickListener, OnCheckedChangeListener, Listener {
+
+    @Override
+    public void onCursor(Cursor cursor) {
+        Log.i("TEST", "Cursor: " + cursor);
+        if (cursor == null) {
+            Log.w(TAG, "Cursor is null");
+            return;
+        }
+        Log.i("TEST", "Cursor Size: " + cursor.getCount());
+        mDiskUsage.clearUsageCategories();
+        while(cursor.moveToNext()) {
+            String fileRoot = cursor.getString(cursor.getColumnIndex(MimeTypeIndexProvider
+                    .COLUMN_FILE_ROOT));
+            String categoryString = cursor.getString(cursor.getColumnIndex(MimeTypeIndexProvider
+                    .COLUMN_CATEGORY));
+            long size = cursor.getLong(cursor.getColumnIndex(MimeTypeIndexProvider.COLUMN_SIZE));
+            MimeTypeCategory category = MimeTypeCategory.valueOf(categoryString);
+            DiskUsageCategory usageCategory = new DiskUsageCategory(category, size);
+            mDiskUsage.addUsageCategory(usageCategory);
+
+            // [TODO][MSB]: Unhandled case: No data, sync in progress, ready to draw
+            // * Should check if 0 length, then wait on uri notification?
+            // ** This should only happen if you are using it without a sync ever having happened
+            // ** before.
+            // * Should always wait on uri notification and update drawing?
+            // * Otherwise if we have data then we are good to go!
+            // * Also should think of a way to dispatch and index refresh (alarm manager? file
+            // ** observer?)
+
+        }
+
+        this.mDiskUsageGraph.post(new Runnable() {
+            @Override
+            public void run() {
+                //Animate disk usage graph
+                FilesystemInfoDialog.this.mDiskUsageGraph.drawDiskUsage(mDiskUsage);
+                isFetching = false;
+            }
+        });
+    }
+
+    boolean isFetching;
+    FetchStatsByTypeTask mFetchStatsByTypeTask;
+    private void fetchStats(String fileRoot) {
+        if (!isFetching) {
+            isFetching = true;
+            mFetchStatsByTypeTask.execute(fileRoot);
+        } else {
+            Log.w(TAG, "Already fetching data...");
+        }
+    }
 
     /**
      * An interface to communicate when the user change the mount state
@@ -108,6 +168,9 @@ public class FilesystemInfoDialog implements OnClickListener, OnCheckedChangeLis
 
         //Save data
         this.mMountPoint = mountPoint;
+        mFetchStatsByTypeTask = new FetchStatsByTypeTask(this.mContext, this);
+        Log.i("TEST", "Mount Point: " + mMountPoint.getMountPoint());
+        fetchStats(mMountPoint.getMountPoint());
         this.mDiskUsage = diskUsage;
         this.mIsMountAllowed = false;
         this.mIsAdvancedMode =
@@ -290,8 +353,7 @@ public class FilesystemInfoDialog implements OnClickListener, OnCheckedChangeLis
                     @Override
                     public void run() {
                         //Animate disk usage graph
-                        FilesystemInfoDialog.this.mDiskUsageGraph.drawDiskUsage(
-                                FilesystemInfoDialog.this.mDiskUsage);
+                        FilesystemInfoDialog.this.mDiskUsageGraph.drawDiskUsage(mDiskUsage);
                     }
                 });
                 break;
