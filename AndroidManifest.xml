@@ -62,6 +62,18 @@
       android:grantUriPermissions="true"
       android:exported="true" />
 
+    <provider
+      android:authorities="com.cyanogenmod.filemanager.providers.index"
+      android:name=".providers.MimeTypeIndexProvider"/>
+
+    <service
+      android:name=".service.MimeTypeIndexService"
+      android:label="@string/app_name">
+      <intent-filter>
+        <action android:name="com.cyanogenmod.filemanager.ACTION_START_INDEX"/>
+      </intent-filter>
+    </service>
+
     <activity
       android:name=".activities.NavigationActivity"
       android:label="@string/app_name"

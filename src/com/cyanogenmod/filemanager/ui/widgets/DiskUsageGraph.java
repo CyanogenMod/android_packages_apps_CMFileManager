@@ -17,6 +17,7 @@
 package com.cyanogenmod.filemanager.ui.widgets;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -62,7 +63,7 @@ public class DiskUsageGraph extends View {
      * Constructor of <code>DiskUsageGraph</code>.
      *
      * @param context The current context
-     * @param attrs The attributes of the XML tag that is inflating the view.
+     * @param attrs   The attributes of the XML tag that is inflating the view.
      */
     public DiskUsageGraph(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -71,12 +72,12 @@ public class DiskUsageGraph extends View {
     /**
      * Constructor of <code>DiskUsageGraph</code>.
      *
-     * @param context The current context
-     * @param attrs The attributes of the XML tag that is inflating the view.
-     * @param defStyle The default style to apply to this view. If 0, no style
-     *        will be applied (beyond what is included in the theme). This may
-     *        either be an attribute resource, whose value will be retrieved
-     *        from the current theme, or an explicit style resource.
+     * @param context  The current context
+     * @param attrs    The attributes of the XML tag that is inflating the view.
+     * @param defStyle The default style to apply to this view. If 0, no style will be applied
+     *                 (beyond what is included in the theme). This may either be an attribute
+     *                 resource, whose value will be retrieved from the current theme, or an
+     *                 explicit style resource.
      */
     public DiskUsageGraph(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -94,8 +95,8 @@ public class DiskUsageGraph extends View {
     }
 
     /**
-     * Method that sets the free disk space percentage after the widget change his color
-     * to advise the user
+     * Method that sets the free disk space percentage after the widget change his color to advise
+     * the user
      *
      * @param percentage The free disk space percentage
      */
@@ -106,7 +107,7 @@ public class DiskUsageGraph extends View {
     /**
      * Method that draw the disk usage.
      *
-     * @param diskUsage The disk usage
+     * @param diskUsage {@link com.cyanogenmod.filemanager.model.DiskUsage} The disk usage params
      */
     public void drawDiskUsage(DiskUsage diskUsage) {
         // Clear if a current drawing exit
@@ -203,7 +204,7 @@ public class DiskUsageGraph extends View {
                         continue;
                     }
                     if (this.mIndex == 1 && dwo == null) {
-                      //Initialize the used arc circle
+                        //Initialize the used arc circle
                         DiskUsageGraph.this.mDrawingObjects.add(
                                 createDrawingObject(
                                         rect, "disk_usage_used_color", stroke)); //$NON-NLS-1$
@@ -279,9 +280,10 @@ public class DiskUsageGraph extends View {
         /**
          * Method that creates the drawing object.
          *
-         * @param rect The area of drawing
+         * @param rect                 The area of drawing
          * @param colorResourceThemeId The theme resource identifier of the color
-         * @param stroke The stroke width
+         * @param stroke               The stroke width
+         *
          * @return DrawingObject The drawing object
          */
         private DrawingObject createDrawingObject(
@@ -304,6 +306,7 @@ public class DiskUsageGraph extends View {
      */
     private class DrawingObject {
         DrawingObject() {/**NON BLOCK**/}
+
         int mStartAngle = -180;
         int mSweepAngle = 0;
         Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
