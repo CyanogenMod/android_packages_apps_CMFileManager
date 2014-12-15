@@ -17,6 +17,8 @@
 package com.cyanogenmod.filemanager.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A class that holds information about the usage of a disk (total, used and free space).
@@ -25,6 +27,8 @@ public class DiskUsage implements Serializable {
 
     private static final long serialVersionUID = -4540446701543226294L;
 
+    private final List<DiskUsageCategory> mDiskUsageCategoryList =
+            new ArrayList<DiskUsageCategory>();
     private final String mMountPoint;
     private final long mTotal;
     private final long mUsed;
@@ -80,6 +84,44 @@ public class DiskUsage implements Serializable {
      */
     public long getFree() {
         return this.mFree;
+    }
+
+    /**
+     * Method that returns the total sum of all categories
+     *
+     * @return {@link java.lang.Long}
+     */
+    public long getCategorySum() {
+        long bytes = 0;
+        for (DiskUsageCategory category : getUsageCategoryList()) {
+            bytes += category.getSizeBytes();
+        }
+        return bytes;
+    }
+
+    /**
+     * Add a usage category
+     *
+     * @param category {@link com.cyanogenmod.filemanager.model.DiskUsageCategory} not null
+     *
+     * @throws IllegalArgumentException {@link java.lang.IllegalArgumentException}
+     */
+    public void addUsageCategory(DiskUsageCategory category) throws IllegalArgumentException {
+        if (category == null) {
+            throw new IllegalArgumentException("'category' cannot be null!");
+        }
+        mDiskUsageCategoryList.add(category);
+    }
+
+    public List<DiskUsageCategory> getUsageCategoryList() {
+        return mDiskUsageCategoryList;
+    }
+
+    /**
+     * Clears the list of usage categories
+     */
+    public void clearUsageCategories() {
+        mDiskUsageCategoryList.clear();
     }
 
     /**
@@ -140,7 +182,5 @@ public class DiskUsage implements Serializable {
                 ", mUsed=" + this.mUsed + ", mFree=" //$NON-NLS-1$ //$NON-NLS-2$
                 + this.mFree + "]";  //$NON-NLS-1$
     }
-
-
 
 }

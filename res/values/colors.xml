@@ -65,4 +65,24 @@
     <color name="material_palette_blue_primary">#1E88E5</color>
     <color name="material_palette_blue_primary_dark">#1976D2</color>
     <color name="actionbar_palette_blue_primary">#1E88E5</color>
+
+
+    <!-- Disk usage blue -->
+    <color name="material_palette_blue_1">#64B5F6</color>
+    <color name="material_palette_blue_2">#2196F3</color>
+    <color name="material_palette_blue_3">#1976D2</color>
+    <color name="material_palette_blue_4">#0D47A1</color>
+
+    <!-- Disk usage green -->
+    <color name="material_palette_green_1">#DCE775</color>
+    <color name="material_palette_green_2">#CDDC39</color>
+    <color name="material_palette_green_3">#AFB42B</color>
+    <color name="material_palette_green_4">#827717</color>
+
+    <!-- Disk usage orange -->
+    <color name="material_palette_orange_1">#FFB74D</color>
+    <color name="material_palette_orange_2">#FF9800</color>
+    <color name="material_palette_orange_3">#F57C00</color>
+    <color name="material_palette_orange_4">#E65100</color>
+
 </resources>

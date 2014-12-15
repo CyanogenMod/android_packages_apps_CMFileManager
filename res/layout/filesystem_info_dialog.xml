@@ -351,4 +351,19 @@
     </TableLayout>
   </LinearLayout>
 
+  <GridLayout
+    android:id="@+id/ll_legend"
+    android:gravity="center"
+    android:layout_centerHorizontal="true"
+    android:visibility="invisible"
+    android:layout_below="@id/filesystem_tab_diskusage"
+    android:orientation="horizontal"
+    android:columnCount="3"
+    android:columnOrderPreserved="true"
+    android:rowOrderPreserved="true"
+    android:useDefaultMargins="true"
+    android:padding="10dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"/>
+
 </RelativeLayout>
