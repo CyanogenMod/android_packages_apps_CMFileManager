@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
+import android.os.Environment;
 import android.util.Log;
 
 import com.cyanogenmod.filemanager.console.Console;
@@ -34,6 +35,7 @@ import com.cyanogenmod.filemanager.preferences.AccessMode;
 import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
 import com.cyanogenmod.filemanager.preferences.ObjectStringIdentifier;
 import com.cyanogenmod.filemanager.preferences.Preferences;
+import com.cyanogenmod.filemanager.service.MimeTypeIndexService;
 import com.cyanogenmod.filemanager.ui.ThemeManager;
 import com.cyanogenmod.filemanager.ui.ThemeManager.Theme;
 import com.cyanogenmod.filemanager.util.AIDHelper;
@@ -174,6 +176,13 @@ public final class FileManagerApplication extends Application {
         }
         init();
         register();
+
+        // Kick off usage by mime type indexing for external storage; most likely use case for
+        // file manager
+        File externalStorage = Environment.getExternalStorageDirectory();
+        MimeTypeIndexService.indexFileRoot(this, externalStorage.getAbsolutePath());
+        MimeTypeIndexService.indexFileRoot(this, "/system");
+
     }
 
     /**
