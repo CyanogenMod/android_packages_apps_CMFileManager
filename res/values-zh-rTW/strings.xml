@@ -25,7 +25,7 @@
   <string name="datetime_format_order">%1$s %2$s</string>
   <string name="device_blockdevice">Block device</string>
   <string name="device_characterdevice">Character device</string>
-  <string name="device_namedpipe">命名的管道</string>
+  <string name="device_namedpipe">命名原則</string>
   <string name="device_domainsocket">通訊端</string>
   <string name="mount_point_readonly">唯讀</string>
   <string name="mount_point_readwrite">讀寫</string>
@@ -54,8 +54,8 @@
   <string name="msgs_file_not_found">未找到檔案或資料夾。</string>
   <string name="msgs_command_not_found">找不到此動作的命令或命令帶有無效的定義。</string>
   <string name="msgs_io_failed">讀寫失敗</string>
-  <string name="msgs_operation_timeout">動作超時。</string>
-  <string name="msgs_operation_failure">動作失敗。</string>
+  <string name="msgs_operation_timeout">操作逾時。</string>
+  <string name="msgs_operation_failure">操作失敗。</string>
   <string name="msgs_console_alloc_failure">發生內部錯誤。</string>
   <string name="msgs_operation_can_not_be_cancelled">無法取消此動作。</string>
   <string name="msgs_read_only_filesystem">只讀檔案系統。請在使用讀寫模式掛載檔案系統並再次嘗試。</string>
@@ -112,7 +112,7 @@
   <string name="fso_properties_failed_to_change_owner_msg">更改擁有者失敗。\n\n基於安全因素，有些檔案系統 (例如 SD 卡) 不允許更改擁有者的動作。</string>
   <string name="fso_properties_failed_to_change_group_msg">更改群組失敗。\n\n基於安全因素，有些檔案系統 (例如 SD 卡) 不允許更改群組的動作。</string>
   <string name="fso_properties_failed_to_change_permission_msg">更改檔案權限失敗。\n\n基於安全因素，有些檔案系統 (例如 SD 卡) 不允許更改權限的動作。</string>
-  <string name="fso_properties_dialog_title">屬性</string>
+  <string name="fso_properties_dialog_title">內容</string>
   <string name="fso_properties_dialog_tab_info">資訊</string>
   <string name="fso_properties_dialog_tab_permissions">權限</string>
   <string name="fso_properties_dialog_name">名稱：</string>
@@ -159,7 +159,7 @@
   <string name="dumping_message">正在生成十六進位制轉儲\u2026</string>
   <string name="displaying_message">正在顯示\u2026</string>
   <string name="bookmarks">書籤</string>
-  <string name="bookmarks_home">家</string>
+  <string name="bookmarks_home">首頁</string>
   <string name="bookmarks_root_folder">根目錄</string>
   <string name="bookmarks_system_folder">系統資料夾</string>
   <string name="bookmarks_button_config_cd">設定初始資料夾。</string>
@@ -174,7 +174,7 @@
   <string name="menu_clear_history">清除記錄</string>
   <string name="menu_no_suggestions">沒有建議</string>
   <string name="menu_word_wrap">自動換行</string>
-  <string name="menu_syntax_highlight">語法高亮</string>
+  <string name="menu_syntax_highlight">語法凸顯</string>
   <string name="waiting_dialog_msg">正在執行動作\u2026</string>
   <string name="waiting_dialog_copying_title">正在複製\u2026</string>
   <string name="waiting_dialog_moving_title">正在移動\u2026</string>
@@ -185,7 +185,7 @@
   <string name="waiting_dialog_extracting_msg"><![CDATA[<b>檔案</b>]]> <xliff:g id="file">%1$s</xliff:g></string>
   <string name="waiting_dialog_compressing_title">正在壓縮\u2026</string>
   <string name="actions_dialog_title">動作</string>
-  <string name="actions_menu_properties_current_folder">屬性</string>
+  <string name="actions_menu_properties_current_folder">內容</string>
   <string name="actions_menu_refresh">重新整理</string>
   <string name="actions_menu_new_directory">新增資料夾</string>
   <string name="actions_menu_new_file">新增檔案</string>
