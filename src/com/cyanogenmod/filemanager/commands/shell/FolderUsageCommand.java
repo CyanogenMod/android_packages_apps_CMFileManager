@@ -36,6 +36,7 @@ import com.cyanogenmod.filemanager.util.MimeTypeHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -174,8 +175,10 @@ public class FolderUsageCommand extends AsyncResultProgram implements FolderUsag
                                 long size = Long.parseLong(fields[4]);
                                 String name = fields[fields.length-1];// We only need the extension
                                 String ext = FileHelper.getExtension(name);
+                                File dir = new File(mDirectory);
+                                File file = new File(dir, name);
                                 MimeTypeCategory category =
-                                        MimeTypeHelper.getCategoryFromExt(null, ext);
+                                        MimeTypeHelper.getCategoryFromExt(null, ext, file.getAbsolutePath());
                                 this.mFolderUsage.addFile();
                                 this.mFolderUsage.addFileToCategory(category);
                                 this.mFolderUsage.addSize(size);
