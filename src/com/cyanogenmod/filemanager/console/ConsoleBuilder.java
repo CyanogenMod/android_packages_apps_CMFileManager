@@ -44,6 +44,7 @@ public final class ConsoleBuilder {
 
     private static final Object SYNC = new Object();
     private static ConsoleHolder sHolder;
+    private static ConsoleHolder sJavaHolder;
 
     private static final int ROOT_UID = 0;
 
@@ -70,6 +71,32 @@ public final class ConsoleBuilder {
             throws FileNotFoundException, IOException, InvalidCommandDefinitionException,
             ConsoleAllocException, InsufficientPermissionsException {
         return getConsole(context, true);
+    }
+
+    /**
+     * Method that returns a Java console, and creates a new console
+     * if no console is allocated. The console is create if not exists.
+     *
+     * @param context The current context
+     * @return Console An allocated console
+     * @throws FileNotFoundException If the initial directory not exists
+     * @throws IOException If initial directory couldn't be checked
+     * @throws InvalidCommandDefinitionException If the command has an invalid definition
+     * @throws ConsoleAllocException If the console can't be allocated
+     * @throws InsufficientPermissionsException If the console created is not a privileged console
+     */
+    public static Console getJavaConsole(Context context)
+            throws FileNotFoundException, IOException, InvalidCommandDefinitionException,
+            ConsoleAllocException, InsufficientPermissionsException {
+        //Check if has a java console. Otherwise create a new console
+        if (sJavaHolder != null && sJavaHolder.getConsole() != null) {
+            return sJavaHolder.getConsole();
+        } else if (sHolder != null && sHolder.getConsole() != null
+                   && sHolder.getConsole() instanceof JavaConsole) {
+            return sHolder.getConsole();
+        }
+        createJavaConsole(context);
+        return sJavaHolder.getConsole();
     }
 
     /**
@@ -271,6 +298,15 @@ public final class ConsoleBuilder {
             /**NON BLOCK**/
         }
         sHolder = null;
+
+        try {
+            if (sJavaHolder != null) {
+                sJavaHolder.dispose();
+            }
+        } catch (Exception e) {
+            /**NON BLOCK**/
+        }
+        sJavaHolder = null;
     }
 
     /**
@@ -301,6 +337,31 @@ public final class ConsoleBuilder {
         // No rooted. Then create a java console
         JavaConsole console = new JavaConsole(context, bufferSize);
         console.alloc();
+        return console;
+    }
+
+    /**
+     * Method that creates a new java console.
+     *
+     * @param context The current context
+     * @return Console The java console
+     * @throws FileNotFoundException If the initial directory not exists
+     * @throws IOException If initial directory couldn't be checked
+     * @throws InvalidCommandDefinitionException If the command has an invalid definition
+     * @throws ConsoleAllocException If the console can't be allocated
+     * @see NonPriviledgeConsole
+     */
+    public static Console createJavaConsole(Context context)
+            throws IOException, InvalidCommandDefinitionException, ConsoleAllocException {
+        int bufferSize = context.getResources().getInteger(R.integer.buffer_size);
+
+        // No rooted. Then create a java console
+        JavaConsole console = new JavaConsole(context, bufferSize);
+        console.alloc();
+        if (sJavaHolder != null) {
+            sJavaHolder.dispose();
+        }
+        sJavaHolder = new ConsoleHolder(console);
         return console;
     }
 

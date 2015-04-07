@@ -23,11 +23,15 @@ LOCAL_SRC_FILES += $(call all-java-files-under, libs/color-picker-view/src)
 
 LOCAL_STATIC_JAVA_LIBRARIES += libtruezip
 LOCAL_STATIC_JAVA_LIBRARIES += android-support-v4
+LOCAL_STATIC_JAVA_LIBRARIES += juniversalchardet
 
 LOCAL_PACKAGE_NAME := CMFileManager
 LOCAL_CERTIFICATE := platform
 LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 
 include $(BUILD_PACKAGE)
+
+LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := \
+	juniversalchardet:libs/juniversalchardet/juniversalchardet-1.0.3.jar
 
 include $(call all-makefiles-under,$(LOCAL_PATH))
