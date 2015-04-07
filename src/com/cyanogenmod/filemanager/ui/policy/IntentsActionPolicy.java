@@ -38,6 +38,7 @@ import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.model.RegularFile;
 import com.cyanogenmod.filemanager.providers.SecureResourceProvider;
 import com.cyanogenmod.filemanager.providers.SecureResourceProvider.AuthorizationResource;
+import com.cyanogenmod.filemanager.providers.secure.SecureHttpServer;
 import com.cyanogenmod.filemanager.ui.dialogs.AssociationsDialog;
 import com.cyanogenmod.filemanager.util.DialogHelper;
 import com.cyanogenmod.filemanager.util.ExceptionUtil;
@@ -113,6 +114,16 @@ public final class IntentsActionPolicy extends ActionsPolicy {
             } else {
                 intent.setData(getUriFromFile(ctx, fso));
             }
+
+            Uri uri = new Uri.Builder()
+                    .scheme("http")
+                    .authority("0.0.0.0:8000")
+                    .appendPath("16.mp3")
+                    .build();
+            intent.setDataAndType(uri, mime);
+
+            SecureHttpServer secureHttpServer = SecureHttpServer.createInstance(ctx);
+            secureHttpServer.openSecureFileSocketForFile(new File(uri.toSafeString()), 6000);
 
             // Resolve the intent
             resolveIntent(
