@@ -17,7 +17,6 @@
 package com.cyanogenmod.filemanager.ui.policy;
 
 import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnDismissListener;
@@ -38,6 +37,7 @@ import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.model.RegularFile;
 import com.cyanogenmod.filemanager.providers.SecureResourceProvider;
 import com.cyanogenmod.filemanager.providers.SecureResourceProvider.AuthorizationResource;
+import com.cyanogenmod.filemanager.providers.secure.SuchHttpServer;
 import com.cyanogenmod.filemanager.ui.dialogs.AssociationsDialog;
 import com.cyanogenmod.filemanager.util.DialogHelper;
 import com.cyanogenmod.filemanager.util.ExceptionUtil;
@@ -48,6 +48,7 @@ import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
 import com.cyanogenmod.filemanager.util.ResourcesHelper;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -114,16 +115,16 @@ public final class IntentsActionPolicy extends ActionsPolicy {
                 intent.setData(getUriFromFile(ctx, fso));
             }
 
-            // Resolve the intent
+           // Resolve the intent
             resolveIntent(
                     ctx,
                     intent,
                     choose,
-                    createInternalIntents(ctx,  fso),
+                    createInternalIntents(ctx, fso),
                     0,
                     R.string.associations_dialog_openwith_title,
                     R.string.associations_dialog_openwith_action,
-                    true, onCancelListener, onDismissListener);
+                    true, onCancelListener, onDismissListener, fso.isSecure());
 
         } catch (Exception e) {
             ExceptionUtil.translateException(ctx, e);
@@ -234,6 +235,13 @@ public final class IntentsActionPolicy extends ActionsPolicy {
         }
     }
 
+    private static void resolveIntent(Context ctx, Intent intent, boolean choose,
+            List<Intent> internals, int icon, int title, int action, boolean allowPreferred,
+        OnCancelListener onCancelListener, OnDismissListener onDismissListener) {
+        resolveIntent(ctx, intent, choose, internals, icon, title, action, allowPreferred,
+                onCancelListener, onDismissListener, false);
+    }
+
     /**
      * Method that resolve
      *
@@ -248,11 +256,13 @@ public final class IntentsActionPolicy extends ActionsPolicy {
      * @param allowPreferred If allow the user to mark the selected app as preferred
      * @param onCancelListener The cancel listener
      * @param onDismissListener The dismiss listener
+     * @param isSecure
      */
     private static void resolveIntent(
             Context ctx, Intent intent, boolean choose, List<Intent> internals,
             int icon, int title, int action, boolean allowPreferred,
-            OnCancelListener onCancelListener, OnDismissListener onDismissListener) {
+            OnCancelListener onCancelListener, OnDismissListener onDismissListener, boolean
+            isSecure) {
         //Retrieve the activities that can handle the file
         final PackageManager packageManager = ctx.getPackageManager();
         if (DEBUG) {
@@ -348,7 +358,7 @@ public final class IntentsActionPolicy extends ActionsPolicy {
         //---
         // If we have a preferred application, then use it
         if (!choose && (mPreferredInfo  != null && mPreferredInfo.match != 0)) {
-            ctx.startActivity(getIntentFromResolveInfo(mPreferredInfo, intent));
+            ctx.startActivity(getIntentFromResolveInfo(mPreferredInfo, intent, isSecure));
             if (onDismissListener != null) {
                 onDismissListener.onDismiss(null);
             }
@@ -357,7 +367,7 @@ public final class IntentsActionPolicy extends ActionsPolicy {
         // If there are only one activity (app or internal editor), then use it
         if (!choose && info.size() == 1) {
             ResolveInfo ri = info.get(0);
-            ctx.startActivity(getIntentFromResolveInfo(ri, intent));
+            ctx.startActivity(getIntentFromResolveInfo(ri, intent, isSecure));
             if (onDismissListener != null) {
                 onDismissListener.onDismiss(null);
             }
@@ -377,7 +387,8 @@ public final class IntentsActionPolicy extends ActionsPolicy {
                         mPreferredInfo,
                         allowPreferred,
                         onCancelListener,
-                        onDismissListener);
+                        onDismissListener,
+                        isSecure);
         dialog.show();
     }
 
@@ -474,6 +485,25 @@ public final class IntentsActionPolicy extends ActionsPolicy {
      * @return Intent The intent
      */
     public static final Intent getIntentFromResolveInfo(ResolveInfo ri, Intent request) {
+        return getIntentFromResolveInfo(ri, request, false);
+    }
+
+    /**
+     * Method that returns an {@link Intent} from his {@link ResolveInfo}
+     *
+     * @param ri The ResolveInfo
+     * @param request The requested intent
+     * @param isSecure
+     * @return Intent The intent
+     */
+    public static final Intent getIntentFromResolveInfo(ResolveInfo ri, Intent request, boolean
+            isSecure) {
+        if (isSecure) {
+            Uri uri = request.getData();
+            uri = uri.buildUpon().appendQueryParameter("package", ri.activityInfo.applicationInfo
+                    .packageName).build();
+            request.setData(uri);
+        }
         Intent intent =
                 getIntentFromComponentName(
                     new ComponentName(
@@ -541,7 +571,8 @@ public final class IntentsActionPolicy extends ActionsPolicy {
 
     private static final void grantSecureAccess(Intent intent, String authority, ResolveInfo ri,
             Uri uri) {
-        if (authority != null && authority.equals(SecureResourceProvider.AUTHORITY)) {
+        if (SecureResourceProvider.AUTHORITY.equals(authority) ||
+                "0.0.0.0:8000".equals(authority)) { // [TODO][MSB]: Needs a central constant
             boolean isInternalEditor = isInternalEditor(ri);
             if (isInternalEditor) {
                 // remove the authorization and change request to file scheme
@@ -672,7 +703,7 @@ public final class IntentsActionPolicy extends ActionsPolicy {
      * Method that returns the best Uri for the file (content uri, file uri, ...)
      *
      * @param ctx The current context
-     * @param file The file to resolve
+     * @param fso The file to resolve
      */
     private static Uri getUriFromFile(Context ctx, FileSystemObject fso) {
         // If the passed object is secure file then we have to provide access with
@@ -681,7 +712,7 @@ public final class IntentsActionPolicy extends ActionsPolicy {
                 && fso instanceof RegularFile) {
             RegularFile file = (RegularFile) fso;
             return SecureResourceProvider.createAuthorizationUri(file);
-        }
+       }
 
         // Try to resolve media data or return a file uri
         final File file = new File(fso.getFullPath());

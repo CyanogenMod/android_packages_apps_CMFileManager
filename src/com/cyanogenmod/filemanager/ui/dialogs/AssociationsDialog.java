@@ -64,6 +64,7 @@ public class AssociationsDialog implements OnItemClickListener {
     private final List<ResolveInfo> mIntents;
     private final ResolveInfo mPreferred;
     private final boolean mAllowPreferred;
+    private boolean mIsSecure = false;
     /**
      * @hide
      */
@@ -100,6 +101,29 @@ public class AssociationsDialog implements OnItemClickListener {
             Intent requestIntent, List<ResolveInfo> intents, ResolveInfo preferred,
             boolean allowPreferred, OnCancelListener onCancelListener,
             OnDismissListener onDismissListener) {
+        this(context, icon, title, action, requestIntent, intents, preferred, allowPreferred,
+                onCancelListener, onDismissListener, false);
+    }
+    /**
+     * Constructor of <code>AssociationsDialog</code>.
+     *
+     * @param context The current context
+     * @param icon The icon of the dialog
+     * @param title The title dialog
+     * @param action The title of the action button
+     * @param requestIntent The original request
+     * @param intents The list of available intents that can handle an action
+     * @param preferred The preferred intent. null if no preferred exists
+     * @param allowPreferred If allow the user to mark the selected app as preferred
+     * @param onCancelListener The cancel listener
+     * @param onDismissListener The dismiss listener
+     * @param isSecure
+     */
+    public AssociationsDialog(
+            Context context, int icon, String title, String action,
+            Intent requestIntent, List<ResolveInfo> intents, ResolveInfo preferred,
+            boolean allowPreferred, OnCancelListener onCancelListener,
+            OnDismissListener onDismissListener, boolean isSecure) {
         super();
 
         //Save the data
@@ -109,6 +133,7 @@ public class AssociationsDialog implements OnItemClickListener {
         this.mPreferred = preferred;
         this.mAllowPreferred = allowPreferred;
         this.mLoaded = false;
+        this.mIsSecure = isSecure;
 
         //Initialize dialog
         init(icon, title, action, onCancelListener, onDismissListener);
@@ -166,7 +191,7 @@ public class AssociationsDialog implements OnItemClickListener {
                         ResolveInfo ri = getSelected();
                         Intent intent =
                                 IntentsActionPolicy.getIntentFromResolveInfo(
-                                        ri, AssociationsDialog.this.mRequestIntent);
+                                        ri, AssociationsDialog.this.mRequestIntent, mIsSecure);
 
                         // Open the intent (and remember the action is the check is marked)
                         onIntentSelected(
