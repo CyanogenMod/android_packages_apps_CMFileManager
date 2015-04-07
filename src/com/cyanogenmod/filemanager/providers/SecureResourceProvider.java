@@ -34,6 +34,7 @@ import android.util.Log;
 import com.cyanogenmod.filemanager.commands.AsyncResultListener;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.model.RegularFile;
+import com.cyanogenmod.filemanager.providers.secure.SuchHttpServer;
 import com.cyanogenmod.filemanager.util.CommandHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper;
 
@@ -222,7 +223,19 @@ public final class SecureResourceProvider extends ContentProvider {
         bundle.putString(EXTRA_AUTH_ID, uuid.toString());
         msg.setData(bundle);
         CLEAR_AUTH_HANDLER.sendMessageDelayed(msg, MAX_AUTH_LIVE_TIME);
-        return createAuthorizationUri(uuid);
+
+        // [TODO][MSB]: Check size, and only make remote uri if above 1MB
+        boolean veryFile = true;//(file.getSize() >= 1024 * 1024 * 1024);
+        if (veryFile) {
+            // Open the socket server to stream data
+            SuchHttpServer secureHttpServer = SuchHttpServer.createInstance();
+            try {
+                secureHttpServer.startListening();
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage(), e);
+            }
+        }
+        return createAuthorizationUri(uuid, veryFile);
     }
 
     /**
@@ -339,6 +352,15 @@ public final class SecureResourceProvider extends ContentProvider {
         throw new SecurityException("Update is not allowed");
     }
 
+    public static FileSystemObject getFileSystemObject(Uri uri) {
+        AuthorizationResource authResource = getAuthorizacionResourceForUri(uri);
+        // [TODO][MSB]: Implement security
+        // Then get authorization from uuid
+        // Check package space (this I don't know if it is possible :-\)
+        // if all is good then get the file and open an input stream on it
+        return authResource.mFile;
+    }
+
     @Override
     public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
         return this.openFile(uri, mode, null);
@@ -412,10 +434,16 @@ public final class SecureResourceProvider extends ContentProvider {
      * Method that returns an authorization URI from the authorization UUID
      *
      * @param uuid The UUID of the authorization
+     * @param veryFile Flag whether or not the file is very big (bigger than or equal to 1MB)
      * @return Uri The authorization Uri
      */
-    private static Uri createAuthorizationUri(UUID uuid) {
-        return Uri.withAppendedPath(Uri.parse(CONTENT_AUTHORITY),
-                uuid.toString());
+    private static Uri createAuthorizationUri(UUID uuid, boolean veryFile) {
+
+        if (veryFile) {
+            Uri uri = Uri.parse("http://0.0.0.0:8000"); // [TODO][MSB]: Could be a constant
+            return Uri.withAppendedPath(uri, uuid.toString());
+        } else {
+            return Uri.withAppendedPath(Uri.parse(CONTENT_AUTHORITY), uuid.toString());
+        }
     }
 }

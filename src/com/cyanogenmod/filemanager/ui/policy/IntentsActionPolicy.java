@@ -17,7 +17,6 @@
 package com.cyanogenmod.filemanager.ui.policy;
 
 import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnDismissListener;
@@ -38,6 +37,7 @@ import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.model.RegularFile;
 import com.cyanogenmod.filemanager.providers.SecureResourceProvider;
 import com.cyanogenmod.filemanager.providers.SecureResourceProvider.AuthorizationResource;
+import com.cyanogenmod.filemanager.providers.secure.SuchHttpServer;
 import com.cyanogenmod.filemanager.ui.dialogs.AssociationsDialog;
 import com.cyanogenmod.filemanager.util.DialogHelper;
 import com.cyanogenmod.filemanager.util.ExceptionUtil;
@@ -48,6 +48,7 @@ import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
 import com.cyanogenmod.filemanager.util.ResourcesHelper;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -114,12 +115,12 @@ public final class IntentsActionPolicy extends ActionsPolicy {
                 intent.setData(getUriFromFile(ctx, fso));
             }
 
-            // Resolve the intent
+           // Resolve the intent
             resolveIntent(
                     ctx,
                     intent,
                     choose,
-                    createInternalIntents(ctx,  fso),
+                    createInternalIntents(ctx, fso),
                     0,
                     R.string.associations_dialog_openwith_title,
                     R.string.associations_dialog_openwith_action,
@@ -681,7 +682,7 @@ public final class IntentsActionPolicy extends ActionsPolicy {
                 && fso instanceof RegularFile) {
             RegularFile file = (RegularFile) fso;
             return SecureResourceProvider.createAuthorizationUri(file);
-        }
+       }
 
         // Try to resolve media data or return a file uri
         final File file = new File(fso.getFullPath());
