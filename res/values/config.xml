@@ -16,5 +16,5 @@
 -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <bool name="cmcc_show_easy_mode">false</bool>
+    <bool name="cmcc_show_easy_mode">true</bool>
 </resources>
