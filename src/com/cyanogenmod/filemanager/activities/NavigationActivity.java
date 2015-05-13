@@ -682,8 +682,21 @@ public class NavigationActivity extends Activity
         if (mDrawerToggle.onOptionsItemSelected(item)) {
           return true;
         }
+        boolean needsEasyMode = getResources().getBoolean(R.bool.cmcc_show_easy_mode);
+
+        if (needsEasyMode) {
+            if (item.getItemId() == android.R.id.home) {
+                if (mHistory.size() == 0 && mEasyModeListView.getVisibility() == View.GONE) {
+                    performShowEasyMode();
+                } else {
+                    back();
+                }
+            }
+        }
         return super.onOptionsItemSelected(item);
     }
+
+
 
     /**
      * {@inheritDoc}
@@ -744,7 +757,7 @@ public class NavigationActivity extends Activity
     private void showWelcomeMsg() {
         boolean firstUse = Preferences.getSharedPreferences().getBoolean(
                 FileManagerSettings.SETTINGS_FIRST_USE.getId(),
-                ((Boolean)FileManagerSettings.SETTINGS_FIRST_USE.getDefaultValue()).booleanValue());
+                ((Boolean) FileManagerSettings.SETTINGS_FIRST_USE.getDefaultValue()).booleanValue());
 
         //Display the welcome message?
         if (firstUse && FileManagerApplication.hasShellCommands()) {
@@ -787,7 +800,7 @@ public class NavigationActivity extends Activity
         // Set the free disk space warning level of the breadcrumb widget
         String fds = Preferences.getSharedPreferences().getString(
                 FileManagerSettings.SETTINGS_DISK_USAGE_WARNING_LEVEL.getId(),
-                (String)FileManagerSettings.SETTINGS_DISK_USAGE_WARNING_LEVEL.getDefaultValue());
+                (String) FileManagerSettings.SETTINGS_DISK_USAGE_WARNING_LEVEL.getDefaultValue());
         breadcrumb.setFreeDiskSpaceWarningLevel(Integer.parseInt(fds));
 
         //Configure the action bar options
@@ -968,6 +981,7 @@ public class NavigationActivity extends Activity
     private void performShowEasyMode() {
         mEasyModeListView.setVisibility(View.VISIBLE);
         getCurrentNavigationView().setVisibility(View.GONE);
+        performShowBackArrow(false);
     }
 
     /**
@@ -976,6 +990,13 @@ public class NavigationActivity extends Activity
     private void performHideEasyMode() {
         mEasyModeListView.setVisibility(View.GONE);
         getCurrentNavigationView().setVisibility(View.VISIBLE);
+    }
+
+    private void performShowBackArrow(boolean showBackArrow) {
+        boolean needsEasyMode = getResources().getBoolean(R.bool.cmcc_show_easy_mode);
+        if (needsEasyMode) {
+            mDrawerToggle.setDrawerIndicatorEnabled(!showBackArrow);
+        }
     }
 
     /**
@@ -1084,6 +1105,7 @@ public class NavigationActivity extends Activity
                         } else {
                             performHideEasyMode();
                         }
+                        performShowBackArrow(false);
                         getCurrentNavigationView().open(fso);
                         mDrawerLayout.closeDrawer(Gravity.START);
                     }
@@ -1459,9 +1481,10 @@ public class NavigationActivity extends Activity
         intent.putExtra(SearchManager.QUERY, "*"); // Use wild-card '*'
 
         if (position == 0) {
+            // the user has selected all items, they want to see their folders so let's do that.
             performHideEasyMode();
+            performShowBackArrow(true);
             return;
-
         } else {
             ArrayList<MimeTypeCategory> searchCategories = new ArrayList<MimeTypeCategory>();
             MimeTypeCategory selectedCategory = EASY_MODE_LIST.get(position);
@@ -1748,6 +1771,14 @@ public class NavigationActivity extends Activity
         if (checkBackAction()) {
             performHideEasyMode();
             return;
+        } else {
+            boolean needsEasyMode = getResources().getBoolean(R.bool.cmcc_show_easy_mode);
+            if (needsEasyMode) {
+                if (mEasyModeListView.getVisibility() == View.GONE) {
+                    performShowEasyMode();
+                    return;
+                }
+            }
         }
 
         // An exit event has occurred, force the destroy the consoles
@@ -2134,7 +2165,16 @@ public class NavigationActivity extends Activity
             //Communicate the user that the next time the application will be closed
             this.mExitBackTimeout = System.currentTimeMillis();
             DialogHelper.showToast(this, R.string.msgs_push_again_to_exit, Toast.LENGTH_SHORT);
-            return true;
+            boolean needsEasyMode = getResources().getBoolean(R.bool.cmcc_show_easy_mode);
+            if (needsEasyMode) {
+                if (mEasyModeListView.getVisibility() == View.GONE) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                return true;
+            }
         }
 
         //Back action not applied
