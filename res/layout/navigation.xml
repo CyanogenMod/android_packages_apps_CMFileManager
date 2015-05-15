@@ -46,7 +46,8 @@
                     android:layout_width="match_parent"
                     android:minHeight="?android:attr/actionBarSize"
                     android:background="?android:attr/colorPrimary"
-                    android:theme="@android:style/Theme.Material"/>
+                    android:colorControlNormal="?android:attr/colorPrimary"
+                    android:theme="@style/FileManager.NewActionBar"/>
 
             <!-- Navigation View -->
             <com.cyanogenmod.filemanager.ui.widgets.NavigationView
