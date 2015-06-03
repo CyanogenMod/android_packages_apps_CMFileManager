@@ -34,7 +34,6 @@ import android.widget.Toast;
 
 import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
-import com.cyanogenmod.filemanager.activities.NavigationActivity;
 import com.cyanogenmod.filemanager.adapters.TwoColumnsMenuListAdapter;
 import com.cyanogenmod.filemanager.console.VirtualMountPointConsole;
 import com.cyanogenmod.filemanager.listeners.OnRequestRefreshListener;
@@ -47,8 +46,6 @@ import com.cyanogenmod.filemanager.model.SystemFile;
 import com.cyanogenmod.filemanager.preferences.AccessMode;
 import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
 import com.cyanogenmod.filemanager.preferences.Preferences;
-import com.cyanogenmod.filemanager.ui.ThemeManager;
-import com.cyanogenmod.filemanager.ui.ThemeManager.Theme;
 import com.cyanogenmod.filemanager.ui.policy.BookmarksActionPolicy;
 import com.cyanogenmod.filemanager.ui.policy.CompressActionPolicy;
 import com.cyanogenmod.filemanager.ui.policy.CopyMoveActionPolicy;
@@ -83,7 +80,7 @@ public class ActionsDialog implements OnItemClickListener, OnItemLongClickListen
      * @hide
      */
     final Context mContext;
-    final NavigationActivity mBackRef;
+    final com.cyanogenmod.filemanager.activities.NavActivity mBackRef;
     private final boolean mGlobal;
     private final boolean mSearch;
     private final boolean mChRooted;
@@ -115,7 +112,7 @@ public class ActionsDialog implements OnItemClickListener, OnItemLongClickListen
      * @param global If the menu to display will be the global one (Global actions)
      * @param search If the call is from search activity
      */
-    public ActionsDialog(Context context, NavigationActivity backRef, FileSystemObject fso,
+    public ActionsDialog(Context context, com.cyanogenmod.filemanager.activities.NavActivity backRef, FileSystemObject fso,
             boolean global, boolean search) {
         super();
 
@@ -152,11 +149,8 @@ public class ActionsDialog implements OnItemClickListener, OnItemLongClickListen
         this.mListView.setLayoutParams(params);
         this.mListView.setAdapter(adapter);
 
-        // Apply the current theme
-        Theme theme = ThemeManager.getCurrentTheme(context);
-        theme.setBackgroundDrawable(context, this.mListView, "background_drawable"); //$NON-NLS-1$
         this.mListView.setDivider(
-                theme.getDrawable(context, "horizontal_divider_drawable")); //$NON-NLS-1$
+                context.getResources().getDrawable(R.drawable.horizontal_divider_drawable)); //$NON-NLS-1$
 
         //Create the dialog
         this.mDialog = DialogHelper.createDialog(
@@ -401,7 +395,7 @@ public class ActionsDialog implements OnItemClickListener, OnItemLongClickListen
                 Bookmark bookmark = BookmarksActionPolicy.addToBookmarks(
                         this.mContext, this.mFso);
                 if (mBackRef != null) {
-                    // tell NavigationActivity's drawer to add the bookmark
+                    // tell NavActivity's drawer to add the bookmark
                     mBackRef.addBookmark(bookmark);
                 }
                 break;

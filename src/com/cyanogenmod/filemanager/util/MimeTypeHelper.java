@@ -150,7 +150,7 @@ public final class MimeTypeHelper {
         MimeTypeInfo() {/**NON BLOCK**/}
         public MimeTypeCategory mCategory;
         public String mMimeType;
-        public String mDrawable;
+        public int mDrawable;
 
         /**
          * {@inheritDoc}
@@ -162,7 +162,7 @@ public final class MimeTypeHelper {
             result = prime * result
                     + ((this.mCategory == null) ? 0 : this.mCategory.hashCode());
             result = prime * result
-                    + ((this.mDrawable == null) ? 0 : this.mDrawable.hashCode());
+                    + ((this.mDrawable == 0) ? 0 : this.mDrawable);
             result = prime * result
                     + ((this.mMimeType == null) ? 0 : this.mMimeType.hashCode());
             return result;
@@ -182,10 +182,10 @@ public final class MimeTypeHelper {
             MimeTypeInfo other = (MimeTypeInfo) obj;
             if (this.mCategory != other.mCategory)
                 return false;
-            if (this.mDrawable == null) {
-                if (other.mDrawable != null)
+            if (this.mDrawable == 0) {
+                if (other.mDrawable != 0)
                     return false;
-            } else if (!this.mDrawable.equals(other.mDrawable))
+            } else if (this.mDrawable != other.mDrawable)
                 return false;
             if (this.mMimeType == null) {
                 if (other.mMimeType != null)
@@ -264,7 +264,7 @@ public final class MimeTypeHelper {
      * @param fso The file system object
      * @return String The associated mime/type icon resource identifier
      */
-    public static final String getIcon(Context context, FileSystemObject fso) {
+    public static final int getIcon(Context context, FileSystemObject fso) {
         //Ensure that mime types are loaded
         if (sMimeTypes == null) {
             loadMimeTypes(context);
@@ -278,11 +278,11 @@ public final class MimeTypeHelper {
         //Check if the argument is a folder
         if (fso instanceof Directory) {
             if (fso.isSecure() && SecureConsole.isSecureStorageDir(fso.getFullPath())) {
-                return "fso_folder_secure"; //$NON-NLS-1$
+                return R.drawable.fso_folder_secure; //$NON-NLS-1$
             } else if (fso.isRemote()) {
-                return "fso_folder_remote"; //$NON-NLS-1$
+                return R.drawable.fso_folder_remote; //$NON-NLS-1$
             }
-            return "ic_fso_folder_drawable"; //$NON-NLS-1$
+            return R.drawable.ic_fso_folder_drawable; //$NON-NLS-1$
         }
 
         //Get the extension and delivery
@@ -292,8 +292,8 @@ public final class MimeTypeHelper {
 
             if (mimeTypeInfo != null) {
                 // Create a new drawable
-                if (!TextUtils.isEmpty(mimeTypeInfo.mDrawable)) {
-                    return mimeTypeInfo.mDrawable;
+                 if (mimeTypeInfo.mDrawable != 0) {
+                     return mimeTypeInfo.mDrawable ;
                 }
 
                 // Something was wrong here. The resource should exist, but it's not present.
@@ -309,17 +309,17 @@ public final class MimeTypeHelper {
 
         // Check  system file
         if (FileHelper.isSystemFile(fso)) {
-            return "fso_type_system_drawable"; //$NON-NLS-1$
+            return R.drawable.fso_type_system_drawable; //$NON-NLS-1$
         }
         // Check if the fso is executable (but not a symlink)
         if (fso.getPermissions() != null && !(fso instanceof Symlink)) {
             if (fso.getPermissions().getUser().isExecute() ||
                 fso.getPermissions().getGroup().isExecute() ||
                 fso.getPermissions().getOthers().isExecute()) {
-                return "fso_type_executable_drawable"; //$NON-NLS-1$
+                return R.drawable.fso_type_executable_drawable; //$NON-NLS-1$
             }
         }
-        return "ic_fso_default_drawable"; //$NON-NLS-1$
+        return R.drawable.ic_fso_default_drawable; //$NON-NLS-1$
     }
 
     /**
@@ -645,7 +645,12 @@ public final class MimeTypeHelper {
                             MimeTypeInfo mimeTypeInfo = new MimeTypeInfo();
                             mimeTypeInfo.mCategory = MimeTypeCategory.valueOf(mimeData[0].trim());
                             mimeTypeInfo.mMimeType = mimeData[1].trim();
-                            mimeTypeInfo.mDrawable = mimeData[2].trim();
+
+                            // do weird things cause we don't have the int
+                            // TODO: this should be fixed later because this seems bad
+                            int draw = context.getResources().getIdentifier(mimeData[2].trim() , "drawable",
+                                    context.getPackageName());
+                            mimeTypeInfo.mDrawable = draw;
 
                             // If no list exists yet for this mimetype, create one.
                             // Else, add it to the existing list.

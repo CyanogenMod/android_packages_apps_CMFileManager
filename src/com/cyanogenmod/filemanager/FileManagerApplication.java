@@ -37,8 +37,6 @@ import com.cyanogenmod.filemanager.preferences.ObjectStringIdentifier;
 import com.cyanogenmod.filemanager.preferences.Preferences;
 import com.cyanogenmod.filemanager.providers.secure.SecureCacheCleanupService;
 import com.cyanogenmod.filemanager.service.MimeTypeIndexService;
-import com.cyanogenmod.filemanager.ui.ThemeManager;
-import com.cyanogenmod.filemanager.ui.ThemeManager.Theme;
 import com.cyanogenmod.filemanager.util.AIDHelper;
 import com.cyanogenmod.filemanager.util.AndroidHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper;
@@ -124,41 +122,6 @@ public final class FileManagerApplication extends Application {
                             AIDHelper.getAIDs(getApplicationContext(), true);
                         } catch (Exception e) {
                             Log.w(TAG, "Failed to reload AIDs", e); //$NON-NLS-1$
-                        }
-
-                        // --- Themes
-                        try {
-                            // Get the package name and remove the schema
-                            String apkPackage = intent.getData().toString();
-                            apkPackage = apkPackage.substring("package:".length()); //$NON-NLS-1$
-
-                            Theme currentTheme = ThemeManager.getCurrentTheme(context);
-                            if (currentTheme.getPackage().compareTo(apkPackage) == 0) {
-                                // The apk that contains the current theme was remove, change
-                                // to default theme
-                                String composedId =
-                                    (String)FileManagerSettings.SETTINGS_THEME.getDefaultValue();
-                                ThemeManager.setCurrentTheme(getApplicationContext(), composedId);
-                                try {
-                                    Preferences.savePreference(
-                                            FileManagerSettings.SETTINGS_THEME, composedId, true);
-                                } catch (Throwable ex) {
-                                    Log.w(TAG, "can't save theme preference", ex); //$NON-NLS-1$
-                                }
-
-                                // Notify the changes to activities
-                                try {
-                                    Intent broadcastIntent =
-                                            new Intent(FileManagerSettings.INTENT_THEME_CHANGED);
-                                    broadcastIntent.putExtra(
-                                            FileManagerSettings.EXTRA_THEME_ID, composedId);
-                                    sendBroadcast(broadcastIntent);
-                                } catch (Throwable ex) {
-                                    Log.w(TAG, "notify of theme change failed", ex); //$NON-NLS-1$
-                                }
-                            }
-                        } catch (Exception e) {
-                            Log.w(TAG, "Failed to reload themes", e); //$NON-NLS-1$
                         }
                     }
                 }
@@ -266,27 +229,6 @@ public final class FileManagerApplication extends Application {
 
         // Read AIDs
         AIDHelper.getAIDs(getApplicationContext(), true);
-
-        // Allocate the default and current themes
-        String defaultValue = ((String)FileManagerSettings.
-                SETTINGS_THEME.getDefaultValue());
-        String value = Preferences.getSharedPreferences().getString(
-                FileManagerSettings.SETTINGS_THEME.getId(),
-                defaultValue);
-        ThemeManager.getDefaultTheme(getApplicationContext());
-        if (!ThemeManager.setCurrentTheme(getApplicationContext(), value)) {
-            //The current theme was not found. Mark the default setting as default theme
-            ThemeManager.setCurrentTheme(getApplicationContext(), defaultValue);
-            try {
-                Preferences.savePreference(
-                        FileManagerSettings.SETTINGS_THEME, defaultValue, true);
-            } catch (Throwable ex) {
-                Log.w(TAG, "can't save theme preference", ex); //$NON-NLS-1$
-            }
-        }
-        // Set the base theme
-        Theme theme = ThemeManager.getCurrentTheme(getApplicationContext());
-        theme.setBaseTheme(getApplicationContext(), false);
 
         //Create a console for background tasks. Register the virtual console prior to
         // the real console so mount point can be listed properly
