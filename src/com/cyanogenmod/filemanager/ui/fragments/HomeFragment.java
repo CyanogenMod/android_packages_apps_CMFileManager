@@ -37,6 +37,7 @@ import android.widget.Toast;
 
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.activities.SearchActivity;
+import com.cyanogenmod.filemanager.util.FileHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
 
@@ -129,9 +130,7 @@ public class HomeFragment extends Fragment {
 
     private void initEasyModePlus() {
 
-        MIME_TYPE_LOCALIZED_NAMES = MimeTypeHelper.MimeTypeCategory.getFriendlyLocalizedNames(
-                getActivity());
-
+        MIME_TYPE_LOCALIZED_NAMES = MimeTypeCategory.getFriendlyLocalizedNames(getActivity());
         EASY_MODE_ICONS.put(MimeTypeHelper.MimeTypeCategory.NONE, getResources().getDrawable(
                 R.drawable
                         .ic_em_all));
@@ -193,8 +192,7 @@ public class HomeFragment extends Fragment {
     private void onClicked(int position) {
         Intent intent = new Intent(getActivity(), SearchActivity.class);
         intent.setAction(Intent.ACTION_SEARCH);
-        /*intent.putExtra(SearchActivity.EXTRA_SEARCH_DIRECTORY,
-                getCurrentNavigationView().getCurrentDir());*/
+        intent.putExtra(SearchActivity.EXTRA_SEARCH_DIRECTORY, FileHelper.ROOT_DIRECTORY);
         intent.putExtra(SearchManager.QUERY, "*"); // Use wild-card '*'
 
         if (position == 0) {

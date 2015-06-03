@@ -841,9 +841,21 @@
     <string name="changelog_title">Changelog</string>
 
     <!-- Welcome Dialog - Title -->
-    <string name="welcome_title">Welcome</string>
+    <string name="welcome_title">Welcome to File Manager</string>
+
+    <string name="skip_text">Skip</string>
+    <string name="next_text">Next</string>
+
     <!-- Welcome Dialog - Message -->
-    <string name="welcome_msg">Welcome to the CyanogenMod file manager.\n\nThis app allows you to explore the file system and do operations that could break your device. To prevent damage, the app will start in a safe, low-privileged mode.\n\nYou can access the advanced, full-privileged mode via Settings. It\'s your responsibility to ensure that an operation doesn\'t break your system.\n\nThe CyanogenMod Team</string>
+    <string name="first_message">This app allows you to explore the file system and do operations
+        that could break your device. To prevent damage, the app will start in a safe, low-privileged mode.
+    </string>
+
+    <string name="second_title">Burn down the house</string>
+
+    <string name="second_message">
+        \n\nYou can access the advanced, full-privileged mode via Settings. It\'s your responsibility to ensure that an operation doesn\'t break your system.\n\nThe CyanogenMod Team
+    </string>
 
     <string name="activity_not_found_exception">Couldn\'t find an app to open this file</string>
 

@@ -29,13 +29,16 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 
+import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.model.Bookmark;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
+import com.cyanogenmod.filemanager.preferences.Preferences;
 import com.cyanogenmod.filemanager.ui.fragments.HomeFragment;
 import com.cyanogenmod.filemanager.ui.fragments.NavigationFragment;
 import com.cyanogenmod.filemanager.util.FileHelper;
+import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -123,6 +126,9 @@ public class MainActivity extends ActionBarActivity {
         // to be our ActionBar
         // to be our ActionBar
 
+        MIME_TYPE_LOCALIZED_NAMES = MimeTypeCategory.getFriendlyLocalizedNames(this);
+
+        showWelcomeMsg();
         setCurrentFragment(FragmentType.HOME);
 
         //Initialize nfc adapter
@@ -336,6 +342,28 @@ public class MainActivity extends ActionBarActivity {
                 default:
                     break;
             }
+        }
+    }
+
+    /**
+     * Method that displays a welcome message the first time the user
+     * access the application
+     */
+    private void showWelcomeMsg() {
+        boolean firstUse = Preferences.getSharedPreferences().getBoolean(
+                FileManagerSettings.SETTINGS_FIRST_USE.getId(),
+                ((Boolean)FileManagerSettings.SETTINGS_FIRST_USE.getDefaultValue()).booleanValue());
+
+        //Display the welcome message?
+        if (firstUse && FileManagerApplication.hasShellCommands()) {
+
+            Intent intent = new Intent(this, WelcomeActivity.class);
+            startActivity(intent);
+
+            try {
+                Preferences.savePreference(
+                        FileManagerSettings.SETTINGS_FIRST_USE, Boolean.FALSE, true);
+            } catch (Exception e) {/**NON BLOCK**/}
         }
     }
 
