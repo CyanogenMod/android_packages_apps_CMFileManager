@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012 The CyanogenMod Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v4.view.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/intro_pager"
+        android:background="@drawable/bg_material_statusbar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:id="@+id/itemOne">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/welcome_title"
+                android:textSize="28sp"
+                android:id="@+id/titleMessageOne"
+                android:textColor="@android:color/white"/>
+
+            <View
+                android:id="@+id/generic_square"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/bottomMessageOne"
+                android:layout_below="@+id/titleMessageOne"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/rectangle"/>
+
+            <TextView
+                android:id="@+id/bottomMessageOne"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/first_message"
+                android:layout_alignParentBottom="true"
+                android:paddingBottom="16dp"
+                android:layout_marginBottom="@dimen/default_row_height"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="16dp"
+            android:paddingLeft="16dp"
+            android:id="@+id/itemTwo">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/second_title"
+                android:textSize="28sp"
+                android:textColor="@android:color/white"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/second_message"
+                android:layout_alignParentBottom="true"
+                android:paddingBottom="16dp"
+                android:layout_marginBottom="@dimen/default_row_height"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="16dp"
+            android:paddingLeft="16dp"
+            android:id="@+id/itemThree">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/second_title"
+                android:textSize="28sp"
+                android:textColor="@android:color/white"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/second_message"
+                android:layout_alignParentBottom="true"
+                android:paddingBottom="16dp"
+                android:layout_marginBottom="@dimen/default_row_height"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"/>
+
+        </RelativeLayout>
+
+    </android.support.v4.view.ViewPager>
+
+    <RelativeLayout
+        android:id="@+id/footer"
+        android:layout_height="@dimen/default_row_height"
+        android:layout_width="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/bottom_bar_walkthrough">
+
+        <Button
+            android:id="@+id/skipButton"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/skip_text"
+            android:layout_alignParentLeft="true"
+            android:textColor="@android:color/white"/>
+
+
+        <com.cyanogenmod.filemanager.views.CirclePageIndicator
+            android:id="@+id/pagination"
+            android:layout_height="@dimen/half_row_height"
+            android:layout_width="fill_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:id="@+id/nextButton"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/next_text"
+            android:layout_alignParentRight="true"
+            android:textColor="@android:color/white"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>
