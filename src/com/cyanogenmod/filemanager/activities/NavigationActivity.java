@@ -766,21 +766,24 @@ public class NavigationActivity extends Activity
                 ((Boolean)FileManagerSettings.SETTINGS_FIRST_USE.getDefaultValue()).booleanValue());
 
         //Display the welcome message?
-        if (firstUse && FileManagerApplication.hasShellCommands()) {
+        //if (firstUse && FileManagerApplication.hasShellCommands()) {
             // open navigation drawer to show user that it exists
             mDrawerLayout.openDrawer(Gravity.START);
 
-            AlertDialog dialog = DialogHelper.createAlertDialog(this,
+            /*AlertDialog dialog = DialogHelper.createAlertDialog(this,
                     R.mipmap.ic_launcher_filemanager, R.string.welcome_title,
                     getString(R.string.welcome_msg), false);
-            DialogHelper.delegateDialogShow(this, dialog);
+            DialogHelper.delegateDialogShow(this, dialog);*/
+
+            Intent intent = new Intent(this, WelcomeActivity.class);
+            startActivity(intent);
 
             // Don't display again this dialog
             try {
                 Preferences.savePreference(
                         FileManagerSettings.SETTINGS_FIRST_USE, Boolean.FALSE, true);
             } catch (Exception e) {/**NON BLOCK**/}
-        }
+        //}
     }
 
     /**
