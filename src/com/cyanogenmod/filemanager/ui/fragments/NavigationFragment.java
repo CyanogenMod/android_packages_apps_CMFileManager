@@ -534,9 +534,6 @@ public class NavigationFragment extends android.support.v4.app.Fragment
         // Apply the theme
         applyTheme();
 
-        // Show welcome message
-        showWelcomeMsg();
-
         this.mHandler = new android.os.Handler();
         this.mHandler.post(new Runnable() {
             @Override
@@ -679,13 +676,7 @@ public class NavigationFragment extends android.support.v4.app.Fragment
                 AccessMode.SAFE) == 0;
     }
 
-    /**
-     * Method that displays a welcome message the first time the user
-     * access the application
-     */
-    private void showWelcomeMsg() {
 
-    }
 
     View titleLayout;
 

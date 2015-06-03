@@ -175,6 +175,9 @@ public final class FileManagerApplication extends Application {
         if (DEBUG) {
             Log.d(TAG, "FileManagerApplication.onCreate"); //$NON-NLS-1$
         }
+
+
+
         init();
         register();
 
@@ -296,6 +299,14 @@ public final class FileManagerApplication extends Application {
         } catch (Exception e) {
             Log.e(TAG, "Mime-types failed.", e); //$NON-NLS-1$
         }
+
+
+        boolean firstUse = Preferences.getSharedPreferences().getBoolean(
+                FileManagerSettings.SETTINGS_FIRST_USE.getId(),
+                true);
+
+        Log.v("BIRD", "First Use:" + firstUse);
+
     }
 
     /**
