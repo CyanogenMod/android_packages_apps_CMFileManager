@@ -180,9 +180,9 @@ public class ShortcutActivity extends Activity implements OnCancelListener, OnDi
                 // We have to finish here; this activity is only a wrapper
                 finish();
 
-                // Forward to the NavigationActivity
-                Intent intent = new Intent(this, NavigationActivity.class);
-                intent.putExtra(NavigationActivity.EXTRA_NAVIGATE_TO, fso.getFullPath());
+                // Forward to the NavActivity
+                Intent intent = new Intent(this, NavActivity.class);
+                intent.putExtra(NavActivity.EXTRA_NAVIGATE_TO, fso.getFullPath());
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

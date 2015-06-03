@@ -35,8 +35,9 @@ import com.cyanogenmod.filemanager.model.ParentDirectory;
 import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
 import com.cyanogenmod.filemanager.preferences.Preferences;
 import com.cyanogenmod.filemanager.ui.IconHolder;
-import com.cyanogenmod.filemanager.ui.ThemeManager;
-import com.cyanogenmod.filemanager.ui.ThemeManager.Theme;
+import com.cyanogenmod.filemanager.ui.dialogs.ActionsDialog;
+import com.cyanogenmod.filemanager.util.CommandHelper;
+import com.cyanogenmod.filemanager.util.ExceptionUtil;
 import com.cyanogenmod.filemanager.util.FileHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper;
 
@@ -103,7 +104,7 @@ public class FileSystemObjectAdapter
     private final int mItemViewResourceId;
     private List<FileSystemObject> mSelectedItems;
     private final boolean mPickable;
-
+    private Resources mRes;
     private OnSelectionChangedListener mOnSelectionChangedListener;
 
     private boolean mDisposed;
@@ -136,7 +137,7 @@ public class FileSystemObjectAdapter
         this.mItemViewResourceId = itemViewResourceId;
         this.mSelectedItems = new ArrayList<FileSystemObject>();
         this.mPickable = pickable;
-        notifyThemeChanged(); // Reload icons
+        mRes = context.getResources();
 
         processData();
     }
@@ -149,14 +150,6 @@ public class FileSystemObjectAdapter
     public void setOnSelectionChangedListener(
             OnSelectionChangedListener onSelectionChangedListener) {
         this.mOnSelectionChangedListener = onSelectionChangedListener;
-    }
-
-    /**
-     * Method that loads the default icons (known icons and more common icons).
-     */
-    private void loadDefaultIcons() {
-        this.mIconHolder.getDrawable("ic_fso_folder_drawable"); //$NON-NLS-1$
-        this.mIconHolder.getDrawable("ic_fso_default_drawable"); //$NON-NLS-1$
     }
 
     /**
@@ -207,8 +200,6 @@ public class FileSystemObjectAdapter
      * Method that process the data before use {@link #getView} method.
      */
     private void processData() {
-        Theme theme = ThemeManager.getCurrentTheme(getContext());
-        Resources res = getContext().getResources();
         int cc = getCount();
 
         this.mData = new DataHolder[cc];
@@ -220,7 +211,7 @@ public class FileSystemObjectAdapter
             //Parse the last modification time and permissions
             StringBuilder sbSummary = new StringBuilder();
             if (fso instanceof ParentDirectory) {
-                sbSummary.append(res.getString(R.string.parent_dir));
+                sbSummary.append(mRes.getString(R.string.parent_dir));
             } else {
                 sbSummary.append(
                         FileHelper.formatFileTime(
@@ -232,20 +223,15 @@ public class FileSystemObjectAdapter
             //Build the data holder
             this.mData[i] = new FileSystemObjectAdapter.DataHolder();
             this.mData[i].mSelected = this.mSelectedItems.contains(fso);
-            if (this.mData[i].mSelected) {
-                this.mData[i].mDwCheck =
-                        theme.getDrawable(
-                                getContext(), "checkbox_selected_drawable"); //$NON-NLS-1$
-            } else {
-                this.mData[i].mDwCheck =
-                        theme.getDrawable(
-                                getContext(), "checkbox_deselected_drawable"); //$NON-NLS-1$
-            }
-            this.mData[i].mDwIcon = this.mIconHolder.getDrawable(
+
+            this.mData[i].mDwIcon = mRes.getDrawable(
                     MimeTypeHelper.getIcon(getContext(), fso));
             this.mData[i].mName = fso.getName();
             this.mData[i].mSummary = sbSummary.toString();
             this.mData[i].mSize = FileHelper.getHumanReadableSize(fso);
+
+            // TODO: Replace with correct info icon
+            this.mData[i].mDwInfo = mRes.getDrawable(R.drawable.ic_fso_type_app);
         }
     }
 
@@ -256,7 +242,6 @@ public class FileSystemObjectAdapter
     public View getView(int position, View convertView, ViewGroup parent) {
         //Check to reuse view
         View v = convertView;
-        Theme theme = ThemeManager.getCurrentTheme(getContext());
 
         if (v == null) {
             //Create the view holder
@@ -284,24 +269,23 @@ public class FileSystemObjectAdapter
         }
         final DataHolder dataHolder = this.mData[position];
 
+
         //Retrieve the view holder
         ViewHolder viewHolder = (ViewHolder)v.getTag();
-        if (this.mPickable) {
-            theme.setBackgroundDrawable(getContext(), v, "background_drawable"); //$NON-NLS-1$
-        }
+        v.setBackgroundDrawable(mRes.getDrawable(R.drawable.background_drawable));
 
         //Set the data
         if (convertView != null) {
             // Cancel load for previous usage
-            mIconHolder.cancelLoad(viewHolder.mIvIcon);
+            viewHolder.mIvIcon.setImageResource(0);
+            //mIconHolder.cancelLoad(viewHolder.mIvIcon);
         }
-        mIconHolder.loadDrawable(viewHolder.mIvIcon, getItem(position), dataHolder.mDwIcon);
-
+        viewHolder.mIvIcon.setImageDrawable(dataHolder.mDwIcon);
         viewHolder.mTvName.setText(dataHolder.mName);
-        theme.setTextColor(getContext(), viewHolder.mTvName, "text_color"); //$NON-NLS-1$
+        viewHolder.mTvName.setTextColor(mRes.getColor(R.color.text_color));
         if (viewHolder.mTvSummary != null) {
             viewHolder.mTvSummary.setText(dataHolder.mSummary);
-            theme.setTextColor(getContext(), viewHolder.mTvSummary, "text_color"); //$NON-NLS-1$
+            viewHolder.mTvSummary.setTextColor(mRes.getColor(R.color.text_color));
         }
         if (viewHolder.mTvSize != null) {
             viewHolder.mTvSize.setText(dataHolder.mSize);
@@ -317,11 +301,12 @@ public class FileSystemObjectAdapter
 
             if (viewHolder.mHasSelectedBg == null
                     || viewHolder.mHasSelectedBg != dataHolder.mSelected) {
-                String drawableId = dataHolder.mSelected
-                        ? "selectors_selected_drawable" //$NON-NLS-1$
-                        : "selectors_deselected_drawable"; //$NON-NLS-1$
+                int drawableId = dataHolder.mSelected
+                        ? R.drawable.selectors_selected_drawable //$NON-NLS-1$
+                        : R.drawable.selectors_deselected_drawable; //$NON-NLS-1$
 
-                theme.setBackgroundDrawable(getContext(), v, drawableId);
+
+                v.setBackgroundDrawable(mRes.getDrawable(drawableId));
                 viewHolder.mHasSelectedBg = dataHolder.mSelected;
             }
         }
@@ -357,7 +342,6 @@ public class FileSystemObjectAdapter
      */
     private void toggleSelection(View v, FileSystemObject fso) {
         if (this.mData != null) {
-            Theme theme = ThemeManager.getCurrentTheme(getContext());
             int cc = this.mData.length;
             for (int i = 0; i < cc; i++) {
                 DataHolder data = this.mData[i];
@@ -366,16 +350,6 @@ public class FileSystemObjectAdapter
                     data.mSelected = !data.mSelected;
                     if (v != null) {
                         ((View)v.getParent()).setSelected(data.mSelected);
-                    }
-                    if (data.mSelected) {
-                        data.mDwCheck =
-                                theme.getDrawable(
-                                        getContext(), "checkbox_selected_drawable"); //$NON-NLS-1$
-                    } else {
-                        data.mDwCheck =
-                                theme.getDrawable(
-                                        getContext(),
-                                            "checkbox_deselected_drawable"); //$NON-NLS-1$
                     }
 
                     //Add or remove from the global selected items
@@ -437,7 +411,6 @@ public class FileSystemObjectAdapter
      */
     private void doSelectDeselectAllVisibleItems(boolean select) {
         if (this.mData != null && this.mData.length > 0) {
-            Theme theme = ThemeManager.getCurrentTheme(getContext());
             int cc = this.mData.length;
             for (int i = 0; i < cc; i++) {
                 DataHolder data = this.mData[i];
@@ -446,15 +419,6 @@ public class FileSystemObjectAdapter
                     continue;
                 }
                 data.mSelected = select;
-                if (data.mSelected) {
-                    data.mDwCheck =
-                            theme.getDrawable(
-                                    getContext(), "checkbox_selected_drawable"); //$NON-NLS-1$
-                } else {
-                    data.mDwCheck =
-                            theme.getDrawable(
-                                    getContext(), "checkbox_deselected_drawable"); //$NON-NLS-1$
-                }
 
                 //Add or remove from the global selected items
                 FileSystemObject fso = getItem(i);
@@ -509,7 +473,7 @@ public class FileSystemObjectAdapter
     public void onClick(View v) {
 
         //Select or deselect the item
-        int pos = ((Integer)v.getTag()).intValue();
+        int pos = ((Integer) v.getTag()).intValue();
 
         if (pos >= getCount() || pos < 0) {
             return;
@@ -528,20 +492,4 @@ public class FileSystemObjectAdapter
                 break;
         }
     }
-
-    /**
-     * Method that should be invoked when the theme of the app was changed
-     */
-    public void notifyThemeChanged() {
-        // Empty icon holder
-        if (this.mIconHolder != null) {
-            this.mIconHolder.cleanup();
-        }
-        final boolean displayThumbs = Preferences.getSharedPreferences().getBoolean(
-                FileManagerSettings.SETTINGS_DISPLAY_THUMBS.getId(),
-                ((Boolean)FileManagerSettings.SETTINGS_DISPLAY_THUMBS.getDefaultValue()).booleanValue());
-        this.mIconHolder = new IconHolder(getContext(), displayThumbs);
-        loadDefaultIcons();
-    }
-
 }

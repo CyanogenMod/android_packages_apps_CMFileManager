@@ -995,7 +995,6 @@ public class EditorActivity extends Activity implements TextWatcher {
             return;
         }
         // This var should be set depending on ACTION_VIEW or ACTION_EDIT action, but for
-        // better compatibility, IntentsActionPolicy use always ACTION_VIEW, so we have
         // to ignore this check here
         this.mReadOnly = false;
 

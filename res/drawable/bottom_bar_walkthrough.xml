@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item>
+        <shape
+                android:shape="rectangle">
+            <solid android:color="@color/material_palette_blue_primary" />
+
+        </shape>
+    </item>
+
+    <!-- this mess is what we have to do to get a bottom border only. -->
+    <item android:top="1dp"
+          android:left="-2dp"
+          android:right="-2dp"
+          android:bottom="-3px">
+        <shape
+                android:shape="rectangle">
+            <stroke android:width="1dp" android:color="@color/console_fg" />
+            <solid android:color="@null" />
+        </shape>
+    </item>
+
+</layer-list>
