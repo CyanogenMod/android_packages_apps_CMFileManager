@@ -17,6 +17,7 @@
 package com.cyanogenmod.filemanager.adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -113,7 +114,7 @@ public class SearchResultAdapter extends ArrayAdapter<SearchResult> {
     private DataHolder[] mData;
     private IconHolder mIconHolder;
     private final int mItemViewResourceId;
-
+    private Resources mRes;
     private final boolean mHighlightTerms;
     private final boolean mShowRelevanceWidget;
 
@@ -171,6 +172,8 @@ public class SearchResultAdapter extends ArrayAdapter<SearchResult> {
                 ((Boolean)FileManagerSettings.SETTINGS_SHOW_RELEVANCE_WIDGET.
                         getDefaultValue()).booleanValue());
 
+
+        this.mRes = context.getResources();
         // determine the sort order of search results
         setSortResultMode();
 
@@ -340,7 +343,7 @@ public class SearchResultAdapter extends ArrayAdapter<SearchResult> {
             //Build the data holder
             final FileSystemObject fso = result.getFso();
             this.mData[i] = new SearchResultAdapter.DataHolder();
-            this.mData[i].mDwIcon = this.mIconHolder.getDrawable(
+            this.mData[i].mDwIcon = mRes.getDrawable(
                     MimeTypeHelper.getIcon(getContext(), fso));
             if (this.mHighlightTerms) {
                 this.mData[i].mName =

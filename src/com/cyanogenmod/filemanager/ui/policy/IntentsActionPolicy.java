@@ -106,82 +106,14 @@ public final class IntentsActionPolicy extends ActionsPolicy {
             // Create the intent to open the file
             final Intent intent = new Intent();
             intent.setAction(android.content.Intent.ACTION_VIEW);
-
-            // [NOTE][MSB]: Short circuit to pop up dialog informing user we need to copy out the
-            // file until we find a better solution.
-            if (fso.isSecure()) {
-                // [TODO][MSB]: Check visible cache for existing file but I need to split up
-                // resolveIntent function properly for this to be successful
-                DialogHelper.createTwoButtonsQuestionDialog(
-                        ctx,
-                        R.string.ok,
-                        R.string.cancel,
-                        R.string.warning_title,
-                        ctx.getResources().getString(R.string.secure_storage_open_file_warning),
-                        new SecureChoiceClickListener(ctx, fso,
-                                new ISecureChoiceCompleteListener() {
-                                    private boolean isCancelled = false;
-                                    @Override
-                                    public void onComplete(File cacheFile) {
-                                        if (isCancelled) {
-                                            return;
-                                        }
-                                        // Schedule cleanup alarm
-                                        SecureCacheCleanupService.scheduleCleanup(ctx);
-
-                                        FileSystemObject cacheFso = FileHelper
-                                                .createFileSystemObject(cacheFile);
-                                        // Obtain the mime/type and passed it to intent
-                                        String mime = MimeTypeHelper.getMimeType(ctx, cacheFso);
-                                        if (mime != null) {
-                                            intent.setDataAndType(getUriFromFile(ctx, cacheFso),
-                                                    mime);
-                                        } else {
-                                            intent.setData(getUriFromFile(ctx, cacheFso));
-                                        }
-                                        // Resolve the intent
-                                        resolveIntent(
-                                                ctx,
-                                                intent,
-                                                choose,
-                                                createInternalIntents(ctx, cacheFso),
-                                                0,
-                                                R.string.associations_dialog_openwith_title,
-                                                R.string.associations_dialog_openwith_action,
-                                                true,
-                                                onCancelListener,
-                                                onDismissListener);
-                                    }
-
-                                    @Override
-                                    public void onCancelled() {
-                                        isCancelled = true;
-                                        Toast.makeText(ctx, R.string.cancelled_message, Toast
-                                                .LENGTH_SHORT).show();
-                                    }
-                                }))
-                        .show();
-                return;
-            }
-
-            // Obtain the mime/type and passed it to intent
             String mime = MimeTypeHelper.getMimeType(ctx, fso);
             if (mime != null) {
-                intent.setDataAndType(getUriFromFile(ctx, fso), mime);
+                intent.setDataAndType(getUriFromFile(ctx, fso),
+                        mime);
             } else {
                 intent.setData(getUriFromFile(ctx, fso));
             }
-
-            // Resolve the intent
-            resolveIntent(
-                    ctx,
-                    intent,
-                    choose,
-                    createInternalIntents(ctx, fso),
-                    0,
-                    R.string.associations_dialog_openwith_title,
-                    R.string.associations_dialog_openwith_action,
-                    true, onCancelListener, onDismissListener);
+            ctx.startActivity(intent);
 
         } catch (Exception e) {
             ExceptionUtil.translateException(ctx, e);
@@ -461,10 +393,8 @@ public final class IntentsActionPolicy extends ActionsPolicy {
             shortcutIntent.putExtra(ShortcutActivity.EXTRA_FSO, fso.getFullPath());
 
             // Obtain the icon drawable (don't use here the themeable drawable)
-            String resid = MimeTypeHelper.getIcon(ctx, fso);
-            int dwid =
-                    ResourcesHelper.getIdentifier(
-                            ctx.getResources(), "drawable", resid); //$NON-NLS-1$
+            int resid = MimeTypeHelper.getIcon(ctx, fso);
+            int dwid = resid;
 
             // The intent to send to broadcast for register the shortcut intent
             Intent intent = new Intent();

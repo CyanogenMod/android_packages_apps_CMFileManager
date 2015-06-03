@@ -772,7 +772,7 @@ public class SearchActivity extends Activity
             ArrayList<String> localizedNames = new ArrayList<String>(mMimeTypeCategories.size());
             for (MimeTypeCategory category : mMimeTypeCategories) {
                 localizedNames
-                        .add(NavigationActivity.MIME_TYPE_LOCALIZED_NAMES[category.ordinal()]);
+                        .add(NavActivity.MIME_TYPE_LOCALIZED_NAMES[category.ordinal()]);
             }
              this.mSearchTerms.setText(
                      Html.fromHtml(getString(R.string.search_terms, localizedNames)));
@@ -1235,7 +1235,7 @@ public class SearchActivity extends Activity
             final Intent intent =  new Intent();
             if (this.mRestoreState != null) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelable(NavigationActivity.EXTRA_SEARCH_LAST_SEARCH_DATA,
+                bundle.putParcelable(NavActivity.EXTRA_SEARCH_LAST_SEARCH_DATA,
                         (Parcelable)this.mRestoreState);
                 intent.putExtras(bundle);
             }
@@ -1299,7 +1299,7 @@ public class SearchActivity extends Activity
     }
 
     /**
-     * Method that navigate to the file system used the intent (NavigationActivity)
+     * Method that navigate to the file system used the intent (NavActivity)
      *
      * @param fso The file system object to navigate to
      * @param intent The intent used to navigate to
@@ -1310,8 +1310,8 @@ public class SearchActivity extends Activity
             if (FileHelper.isDirectory(fso)) {
                 final Intent intent = new Intent();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(NavigationActivity.EXTRA_SEARCH_ENTRY_SELECTION, fso);
-                bundle.putParcelable(NavigationActivity.EXTRA_SEARCH_LAST_SEARCH_DATA,
+                bundle.putSerializable(NavActivity.EXTRA_SEARCH_ENTRY_SELECTION, fso);
+                bundle.putParcelable(NavActivity.EXTRA_SEARCH_LAST_SEARCH_DATA,
                         (Parcelable)createSearchInfo());
                 intent.putExtras(bundle);
                 setResult(RESULT_OK, intent);
