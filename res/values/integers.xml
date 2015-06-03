@@ -30,4 +30,12 @@
 
     <!-- Association items per row -->
     <integer name="associations_items_per_row">3</integer>
+
+    <!-- intro pager circles -->
+    <integer name="default_title_indicator_footer_indicator_style">2</integer>
+    <integer name="default_circle_indicator_orientation">0</integer>
+    <integer name="default_underline_indicator_fade_delay">300</integer>
+    <integer name="default_underline_indicator_fade_length">400</integer>
+    <integer name="default_title_indicator_line_position">0</integer>
+
 </resources>

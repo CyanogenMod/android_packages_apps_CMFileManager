@@ -130,9 +130,7 @@ public class HomeFragment extends Fragment {
 
     private void initEasyModePlus() {
 
-        MIME_TYPE_LOCALIZED_NAMES = MimeTypeHelper.MimeTypeCategory.getFriendlyLocalizedNames(
-                getActivity());
-
+        MIME_TYPE_LOCALIZED_NAMES = MimeTypeCategory.getFriendlyLocalizedNames(getActivity());
         EASY_MODE_ICONS.put(MimeTypeHelper.MimeTypeCategory.NONE, getResources().getDrawable(
                 R.drawable
                         .ic_em_all));
