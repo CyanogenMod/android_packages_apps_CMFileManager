@@ -33,6 +33,8 @@
 
     <!-- The default row height -->
     <dimen name="default_row_height">56dp</dimen>
+    <!-- pagination height -->
+    <dimen name="half_row_height">32dp</dimen>
     <!-- An small row height -->
     <dimen name="small_row_height">40dp</dimen>
     <!-- An smallest row height -->
@@ -133,5 +135,20 @@
 
     <dimen name="easy_mode_type_icon_wh">40dp</dimen>
     <dimen name="easy_mode_type_icon_margin_lr">16dp</dimen>
+
+    <!-- intro circle indicators -->
+    <dimen name="default_circle_indicator_radius">3dp</dimen>
+    <dimen name="default_circle_indicator_stroke_width">1dp</dimen>
+    <dimen name="default_line_indicator_line_width">12dp</dimen>
+    <dimen name="default_line_indicator_gap_width">4dp</dimen>
+    <dimen name="default_line_indicator_stroke_width">1dp</dimen>
+    <dimen name="default_title_indicator_text_size">15dp</dimen>
+    <dimen name="default_title_indicator_title_padding">5dp</dimen>
+    <dimen name="default_title_indicator_top_padding">7dp</dimen>
+    <dimen name="default_title_indicator_footer_padding">7dp</dimen>
+    <dimen name="default_title_indicator_footer_indicator_height">4dp</dimen>
+    <dimen name="default_title_indicator_footer_indicator_underline_padding">20dp</dimen>
+    <dimen name="default_title_indicator_footer_line_height">2dp</dimen>
+    <dimen name="default_title_indicator_clip_padding">4dp</dimen>
 
 </resources>

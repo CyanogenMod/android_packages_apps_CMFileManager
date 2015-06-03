@@ -32,19 +32,21 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
-
+import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.activities.preferences.SettingsPreferences;
 import com.cyanogenmod.filemanager.model.Bookmark;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
+import com.cyanogenmod.filemanager.preferences.Preferences;
 import com.cyanogenmod.filemanager.ui.fragments.HomeFragment;
 import com.cyanogenmod.filemanager.ui.fragments.NavigationFragment;
 import com.cyanogenmod.filemanager.util.FileHelper;
+import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
 
 import java.io.File;
+import java.io.InvalidClassException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -149,6 +151,9 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawer.setItemTextColor(colorStateList);
         mNavigationDrawer.setItemIconTintList(colorStateList);
 
+        MIME_TYPE_LOCALIZED_NAMES = MimeTypeCategory.getFriendlyLocalizedNames(this);
+
+        showWelcomeMsg();
         setCurrentFragment(FragmentType.HOME);
 
         //Initialize nfc adapter
@@ -381,5 +386,29 @@ public class MainActivity extends ActionBarActivity
         Intent settingsIntent = new Intent(MainActivity.this,
                 SettingsPreferences.class);
         startActivityForResult(settingsIntent, INTENT_REQUEST_SETTINGS);
+    }
+
+    /**
+     * Method that displays a welcome message the first time the user
+     * access the application
+     */
+    private void showWelcomeMsg() {
+        boolean firstUse = Preferences.getSharedPreferences().getBoolean(
+                FileManagerSettings.SETTINGS_FIRST_USE.getId(),
+                ((Boolean)FileManagerSettings.SETTINGS_FIRST_USE.getDefaultValue()).booleanValue());
+
+        //Display the welcome message?
+        if (firstUse && FileManagerApplication.hasShellCommands()) {
+
+            Intent intent = new Intent(this, WelcomeActivity.class);
+            startActivity(intent);
+
+            try {
+                Preferences.savePreference(FileManagerSettings.SETTINGS_FIRST_USE, Boolean.FALSE,
+                        true);
+            } catch (InvalidClassException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
