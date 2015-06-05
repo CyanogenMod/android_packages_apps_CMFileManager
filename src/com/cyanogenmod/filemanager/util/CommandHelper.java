@@ -19,9 +19,9 @@ package com.cyanogenmod.filemanager.util;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaScannerConnection;
+import android.provider.MediaStore;
 import android.provider.MediaStore.Files;
 
-import android.provider.MediaStore;
 import com.cyanogenmod.filemanager.commands.AsyncResultListener;
 import com.cyanogenmod.filemanager.commands.ChangeOwnerExecutable;
 import com.cyanogenmod.filemanager.commands.ChangePermissionsExecutable;
@@ -83,7 +83,6 @@ import com.cyanogenmod.filemanager.model.SearchResult;
 import com.cyanogenmod.filemanager.model.User;
 import com.cyanogenmod.filemanager.preferences.CompressionMode;
 import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
-import com.cyanogenmod.filemanager.util.MediaHelper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -308,6 +307,11 @@ public final class CommandHelper {
         CreateDirExecutable executable =
                 c.getExecutableFactory().newCreator().createCreateDirectoryExecutable(directory);
         writableExecute(context, executable, c);
+
+        // Do media scan
+        MediaScannerConnection.scanFile(context, new String[]{
+                MediaHelper.normalizeMediaPath(directory)}, null, null);
+
         return executable.getResult().booleanValue();
     }
 
@@ -382,12 +386,9 @@ public final class CommandHelper {
                 c.getExecutableFactory().newCreator().createDeleteDirExecutable(directory);
         writableExecute(context, executable, c);
 
-        // Do media scan
-        File parent = new File(directory).getParentFile();
-        if (parent != null) {
-            MediaScannerConnection.scanFile(context, new String[]{
-                    MediaHelper.normalizeMediaPath(parent.getAbsolutePath())}, null, null);
-        }
+        // update media scan
+        MediaScannerConnection.scanFile(context, new String[]{
+                MediaHelper.normalizeMediaPath(directory)}, null, null);
 
         return executable.getResult().booleanValue();
     }
@@ -424,8 +425,10 @@ public final class CommandHelper {
                 c.getExecutableFactory().newCreator().createDeleteFileExecutable(file);
         writableExecute(context, executable, c);
 
-        // Remove from media scanner
-        removeFromMediaStore(context, file);
+        // Remove from mediascanner
+        MediaScannerConnection.scanFile(context, new String[]{
+                MediaHelper.normalizeMediaPath(file)
+        }, null, null);
 
         return executable.getResult().booleanValue();
     }
@@ -810,25 +813,19 @@ public final class CommandHelper {
 
         // Do media scan (don't scan the file if is virtual file)
         if (ret) {
-            File parent = new File(src).getParentFile();
-            if (parent != null) {
-                if (!VirtualMountPointConsole.isVirtualStorageResource(parent.getAbsolutePath())) {
-                    // Remove from media scanner
-                    removeFromMediaStore(context, src);
-                }
-            }
-            if (!VirtualMountPointConsole.isVirtualStorageResource(parent.getAbsolutePath())) {
+            File parent = new File(dst).getParentFile();
+            if (parent != null && !VirtualMountPointConsole.isVirtualStorageResource(parent
+                    .getAbsolutePath())) {
+
+                // Remove from mediascanner
                 MediaScannerConnection.scanFile(context, new String[]{
-                        MediaHelper.normalizeMediaPath(dst)}, null, null);
+                        MediaHelper.normalizeMediaPath(src),
+                        MediaHelper.normalizeMediaPath(dst)
+                }, null, null);
             }
         }
 
         return ret;
-    }
-
-    private static void removeFromMediaStore(Context context, String path) {
-        context.getContentResolver().delete(Files.getContentUri(MediaHelper.EXTERNAL_VOLUME),
-            MediaStore.Files.FileColumns.DATA + "=?", new String[]{path});
     }
 
     /**
