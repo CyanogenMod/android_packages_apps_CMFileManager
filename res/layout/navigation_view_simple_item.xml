@@ -20,13 +20,6 @@
   android:layout_height="@dimen/default_row_height"
   android:orientation="horizontal">
 
-  <com.cyanogenmod.filemanager.ui.widgets.TransparentNonFocusableButtonItem
-    android:id="@+id/navigation_view_item_check"
-    android:layout_width="@dimen/item_menu_row_button_width"
-    android:layout_height="match_parent"
-    android:contentDescription="@null"
-    android:src="@drawable/btn_material_light_check_off_normal" />
-
   <com.cyanogenmod.filemanager.ui.widgets.FixedSizeImageView
     android:id="@+id/navigation_view_item_icon"
     android:layout_marginStart="@dimen/easy_mode_type_icon_margin_lr"
@@ -38,16 +31,42 @@
     android:contentDescription="@null"
     android:src="@null" />
 
-  <TextView
-    android:id="@+id/navigation_view_item_name"
+  <RelativeLayout
     android:layout_width="0dp"
     android:layout_height="match_parent"
     android:layout_weight="1"
-    android:layout_marginStart="@dimen/small_margin"
-    android:layout_marginEnd="@dimen/extra_margin"
-    android:gravity="start|center_vertical"
-    android:singleLine="true"
-    android:ellipsize="middle"
-    android:textAppearance="@style/primary_text_appearance" />
+    android:layout_marginEnd="@dimen/extra_margin">
+
+    <TextView
+      android:id="@+id/navigation_view_item_name"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentStart="true"
+      android:layout_alignParentTop="true"
+      android:layout_marginStart="@dimen/default_margin"
+      android:layout_marginTop="@dimen/extra_margin"
+      android:ellipsize="middle"
+      android:singleLine="true"
+      android:textAppearance="@style/primary_text_appearance" />
+
+    <TextView
+      android:id="@+id/navigation_view_item_summary"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:layout_alignParentStart="true"
+      android:layout_marginBottom="@dimen/extra_margin"
+      android:layout_marginStart="@dimen/default_margin"
+      android:singleLine="true"
+      android:textAppearance="@style/secondary_text_appearance" />
+  </RelativeLayout>
+
+  <!-- TODO: Replace with correct resource for "file info" -->
+  <com.cyanogenmod.filemanager.ui.widgets.TransparentNonFocusableButtonItem
+    android:id="@+id/navigation_view_item_info"
+    android:layout_width="@dimen/item_menu_row_button_width"
+    android:layout_height="match_parent"
+    android:contentDescription="@null"
+    android:src="@drawable/ic_fso_type_app" />
 
 </LinearLayout>

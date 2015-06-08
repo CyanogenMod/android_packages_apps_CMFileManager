@@ -22,7 +22,7 @@
 
     <!-- Human readable sizes -->
     <string name="size_bytes">B</string>
-    <string name="size_kilobytes">kB</string>
+    <string name="size_kilobytes">KB</string>
     <string name="size_megabytes">MB</string>
     <string name="size_gigabytes">GB</string>
 

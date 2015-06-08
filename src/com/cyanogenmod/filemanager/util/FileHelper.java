@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.system.ErrnoException;
 import android.system.OsConstants;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.cyanogenmod.filemanager.FileManagerApplication;
@@ -1480,6 +1481,58 @@ public final class FileHelper {
         } else {
             return sDateFormat.format(filetime);
         }
+    }
+
+    /**
+     * Adapted from frameworks/base/core/java/android/text/format/DateUtils.java
+     *
+     * Return string describing the elapsed time since startTime formatted like
+     * "[relative time/date]".
+     * <p>
+     * Example output strings for the US date format.
+     * <ul>
+     * <li>3 mins ago</li>
+     * <li>yesterday</li>
+     * <li>Dec 12, 2015</li>
+     * </ul>
+     *
+     * @param time some time in the past.
+     * @param minResolution the minimum elapsed time (in milliseconds) to report
+     *            when showing relative times. For example, a time 3 seconds in
+     *            the past will be reported as "0 minutes ago" if this is set to
+     *            {@link #MINUTE_IN_MILLIS}.
+     * @param transitionResolution the elapsed time (in milliseconds) at which
+     *            to stop reporting relative measurements. Elapsed times greater
+     *            than this resolution will default to normal date formatting.
+     *            For example, will transition from "6 days ago" to "Dec 12"
+     *            when using {@link #WEEK_IN_MILLIS}.
+     */
+    public static CharSequence getRelativeDateString(Context c, long time, long minResolution,
+            long transitionResolution, int flags) {
+        Resources r = Resources.getSystem();
+
+        long now = System.currentTimeMillis();
+        long duration = Math.abs(now - time);
+
+        // getRelativeTimeSpanString() doesn't correctly format relative dates
+        // above a week or exact dates below a day, so clamp
+        // transitionResolution as needed.
+        if (transitionResolution > DateUtils.WEEK_IN_MILLIS) {
+            transitionResolution = DateUtils.WEEK_IN_MILLIS;
+        } else if (transitionResolution < DateUtils.DAY_IN_MILLIS) {
+            transitionResolution = DateUtils.DAY_IN_MILLIS;
+        }
+
+        String result;
+        if (duration < transitionResolution) {
+            CharSequence relativeClause =
+                    DateUtils.getRelativeTimeSpanString(time, now, minResolution, flags);
+            result = relativeClause.toString();
+        } else {
+            result = DateUtils.formatDateTime(c, time, flags);
+        }
+
+        return result;
     }
 
     /**
