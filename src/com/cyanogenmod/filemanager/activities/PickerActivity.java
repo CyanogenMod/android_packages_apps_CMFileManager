@@ -111,9 +111,34 @@ public class PickerActivity extends Activity
     private static final String EXTRA_CROP = "crop"; //$NON-NLS-1$
 
     // Intent for folder picker
-    private static final String INTENT_FOLDER_SELECT = "com.android.fileexplorer.action.DIR_SEL";
+    public static final String INTENT_FOLDER_SELECT = "com.android.fileexplorer.action.DIR_SEL";
     // String extra for folder selection
-    private static final String EXTRA_FOLDER_PATH = "def_file_manager_result_dir";
+    public static final String EXTRA_FOLDER_PATH = "def_file_manager_result_dir";
+
+    /**
+     * Constant for extra information for picker activity mode
+     */
+    public static final String EXTRA_ACTION = "extra_picker_activity_mode";
+
+    /**
+     * The Picker action mode
+     * @hide
+     */
+    public enum ACTION_MODE {
+        /**
+         * The picker activity is configured for select action.
+         * This is default behavior if not specified.
+         */
+        SELECT,
+        /**
+         * The picker activity is configured for copy action.
+         */
+        COPY,
+        /**
+         * The picker activity is configured for move action.
+         */
+        MOVE,
+    }
 
     FileSystemObject mFso;  // The picked item
     FileSystemObject mCurrentDirectory;
@@ -279,11 +304,32 @@ public class PickerActivity extends Activity
         // Apply the current theme
         applyTheme();
 
+        // Get dialog title and positive button, default to picker_title and select respectively
+        ACTION_MODE pickerMode = ACTION_MODE.SELECT;
+        if (extras != null) {
+            if (extras.containsKey(EXTRA_ACTION)) {
+                int mode = extras.getInt(EXTRA_ACTION);
+                pickerMode = ACTION_MODE.values()[mode];
+            }
+        }
+        int titleId = R.string.picker_title;
+        int buttonId = R.string.select;
+        if (pickerMode.compareTo(ACTION_MODE.COPY) == 0) {
+            titleId = R.string.picker_copy_title;
+            buttonId = R.string.copy;
+        } else if (pickerMode.compareTo(ACTION_MODE.MOVE) == 0) {
+            titleId = R.string.picker_move_title;
+            buttonId = R.string.move;
+        } else {
+            if (pickingDirectory) {
+                titleId = pickingDirectory ?
+                        R.string.directory_picker_title : R.string.picker_title;
+            }
+        }
+
         // Create the dialog
         this.mDialog = DialogHelper.createDialog(
-            this, R.mipmap.ic_launcher_filemanager,
-            pickingDirectory ? R.string.directory_picker_title : R.string.picker_title,
-            this.mRootView);
+                this, R.mipmap.ic_launcher_filemanager, titleId, this.mRootView);
 
         this.mDialog.setButton(
                 DialogInterface.BUTTON_NEGATIVE,
@@ -297,7 +343,7 @@ public class PickerActivity extends Activity
         if (pickingDirectory) {
             this.mDialog.setButton(
                     DialogInterface.BUTTON_POSITIVE,
-                    getString(R.string.select),
+                    getString(buttonId),
                     new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dlg, int which) {

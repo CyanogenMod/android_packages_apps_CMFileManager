@@ -576,8 +576,8 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
                             SETTINGS_LAYOUT_MODE.getDefaultValue()).getId());
             changeViewMode(NavigationLayoutMode.fromId(viewMode));
         } else {
-            // Pick mode has always a details layout
-            changeViewMode(NavigationLayoutMode.DETAILS);
+            // Pick mode has always a simple layout
+            changeViewMode(NavigationLayoutMode.SIMPLE);
         }
     }
 

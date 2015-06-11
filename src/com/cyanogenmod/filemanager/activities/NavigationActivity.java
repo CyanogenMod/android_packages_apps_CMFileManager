@@ -102,6 +102,7 @@ import com.cyanogenmod.filemanager.ui.dialogs.ActionsDialog;
 import com.cyanogenmod.filemanager.ui.dialogs.FilesystemInfoDialog;
 import com.cyanogenmod.filemanager.ui.dialogs.InitialDirectoryDialog;
 import com.cyanogenmod.filemanager.ui.dialogs.FilesystemInfoDialog.OnMountListener;
+import com.cyanogenmod.filemanager.ui.policy.CopyMoveActionPolicy;
 import com.cyanogenmod.filemanager.ui.widgets.Breadcrumb;
 import com.cyanogenmod.filemanager.ui.widgets.ButtonItem;
 import com.cyanogenmod.filemanager.ui.widgets.NavigationCustomTitleView;
@@ -129,6 +130,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.*;
+import static com.cyanogenmod.filemanager.activities.PickerActivity.EXTRA_FOLDER_PATH;
 
 /**
  * The main navigation activity. This activity is the center of the application.
@@ -165,6 +167,16 @@ public class NavigationActivity extends Activity
      * Intent code for request a search.
      */
     public static final int INTENT_REQUEST_SETTINGS = 20001;
+
+    /**
+     * Intent code for request a copy.
+     */
+    public static final int INTENT_REQUEST_COPY = 30001;
+
+    /**
+     * Intent code for request a move.
+     */
+    public static final int INTENT_REQUEST_MOVE = 30002;
 
     /**
      * Constant for extra information about selected search entry.
@@ -1945,6 +1957,42 @@ public class NavigationActivity extends Activity
                     // reset bookmarks list to default as the user could have set a
                     // new bookmark in the search activity
                     initBookmarks();
+                    break;
+
+                // Paste selection
+                case INTENT_REQUEST_COPY:
+                    if (resultCode == Activity.RESULT_OK) {
+                        Bundle extras = data.getExtras();
+                        String destination = extras.getString(EXTRA_FOLDER_PATH);
+                        List<FileSystemObject> selection =
+                                getCurrentNavigationView().onRequestSelectedFiles();
+                        if (!TextUtils.isEmpty(destination)) {
+                            CopyMoveActionPolicy.copyFileSystemObjects(
+                                    this,
+                                    selection,
+                                    destination,
+                                    getCurrentNavigationView(),
+                                    this);
+                        }
+                    }
+                    break;
+
+                // Move selection
+                case INTENT_REQUEST_MOVE:
+                    if (resultCode == Activity.RESULT_OK) {
+                        Bundle extras = data.getExtras();
+                        String destination = extras.getString(EXTRA_FOLDER_PATH);
+                        List<FileSystemObject> selection =
+                                getCurrentNavigationView().onRequestSelectedFiles();
+                        if (!TextUtils.isEmpty(destination)) {
+                            CopyMoveActionPolicy.moveFileSystemObjects(
+                                    this,
+                                    selection,
+                                    destination,
+                                    getCurrentNavigationView(),
+                                    this);
+                        }
+                    }
                     break;
 
                 default:

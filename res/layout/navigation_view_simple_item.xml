@@ -31,35 +31,17 @@
     android:contentDescription="@null"
     android:src="@null" />
 
-  <RelativeLayout
+  <TextView
+    android:id="@+id/navigation_view_item_name"
     android:layout_width="0dp"
     android:layout_height="match_parent"
     android:layout_weight="1"
-    android:layout_marginEnd="@dimen/extra_margin">
-
-    <TextView
-      android:id="@+id/navigation_view_item_name"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_alignParentStart="true"
-      android:layout_alignParentTop="true"
-      android:layout_marginStart="@dimen/default_margin"
-      android:layout_marginTop="@dimen/extra_margin"
-      android:ellipsize="middle"
-      android:singleLine="true"
-      android:textAppearance="@style/primary_text_appearance" />
-
-    <TextView
-      android:id="@+id/navigation_view_item_summary"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentBottom="true"
-      android:layout_alignParentStart="true"
-      android:layout_marginBottom="@dimen/extra_margin"
-      android:layout_marginStart="@dimen/default_margin"
-      android:singleLine="true"
-      android:textAppearance="@style/secondary_text_appearance" />
-  </RelativeLayout>
+    android:layout_marginStart="@dimen/default_margin"
+    android:layout_marginTop="@dimen/extra_margin"
+    android:gravity="start|center_vertical"
+    android:singleLine="true"
+    android:ellipsize="middle"
+    android:textAppearance="@style/primary_text_appearance" />
 
   <com.cyanogenmod.filemanager.ui.widgets.TransparentNonFocusableButtonItem
     android:id="@+id/navigation_view_item_info"
