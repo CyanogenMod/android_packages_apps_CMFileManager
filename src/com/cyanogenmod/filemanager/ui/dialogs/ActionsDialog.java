@@ -16,9 +16,12 @@
 
 package com.cyanogenmod.filemanager.ui.dialogs;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -73,12 +76,18 @@ import java.io.InvalidClassException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.cyanogenmod.filemanager.activities.PickerActivity.INTENT_FOLDER_SELECT;
+import static com.cyanogenmod.filemanager.activities.PickerActivity.EXTRA_ACTION;
+import static com.cyanogenmod.filemanager.activities.PickerActivity.ACTION_MODE.COPY;
+import static com.cyanogenmod.filemanager.activities.PickerActivity.ACTION_MODE.MOVE;
+import static com.cyanogenmod.filemanager.activities.NavigationActivity.INTENT_REQUEST_COPY;
+import static com.cyanogenmod.filemanager.activities.NavigationActivity.INTENT_REQUEST_MOVE;
+
 /**
  * A class that wraps a dialog for showing the list of actions that
  * the user can do.
  */
 public class ActionsDialog implements OnItemClickListener, OnItemLongClickListener {
-
     /**
      * @hide
      */
@@ -322,25 +331,19 @@ public class ActionsDialog implements OnItemClickListener, OnItemLongClickListen
             // Paste selection
             case R.id.mnu_actions_paste_selection:
                 if (this.mOnSelectionListener != null) {
-                    List<FileSystemObject> selection =
-                            this.mOnSelectionListener.onRequestSelectedFiles();
-                    CopyMoveActionPolicy.copyFileSystemObjects(
-                            this.mContext,
-                            createLinkedResource(selection, this.mFso),
-                            this.mOnSelectionListener,
-                            this.mOnRequestRefreshListener);
+                    // Select destination
+                    Intent intent = new Intent(INTENT_FOLDER_SELECT);
+                    intent.putExtra(EXTRA_ACTION, COPY.ordinal());
+                    mBackRef.startActivityForResult(intent, INTENT_REQUEST_COPY);
                 }
                 break;
             // Move selection
             case R.id.mnu_actions_move_selection:
                 if (this.mOnSelectionListener != null) {
-                    List<FileSystemObject> selection =
-                            this.mOnSelectionListener.onRequestSelectedFiles();
-                    CopyMoveActionPolicy.moveFileSystemObjects(
-                            this.mContext,
-                            createLinkedResource(selection, this.mFso),
-                            this.mOnSelectionListener,
-                            this.mOnRequestRefreshListener);
+                    // Select destination
+                    Intent intent = new Intent(INTENT_FOLDER_SELECT);
+                    intent.putExtra(EXTRA_ACTION, MOVE.ordinal());
+                    mBackRef.startActivityForResult(intent, INTENT_REQUEST_MOVE);
                 }
                 break;
             // Delete selection
@@ -844,26 +847,5 @@ public class ActionsDialog implements OnItemClickListener, OnItemLongClickListen
             menu.removeItem(R.id.mnu_actions_compress_selection);
             menu.removeItem(R.id.mnu_actions_extract);
         }
-    }
-
-    /**
-     * Method that creates a {@link LinkedResource} for the list of object to the
-     * destination directory
-     *
-     * @param items The list of the source items
-     * @param directory The destination directory
-     */
-    private static List<LinkedResource> createLinkedResource(
-            List<FileSystemObject> items, FileSystemObject directory) {
-        List<LinkedResource> resources =
-                new ArrayList<LinkedResource>(items.size());
-        int cc = items.size();
-        for (int i = 0; i < cc; i++) {
-            FileSystemObject fso = items.get(i);
-            File src = new File(fso.getFullPath());
-            File dst = new File(directory.getFullPath(), fso.getName());
-            resources.add(new LinkedResource(src, dst));
-        }
-        return resources;
     }
 }

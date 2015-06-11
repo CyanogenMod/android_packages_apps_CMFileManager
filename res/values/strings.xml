@@ -47,6 +47,8 @@
     <string name="all">All</string>
     <string name="overwrite">Overwrite</string>
     <string name="select">Select</string>
+    <string name="copy">Copy</string>
+    <string name="move">Move</string>
 
     <!-- The root directory name -->
     <string name="root_directory_name"><![CDATA[<Root folder>]]></string>
@@ -338,6 +340,8 @@
     <!-- Picker Activity - Dialog title -->
     <string name="picker_title">Pick a file</string>
     <string name="directory_picker_title">Pick a directory</string>
+    <string name="picker_copy_title">Copy to</string>
+    <string name="picker_move_title">Move to</string>
 
     <!-- Editor - Editor activity title -->
     <string name="editor">Editor</string>
@@ -454,9 +458,9 @@
     <!-- Actions Dialog - Menu - Deselect -->
     <string name="actions_menu_deselect">Deselect</string>
     <!-- Actions Dialog - Menu - Copy/Paste selection -->
-    <string name="actions_menu_paste_selection">Copy selection here</string>
+    <string name="actions_menu_paste_selection">Copy to</string>
     <!-- Actions Dialog - Menu - Move selection -->
-    <string name="actions_menu_move_selection">Move selection here</string>
+    <string name="actions_menu_move_selection">Move to</string>
     <!-- Actions Dialog - Menu - Delete selection -->
     <string name="actions_menu_delete_selection">Delete selection</string>
     <!-- Actions Dialog - Menu - Compress selection -->

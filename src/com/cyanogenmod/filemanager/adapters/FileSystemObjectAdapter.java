@@ -113,7 +113,7 @@ public class FileSystemObjectAdapter
     private IconHolder mIconHolder;
     private final int mItemViewResourceId;
     private List<FileSystemObject> mSelectedItems;
-    private boolean mPickable;
+    private final boolean mPickable;
     private Resources mRes;
     private OnSelectionChangedListener mOnSelectionChangedListener;
 
@@ -292,9 +292,13 @@ public class FileSystemObjectAdapter
             viewHolder.mIvIcon = (ImageView)v.findViewById(RESOURCE_ITEM_ICON);
             viewHolder.mTvName = (TextView)v.findViewById(RESOURCE_ITEM_NAME);
             viewHolder.mTvSummary = (TextView)v.findViewById(RESOURCE_ITEM_SUMMARY);
-            viewHolder.mBtInfo = (ImageButton)v.findViewById(RESOURCE_ITEM_INFO);
-            viewHolder.mIvIcon.setOnClickListener(this);
-            viewHolder.mBtInfo.setOnClickListener(this);
+            viewHolder.mBtInfo = (ImageButton) v.findViewById(RESOURCE_ITEM_INFO);
+            if (!mPickable) {
+                viewHolder.mIvIcon.setOnClickListener(this);
+                viewHolder.mBtInfo.setOnClickListener(this);
+            } else {
+                viewHolder.mBtInfo.setVisibility(View.GONE);
+            }
             v.setTag(viewHolder);
         }
 
@@ -320,26 +324,30 @@ public class FileSystemObjectAdapter
 
         viewHolder.mTvName.setText(dataHolder.mName);
         theme.setTextColor(getContext(), viewHolder.mTvName, "text_color"); //$NON-NLS-1$
-        if (viewHolder.mTvSummary != null) {
-            viewHolder.mTvSummary.setText(dataHolder.mSummary);
-            theme.setTextColor(getContext(), viewHolder.mTvSummary, "text_color"); //$NON-NLS-1$
-        }
-        viewHolder.mBtInfo.setVisibility(
-                TextUtils.equals(dataHolder.mName, FileHelper.PARENT_DIRECTORY) ?
-                        View.INVISIBLE : View.VISIBLE);
 
-        viewHolder.mBtInfo.setImageDrawable(dataHolder.mDwInfo);
-        viewHolder.mBtInfo.setTag(Integer.valueOf(position));
-        viewHolder.mIvIcon.setTag(Integer.valueOf(position));
+        if (!mPickable) {
+            if (viewHolder.mTvSummary != null) {
+                viewHolder.mTvSummary.setText(dataHolder.mSummary);
+                theme.setTextColor(getContext(), viewHolder.mTvSummary, "text_color"); //$NON-NLS-1$
+            }
 
-        if (viewHolder.mHasSelectedBg == null
-                || viewHolder.mHasSelectedBg != dataHolder.mSelected) {
-            int drawableId = dataHolder.mSelected
-                    ? R.drawable.selectors_selected_drawable //$NON-NLS-1$
-                    : R.drawable.selectors_deselected_drawable; //$NON-NLS-1$
+            viewHolder.mBtInfo.setVisibility(
+                    TextUtils.equals(dataHolder.mName, FileHelper.PARENT_DIRECTORY) ?
+                            View.INVISIBLE : View.VISIBLE);
 
-            v.setBackgroundDrawable(mRes.getDrawable(drawableId));
-            viewHolder.mHasSelectedBg = dataHolder.mSelected;
+            viewHolder.mBtInfo.setImageDrawable(dataHolder.mDwInfo);
+            viewHolder.mBtInfo.setTag(Integer.valueOf(position));
+            viewHolder.mIvIcon.setTag(Integer.valueOf(position));
+
+            if (viewHolder.mHasSelectedBg == null
+                    || viewHolder.mHasSelectedBg != dataHolder.mSelected) {
+                int drawableId = dataHolder.mSelected
+                        ? R.drawable.selectors_selected_drawable //$NON-NLS-1$
+                        : R.drawable.selectors_deselected_drawable; //$NON-NLS-1$
+
+                v.setBackgroundDrawable(mRes.getDrawable(drawableId));
+                viewHolder.mHasSelectedBg = dataHolder.mSelected;
+            }
         }
 
         //Return the view
