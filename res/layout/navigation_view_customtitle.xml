@@ -23,7 +23,7 @@
   <com.cyanogenmod.filemanager.ui.widgets.NavigationCustomTitleView
     android:id="@+id/navigation_title_flipper"
     android:layout_width="0dp"
-    android:layout_height="match_parent"
+    android:layout_height="?android:attr/actionBarSize"
     android:layout_weight="1"
     android:animateFirstView="true">
 
