@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The main content view -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:filemanager="http://schemas.android.com/apk/res/com.cyanogenmod.filemanager"
+    android:id="@+id/navigation_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="25dp"
+    android:orientation="vertical">
+
+    <!-- We use a Toolbar so that our drawer can be displayed in front of the action bar -->
+    <android.widget.Toolbar
+        android:id="@+id/material_toolbar"
+        android:fitsSystemWindows="true"
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:minHeight="?android:attr/actionBarSize"
+        android:background="?android:attr/colorPrimary"
+        android:theme="@style/FileManager.NavigationActionBar"/>
+
+    <!-- Navigation View -->
+    <com.cyanogenmod.filemanager.ui.widgets.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        filemanager:navigation="browsable"/>
+
+    <ListView
+        android:background="@android:color/white"
+        android:id="@+id/lv_easy_mode"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone"/>
+
+    <!-- SelectionBar -->
+    <com.cyanogenmod.filemanager.ui.widgets.SelectionView
+        android:id="@+id/navigation_selectionbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/small_row_height"
+        android:background="@drawable/bg_material_selectionbar"
+        android:visibility="invisible"/>
+
+    <!-- StatusBar -->
+    <include layout="@layout/navigation_view_statusbar"/>
+</LinearLayout>
