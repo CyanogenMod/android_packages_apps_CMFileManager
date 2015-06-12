@@ -13,6 +13,10 @@
 -keep public class * extends android.content.BroadcastReceiver
 -keep public class * extends android.content.ContentProvider
 
+-keep class android.support.design.widget.** { *; }
+-keep interface android.support.design.widget.** { *; }
+-dontwarn android.support.design.**
+
 #keep all classes that might be used in XML layouts
 -keep public class * extends android.view.View {
     public <init>(android.content.Context);
