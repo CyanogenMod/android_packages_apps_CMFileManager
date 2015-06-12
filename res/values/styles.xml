@@ -18,6 +18,27 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Base themes -->
+    <style name="Base.AppTheme" parent="Theme.AppCompat.Light">
+        <item name="android:colorPrimary">@color/material_palette_blue_primary</item>
+        <item name="android:colorPrimaryDark">@color/material_palette_blue_primary_dark</item>
+        <item name="android:colorAccent">@color/material_palette_blue_primary</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Widget.FileManager.ActionBar" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">@color/material_palette_blue_primary</item>
+        <item name="android:theme">@style/ThemeOverlay.FileManager.ActionBar</item>
+    </style>
+
+    <style name="ThemeOverlay.FileManager.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColorPrimary">@color/console_fg</item>
+    </style>
+
+    <!-- Pre-Google Support Themes -->
+    <!-- Base themes -->
     <style name="FileManager.Theme.Material.Light.NoActionBar" parent="@android:style/Theme.Material.Light.NoActionBar">
         <item name="android:windowBackground">@color/default_background</item>
         <item name="android:windowActionBar">false</item>
