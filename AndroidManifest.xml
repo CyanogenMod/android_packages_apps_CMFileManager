@@ -21,7 +21,7 @@
 
   <original-package android:name="com.cyanogenmod.filemanager" />
 
-  <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="21" />
+  <uses-sdk android:minSdkVersion="22" android:targetSdkVersion="22" />
 
   <uses-feature android:name="android.software.leanback"
     android:required="false" />
@@ -51,7 +51,7 @@
     android:banner="@drawable/banner"
     android:label="@string/app_name"
     android:largeHeap="true"
-    android:theme="@style/FileManager.Theme.Material.Light"
+    android:theme="@style/Base.AppTheme"
     android:supportsRtl="true">
 
     <meta-data
@@ -91,7 +91,6 @@
       android:label="@string/app_name"
       android:launchMode="singleTop"
       android:uiOptions="none"
-      android:theme="@style/FileManager.Theme.Material.Light.NoActionBar"
       android:windowSoftInputMode="adjustNothing"
       android:configChanges="orientation|keyboardHidden|screenSize"
       android:exported="true">
@@ -135,7 +134,6 @@
       android:label="@string/picker"
       android:uiOptions="none"
       android:configChanges="orientation|keyboardHidden|screenSize"
-      android:theme="@style/FileManager.Theme.Material.Light.Overlay"
       android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.GET_CONTENT" />
@@ -170,7 +168,6 @@
       android:name=".activities.ShortcutActivity"
       android:label="@string/app_name"
       android:uiOptions="none"
-      android:theme="@style/FileManager.Theme.Material.Light.Overlay"
       android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
@@ -181,7 +178,6 @@
       android:name=".activities.ChangeLogActivity"
       android:label="@string/app_name"
       android:uiOptions="none"
-      android:theme="@style/FileManager.Theme.Material.Light.Overlay"
       android:exported="false">
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
@@ -224,7 +220,6 @@
       android:label="@string/app_name"
       android:uiOptions="none"
       android:configChanges="orientation|keyboardHidden|screenSize"
-      android:theme="@android:style/Theme.Material.Light.Dialog"
       android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
