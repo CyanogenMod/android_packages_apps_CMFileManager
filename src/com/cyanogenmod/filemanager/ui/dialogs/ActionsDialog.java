@@ -80,8 +80,8 @@ import static com.cyanogenmod.filemanager.activities.PickerActivity.INTENT_FOLDE
 import static com.cyanogenmod.filemanager.activities.PickerActivity.EXTRA_ACTION;
 import static com.cyanogenmod.filemanager.activities.PickerActivity.ACTION_MODE.COPY;
 import static com.cyanogenmod.filemanager.activities.PickerActivity.ACTION_MODE.MOVE;
-import static com.cyanogenmod.filemanager.activities.NavigationActivity.INTENT_REQUEST_COPY;
-import static com.cyanogenmod.filemanager.activities.NavigationActivity.INTENT_REQUEST_MOVE;
+import static com.cyanogenmod.filemanager.activities.NavFrag.INTENT_REQUEST_COPY;
+import static com.cyanogenmod.filemanager.activities.NavFrag.INTENT_REQUEST_MOVE;
 
 /**
  * A class that wraps a dialog for showing the list of actions that
