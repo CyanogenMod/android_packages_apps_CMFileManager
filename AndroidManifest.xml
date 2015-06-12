@@ -21,7 +21,7 @@
 
   <original-package android:name="com.cyanogenmod.filemanager" />
 
-  <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="21" />
+  <uses-sdk android:minSdkVersion="22" android:targetSdkVersion="22" />
 
   <uses-feature android:name="android.software.leanback"
     android:required="false" />
