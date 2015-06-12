@@ -14,12 +14,40 @@
  ** See the License for the specific language governing permissions and
  ** limitations under the License.
 -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
-  <!-- Actions -->
-  <item
-    android:id="@+id/mnu_search"
-    android:showAsAction="ifRoom"
-    android:title="@string/menu_search"/>
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context=".MainActivity">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_item_1"
+            android:checked="true"
+            android:icon="@drawable/ic_launcher_themes"
+            android:title="HEY!" />
+        <item
+            android:id="@+id/navigation_item_2"
+            android:icon="@drawable/ic_launcher_themes"
+            android:title="WOW" />
+    </group>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_item_1"
+            android:checked="true"
+            android:icon="@drawable/ic_launcher_themes"
+            android:title="HEY!" />
+        <item
+            android:id="@+id/navigation_item_2"
+            android:icon="@drawable/ic_launcher_themes"
+            android:title="WOW" />
+    </group>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_item_1"
+            android:checked="true"
+            android:icon="@drawable/ic_launcher_themes"
+            android:title="HEY!" />
+        <item
+            android:id="@+id/navigation_item_2"
+            android:icon="@drawable/ic_launcher_themes"
+            android:title="WOW" />
+    </group>
 </menu>
