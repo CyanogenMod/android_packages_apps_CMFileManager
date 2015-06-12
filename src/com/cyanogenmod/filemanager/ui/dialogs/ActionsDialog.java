@@ -38,6 +38,7 @@ import android.widget.Toast;
 import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.activities.NavigationActivity;
+import com.cyanogenmod.filemanager.activities.NavFrag;
 import com.cyanogenmod.filemanager.adapters.TwoColumnsMenuListAdapter;
 import com.cyanogenmod.filemanager.console.VirtualMountPointConsole;
 import com.cyanogenmod.filemanager.listeners.OnRequestRefreshListener;
@@ -80,8 +81,8 @@ import static com.cyanogenmod.filemanager.activities.PickerActivity.INTENT_FOLDE
 import static com.cyanogenmod.filemanager.activities.PickerActivity.EXTRA_ACTION;
 import static com.cyanogenmod.filemanager.activities.PickerActivity.ACTION_MODE.COPY;
 import static com.cyanogenmod.filemanager.activities.PickerActivity.ACTION_MODE.MOVE;
-import static com.cyanogenmod.filemanager.activities.NavigationActivity.INTENT_REQUEST_COPY;
-import static com.cyanogenmod.filemanager.activities.NavigationActivity.INTENT_REQUEST_MOVE;
+import static com.cyanogenmod.filemanager.activities.NavFrag.INTENT_REQUEST_COPY;
+import static com.cyanogenmod.filemanager.activities.NavFrag.INTENT_REQUEST_MOVE;
 
 /**
  * A class that wraps a dialog for showing the list of actions that
@@ -92,7 +93,7 @@ public class ActionsDialog implements OnItemClickListener, OnItemLongClickListen
      * @hide
      */
     final Context mContext;
-    final NavigationActivity mBackRef;
+    final NavFrag mBackRef;
     private final boolean mGlobal;
     private final boolean mSearch;
     private final boolean mChRooted;
@@ -124,7 +125,7 @@ public class ActionsDialog implements OnItemClickListener, OnItemLongClickListen
      * @param global If the menu to display will be the global one (Global actions)
      * @param search If the call is from search activity
      */
-    public ActionsDialog(Context context, NavigationActivity backRef, FileSystemObject fso,
+    public ActionsDialog(Context context, NavFrag backRef, FileSystemObject fso,
             boolean global, boolean search) {
         super();
 
