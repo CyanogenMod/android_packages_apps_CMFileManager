@@ -18,6 +18,8 @@
     <!-- The name of the app -->
     <string name="app_name">File Manager</string>
     <!-- The description of the app -->
+    <string name="homepage_statement">This is the Homepage</string>
+
     <string name="app_description">A CyanogenMod file manager</string>
 
     <!-- Human readable sizes -->
@@ -315,7 +317,7 @@
     <!-- Search - Search activity title -->
     <string name="search">Search results</string>
     <!-- Search - Search hint message -->
-    <string name="search_hint">Type your search</string>
+    <string name="search_hint">Search local files</string>
     <!-- Search - Voice search hint message -->
     <string name="search_voice_hint">Speak your search</string>
     <!-- Search - Search error message -->
