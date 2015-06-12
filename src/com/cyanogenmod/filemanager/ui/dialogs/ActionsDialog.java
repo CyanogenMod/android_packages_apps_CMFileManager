@@ -16,12 +16,10 @@
 
 package com.cyanogenmod.filemanager.ui.dialogs;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,7 +35,7 @@ import android.widget.Toast;
 
 import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
-import com.cyanogenmod.filemanager.activities.NavigationActivity;
+import com.cyanogenmod.filemanager.ui.fragments.NavigationFragment;
 import com.cyanogenmod.filemanager.adapters.TwoColumnsMenuListAdapter;
 import com.cyanogenmod.filemanager.console.VirtualMountPointConsole;
 import com.cyanogenmod.filemanager.listeners.OnRequestRefreshListener;
@@ -55,7 +53,6 @@ import com.cyanogenmod.filemanager.ui.ThemeManager.Theme;
 import com.cyanogenmod.filemanager.ui.policy.BookmarksActionPolicy;
 import com.cyanogenmod.filemanager.ui.policy.CompressActionPolicy;
 import com.cyanogenmod.filemanager.ui.policy.CopyMoveActionPolicy;
-import com.cyanogenmod.filemanager.ui.policy.CopyMoveActionPolicy.LinkedResource;
 import com.cyanogenmod.filemanager.ui.policy.DeleteActionPolicy;
 import com.cyanogenmod.filemanager.ui.policy.ExecutionActionPolicy;
 import com.cyanogenmod.filemanager.ui.policy.InfoActionPolicy;
@@ -71,17 +68,15 @@ import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
 import com.cyanogenmod.filemanager.util.SelectionHelper;
 import com.cyanogenmod.filemanager.util.StorageHelper;
 
-import java.io.File;
 import java.io.InvalidClassException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.cyanogenmod.filemanager.activities.PickerActivity.INTENT_FOLDER_SELECT;
 import static com.cyanogenmod.filemanager.activities.PickerActivity.EXTRA_ACTION;
 import static com.cyanogenmod.filemanager.activities.PickerActivity.ACTION_MODE.COPY;
 import static com.cyanogenmod.filemanager.activities.PickerActivity.ACTION_MODE.MOVE;
-import static com.cyanogenmod.filemanager.activities.NavigationActivity.INTENT_REQUEST_COPY;
-import static com.cyanogenmod.filemanager.activities.NavigationActivity.INTENT_REQUEST_MOVE;
+import static com.cyanogenmod.filemanager.ui.fragments.NavigationFragment.INTENT_REQUEST_COPY;
+import static com.cyanogenmod.filemanager.ui.fragments.NavigationFragment.INTENT_REQUEST_MOVE;
 
 /**
  * A class that wraps a dialog for showing the list of actions that
@@ -92,7 +87,7 @@ public class ActionsDialog implements OnItemClickListener, OnItemLongClickListen
      * @hide
      */
     final Context mContext;
-    final NavigationActivity mBackRef;
+    final NavigationFragment mBackRef;
     private final boolean mGlobal;
     private final boolean mSearch;
     private final boolean mChRooted;
@@ -124,7 +119,7 @@ public class ActionsDialog implements OnItemClickListener, OnItemLongClickListen
      * @param global If the menu to display will be the global one (Global actions)
      * @param search If the call is from search activity
      */
-    public ActionsDialog(Context context, NavigationActivity backRef, FileSystemObject fso,
+    public ActionsDialog(Context context, NavigationFragment backRef, FileSystemObject fso,
             boolean global, boolean search) {
         super();
 
@@ -404,7 +399,7 @@ public class ActionsDialog implements OnItemClickListener, OnItemLongClickListen
                 Bookmark bookmark = BookmarksActionPolicy.addToBookmarks(
                         this.mContext, this.mFso);
                 if (mBackRef != null) {
-                    // tell NavigationActivity's drawer to add the bookmark
+                    // tell MainActivity's drawer to add the bookmark
                     mBackRef.addBookmark(bookmark);
                 }
                 break;
