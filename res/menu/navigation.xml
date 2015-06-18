@@ -17,38 +17,49 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".MainActivity">
-  <group android:checkableBehavior="single">
-    <item
-            android:id="@+id/navigation_item_1"
-            android:checked="true"
-            android:icon="@drawable/ic_launcher_themes"
-            android:title="HEY!" />
-    <item
-            android:id="@+id/navigation_item_2"
-            android:icon="@drawable/ic_launcher_themes"
-            android:title="WOW" />
-  </group>
-    <group android:checkableBehavior="single">
-        <item
-                android:id="@+id/navigation_item_1"
-                android:checked="true"
-                android:icon="@drawable/ic_launcher_themes"
-                android:title="HEY!" />
-        <item
-                android:id="@+id/navigation_item_2"
-                android:icon="@drawable/ic_launcher_themes"
-                android:title="WOW" />
+    <group
+        android:checkableBehavior="single"
+        android:id="@+id/navigation_group_home">
+        <item android:id="@+id/navigation_item_home"
+            android:icon="@drawable/ic_home"
+            android:title="Home" />
+        <item android:id="@+id/navigation_item_favorites"
+            android:icon="@drawable/ic_favorite_on"
+            android:title="Favorites" />
+    </group>
+    <group
+        android:checkableBehavior="single"
+        android:id="@+id/navigation_group_roots">
+        <!-- TODO: Replace with dynamically created roots -->
+        <item android:id="@+id/navigation_item_0"
+            android:icon="@drawable/ic_source_internal"
+            android:title="Local storage"
+            android:checked="true" />
+        <item android:id="@+id/navigation_item_1"
+            android:icon="@drawable/ic_source_root_d"
+            android:title="Root directory" />
+        <item android:id="@+id/navigation_item_2"
+            android:icon="@drawable/ic_source_sd_card"
+            android:title="SD card" />
+        <item android:id="@+id/navigation_item_3"
+            android:icon="@drawable/ic_source_usb"
+            android:title="USB storage" />
+        <item android:id="@+id/navigation_item_4"
+              android:icon="@drawable/ic_folder"
+              android:title="Misc. storage" />
+        <item android:id="@+id/navigation_item_5"
+              android:icon="@drawable/ic_source_stache"
+              android:title="Protected storage" />
     </group>
 
-    <group android:checkableBehavior="single">
-        <item
-                android:id="@+id/navigation_item_1"
-                android:checked="true"
-                android:icon="@drawable/ic_launcher_themes"
-                android:title="HEY!" />
-        <item
-                android:id="@+id/navigation_item_2"
-                android:icon="@drawable/ic_launcher_themes"
-                android:title="WOW" />
+    <group
+        android:checkableBehavior="single"
+        android:id="@+id/navigation_group_settings">
+        <item android:id="@+id/navigation_item_manage"
+            android:icon="@drawable/ic_storage_sources"
+            android:title="Manage storage sources" />
+        <item android:id="@+id/navigation_item_settings"
+            android:icon="@drawable/ic_settings"
+            android:title="Settings" />
     </group>
 </menu>
