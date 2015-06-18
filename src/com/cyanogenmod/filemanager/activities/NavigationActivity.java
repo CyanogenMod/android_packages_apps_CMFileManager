@@ -19,10 +19,16 @@ package com.cyanogenmod.filemanager.activities;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
 
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.model.Bookmark;
@@ -40,7 +46,8 @@ import com.cyanogenmod.filemanager.ui.widgets.HomeFragment;
  * {@link Activity#onRestoreInstanceState(Bundle)} are not implemented, and every time
  * the app is killed, is restarted from his initial state.
  */
-public class NavigationActivity extends ActionBarActivity {
+public class NavigationActivity extends ActionBarActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "NavigationActivity"; //$NON-NLS-1$
 
@@ -79,8 +86,21 @@ public class NavigationActivity extends ActionBarActivity {
 
     static String MIME_TYPE_LOCALIZED_NAMES[];
 
+    int[][] color_states = new int[][] {
+            new int[] {android.R.attr.state_checked}, // checked
+            new int[0] // default
+    };
+
+    // TODO: Replace with legitimate colors per item.
+    int[] colors = new int[] {
+            R.color.favorites_primary,
+            Color.BLACK
+    };
+
     public HomeFragment mHomeFragment;
     public Toolbar mToolbar;
+    private DrawerLayout mDrawerLayout;
+    private NavigationView mNavigationDrawer;
     NavFrag nFrag;
 
     /**
@@ -94,6 +114,14 @@ public class NavigationActivity extends ActionBarActivity {
         super.onCreate(state);
         //Set the main layout of the activity
         setContentView(R.layout.navigation);
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mNavigationDrawer = (NavigationView) findViewById(R.id.navigation_view);
+        mNavigationDrawer.setNavigationItemSelectedListener(this);
+        ColorStateList colorStateList = new ColorStateList(color_states, colors);
+        // TODO: Figure out why the following doesn't work correctly...
+        mNavigationDrawer.setItemTextColor(colorStateList);
+        mNavigationDrawer.setItemIconTintList(colorStateList);
 
         //mToolbar = (Toolbar) findViewById(R.id.homepage_toolbar);
         //setSupportActionBar(mToolbar);
@@ -154,6 +182,9 @@ public class NavigationActivity extends ActionBarActivity {
         return super.onKeyUp(keyCode, event);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onBackPressed() {
        /* if (mDrawerLayout.isDrawerOpen(android.view.Gravity.START)) {
@@ -174,6 +205,37 @@ public class NavigationActivity extends ActionBarActivity {
         exit(); */
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean onNavigationItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.navigation_item_home:
+                // TODO: Implement this path
+                if (DEBUG) Log.d(TAG, "onNavigationItemSelected::navigation_item_home");
+                break;
+            case R.id.navigation_item_favorites:
+                // TODO: Implement this path
+                if (DEBUG) Log.d(TAG, "onNavigationItemSelected::navigation_item_favorites");
+                break;
+            case R.id.navigation_item_manage:
+                // TODO: Implement this path
+                if (DEBUG) Log.d(TAG, "onNavigationItemSelected::navigation_item_manage");
+                break;
+            case R.id.navigation_item_settings:
+                // TODO: Implement this path
+                if (DEBUG) Log.d(TAG, "onNavigationItemSelected::navigation_item_settings");
+                break;
+            default:
+                // TODO: Implement this path
+                if (DEBUG) Log.d(TAG, "onNavigationItemSelected::default");
+                break;
+        }
+        menuItem.setChecked(true);
+        mDrawerLayout.closeDrawers();
+        return true;
+    }
 
     /**
      * Method invoked when an action item is clicked.
