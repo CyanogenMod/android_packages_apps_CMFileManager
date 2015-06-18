@@ -30,4 +30,7 @@
 
     <!-- Association items per row -->
     <integer name="associations_items_per_row">3</integer>
+
+    <!-- Navigation drawer group last -->
+    <integer name="navigation_item_order_after_roots">1</integer>
 </resources>
