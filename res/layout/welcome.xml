@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012 The CyanogenMod Project
+<!-- Copyright (C) 2015 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -27,39 +27,51 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="16dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
+            android:background="@color/default_primary"
             android:id="@+id/itemOne">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/welcome_title"
-                android:textSize="28sp"
-                android:id="@+id/titleMessageOne"
-                android:textColor="@android:color/white"/>
-
-            <View
-                android:id="@+id/generic_square"
-                android:layout_width="fill_parent"
+            <ImageView
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_above="@+id/bottomMessageOne"
-                android:layout_below="@+id/titleMessageOne"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/rectangle"/>
+                android:scaleType="centerCrop"
+                android:src="@drawable/fm_header_bg" />
 
-            <TextView
-                android:id="@+id/bottomMessageOne"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/first_message"
-                android:layout_alignParentBottom="true"
-                android:paddingBottom="16dp"
-                android:layout_marginBottom="@dimen/default_row_height"
-                android:textSize="16sp"
-                android:textColor="@android:color/white"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:layout_margin="24dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/welcome_to"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/file"
+                    android:textSize="56sp"
+                    android:textColor="@android:color/white"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/manager"
+                    android:textSize="56sp"
+                    android:textColor="@android:color/white"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/welcome_desc"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"/>
+
+            </LinearLayout>
 
         </RelativeLayout>
 
@@ -74,13 +86,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/second_title"
+                android:id="@+id/titleMessageOne"
                 android:textSize="28sp"
                 android:textColor="@android:color/white"/>
+
+            <View
+                android:id="@+id/generic_square"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/bottomMessageOne"
+                android:layout_below="@+id/titleMessageOne"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/rectangle"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/second_message"
+                android:text="@string/first_message"
+                android:id="@+id/bottomMessageOne"
                 android:layout_alignParentBottom="true"
                 android:paddingBottom="16dp"
                 android:layout_marginBottom="@dimen/default_row_height"
@@ -138,9 +162,9 @@
         <com.cyanogenmod.filemanager.views.CirclePageIndicator
             android:id="@+id/pagination"
             android:layout_height="@dimen/half_row_height"
-            android:layout_width="fill_parent"
+            android:layout_width="40dp"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true" />
+            android:gravity="center_horizontal" android:layout_centerInParent="true"/>
 
         <Button
             android:id="@+id/nextButton"

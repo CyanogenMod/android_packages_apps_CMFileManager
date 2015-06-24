@@ -61,8 +61,7 @@
         <item android:id="@+id/navigation_item_manage"
             android:icon="@drawable/ic_storage_sources"
             android:title="Manage storage sources"
-            android:orderInCategory="@integer/navigation_item_order_after_roots"
-            android:visible="false" /> <!-- hidden until wired up -->
+            android:orderInCategory="@integer/navigation_item_order_after_roots" />
         <item android:id="@+id/navigation_item_settings"
             android:icon="@drawable/ic_settings"
             android:title="Settings"
