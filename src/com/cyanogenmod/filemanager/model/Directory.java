@@ -41,6 +41,8 @@ public class Directory extends FileSystemObject {
      *
      * @param name The name of the object
      * @param parent The parent folder of the object
+     * @param providerPrefix The prefix to file path that represents a specific provider
+     * @param id The id of the object
      * @param user The user proprietary of the object
      * @param group The group proprietary of the object
      * @param permissions The permissions of the object
@@ -48,9 +50,10 @@ public class Directory extends FileSystemObject {
      * @param lastModifiedTime The last time that the object was modified
      * @param lastChangedTime The last time that the object was changed
      */
-    public Directory(String name, String parent, User user, Group group, Permissions permissions,
-            Date lastAccessedTime, Date lastModifiedTime, Date lastChangedTime) {
-        super(name, parent, user, group, permissions, 0L,
+    public Directory(String name, String parent, String providerPrefix, String id, User user,
+            Group group, Permissions permissions, Date lastAccessedTime, Date lastModifiedTime,
+            Date lastChangedTime) {
+        super(name, parent, providerPrefix, id, user, group, permissions, 0L,
                 lastAccessedTime, lastModifiedTime, lastChangedTime);
         setResourceIconId(RESOURCE_FOLDER_DEFAULT);
     }

@@ -33,4 +33,7 @@
 
     <!-- Navigation drawer group last -->
     <integer name="navigation_item_order_after_roots">1</integer>
+
+    <!-- Timeout used for waiting on Storage API to return document list -->
+    <integer name="storageapi_timeout">5000</integer>
 </resources>
