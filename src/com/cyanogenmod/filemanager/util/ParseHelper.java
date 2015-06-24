@@ -360,11 +360,11 @@ public final class ParseHelper {
 
         if (type == RegularFile.UNIX_ID) {
             return new RegularFile(
-                    name, parent, user, group, permissions, size,
+                    name, parent, null, null, user, group, permissions, size,
                     lastAccessedTime, lastModifiedTime, lastChangedTime);
         }
         if (type == Directory.UNIX_ID) {
-            return new Directory(name, parent, user, group, permissions,
+            return new Directory(name, parent, null, null, user, group, permissions,
                     lastAccessedTime, lastModifiedTime, lastChangedTime);
         }
         if (type == Symlink.UNIX_ID) {

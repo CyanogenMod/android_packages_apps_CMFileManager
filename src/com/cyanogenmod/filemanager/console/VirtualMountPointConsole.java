@@ -176,6 +176,8 @@ public abstract class VirtualMountPointConsole extends VirtualConsole {
                 Directory directory = new Directory(
                         dir.getName(),
                         getVirtualStorageDir().getAbsolutePath(),
+                        null,
+                        null,
                         sVirtualIdentity.getUser(),
                         sVirtualIdentity.getGroup(),
                         sVirtualFolderPermissions,
