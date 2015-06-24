@@ -34,6 +34,8 @@ import android.view.MenuItem;
 import com.cyanogenmod.filemanager.FileManagerApplication;
 
 import com.cyanogen.ambient.storage.provider.StorageProviderInfo;
+import com.cyanogen.ambient.storage.provider.StorageProviderInfo.ProviderInfoListResult;
+import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.activities.preferences.SettingsPreferences;
 import com.cyanogenmod.filemanager.console.storageapi.StorageApiConsole;
@@ -43,6 +45,7 @@ import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
 import com.cyanogenmod.filemanager.preferences.Preferences;
 import com.cyanogenmod.filemanager.ui.fragments.HomeFragment;
+import com.cyanogenmod.filemanager.ui.fragments.LoginFragment;
 import com.cyanogenmod.filemanager.ui.fragments.NavigationFragment;
 import com.cyanogenmod.filemanager.util.FileHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
@@ -111,12 +114,15 @@ public class MainActivity extends ActionBarActivity
     /**
      * Fragment types
      */
-    private enum FragmentType {
+    public enum FragmentType {
         // Home fragment
         HOME,
 
         // Navigation fragment
         NAVIGATION,
+
+        // Login
+        LOGIN,
     }
 
     static String MIME_TYPE_LOCALIZED_NAMES[];
@@ -124,6 +130,8 @@ public class MainActivity extends ActionBarActivity
     private Fragment currentFragment;
     private DrawerLayout mDrawerLayout;
     private NavigationDrawerController mNavigationDrawerController;
+
+    private List<StorageProviderInfo> mProviderInfoList;
 
     /**
      * {@inheritDoc}
@@ -176,25 +184,39 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
-    private void setCurrentFragment(FragmentType fragmentType) {
+    public void setCurrentFragment(FragmentType fragmentType) {
         FragmentManager fragmentManager = getSupportFragmentManager();
+        boolean noBackStack = false;
 
         switch (fragmentType) {
+            case HOME:
+                noBackStack = true;
+                currentFragment = HomeFragment.newInstance();
+                break;
             case NAVIGATION:
                 currentFragment = new NavigationFragment();
                 break;
-            case HOME:
+            case LOGIN:
+                currentFragment = LoginFragment.newInstance();
+                break;
             default:
                 // Default to HOME
                 currentFragment = HomeFragment.newInstance();
                 break;
         }
 
-        fragmentManager.beginTransaction()
-                .replace(R.id.navigation_fragment_container, currentFragment)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .addToBackStack(null)
-                .commit();
+        if (noBackStack) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.navigation_fragment_container, currentFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
+        } else {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.navigation_fragment_container, currentFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
     public void addBookmark(Bookmark bookmark) {
@@ -213,6 +235,7 @@ public class MainActivity extends ActionBarActivity
     protected void onNewIntent(Intent intent) {
         //stub
     }
+
 
     /**
      * {@inheritDoc}
@@ -245,8 +268,8 @@ public class MainActivity extends ActionBarActivity
                 if (DEBUG) Log.d(TAG, "onNavigationItemSelected::navigation_item_protected");
                 break;
             case R.id.navigation_item_manage:
-                // TODO: Implement this path
                 if (DEBUG) Log.d(TAG, "onNavigationItemSelected::navigation_item_manage");
+                setCurrentFragment(FragmentType.LOGIN);
                 break;
             case R.id.navigation_item_settings:
                 if (DEBUG) Log.d(TAG, "onNavigationItemSelected::navigation_item_settings");
@@ -284,6 +307,11 @@ public class MainActivity extends ActionBarActivity
         return true;
     }
 
+    public List<StorageProviderInfo> getProviderList() {
+        return mNavigationDrawerController.getProviderList();
+    }
+
+
     /**
      * {@inheritDoc}
      */
@@ -295,6 +323,7 @@ public class MainActivity extends ActionBarActivity
             mNavigationDrawerController.loadNavigationDrawerItems();
             return;
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -416,7 +445,7 @@ public class MainActivity extends ActionBarActivity
     private void showWelcomeMsg() {
         boolean firstUse = Preferences.getSharedPreferences().getBoolean(
                 FileManagerSettings.SETTINGS_FIRST_USE.getId(),
-                ((Boolean)FileManagerSettings.SETTINGS_FIRST_USE.getDefaultValue()).booleanValue());
+                ((Boolean) FileManagerSettings.SETTINGS_FIRST_USE.getDefaultValue()).booleanValue());
 
         //Display the welcome message?
         if (firstUse && FileManagerApplication.hasShellCommands()) {
@@ -430,6 +459,23 @@ public class MainActivity extends ActionBarActivity
             } catch (InvalidClassException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    static final int LOGIN_TO_PROVIDER = 1;
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                FragmentManager fm = getSupportFragmentManager();
+                if (fm.getBackStackEntryCount() > 0) {
+                    fm.popBackStack();
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

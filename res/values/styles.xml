@@ -28,6 +28,17 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="Base.WelcomeTheme" parent="Theme.AppCompat.Light">
+        <item name="android:colorPrimary">@color/material_palette_blue_primary</item>
+        <item name="android:colorPrimaryDark">@color/material_palette_blue_primary_dark</item>
+        <item name="android:colorAccent">@color/material_palette_blue_primary</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="Widget.FileManager.ActionBar" parent="Widget.AppCompat.ActionBar">
         <item name="android:background">@color/material_palette_blue_primary</item>
         <item name="android:theme">@style/ThemeOverlay.FileManager.ActionBar</item>

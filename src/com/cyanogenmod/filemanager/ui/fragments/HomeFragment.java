@@ -24,38 +24,33 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.cyanogenmod.filemanager.R;
+import com.cyanogenmod.filemanager.activities.MainActivity;
+import com.cyanogenmod.filemanager.activities.MainActivity.FragmentType;
 import com.cyanogenmod.filemanager.activities.SearchActivity;
 import com.cyanogenmod.filemanager.util.FileHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper;
+
 import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.APP;
-import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.AUDIO;
-import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.DOCUMENT;
-import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.IMAGE;
-import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.NONE;
-import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.VIDEO;
+import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.*;
 
 public class HomeFragment extends Fragment {
 
     View mView;
     Toolbar mToolBar;
-    private android.widget.ArrayAdapter<MimeTypeHelper.MimeTypeCategory> mEasyModeAdapter;
+    private android.widget.ArrayAdapter<MimeTypeCategory> mEasyModeAdapter;
     private static final List<MimeTypeCategory> EASY_MODE_LIST = new ArrayList<MimeTypeCategory>() {
         {
             add(NONE);
@@ -66,10 +61,10 @@ public class HomeFragment extends Fragment {
             add(APP);
         }
     };
-    static java.util.Map<MimeTypeHelper.MimeTypeCategory, Drawable> EASY_MODE_ICONS = new
-            java.util.HashMap<MimeTypeHelper.MimeTypeCategory, Drawable>();
+    static java.util.Map<MimeTypeCategory, Drawable> EASY_MODE_ICONS = new
+            java.util.HashMap<MimeTypeCategory, Drawable>();
     static String MIME_TYPE_LOCALIZED_NAMES[];
-    private View.OnClickListener mEasyModeItemClickListener = new View.OnClickListener() {
+    private OnClickListener mEasyModeItemClickListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
             Integer position = (Integer) view.getTag();
@@ -101,6 +96,25 @@ public class HomeFragment extends Fragment {
         mLayoutInflater = inflater;
 
         mView = inflater.inflate(R.layout.home_fragment, container, false);
+
+        final CardView cV = (CardView)mView.findViewById(R.id.add_provider);
+        cV.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).setCurrentFragment(FragmentType.LOGIN);
+            }
+        });
+
+        Button dismiss =(Button) mView.findViewById(R.id.dismiss_card);
+        dismiss.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cV.setVisibility(View.GONE);
+                // TODO: Save that the card has been dismissed
+            }
+        });
+
+
         return mView;
     }
 
@@ -109,9 +123,9 @@ public class HomeFragment extends Fragment {
         super.onStart();
 
         mToolBar = (Toolbar) mView.findViewById(
-                com.cyanogenmod.filemanager.R.id.material_toolbar);
+                R.id.material_toolbar);
         ((ActionBarActivity) getActivity()).setSupportActionBar(mToolBar);
-        ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         initEasyModePlus();
     }
@@ -144,18 +158,16 @@ public class HomeFragment extends Fragment {
         EASY_MODE_ICONS.put(MimeTypeHelper.MimeTypeCategory.APP, getResources().getDrawable(
                 R.drawable.ic_em_application));
 
-
         GridView gridview = (GridView) mView.findViewById(R.id.easy_modeView);
 
-        mEasyModeAdapter = new android.widget.ArrayAdapter<com.cyanogenmod.filemanager.util
-                .MimeTypeHelper.MimeTypeCategory>(getActivity(), R.layout
+        mEasyModeAdapter = new android.widget.ArrayAdapter<MimeTypeCategory>(getActivity(), R.layout
                 .navigation_view_simple_item) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 convertView = (convertView == null) ?mLayoutInflater.inflate(
                         R.layout
                                 .navigation_view_simple_item, parent, false) : convertView;
-                MimeTypeHelper.MimeTypeCategory item = getItem(position);
+                MimeTypeCategory item = getItem(position);
                 String typeTitle = MIME_TYPE_LOCALIZED_NAMES[item.ordinal()];
                 TextView typeTitleTV = (TextView) convertView
                         .findViewById(R.id.navigation_view_item_name);
@@ -198,7 +210,7 @@ public class HomeFragment extends Fragment {
 
         } else {
             ArrayList<MimeTypeCategory> searchCategories = new ArrayList<MimeTypeCategory>();
-            MimeTypeHelper.MimeTypeCategory selectedCategory = EASY_MODE_LIST.get(position);
+            MimeTypeCategory selectedCategory = EASY_MODE_LIST.get(position);
             searchCategories.add(selectedCategory);
             // a one off case where we implicitly want to also search for TEXT mimetypes when the
             // DOCUMENTS category is selected
