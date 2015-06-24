@@ -521,41 +521,79 @@ public final class CopyMoveActionPolicy extends ActionsPolicy {
         };
         final BackgroundAsyncTask task = new BackgroundAsyncTask(ctx, callable);
 
-        // Prior to execute, we need to check if some of the files will be overwritten
-        List<FileSystemObject> curFiles = null;
-        try {
-            curFiles = CommandHelper.listFiles(ctx, destination, null);
-        } catch (Exception e) {
-            Log.e(TAG, "Failed to get destiniation directory contents. Error=" + e);
-        }
-        if (curFiles != null) {
-            // Is necessary to ask the user?
-            if (isOverwriteNeeded(files, curFiles)) {
-                //Show a dialog asking the user for overwrite the files
-                AlertDialog dialog =
-                        DialogHelper.createTwoButtonsQuestionDialog(
-                                ctx,
-                                android.R.string.cancel,
-                                R.string.overwrite,
-                                R.string.confirm_overwrite,
-                                ctx.getString(R.string.msgs_overwrite_files),
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface alertDialog, int which) {
-                                        // NEGATIVE (overwrite)  POSITIVE (cancel)
-                                        if (which == DialogInterface.BUTTON_NEGATIVE) {
-                                            // Execute background task
-                                            task.execute(task);
-                                        }
-                                    }
-                               });
-                DialogHelper.delegateDialogShow(ctx, dialog);
-                return;
-            }
-        }
+        BackgroundCallable callableCurFiles = new BackgroundCallable() {
+            // Prior to execute, we need to check if some of the files will be overwritten
+            List<FileSystemObject> curFiles = null;
 
-        // Execute background task
-        task.execute(task);
+            @Override
+            public int getDialogIcon() {
+                return 0;
+            }
+
+            @Override
+            public int getDialogTitle() {
+                return operation.equals(COPY_MOVE_OPERATION.MOVE)
+                        || operation.equals(COPY_MOVE_OPERATION.RENAME) ?
+                        R.string.waiting_dialog_moving_title :
+                        R.string.waiting_dialog_copying_title;
+            }
+
+            @Override
+            public boolean isDialogCancellable() {
+                return false;
+            }
+
+            @Override
+            public Spanned requestProgress() {
+                return null;
+            }
+
+            @Override
+            public void doInBackground(Object... params) throws Throwable {
+                try {
+                    curFiles = CommandHelper.listFiles(ctx, destination, null);
+                    Log.v("RAJ", "getting cur files!: " + (curFiles == null));
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to get destination directory contents. Error=" + e);
+                }
+            }
+
+            @Override
+            public void onSuccess() {
+                // Is necessary to ask the user?
+                if (curFiles != null && isOverwriteNeeded(files, curFiles)) {
+                    //Show a dialog asking the user for overwrite the files
+                    AlertDialog dialog =
+                            DialogHelper.createTwoButtonsQuestionDialog(
+                                    ctx,
+                                    android.R.string.cancel,
+                                    R.string.overwrite,
+                                    R.string.confirm_overwrite,
+                                    ctx.getString(R.string.msgs_overwrite_files),
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface alertDialog,
+                                                int which) {
+                                            // NEGATIVE (overwrite)  POSITIVE (cancel)
+                                            if (which == DialogInterface.BUTTON_NEGATIVE) {
+                                                // Execute background task
+                                                task.execute(task);
+                                            }
+                                        }
+                                    });
+                    DialogHelper.delegateDialogShow(ctx, dialog);
+                    return;
+                } else {
+                    // Execute background task
+                    task.execute(task);
+                }
+            }
+
+            @Override
+            public void onCancel() { /*NO-OP*/ }
+        };
+        BackgroundAsyncTask curFilesTask = new BackgroundAsyncTask(ctx, callableCurFiles);
+        curFilesTask.execute(curFilesTask);
     }
 
     /**
