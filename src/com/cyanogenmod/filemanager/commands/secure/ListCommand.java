@@ -143,6 +143,7 @@ public class ListCommand extends Program implements ListExecutable {
                     fso = new Directory(
                             virtualMountPoint.getName(),
                             getConsole().getVirtualMountPoint().getParent(),
+                            null,
                             fso.getUser(), fso.getGroup(), fso.getPermissions(),
                             fso.getLastAccessedTime(),
                             fso.getLastModifiedTime(),

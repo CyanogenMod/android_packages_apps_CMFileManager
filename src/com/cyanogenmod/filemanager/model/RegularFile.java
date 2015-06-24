@@ -36,6 +36,7 @@ public class RegularFile extends FileSystemObject {
      *
      * @param name The name of the object
      * @param parent The parent folder of the object
+     * @param providerPrefix The prefix to file path that represents a specific provider
      * @param user The user proprietary of the object
      * @param group The group proprietary of the object
      * @param permissions The permissions of the object
@@ -44,10 +45,10 @@ public class RegularFile extends FileSystemObject {
      * @param lastModifiedTime The last time that the object was modified
      * @param lastChangedTime The last time that the object was changed
      */
-    public RegularFile(String name, String parent, User user, Group group,
-            Permissions permissions, long size,
-            Date lastAccessedTime, Date lastModifiedTime, Date lastChangedTime) {
-        super(name, parent, user, group, permissions, size,
+    public RegularFile(String name, String parent, String providerPrefix, User user, Group group,
+            Permissions permissions, long size, Date lastAccessedTime, Date lastModifiedTime,
+            Date lastChangedTime) {
+        super(name, parent, providerPrefix, user, group, permissions, size,
                 lastAccessedTime, lastModifiedTime, lastChangedTime);
     }
 

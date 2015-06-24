@@ -24,6 +24,8 @@ import android.system.OsConstants;
 import android.text.format.DateUtils;
 import android.util.Log;
 
+import com.cyanogen.ambient.storage.StorageApi;
+import com.cyanogen.ambient.storage.StorageApi.Document;
 import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.commands.SyncResultExecutable;
@@ -1080,6 +1082,7 @@ public final class FileHelper {
                     new Directory(
                             file.getName(),
                             file.getParent(),
+                            null,
                             user, group, perm,
                             lastModified, lastModified, lastModified); // The only date we have
             }
@@ -1089,9 +1092,66 @@ public final class FileHelper {
                 new RegularFile(
                         file.getName(),
                         file.getParent(),
+                        null,
                         user, group, perm,
                         file.length(),
                         lastModified, lastModified, lastModified); // The only date we have
+        } catch (Exception e) {
+            Log.e(TAG, "Exception retrieving the fso", e); //$NON-NLS-1$
+        }
+        return null;
+    }
+
+    /**
+     * Method that creates a {@link FileSystemObject} from a {@link Document}
+     *
+     * @param document The file or folder reference
+     * @param providerPrefix The prefix to file path that represents a specific provider
+     * @return FileSystemObject The file system object reference
+     */
+    public static FileSystemObject createFileSystemObject(Document document,
+            String providerPrefix) {
+        try {
+            // The user and group name of the files. Use the defaults one for sdcards
+            final String USER = "root"; //$NON-NLS-1$
+            final String GROUP = "sdcard_r"; //$NON-NLS-1$
+
+            // The user and group name of the files. In ChRoot, aosp give restrict access to
+            // this user and group. This applies for permission also. This has no really much
+            // interest if we not allow to change the permissions
+            AID userAID = AIDHelper.getAIDFromName(USER);
+            AID groupAID = AIDHelper.getAIDFromName(GROUP);
+            User user = new User(userAID.getId(), userAID.getName());
+            Group group = new Group(groupAID.getId(), groupAID.getName());
+            Permissions perm = document.isDir()
+                    ? Permissions.createDefaultFolderPermissions()
+                    : Permissions.createDefaultFilePermissions();
+
+            // Build a directory?
+            Date lastModified = new Date(document.getModified());
+            if (document.isDir()) {
+                return
+                        new Directory(
+                                // TODO: Change from path to name
+                                document.getPath(),
+                                // TODO: Add parent
+                                null, //document.getParent(),
+                                providerPrefix,
+                                user, group, perm,
+                                lastModified, lastModified, lastModified); // The only date we have
+            }
+
+            // Build a regular file
+            return
+                    new RegularFile(
+                            // TODO: Change from path to name
+                            document.getPath(),
+                            // TODO: Add parent
+                            null, //document.getParent(),
+                            providerPrefix,
+                            user, group, perm,
+                            document.getBytes(),
+                            lastModified, lastModified, lastModified); // The only date we have
         } catch (Exception e) {
             Log.e(TAG, "Exception retrieving the fso", e); //$NON-NLS-1$
         }
