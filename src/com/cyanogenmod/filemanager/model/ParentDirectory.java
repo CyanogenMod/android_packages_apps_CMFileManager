@@ -32,7 +32,7 @@ public class ParentDirectory extends Directory {
      * @param parent The parent folder of the object
      */
     public ParentDirectory(String parent) {
-        super(FileHelper.PARENT_DIRECTORY, parent, null, null, null, null, null, null);
+        super(FileHelper.PARENT_DIRECTORY, parent, null, null, null, null, null, null, null, null);
     }
 
     /**

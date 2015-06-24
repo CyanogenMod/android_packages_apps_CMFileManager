@@ -18,6 +18,7 @@ package com.cyanogenmod.filemanager.model;
 
 import android.content.ContentResolver;
 import android.net.Uri;
+import android.text.TextUtils;
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.util.FileHelper;
 
@@ -43,6 +44,8 @@ public abstract class FileSystemObject implements Serializable, Comparable<FileS
     private int mResourceIconId;
     private String mName;
     private String mParent;
+    private String mProviderPrefix;
+    private String mId;
     private User mUser;
     private Group mGroup;
     private Permissions mPermissions;
@@ -58,6 +61,8 @@ public abstract class FileSystemObject implements Serializable, Comparable<FileS
      *
      * @param name The name of the object
      * @param parent The parent folder of the object
+     * @param providerPrefix The prefix to file path that represents a specific provider
+     * @param id The id of the object
      * @param user The user proprietary of the object
      * @param group The group proprietary of the object
      * @param permissions The permissions of the object
@@ -66,12 +71,14 @@ public abstract class FileSystemObject implements Serializable, Comparable<FileS
      * @param lastModifiedTime The last time that the object was modified
      * @param lastChangedTime The last time that the object was changed
      */
-    public FileSystemObject(String name, String parent, User user, Group group,
-            Permissions permissions, long size,
-            Date lastAccessedTime, Date lastModifiedTime, Date lastChangedTime) {
+    public FileSystemObject(String name, String parent, String providerPrefix, String id, User user,
+            Group group, Permissions permissions, long size, Date lastAccessedTime,
+            Date lastModifiedTime, Date lastChangedTime) {
         super();
         this.mName = name;
         this.mParent = parent;
+        this.mProviderPrefix = providerPrefix;
+        this.mId = id;
         this.mUser = user;
         this.mGroup = group;
         this.mPermissions = permissions;
@@ -125,6 +132,42 @@ public abstract class FileSystemObject implements Serializable, Comparable<FileS
      */
     public void setParent(String parent) {
         this.mParent = parent;
+    }
+
+    /**
+     * Method that returns the providerPrefix of the object.
+     *
+     * @return String The providerPrefix of the object
+     */
+    public String getProviderPrefix() {
+        return this.mProviderPrefix;
+    }
+
+    /**
+     * Method that sets the providerPrefix of the object.
+     *
+     * @param providerPrefix The providerPrefix of the object
+     */
+    public void setProviderPrefix(String providerPrefix) {
+        this.mProviderPrefix = providerPrefix;
+    }
+
+    /**
+     * Method that returns the id of the object.
+     *
+     * @return String The id of the object
+     */
+    public String getId() {
+        return this.mId;
+    }
+
+    /**
+     * Method that sets the id of the object.
+     *
+     * @param id The id of the object
+     */
+    public void setId(String id) {
+        this.mId = id;
     }
 
     /**
@@ -326,15 +369,19 @@ public abstract class FileSystemObject implements Serializable, Comparable<FileS
      * @return String The full path of the file system object
      */
     public String getFullPath() {
-        if (FileHelper.isRootDirectory(this)) {
-            return FileHelper.ROOT_DIRECTORY;
-        } else if (FileHelper.isParentRootDirectory(this)) {
-            if (this.mParent == null) {
-                return FileHelper.ROOT_DIRECTORY + this.mName;
+        if (TextUtils.isEmpty(mProviderPrefix)) {
+            if (FileHelper.isRootDirectory(this)) {
+                return FileHelper.ROOT_DIRECTORY;
+            } else if (FileHelper.isParentRootDirectory(this)) {
+                if (this.mParent == null) {
+                    return FileHelper.ROOT_DIRECTORY + this.mName;
+                }
+                return this.mParent + this.mName;
             }
-            return this.mParent + this.mName;
+            return this.mParent + File.separator + this.mName;
+        } else {
+            return mProviderPrefix + mId;
         }
-        return this.mParent + File.separator + this.mName;
     }
 
     /**

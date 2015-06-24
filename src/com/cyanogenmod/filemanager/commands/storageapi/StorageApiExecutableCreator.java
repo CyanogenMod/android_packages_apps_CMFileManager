@@ -225,8 +225,7 @@ public class StorageApiExecutableCreator implements ExecutableCreator {
     @Override
     public ListExecutable createListExecutable(String src)
             throws CommandNotFoundException {
-        throw new CommandNotFoundException("Not implemented"); //$NON-NLS-1$
-        //return new ListCommand(src, LIST_MODE.DIRECTORY);
+        return new ListCommand(mConsole, src, LIST_MODE.DIRECTORY);
     }
 
     /**
