@@ -35,6 +35,11 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 
+import com.cyanogen.ambient.common.api.PendingResult;
+import com.cyanogen.ambient.common.api.ResultCallback;
+import com.cyanogen.ambient.storage.StorageApi;
+import com.cyanogen.ambient.storage.provider.StorageProviderInfo;
+import com.cyanogen.ambient.storage.provider.StorageProviderInfo.ProviderInfoListResult;
 import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.model.Bookmark;
@@ -42,6 +47,7 @@ import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
 import com.cyanogenmod.filemanager.preferences.Preferences;
 import com.cyanogenmod.filemanager.ui.fragments.HomeFragment;
+import com.cyanogenmod.filemanager.ui.fragments.LoginFragment;
 import com.cyanogenmod.filemanager.ui.fragments.NavigationFragment;
 import com.cyanogenmod.filemanager.util.FileHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
@@ -102,12 +108,15 @@ public class MainActivity extends ActionBarActivity
     /**
      * Fragment types
      */
-    private enum FragmentType {
+    public enum FragmentType {
         // Home fragment
         HOME,
 
         // Navigation fragment
         NAVIGATION,
+
+        // Login
+        LOGIN,
     }
 
     static String MIME_TYPE_LOCALIZED_NAMES[];
@@ -128,6 +137,8 @@ public class MainActivity extends ActionBarActivity
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationDrawer;
 
+    private List<StorageProviderInfo> mProviderInfoList;
+
     /**
      * {@inheritDoc}
      */
@@ -137,6 +148,8 @@ public class MainActivity extends ActionBarActivity
         super.onCreate(state);
         //Set the main layout of the activity
         setContentView(R.layout.navigation);
+
+        getProviders();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigationDrawer = (NavigationView) findViewById(R.id.navigation_view);
@@ -187,15 +200,20 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
-    private void setCurrentFragment(FragmentType fragmentType) {
+    public void setCurrentFragment(FragmentType fragmentType) {
         FragmentManager fragmentManager = getSupportFragmentManager();
+        boolean noBackStack = false;
 
         switch (fragmentType) {
             case HOME:
+                noBackStack = true;
                 currentFragment = HomeFragment.newInstance();
                 break;
             case NAVIGATION:
                 currentFragment = new NavigationFragment();
+                break;
+            case LOGIN:
+                currentFragment = LoginFragment.newInstance();
                 break;
             default:
                 // Default to HOME
@@ -203,11 +221,18 @@ public class MainActivity extends ActionBarActivity
                 break;
         }
 
-        fragmentManager.beginTransaction()
-                .replace(R.id.navigation_fragment_container, currentFragment)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .addToBackStack(null)
-                .commit();
+        if (noBackStack) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.navigation_fragment_container, currentFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
+        } else {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.navigation_fragment_container, currentFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
     public void addBookmark(Bookmark bookmark) {
@@ -251,24 +276,31 @@ public class MainActivity extends ActionBarActivity
      * {@inheritDoc}
      */
     @Override
-    public void onBackPressed() {
-       /* if (mDrawerLayout.isDrawerOpen(android.view.Gravity.START)) {
-            mDrawerLayout.closeDrawer(android.view.Gravity.START);
-            return;
-        }
-        if (checkBackAction()) {
-            performHideEasyMode();
-            return;
+    public void onBackPressed()
+    {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
         } else {
-            if (mNeedsEasyMode && !isEasyModeVisible()) {
-                performShowEasyMode();
-                return;
-            }
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int itemId = item.getItemId();
+        switch (itemId) {
+            case android.R.id.home:
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                    getSupportFragmentManager().popBackStack();
+                }
+                break;
+
         }
 
-        // An exit event has occurred, force the destroy the consoles
-        exit(); */
+        return true;
     }
+
 
     /**
      * {@inheritDoc}
@@ -425,5 +457,41 @@ public class MainActivity extends ActionBarActivity
             } catch (Exception e) {/**NON BLOCK**/}
         }
     }
+
+    static final int LOGIN_TO_PROVIDER = 1;
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // update providers
+        getProviders();
+
+        // return to fragment
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+    }
+
+    private void getProviders() {
+        StorageApi storageApi = StorageApi.newInstance(this);
+        PendingResult<ProviderInfoListResult> pendingResult =
+                storageApi.fetchProviders();
+        pendingResult.setResultCallback(new ResultCallback<ProviderInfoListResult>() {
+            @Override
+            public void onResult(ProviderInfoListResult providerInfoListResult) {
+                List<StorageProviderInfo> providerInfoList =
+                        providerInfoListResult.getProviderInfoList();
+                if (providerInfoList == null) {
+                    Log.e(TAG, "no results retunred");
+                    return;
+                }
+                mProviderInfoList = providerInfoList;
+
+            }
+
+        });
+    }
+
+    public List<StorageProviderInfo> getProviderList() { return mProviderInfoList; };
 
 }
