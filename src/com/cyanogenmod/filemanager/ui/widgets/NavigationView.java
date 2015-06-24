@@ -41,6 +41,7 @@ import com.cyanogenmod.filemanager.adapters.FileSystemObjectAdapter.OnSelectionC
 import com.cyanogenmod.filemanager.console.CancelledOperationException;
 import com.cyanogenmod.filemanager.console.ConsoleAllocException;
 import com.cyanogenmod.filemanager.console.VirtualMountPointConsole;
+import com.cyanogenmod.filemanager.console.storageapi.StorageApiConsole;
 import com.cyanogenmod.filemanager.listeners.OnHistoryListener;
 import com.cyanogenmod.filemanager.listeners.OnRequestRefreshListener;
 import com.cyanogenmod.filemanager.listeners.OnSelectionListener;
@@ -1419,7 +1420,8 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
         if (!this.mChRooted) return newDir;
 
         // Check if the path is owned by one of the storage volumes
-        if (!StorageHelper.isPathInStorageVolume(newDir)) {
+        if (StorageApiConsole.getStorageApiConsoleForPath(newDir) == null &&
+                !StorageHelper.isPathInStorageVolume(newDir)) {
             StorageVolume[] volumes = StorageHelper.getStorageVolumes(getContext(), false);
             if (volumes != null && volumes.length > 0) {
                 return volumes[0].getPath();
