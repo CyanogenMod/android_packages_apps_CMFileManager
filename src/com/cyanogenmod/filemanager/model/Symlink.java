@@ -52,7 +52,7 @@ public class Symlink extends FileSystemObject {
     public Symlink(String name, String link, String parent, User user,
             Group group, Permissions permissions,
             Date lastAccessedTime, Date lastModifiedTime, Date lastChangedTime) {
-        super(name, parent, user, group, permissions, 0L,
+        super(name, parent, null, null, user, group, permissions, 0L,
                 lastAccessedTime, lastModifiedTime, lastChangedTime);
         this.mLink = link;
     }

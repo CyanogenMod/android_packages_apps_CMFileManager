@@ -255,6 +255,7 @@ public class MainActivity extends ActionBarActivity
         switch (id) {
             case R.id.navigation_item_home:
                 if (DEBUG) Log.d(TAG, "onNavigationItemSelected::navigation_item_home");
+                getIntent().putExtra(EXTRA_NAVIGATE_TO, FileHelper.ROOT_DIRECTORY);
                 setCurrentFragment(FragmentType.HOME);
                 break;
             case R.id.navigation_item_favorites:
@@ -263,6 +264,7 @@ public class MainActivity extends ActionBarActivity
                 break;
             case R.id.navigation_item_internal:
                 if (DEBUG) Log.d(TAG, "onNavigationItemSelected::navigation_item_favorites");
+                getIntent().putExtra(EXTRA_NAVIGATE_TO, FileHelper.ROOT_DIRECTORY);
                 setCurrentFragment(FragmentType.NAVIGATION);
                 break;
             case R.id.navigation_item_root_d:
@@ -290,19 +292,14 @@ public class MainActivity extends ActionBarActivity
                 openSettings();
                 break;
             default:
-                if (DEBUG) {
-                    Log.d(TAG, String.format("onNavigationItemSelected::default (%d)", id));
-
-                    // Check for item id in remote roots
-                    StorageProviderInfo providerInfo = mProvidersMap.get(id);
-                    Log.v(TAG, "providerInfo " + providerInfo.hashCode());
-                    Log.v(TAG, "providerInfo.package " + providerInfo.getPackage());
-                    Log.v(TAG, "providerInfo.authority " + providerInfo.getAuthority());
-                    Log.v(TAG, "providerInfo.needsAuth " + providerInfo.needAuthentication());
-                    Log.v(TAG, "providerInfo.title " + providerInfo.getTitle());
-                    Log.v(TAG, "providerInfo.summary " + providerInfo.getSummary());
-                    Log.v(TAG, "providerInfo.root " + providerInfo.getRootPath());
-                }
+                if (DEBUG) Log.d(TAG, String.format("onNavigationItemSelected::default (%d)", id));
+                // Check for item id in remote roots
+                StorageProviderInfo providerInfo = mProvidersMap.get(id);
+                getIntent().putExtra(EXTRA_NAVIGATE_TO,
+                        StorageApiConsole.constructStorageApiFilePathFromProvider(
+                                providerInfo.getRootDocumentId(),
+                                StorageApiConsole.getHashCodeFromProvider(providerInfo)));
+                setCurrentFragment(FragmentType.NAVIGATION);
                 break;
         }
         mDrawerLayout.closeDrawers();
@@ -317,31 +314,24 @@ public class MainActivity extends ActionBarActivity
             Log.e(TAG, "no results returned");
             return;
         }
-        Log.v(TAG, "got result(s)! " + providerInfoList.size());
+        if (DEBUG) Log.v(TAG, "got result(s)! " + providerInfoList.size());
         for (StorageProviderInfo providerInfo : providerInfoList) {
             StorageApi sapi = StorageApi.newInstance(MainActivity.this);
-            sapi.getMetadata(providerInfo, providerInfo.getRootPath(), true);
-            if (DEBUG) {
-                Log.v(TAG, "providerInfo " + providerInfo.hashCode());
-                Log.v(TAG, "providerInfo.package " + providerInfo.getPackage());
-                Log.v(TAG, "providerInfo.authority " + providerInfo.getAuthority());
-                Log.v(TAG, "providerInfo.needsAuth " + providerInfo.needAuthentication());
-                Log.v(TAG, "providerInfo.title " + providerInfo.getTitle());
-                Log.v(TAG, "providerInfo.summary " + providerInfo.getSummary());
-                Log.v(TAG, "providerInfo.root " + providerInfo.getRootPath());
-            }
-            final String rootTitle = String.format("%s %s", providerInfo.getTitle(),
-                    providerInfo.getSummary());
 
             // Add provider to map
-            mProvidersMap.put(rootTitle.hashCode(), providerInfo);
+            int providerHashCode = StorageApiConsole.getHashCodeFromProvider(providerInfo);
+            mProvidersMap.put(providerHashCode, providerInfo);
 
             // Verify console exists, or create one
             StorageApiConsole.registerStorageApiConsole(this, sapi, providerInfo);
 
+            // Concatenate title and summary
+            // TODO: Change to two line menu items
+            String title = providerInfo.getTitle() + " " + providerInfo.getSummary();
+
             // Add to navigation drawer
             mNavigationDrawer.getMenu()
-                    .add(R.id.navigation_group_roots, rootTitle.hashCode(), 0, rootTitle)
+                    .add(R.id.navigation_group_roots, providerHashCode, 0, title)
                     .setIcon(R.drawable.ic_fso_folder);
         }
     }

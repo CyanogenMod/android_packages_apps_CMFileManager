@@ -32,7 +32,18 @@ public class ParentDirectory extends Directory {
      * @param parent The parent folder of the object
      */
     public ParentDirectory(String parent) {
-        super(FileHelper.PARENT_DIRECTORY, parent, null, null, null, null, null, null);
+        super(FileHelper.PARENT_DIRECTORY, parent, null, null, null, null, null, null, null, null);
+    }
+
+    /**
+     * Constructor of <code>ParentDirectory</code>.
+     *
+     * @param parent The parent folder of the object
+     * @param providerPrefix The prefix to file path that represents a specific provider
+     */
+    public ParentDirectory(String parent, String providerPrefix) {
+        super(FileHelper.PARENT_DIRECTORY, parent, providerPrefix, parent, null, null, null, null,
+                null, null);
     }
 
     /**

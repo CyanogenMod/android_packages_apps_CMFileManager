@@ -22,6 +22,7 @@ import android.os.storage.StorageVolume;
 
 import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
+import com.cyanogenmod.filemanager.console.storageapi.StorageApiConsole;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -128,6 +129,10 @@ public final class StorageHelper {
      * @return boolean If the path is in a volume storage
      */
     public static boolean isPathInStorageVolume(String path) {
+        if (StorageApiConsole.getStorageApiConsoleForPath(path) != null) {
+            return true;
+        }
+
         String fso = FileHelper.getAbsPath(path);
         StorageVolume[] volumes =
                 getStorageVolumes(FileManagerApplication.getInstance().getApplicationContext(),
