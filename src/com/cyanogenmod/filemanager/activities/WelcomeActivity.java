@@ -17,16 +17,16 @@
 package com.cyanogenmod.filemanager.activities;
 
 import android.app.Activity;
-import com.cyanogenmod.filemanager.adapters.WelcomeAdapter;
-import com.cyanogenmod.filemanager.R;
 import android.support.v4.view.ViewPager;
-import com.cyanogenmod.filemanager.views.PageIndicator;
-import com.cyanogenmod.filemanager.views.CirclePageIndicator;
-import android.widget.Button;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.util.Log;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.widget.Button;
+
+import com.cyanogenmod.filemanager.R;
+import com.cyanogenmod.filemanager.adapters.WelcomeAdapter;
+import com.cyanogenmod.filemanager.views.CirclePageIndicator;
+import com.cyanogenmod.filemanager.views.PageIndicator;
 
 
 /**
@@ -53,7 +53,7 @@ public class WelcomeActivity extends Activity {
         //Set the main layout of the activity
         setContentView(R.layout.welcome);
         // Hide action bar
-        getActionBar().hide();
+        //getActionBar().hide();
 
         adapter = new WelcomeAdapter();
         vp = (ViewPager) findViewById(R.id.intro_pager);
