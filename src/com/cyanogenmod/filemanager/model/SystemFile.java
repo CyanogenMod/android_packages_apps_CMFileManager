@@ -47,7 +47,7 @@ public abstract class SystemFile extends FileSystemObject {
             String name, String parent, User user, Group group,
             Permissions permissions, long size,
             Date lastAccessedTime, Date lastModifiedTime, Date lastChangedTime) {
-        super(name, parent, user, group, permissions, size,
+        super(name, parent, null, user, group, permissions, size,
                 lastAccessedTime, lastModifiedTime, lastChangedTime);
     }
 }

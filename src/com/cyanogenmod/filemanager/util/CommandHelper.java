@@ -22,6 +22,7 @@ import android.media.MediaScannerConnection;
 import android.provider.MediaStore.Files;
 
 import android.provider.MediaStore;
+import com.cyanogen.ambient.storage.StorageApi;
 import com.cyanogenmod.filemanager.commands.AsyncResultListener;
 import com.cyanogenmod.filemanager.commands.ChangeOwnerExecutable;
 import com.cyanogenmod.filemanager.commands.ChangePermissionsExecutable;
@@ -71,6 +72,7 @@ import com.cyanogenmod.filemanager.console.OperationTimeoutException;
 import com.cyanogenmod.filemanager.console.ReadOnlyFilesystemException;
 import com.cyanogenmod.filemanager.console.VirtualMountPointConsole;
 import com.cyanogenmod.filemanager.console.secure.SecureConsole;
+import com.cyanogenmod.filemanager.console.storageapi.StorageApiConsole;
 import com.cyanogenmod.filemanager.model.DiskUsage;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.model.FolderUsage;
@@ -2016,8 +2018,14 @@ public final class CommandHelper {
             throws FileNotFoundException, IOException, InvalidCommandDefinitionException,
             ConsoleAllocException, InsufficientPermissionsException {
 
+        // Check if the path belongs to a storage provider
+        Console c = StorageApiConsole.getStorageApiConsoleForPath(src);
+        if (c != null) {
+            return c;
+        }
+
         // Check if the path belongs to a virtual mount point
-        Console c = VirtualMountPointConsole.getVirtualConsoleForPath(src);
+        c = VirtualMountPointConsole.getVirtualConsoleForPath(src);
         if (c != null) {
             return c;
         }
