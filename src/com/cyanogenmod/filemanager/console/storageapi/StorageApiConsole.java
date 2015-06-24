@@ -53,8 +53,8 @@ public class StorageApiConsole extends VirtualConsole {
 
     private static List<StorageApiConsole> sStorageApiConsoles;
 
-    //private final StorageApi mStorageApi;
-    //private final StorageProviderInfo mProviderInfo;
+    private final StorageApi mStorageApi;
+    private final StorageProviderInfo mProviderInfo;
     private final int mBufferSize;
     private Program mActiveProgram;
 
