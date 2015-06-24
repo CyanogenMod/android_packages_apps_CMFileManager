@@ -39,6 +39,9 @@ import com.cyanogen.ambient.common.api.PendingResult;
 import com.cyanogen.ambient.common.api.ResultCallback;
 import com.cyanogen.ambient.storage.StorageApi;
 import com.cyanogen.ambient.storage.provider.StorageProviderInfo;
+
+import com.cyanogen.ambient.storage.provider.StorageProviderInfo.ProviderInfoListResult;
+import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.activities.preferences.SettingsPreferences;
 import com.cyanogenmod.filemanager.console.ConsoleHolder;
@@ -48,6 +51,7 @@ import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
 import com.cyanogenmod.filemanager.preferences.Preferences;
 import com.cyanogenmod.filemanager.ui.fragments.HomeFragment;
+import com.cyanogenmod.filemanager.ui.fragments.LoginFragment;
 import com.cyanogenmod.filemanager.ui.fragments.NavigationFragment;
 import com.cyanogenmod.filemanager.util.FileHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
@@ -117,12 +121,15 @@ public class MainActivity extends ActionBarActivity
     /**
      * Fragment types
      */
-    private enum FragmentType {
+    public enum FragmentType {
         // Home fragment
         HOME,
 
         // Navigation fragment
         NAVIGATION,
+
+        // Login
+        LOGIN,
     }
 
     static String MIME_TYPE_LOCALIZED_NAMES[];
@@ -144,6 +151,8 @@ public class MainActivity extends ActionBarActivity
     private NavigationView mNavigationDrawer;
     private Map<Integer, StorageProviderInfo> mProvidersMap;
 
+    private List<StorageProviderInfo> mProviderInfoList;
+
     /**
      * {@inheritDoc}
      */
@@ -153,6 +162,8 @@ public class MainActivity extends ActionBarActivity
         super.onCreate(state);
         //Set the main layout of the activity
         setContentView(R.layout.navigation);
+
+        getProviders();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigationDrawer = (NavigationView) findViewById(R.id.navigation_view);
@@ -207,25 +218,39 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
-    private void setCurrentFragment(FragmentType fragmentType) {
+    public void setCurrentFragment(FragmentType fragmentType) {
         FragmentManager fragmentManager = getSupportFragmentManager();
+        boolean noBackStack = false;
 
         switch (fragmentType) {
+            case HOME:
+                noBackStack = true;
+                currentFragment = HomeFragment.newInstance();
+                break;
             case NAVIGATION:
                 currentFragment = new NavigationFragment();
                 break;
-            case HOME:
+            case LOGIN:
+                currentFragment = LoginFragment.newInstance();
+                break;
             default:
                 // Default to HOME
                 currentFragment = HomeFragment.newInstance();
                 break;
         }
 
-        fragmentManager.beginTransaction()
-                .replace(R.id.navigation_fragment_container, currentFragment)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .addToBackStack(null)
-                .commit();
+        if (noBackStack) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.navigation_fragment_container, currentFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
+        } else {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.navigation_fragment_container, currentFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
     public void addBookmark(Bookmark bookmark) {
@@ -244,6 +269,7 @@ public class MainActivity extends ActionBarActivity
     protected void onNewIntent(Intent intent) {
         //stub
     }
+
 
     /**
      * {@inheritDoc}
@@ -480,4 +506,56 @@ public class MainActivity extends ActionBarActivity
             }
         }
     }
+
+    static final int LOGIN_TO_PROVIDER = 1;
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // update providers
+        getProviders();
+
+        // return to fragment
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                FragmentManager fm = getSupportFragmentManager();
+                if (fm.getBackStackEntryCount() > 0) {
+                    fm.popBackStack();
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void getProviders() {
+        StorageApi storageApi = StorageApi.newInstance(this);
+        PendingResult<ProviderInfoListResult> pendingResult =
+                storageApi.fetchProviders();
+        pendingResult.setResultCallback(new ResultCallback<ProviderInfoListResult>() {
+            @Override
+            public void onResult(ProviderInfoListResult providerInfoListResult) {
+                List<StorageProviderInfo> providerInfoList =
+                        providerInfoListResult.getProviderInfoList();
+                if (providerInfoList == null) {
+                    Log.e(TAG, "no results retunred");
+                    return;
+                }
+                mProviderInfoList = providerInfoList;
+
+            }
+
+        });
+    }
+
+    public List<StorageProviderInfo> getProviderList() { return mProviderInfoList; };
+
 }
