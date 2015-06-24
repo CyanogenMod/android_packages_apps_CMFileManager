@@ -299,6 +299,7 @@ public class MainActivity extends ActionBarActivity
         switch (id) {
             case R.id.navigation_item_home:
                 if (DEBUG) Log.d(TAG, "onNavigationItemSelected::navigation_item_home");
+                getIntent().putExtra(EXTRA_NAVIGATE_TO, FileHelper.ROOT_DIRECTORY);
                 setCurrentFragment(FragmentType.HOME);
                 break;
             case R.id.navigation_item_favorites:
@@ -307,6 +308,7 @@ public class MainActivity extends ActionBarActivity
                 break;
             case R.id.navigation_item_internal:
                 if (DEBUG) Log.d(TAG, "onNavigationItemSelected::navigation_item_favorites");
+                getIntent().putExtra(EXTRA_NAVIGATE_TO, FileHelper.ROOT_DIRECTORY);
                 setCurrentFragment(FragmentType.NAVIGATION);
                 break;
             case R.id.navigation_item_root_d:
@@ -344,7 +346,11 @@ public class MainActivity extends ActionBarActivity
                 Log.v(TAG, "providerInfo.title " + providerInfo.getTitle());
                 Log.v(TAG, "providerInfo.summary " + providerInfo.getSummary());
                 Log.v(TAG, "providerInfo.root " + providerInfo.getRootPath());
-                //setCurrentFragment(FragmentType.NAVIGATION);
+                getIntent().putExtra(EXTRA_NAVIGATE_TO,
+                        StorageApiConsole.constructStorageApiFilePathFromProvider(
+                                providerInfo.getRootPath(),
+                                StorageApiConsole.getHashCodeFromProvider(providerInfo)));
+                setCurrentFragment(FragmentType.NAVIGATION);
                 break;
         }
         mDrawerLayout.closeDrawers();
@@ -370,18 +376,17 @@ public class MainActivity extends ActionBarActivity
             Log.v(TAG, "providerInfo.title " + providerInfo.getTitle());
             Log.v(TAG, "providerInfo.summary " + providerInfo.getSummary());
             Log.v(TAG, "providerInfo.root " + providerInfo.getRootPath());
-            final String rootTitle = String.format("%s %s", providerInfo.getTitle(),
-                    providerInfo.getSummary());
 
             // Add provider to map
-            mProvidersMap.put(rootTitle.hashCode(), providerInfo);
+            int providerHashCode = StorageApiConsole.getHashCodeFromProvider(providerInfo);
+            mProvidersMap.put(providerHashCode, providerInfo);
 
             // Verify console exists, or create one
             StorageApiConsole.registerStorageApiConsole(this, sapi, providerInfo);
 
             // Add to navigation drawer
             mNavigationDrawer.getMenu()
-                    .add(R.id.navigation_group_roots, rootTitle.hashCode(), 0, rootTitle)
+                    .add(R.id.navigation_group_roots, providerHashCode, 0, providerInfo.getTitle())
                     .setIcon(R.drawable.ic_fso_folder);
         }
     }
