@@ -35,8 +35,14 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 
+import com.cyanogen.ambient.common.api.PendingResult;
+import com.cyanogen.ambient.common.api.ResultCallback;
+import com.cyanogen.ambient.storage.StorageApi;
+import com.cyanogen.ambient.storage.provider.StorageProviderInfo;
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.activities.preferences.SettingsPreferences;
+import com.cyanogenmod.filemanager.console.ConsoleHolder;
+import com.cyanogenmod.filemanager.console.storageapi.StorageApiConsole;
 import com.cyanogenmod.filemanager.model.Bookmark;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
@@ -46,7 +52,9 @@ import com.cyanogenmod.filemanager.util.FileHelper;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The main navigation activity. This activity is the center of the application.
@@ -61,7 +69,8 @@ import java.util.List;
  * the app is killed, is restarted from his initial state.
  */
 public class MainActivity extends ActionBarActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        ResultCallback<StorageProviderInfo.ProviderInfoListResult> {
 
     private static final String TAG = "MainActivity"; //$NON-NLS-1$
 
@@ -130,6 +139,7 @@ public class MainActivity extends ActionBarActivity
     private Fragment currentFragment;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationDrawer;
+    private Map<Integer, StorageProviderInfo> mProvidersMap;
 
     /**
      * {@inheritDoc}
@@ -148,6 +158,16 @@ public class MainActivity extends ActionBarActivity
         // TODO: Figure out why the following doesn't work correctly...
         mNavigationDrawer.setItemTextColor(colorStateList);
         mNavigationDrawer.setItemIconTintList(colorStateList);
+
+        /*
+         * TEST CODE
+         * TODO: MOVE SOMEWHERE MORE LEGITIMATE
+         */
+        mProvidersMap = new HashMap<Integer, StorageProviderInfo>();
+        StorageApi storageApi = StorageApi.newInstance(MainActivity.this);
+        PendingResult<StorageProviderInfo.ProviderInfoListResult> pendingResult =
+                storageApi.fetchProviders();
+        pendingResult.setResultCallback(this);
 
         //mToolbar = (Toolbar) findViewById(R.id.homepage_toolbar);
         //setSupportActionBar(mToolbar);
@@ -314,13 +334,56 @@ public class MainActivity extends ActionBarActivity
                 openSettings();
                 break;
             default:
-                // TODO: Implement this path
-                if (DEBUG) Log.d(TAG, "onNavigationItemSelected::default");
-                setCurrentFragment(FragmentType.NAVIGATION); // Temporary...
+                if (true) Log.d(TAG, String.format("onNavigationItemSelected::default (%d)", id));
+                // Check for item id in remote roots
+                StorageProviderInfo providerInfo = mProvidersMap.get(id);
+                Log.v(TAG, "providerInfo " + providerInfo.hashCode());
+                Log.v(TAG, "providerInfo.package " + providerInfo.getPackage());
+                Log.v(TAG, "providerInfo.authority " + providerInfo.getAuthority());
+                Log.v(TAG, "providerInfo.needsAuth " + providerInfo.needAuthentication());
+                Log.v(TAG, "providerInfo.title " + providerInfo.getTitle());
+                Log.v(TAG, "providerInfo.summary " + providerInfo.getSummary());
+                Log.v(TAG, "providerInfo.root " + providerInfo.getRootPath());
+                //setCurrentFragment(FragmentType.NAVIGATION);
                 break;
         }
         mDrawerLayout.closeDrawers();
         return true;
+    }
+
+    @Override
+    public void onResult(StorageProviderInfo.ProviderInfoListResult providerInfoListResult) {
+        List<StorageProviderInfo> providerInfoList =
+                providerInfoListResult.getProviderInfoList();
+        if (providerInfoList == null) {
+            Log.e(TAG, "no results returned");
+            return;
+        }
+        Log.v(TAG, "got result(s)! " + providerInfoList.size());
+        for (StorageProviderInfo providerInfo : providerInfoList) {
+            StorageApi sapi = StorageApi.newInstance(MainActivity.this);
+            sapi.getMetadata(providerInfo, providerInfo.getRootPath(), true);
+            Log.v(TAG, "providerInfo " + providerInfo.hashCode());
+            Log.v(TAG, "providerInfo.package " + providerInfo.getPackage());
+            Log.v(TAG, "providerInfo.authority " + providerInfo.getAuthority());
+            Log.v(TAG, "providerInfo.needsAuth " + providerInfo.needAuthentication());
+            Log.v(TAG, "providerInfo.title " + providerInfo.getTitle());
+            Log.v(TAG, "providerInfo.summary " + providerInfo.getSummary());
+            Log.v(TAG, "providerInfo.root " + providerInfo.getRootPath());
+            final String rootTitle = String.format("%s %s", providerInfo.getTitle(),
+                    providerInfo.getSummary());
+
+            // Add provider to map
+            mProvidersMap.put(rootTitle.hashCode(), providerInfo);
+
+            // Verify console exists, or create one
+            StorageApiConsole.registerStorageApiConsole(this, sapi, providerInfo);
+
+            // Add to navigation drawer
+            mNavigationDrawer.getMenu()
+                    .add(R.id.navigation_group_roots, rootTitle.hashCode(), 0, rootTitle)
+                    .setIcon(R.drawable.ic_fso_folder);
+        }
     }
 
     /**

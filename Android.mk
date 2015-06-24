@@ -30,6 +30,7 @@ LOCAL_SRC_FILES += $(call all-java-files-under, libs/color-picker-view/src)
 
 LOCAL_STATIC_JAVA_LIBRARIES += libtruezip
 LOCAL_STATIC_JAVA_LIBRARIES += juniversalchardet
+LOCAL_STATIC_JAVA_LIBRARIES += cmfm-ambientsdk
 LOCAL_STATIC_JAVA_LIBRARIES += cmfm-android-support-v4
 LOCAL_STATIC_JAVA_LIBRARIES += cmfm-android-support-v7-appcompat
 LOCAL_STATIC_JAVA_LIBRARIES += cmfm-android-support-design
@@ -51,6 +52,7 @@ include $(CLEAR_VARS)
 
 LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := \
     juniversalchardet:libs/juniversalchardet/juniversalchardet-1.0.3.jar \
+    cmfm-ambientsdk:libs/classes.jar \
     cmfm-android-support-v4:../../../external/android/support-prebuilt/appcompat/android-support-v4.jar \
     cmfm-android-support-v7-appcompat:../../../external/android/support-prebuilt/appcompat/android-support-v7-appcompat.jar \
     cmfm-android-support-design:../../../external/android/support-prebuilt/support-design/android-support-design.jar
