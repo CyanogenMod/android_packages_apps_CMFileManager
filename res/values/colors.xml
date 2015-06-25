@@ -32,6 +32,7 @@
 
     <color name="cloud_fill">#1976d2</color>
     <color name="text_color">#ffffff</color>
+    <color name="dark_button_blue">#0277bd</color>
 
     <!-- The default background color -->
     <color name="default_background">@android:color/white</color>

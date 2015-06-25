@@ -27,13 +27,12 @@ import android.os.storage.StorageVolume;
 import android.support.design.widget.NavigationView;
 import android.text.TextUtils;
 import android.util.Log;
-import com.cyanogen.ambient.common.api.ResultCallback;
-import com.cyanogen.ambient.storage.provider.StorageProviderInfo.ProviderInfoListResult;
-import com.cyanogenmod.filemanager.FileManagerApplication;
-
 import com.cyanogen.ambient.common.api.PendingResult;
+import com.cyanogen.ambient.common.api.ResultCallback;
 import com.cyanogen.ambient.storage.StorageApi;
 import com.cyanogen.ambient.storage.provider.StorageProviderInfo;
+import com.cyanogen.ambient.storage.provider.StorageProviderInfo.ProviderInfoListResult;
+import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.console.storageapi.StorageApiConsole;
 import com.cyanogenmod.filemanager.model.Bookmark;
@@ -42,13 +41,13 @@ import com.cyanogenmod.filemanager.util.StorageHelper;
 import com.cyanogenmod.filemanager.util.StorageProviderUtils;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import static com.cyanogenmod.filemanager.model.Bookmark.BOOKMARK_TYPE.SDCARD;
-import static com.cyanogenmod.filemanager.model.Bookmark.BOOKMARK_TYPE.SECURE;
 import static com.cyanogenmod.filemanager.model.Bookmark.BOOKMARK_TYPE.USB;
 
 /**
@@ -115,7 +114,6 @@ public class NavigationDrawerController
         }
     }
 
-
     public List<StorageProviderInfo> getProviderList() {
         return mProviderInfoList;
     }
@@ -130,8 +128,7 @@ public class NavigationDrawerController
 
         loadExternalStorageItems();
         StorageApi storageApi = StorageApi.getInstance();
-        PendingResult<StorageProviderInfo.ProviderInfoListResult> pendingResult =
-                storageApi.fetchProviders(this);
+        storageApi.fetchProviders(this);
     }
 
     /**
@@ -216,13 +213,17 @@ public class NavigationDrawerController
     }
 
     public void removeAllDynamicMenuItemsFromDrawer() {
-        for (int key : mStorageBookmarks.keySet()) {
-            removeMenuItemFromDrawer(key);
-            mStorageBookmarks.remove(key);
-        }
-        for (int key : mProvidersMap.keySet()) {
-            removeMenuItemFromDrawer(key);
-            mProvidersMap.remove(key);
+        try {
+            for (int key : mStorageBookmarks.keySet()) {
+                removeMenuItemFromDrawer(key);
+                mStorageBookmarks.remove(key);
+            }
+            for (int key : mProvidersMap.keySet()) {
+                removeMenuItemFromDrawer(key);
+                mProvidersMap.remove(key);
+            }
+        } catch (ConcurrentModificationException e) {
+            e.printStackTrace();
         }
     }
 

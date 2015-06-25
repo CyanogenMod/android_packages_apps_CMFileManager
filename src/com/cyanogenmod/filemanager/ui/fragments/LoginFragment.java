@@ -36,8 +36,6 @@ import com.cyanogen.ambient.storage.provider.StorageProviderInfo.ProviderInfoLis
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.activities.MainActivity;
 import com.cyanogenmod.filemanager.adapters.ProviderAdapter;
-import com.cyanogenmod.filemanager.console.storageapi.StorageApiConsole;
-import com.cyanogenmod.filemanager.controllers.NavigationDrawerController;
 
 import java.util.List;
 
@@ -119,7 +117,6 @@ public class LoginFragment extends Fragment implements
             // logout
             // TODO: at some point this will apparently be in the storage area of the Settings
         }
-
     }
 
     public void updateAccountList() {
