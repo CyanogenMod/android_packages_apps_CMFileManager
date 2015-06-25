@@ -49,6 +49,8 @@ import java.util.List;
  * because can't be obtain from storage api.
  */
 public class StorageApiConsole extends VirtualConsole {
+    public static final String CACHE_DIR = ".storage-provider-files";
+
     private static final String TAG = StorageApiConsole.class.getSimpleName();
     private static final String PATH_SEPARATOR = "://";
 

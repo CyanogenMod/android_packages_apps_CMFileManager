@@ -19,7 +19,6 @@ package com.cyanogenmod.filemanager.commands.storageapi;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.cyanogen.ambient.common.api.PendingResult;
 import com.cyanogen.ambient.common.api.ResultCallback;
 import com.cyanogen.ambient.storage.StorageApi;
 import com.cyanogen.ambient.storage.StorageApi.Document;
@@ -104,30 +103,29 @@ public class ListCommand extends Program implements ListExecutable {
             return;
         }
 
-        PendingResult<DocumentResult> pendingResult =
-                storageApi.getMetadata(storageProviderInfo, mSrc, true);
-        pendingResult.setResultCallback(new ResultCallback<DocumentResult>() {
-            @Override
-            public void onResult(DocumentResult documentResult) {
-                if (documentResult == null) {
-                    Log.e(TAG, "Result: FAIL. No results returned."); //$NON-NLS-1$
-                    return;
-                }
-                try {
-                    processDocumentResult(documentResult);
-                } catch (Exception e) {
-                    Log.e(TAG, "Result: Error parsing results. e=" + e); //$NON-NLS-1$
-                }
-                synchronized (mSync) {
-                    mSync.notify();
-                }
-                mFinished = true;
+        storageApi.getMetadata(storageProviderInfo, mSrc, true,
+                new ResultCallback<DocumentResult>() {
+                    @Override
+                    public void onResult(DocumentResult documentResult) {
+                        if (documentResult == null) {
+                            Log.e(TAG, "Result: FAIL. No results returned."); //$NON-NLS-1$
+                            return;
+                        }
+                        try {
+                            processDocumentResult(documentResult);
+                        } catch (Exception e) {
+                            Log.e(TAG, "Result: Error parsing results. e=" + e); //$NON-NLS-1$
+                        }
+                        synchronized (mSync) {
+                            mSync.notify();
+                        }
+                        mFinished = true;
 
-                if (isTrace()) {
-                    Log.v(TAG, "Result: OK"); //$NON-NLS-1$
-                }
-            }
-        });
+                        if (isTrace()) {
+                            Log.v(TAG, "Result: OK"); //$NON-NLS-1$
+                        }
+                    }
+                });
     }
 
     private void processDocumentResult(DocumentResult result)

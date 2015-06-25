@@ -16,8 +16,10 @@
 
 package com.cyanogenmod.filemanager.ui.policy;
 
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
@@ -26,12 +28,20 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Html;
+import android.text.Spanned;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
+import com.cyanogen.ambient.common.api.PendingResult;
+import com.cyanogen.ambient.common.api.ResultCallback;
+import com.cyanogen.ambient.storage.StorageApi;
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.activities.ShortcutActivity;
 import com.cyanogenmod.filemanager.console.secure.SecureConsole;
+import com.cyanogenmod.filemanager.console.storageapi.StorageApiConsole;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.model.RegularFile;
 import com.cyanogenmod.filemanager.providers.SecureResourceProvider;
@@ -49,6 +59,8 @@ import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
 import com.cyanogenmod.filemanager.util.ResourcesHelper;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -162,6 +174,11 @@ public final class IntentsActionPolicy extends ActionsPolicy {
                                 }))
                         .show();
                 return;
+            } else if (!TextUtils.isEmpty(fso.getProviderPrefix())) {
+                // Special handling for Storage Provider files
+                copyAndOpenStorageProviderFile(ctx, fso, onCancelListener, onDismissListener,
+                        choose);
+                return;
             }
 
             // Obtain the mime/type and passed it to intent
@@ -186,6 +203,113 @@ public final class IntentsActionPolicy extends ActionsPolicy {
         } catch (Exception e) {
             ExceptionUtil.translateException(ctx, e);
         }
+    }
+
+    private static void copyAndOpenStorageProviderFile(final Context ctx,
+            final FileSystemObject fso, final OnCancelListener onCancelListener,
+            final OnDismissListener onDismissListener, final boolean choose) {
+        String prefix = fso.getProviderPrefix();
+        if (TextUtils.isEmpty(prefix)) {
+            return;
+        }
+
+        final String path = StorageApiConsole.getProviderPathFromFullPath(fso.getFullPath());
+        final String name = fso.getName();
+        final StorageApiConsole console = StorageApiConsole.getStorageApiConsoleForPath(prefix);
+
+        BackgroundCallable callable = new BackgroundCallable() {
+            private final Object mSync = new Object();
+            private boolean mFinished = false;
+            private File file;
+            private StorageApi.DocumentInfo documentInfo;
+
+            @Override
+            public int getDialogIcon() {
+                return 0;
+            }
+
+            @Override
+            public int getDialogTitle() {
+                return R.string.waiting_dialog_opening_storage_provider_title;
+            }
+
+            @Override
+            public boolean isDialogCancellable() {
+                return false;
+            }
+
+            @Override
+            public Spanned requestProgress() {
+                String progress = ctx.getResources().getString(
+                        R.string.waiting_dialog_opening_storage_provider_message, fso.getName(),
+                        console.getName());
+                return Html.fromHtml(progress);
+            }
+
+            @Override
+            public void doInBackground(Object... params) throws Throwable {
+                OutputStream outputStream = null;
+                try {
+                    File downloadDir = new File(ctx.getExternalCacheDir(),
+                            StorageApiConsole.CACHE_DIR);
+                    if (downloadDir.exists() || downloadDir.mkdirs()) {
+                        file = new File(downloadDir.getPath() + File.separator + name);
+                        if (file.exists() || file.createNewFile()) {
+                            outputStream = new FileOutputStream(file);
+                        }
+                    } else {
+                        Log.e(TAG, "Cannot create cache directory");
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "Cannot create temp file", e);
+                }
+                PendingResult<StorageApi.DocumentInfo.DocumentInfoResult> pendingResult =
+                        console.getStorageApi().getFile(console.getStorageProviderInfo(),path,
+                                outputStream, null,
+                                new ResultCallback<StorageApi.DocumentInfo.DocumentInfoResult>() {
+                                    @Override
+                                    public void onResult(
+                                            StorageApi.DocumentInfo.DocumentInfoResult result) {
+                                        if (result == null
+                                                || !result.getStatus().isSuccess()) {
+                                            Log.e(TAG, "Cannot download file");
+                                            return;
+                                        }
+                                        documentInfo = result.getDocumentInfo();
+                                    }
+                                });
+
+                // Since we're downloading a file, this can take a while, so don't specify a timeout
+                pendingResult.await();
+            }
+
+            @Override
+            public void onSuccess() {
+                Intent intent = new Intent();
+                intent.setAction(android.content.Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.fromFile(file), documentInfo.getMimeType());
+                FileSystemObject cacheFso = FileHelper.createFileSystemObject(file);
+                resolveIntent(
+                        ctx,
+                        intent,
+                        choose,
+                        createInternalIntents(ctx, cacheFso),
+                        0,
+                        R.string.associations_dialog_openwith_title,
+                        R.string.associations_dialog_openwith_action,
+                        true,
+                        onCancelListener,
+                        onDismissListener);
+            }
+
+            @Override
+            public void onCancel() {
+                Toast.makeText(ctx, R.string.cancelled_message, Toast
+                        .LENGTH_SHORT).show();
+            }
+        };
+        BackgroundAsyncTask task = new BackgroundAsyncTask(ctx, callable);
+        task.execute(task);
     }
 
     /**

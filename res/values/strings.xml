@@ -453,6 +453,10 @@
     <string name="waiting_dialog_compressing_msg"><![CDATA[<b>File</b>]]> <xliff:g id="file">%1$s</xliff:g></string>
     <!-- Waiting dialog - Initializing the dialog -->
     <string name="waiting_dialog_analizing_msg"><![CDATA[<b>Analyzing\u2026</b>]]></string>
+    <!-- Waiting dialog - Opening Storage Provider file title -->
+    <string name="waiting_dialog_opening_storage_provider_title">Opening\u2026</string>
+    <!-- Waiting dialog - Opening Storage Provider file message -->
+    <string name="waiting_dialog_opening_storage_provider_message"><![CDATA[<b>Opening</b>]]> <xliff:g id="file">%1$s</xliff:g><![CDATA[<br/>]]> <![CDATA[<b>From</b>]]> <xliff:g id="name">%2$s</xliff:g></string>
     <!-- Extracting - Success message -->
     <string name="msgs_extracting_success">The extracting operation was completed successfully. The data was extracted to <xliff:g id="destination">%1$s</xliff:g>.</string>
     <!-- Compressing - Success message -->
