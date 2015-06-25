@@ -24,13 +24,12 @@ import android.os.storage.StorageVolume;
 import android.support.design.widget.NavigationView;
 import android.text.TextUtils;
 import android.util.Log;
-import com.cyanogen.ambient.common.api.ResultCallback;
-import com.cyanogen.ambient.storage.provider.StorageProviderInfo.ProviderInfoListResult;
-import com.cyanogenmod.filemanager.FileManagerApplication;
-
 import com.cyanogen.ambient.common.api.PendingResult;
+import com.cyanogen.ambient.common.api.ResultCallback;
 import com.cyanogen.ambient.storage.StorageApi;
 import com.cyanogen.ambient.storage.provider.StorageProviderInfo;
+import com.cyanogen.ambient.storage.provider.StorageProviderInfo.ProviderInfoListResult;
+import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.console.storageapi.StorageApiConsole;
 import com.cyanogenmod.filemanager.model.Bookmark;
@@ -44,7 +43,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import static com.cyanogenmod.filemanager.model.Bookmark.BOOKMARK_TYPE.SDCARD;
-import static com.cyanogenmod.filemanager.model.Bookmark.BOOKMARK_TYPE.SECURE;
 import static com.cyanogenmod.filemanager.model.Bookmark.BOOKMARK_TYPE.USB;
 
 /**

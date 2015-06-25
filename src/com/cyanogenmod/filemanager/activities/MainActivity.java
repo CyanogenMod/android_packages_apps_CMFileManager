@@ -230,6 +230,13 @@ public class MainActivity extends ActionBarActivity
         //stub
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mNavigationDrawerController.loadNavigationDrawerItems();
+
+    }
+
     /**
      * {@inheritDoc}
      */
