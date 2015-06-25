@@ -23,7 +23,7 @@ import android.view.ViewGroup;
 
 public class WelcomeAdapter extends PagerAdapter {
 
-    private final static int COUNT_OF_INTRO_PAGES = 3;
+    private final static int COUNT_OF_INTRO_PAGES = 4;
 
     public Object instantiateItem(ViewGroup collection, int position) {
 
@@ -38,6 +38,8 @@ public class WelcomeAdapter extends PagerAdapter {
             case 2:
                 resId = R.id.itemThree;
                 break;
+            case 3:
+                resId = R.id.itemFour;
         }
         return collection.findViewById(resId);
     }
