@@ -90,16 +90,6 @@
                 android:textSize="28sp"
                 android:textColor="@android:color/white"/>
 
-            <View
-                android:id="@+id/generic_square"
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent"
-                android:layout_above="@+id/bottomMessageOne"
-                android:layout_below="@+id/titleMessageOne"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/rectangle"/>
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -139,6 +129,76 @@
 
         </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/itemFour"
+            android:background="@color/cloud_fill">
+
+            <ImageView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/flying_folder"
+                android:layout_above="@+id/clouds_intro"
+                android:id="@+id/flying_folder"
+                android:layout_marginBottom="78dp"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center|center_vertical|center_horizontal" />
+
+            <!-- the cloud drawable has some weird spacing around it -->
+            <ImageView android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/cloud_line"
+                android:layout_marginLeft="-50dp"
+                android:layout_marginBottom="-13dp"
+                android:layout_centerVertical="true"
+                android:id="@+id/clouds_intro"
+                android:layout_gravity="center|center_vertical|center_horizontal"/>
+
+            <View
+                android:id="@+id/generic_square"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/clouds_intro"
+                android:background="@drawable/rectangle"/>
+
+            <LinearLayout
+                android:id="@+id/cloud_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_below="@+id/clouds_intro"
+                android:layout_margin="24dp">
+
+                    <TextView
+                        android:text="@string/add_cloud_storage"
+                        android:id="@+id/cardHeaderText"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp"
+                        android:layout_width="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:text="@string/oobe_add_cloud_storage_desc"
+                        android:id="@+id/cardChildText"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:layout_marginTop="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+
+                    <Button
+                        android:text="@string/connect_now"
+                        android:id="@+id/dismiss_card"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
     </android.support.v4.view.ViewPager>
 
     <RelativeLayout
@@ -146,18 +206,16 @@
         android:layout_height="@dimen/default_row_height"
         android:layout_width="fill_parent"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:background="@drawable/bottom_bar_walkthrough">
+        android:layout_alignParentStart="true">
 
-        <Button
+        <ImageView
             android:id="@+id/skipButton"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/skip_text"
+            android:src="@drawable/ic_oobe_back"
             android:layout_alignParentLeft="true"
             android:textColor="@android:color/white"/>
-
 
         <com.cyanogenmod.filemanager.views.CirclePageIndicator
             android:id="@+id/pagination"
@@ -166,12 +224,12 @@
             android:layout_alignParentBottom="true"
             android:gravity="center_horizontal" android:layout_centerInParent="true"/>
 
-        <Button
+        <ImageView
             android:id="@+id/nextButton"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/next_text"
+            android:src="@drawable/ic_oobe_forward"
             android:layout_alignParentRight="true"
             android:textColor="@android:color/white"/>
 

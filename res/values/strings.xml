@@ -53,6 +53,7 @@
     <string name="move">Move</string>
     <string name="add">Add</string>
     <string name="dismiss">Dismiss</string>
+    <string name="connect_now">Connect Now</string>
 
     <!-- The root directory name -->
     <string name="root_directory_name"><![CDATA[<Root folder>]]></string>
@@ -882,6 +883,7 @@
 
     <string name="add_cloud_storage">Add cloud storage</string>
     <string name="add_cloud_storage_desc">Important files are a tap away when you link cloud storage to your device. Tap here to set up.</string>
+    <string name="oobe_add_cloud_storage_desc">Important files are a tap away when you link cloud storage to your device.</string>
     <string name="welcome_to">Welcome to</string>
     <string name="file">File</string>
     <string name="manager">Manager</string>
