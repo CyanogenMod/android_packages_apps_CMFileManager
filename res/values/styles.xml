@@ -195,6 +195,7 @@
     <!-- Breadcrumb item -->
     <style name="breadcrumb_item" parent="@style/breadcrumb_elemement">
         <item name="android:textAppearance">@style/primary_text_appearance</item>
+        <item name="android:textColor">@color/breadcrumb_text_color</item>
         <item name="android:singleLine">true</item>
         <item name="android:paddingStart">@dimen/breadcrumb_item_margin_space</item>
         <item name="android:paddingEnd">@dimen/breadcrumb_item_margin_space</item>

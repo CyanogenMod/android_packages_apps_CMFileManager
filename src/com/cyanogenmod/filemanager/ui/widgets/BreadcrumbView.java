@@ -387,25 +387,6 @@ public class BreadcrumbView extends RelativeLayout implements Breadcrumb, OnClic
     @Override
     public void applyTheme() {
         Theme theme = ThemeManager.getCurrentTheme(getContext());
-
-        //- Breadcrumb
-        if (this.mBreadcrumbBar != null) {
-            int cc = this.mBreadcrumbBar.getChildCount();
-            for (int i = 0; i < cc; i++) {
-                // There are 2 types: Breadcrumb items and separators
-                View v = this.mBreadcrumbBar.getChildAt(i);
-                if (v instanceof BreadcrumbItem) {
-                    // Breadcrumb item
-                    theme.setTextColor(
-                            getContext(), (BreadcrumbItem)v, "action_bar_text_color"); //$NON-NLS-1$
-                } else if (v instanceof ImageView) {
-                    // Divider drawable
-                    theme.setImageDrawable(
-                            getContext(),
-                            (ImageView)v, "breadcrumb_divider_drawable"); //$NON-NLS-1$
-                }
-            }
-        }
         if (this.mDiskUsageInfo != null) {
             Drawable dw = theme.getDrawable(getContext(), "horizontal_progress_bar"); //$NON-NLS-1$
             this.mDiskUsageInfo.setProgressDrawable(dw);
