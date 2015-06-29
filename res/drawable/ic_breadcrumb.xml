@@ -21,8 +21,6 @@
     android:viewportHeight="32">
 
     <path
-        android:fillColor="#FFFFFF"
-        android:fillAlpha="0.26"
-        android:strokeAlpha="0.26"
-        android:pathData="M-7.5,13l8,8l-8,8V13z" />
+        android:fillColor="@color/action_bar_text_color"
+        android:pathData="M5,8 L13,16 L5,24 L5,8 Z" />
 </vector>

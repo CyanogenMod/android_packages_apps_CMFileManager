@@ -84,9 +84,6 @@
     <!-- The text color of TextView controls -->
     <color name="text_color">@color/black_transparent</color>
 
-    <!-- The text color of the ActionBar -->
-    <color name="action_bar_text_color">@android:color/white</color>
-
     <!-- The text color of Dialog -->
     <color name="dialog_text_color">@color/material_palette_blue_primary_dark</color>
 
