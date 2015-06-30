@@ -536,14 +536,6 @@ public class NavigationFragment extends Fragment
 
         initNavigationViews();
 
-        return mView;
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
         mToolBar = (Toolbar) mView.findViewById(R.id.material_toolbar);
         ActionBarActivity actionBarActivity = (ActionBarActivity) getActivity();
         actionBarActivity.setSupportActionBar(mToolBar);
@@ -584,6 +576,14 @@ public class NavigationFragment extends Fragment
             onLayoutChanged();
         }
         this.mOrientation = orientation;
+
+        return mView;
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     @Override
@@ -1431,7 +1431,10 @@ public class NavigationFragment extends Fragment
         // We cannot navigate to a secure console if it is unmounted. So go to root in that case
         VirtualConsole vc = VirtualMountPointConsole.getVirtualConsoleForPath(initialDir);
         if (vc != null && vc instanceof SecureConsole && !((SecureConsole) vc).isMounted()) {
-            initialDir = FileHelper.ROOT_DIRECTORY;
+            // TODO: Find a better way to deal with this.
+            // We want to at least try to mount the console (requires login), but
+            // SecureStorageKeyPromptActivity only pops up after navigationview.open is called.
+            //initialDir = FileHelper.ROOT_DIRECTORY;
         }
 
         if (this.mChRooted) {
