@@ -29,6 +29,8 @@
     <color name="root_primary">#607D8B</color>
     <!-- The protected storage primary color -->
     <color name="protected_primary">#37474f</color>
+    <!-- The default navigation drawer primary color. Used for settings etc. -->
+    <color name="misc_primary">#ff000000</color>
 
     <color name="cloud_fill">#1976d2</color>
     <color name="text_color">#ffffff</color>
@@ -41,6 +43,11 @@
 
     <!-- A black color with some transparency -->
     <color name="black_transparent">#8a000000</color>
+
+    <!-- Default navigation drawer colors -->
+    <color name="navigation_drawer_title_default">#df000000</color>
+    <color name="navigation_drawer_summary_default">#8a000000</color>
+    <color name="navigation_drawer_icon_default">#8a000000</color>
 
     <color name="lighter_black">#42000000</color>
     <color name="darker_black">#C9000000</color>
@@ -89,6 +96,8 @@
     <color name="divider_color">#90909090</color>
     <!-- Divider - Light -->
     <color name="divider_color_light">#50505050</color>
+    <!-- Navigation Drawer Divider -->
+    <color name="navigation_drawer_divider_color">#1f000000</color>
 
     <!-- Execution console -->
     <color name="console_bg">#99000000</color>

@@ -24,6 +24,7 @@
         <item name="android:colorAccent">@color/material_palette_blue_primary</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -228,6 +229,13 @@
         <item name="android:layout_marginStart">@dimen/default_margin</item>
         <item name="android:layout_marginEnd">@dimen/default_margin</item>
         <item name="android:background">@color/divider_color</item>
+    </style>
+
+    <!-- Navigation drawer divider -->
+    <style name="navigation_drawer_divider">
+        <item name="android:layout_marginTop">@dimen/navigation_drawer_divider_margintop</item>
+        <item name="android:layout_marginBottom">@dimen/navigation_drawer_divider_marginbottom</item>
+        <item name="android:background">@color/navigation_drawer_divider_color</item>
     </style>
 
     <!-- Navigation drawer -->
