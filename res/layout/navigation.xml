@@ -34,8 +34,17 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/navigation_drawer_background"
-        app:headerLayout="@layout/navigation_header"
-        app:menu="@menu/navigation" />
+        android:fitsSystemWindows="true"
+        android:background="@color/navigation_drawer_background" >
+
+        <!-- Using app:menu is too restricting at the moment, Adding as child view -->
+        <ListView
+            android:id="@+id/navigation_view_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:dividerHeight="0dp"
+            android:divider="@null" />
+
+    </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>
