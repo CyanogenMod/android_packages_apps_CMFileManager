@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.AsyncTask;
 import android.os.storage.StorageVolume;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -38,6 +39,7 @@ import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.adapters.FileSystemObjectAdapter;
 import com.cyanogenmod.filemanager.adapters.FileSystemObjectAdapter.OnSelectionChangedListener;
+import com.cyanogenmod.filemanager.console.AuthenticationFailedException;
 import com.cyanogenmod.filemanager.console.CancelledOperationException;
 import com.cyanogenmod.filemanager.console.ConsoleAllocException;
 import com.cyanogenmod.filemanager.console.VirtualMountPointConsole;
@@ -307,7 +309,13 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
                         /**NON BLOCK**/
                     }
                 }
-                if (ex instanceof CancelledOperationException) {
+                if (ex instanceof CancelledOperationException ||
+                        ex instanceof AuthenticationFailedException) {
+                    if (TextUtils.isEmpty(mCurrentDir)) {
+                        // If currentDir isn't set, load default
+                        // This is local storage or root depending on mode
+                        mCurrentDir = FileHelper.ROOT_DIRECTORY;
+                    }
                     return null;
                 }
 
@@ -381,6 +389,9 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
 
                 // Do animation
                 fadeEfect(false);
+            } else {
+                // Reload current directory
+                changeCurrentDir(mCurrentDir);
             }
         }
 
