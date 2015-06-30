@@ -18,13 +18,13 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="@dimen/drawer_header_height"
-    android:background="@android:color/background_light">
+    android:background="@color/navigation_drawer_background">
 
     <ImageView
         android:id="@+id/header"
         android:background="@color/default_primary"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/drawer_header_backgound_height"
         android:scaleType="centerCrop"/>
     <TextView
         android:layout_gravity="bottom"

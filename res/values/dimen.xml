@@ -98,6 +98,8 @@
     <dimen name="horizontal_divider_width">0.25dp</dimen>
     <!-- The vertical divider height -->
     <dimen name="vertical_divider_height">0.75dp</dimen>
+    <!-- The navigation drawer divider height -->
+    <dimen name="navigation_drawer_divider_height">1dp</dimen>
 
     <!-- The relevance widget width -->
     <dimen name="relevance_item_width">16dp</dimen>
@@ -126,7 +128,9 @@
     <!-- Scrim layout elevation -->
     <dimen name="scrim_layout_elevation">10dp</dimen>
     <!-- Drawer header height -->
-    <dimen name="drawer_header_height">172dp</dimen>
+    <dimen name="drawer_header_height">180dp</dimen>
+    <!-- Drawer header background (image) height -->
+    <dimen name="drawer_header_backgound_height">172dp</dimen>
 
     <!-- usage graph stuff -->
     <dimen name="legend_title_textSize">9sp</dimen>

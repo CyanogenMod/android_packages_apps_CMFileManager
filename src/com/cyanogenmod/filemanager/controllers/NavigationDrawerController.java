@@ -25,14 +25,22 @@ import android.os.storage.StorageVolume;
 import android.support.design.widget.NavigationView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 import com.cyanogen.ambient.common.api.ResultCallback;
 import com.cyanogen.ambient.storage.StorageApi;
 import com.cyanogen.ambient.storage.provider.StorageProviderInfo;
 import com.cyanogen.ambient.storage.provider.StorageProviderInfo.ProviderInfoListResult;
 import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
+import com.cyanogenmod.filemanager.activities.MainActivity;
+import com.cyanogenmod.filemanager.adapters.NavigationDrawerAdapter;
 import com.cyanogenmod.filemanager.console.storageapi.StorageApiConsole;
 import com.cyanogenmod.filemanager.model.Bookmark;
+import com.cyanogenmod.filemanager.model.NavigationDrawerItem;
+import com.cyanogenmod.filemanager.model.NavigationDrawerItem.NavigationDrawerItemType;
 import com.cyanogenmod.filemanager.preferences.AccessMode;
 import com.cyanogenmod.filemanager.util.StorageHelper;
 import com.cyanogenmod.filemanager.util.StorageProviderUtils;
@@ -50,25 +58,16 @@ import static com.cyanogenmod.filemanager.model.Bookmark.BOOKMARK_TYPE.USB;
  * NavigationDrawerController. This class is contains logic to add/remove and manage items in
  * the NavigationDrawer which uses android support libraries NavigationView.
  */
-public class NavigationDrawerController
-        implements ResultCallback<ProviderInfoListResult> {
+public class NavigationDrawerController implements ResultCallback<ProviderInfoListResult> {
     private static final String TAG = NavigationDrawerController.class.getSimpleName();
     private static boolean DEBUG = false;
     private static final String STR_USB = "usb"; // $NON-NLS-1$
 
-    int[][] color_states = new int[][] {
-            new int[] {android.R.attr.state_checked}, // checked
-            new int[0] // default
-    };
-
-    // TODO: Replace with legitimate colors per item.
-    int[] colors = new int[] {
-            R.color.favorites_primary,
-            Color.BLACK
-    };
-
     private Context mCtx;
     private NavigationView mNavigationDrawer;
+    private NavigationDrawerAdapter mAdapter;
+    private List<NavigationDrawerItem> mNavigationDrawerItemList;
+    private int mLastRoot;
     private Map<Integer, StorageProviderInfo> mProvidersMap;
     private Map<Integer, Bookmark> mStorageBookmarks;
     public List<StorageProviderInfo> mProviderInfoList;
@@ -76,13 +75,15 @@ public class NavigationDrawerController
     public NavigationDrawerController(Context ctx, NavigationView navigationView) {
         mCtx = ctx;
         mNavigationDrawer = navigationView;
+
         mProvidersMap = new HashMap<Integer, StorageProviderInfo>();
         mStorageBookmarks = new HashMap<Integer, Bookmark>();
-
-        ColorStateList colorStateList = new ColorStateList(color_states, colors);
-        // TODO: Figure out why the following doesn't work correctly...
-        mNavigationDrawer.setItemTextColor(colorStateList);
-        mNavigationDrawer.setItemIconTintList(colorStateList);
+        mNavigationDrawerItemList = new ArrayList<NavigationDrawerItem>();
+        mLastRoot = 0;
+        ListView listView = (ListView)mNavigationDrawer.findViewById(R.id.navigation_view_listview);
+        listView.setOnItemClickListener(((MainActivity)mCtx));
+        mAdapter = new NavigationDrawerAdapter(mCtx, mNavigationDrawerItemList);
+        listView.setAdapter(mAdapter);
     }
 
     @Override
@@ -108,6 +109,7 @@ public class NavigationDrawerController
                 addProviderInfoItem(providerHashCode, providerInfo);
             }
         }
+        mAdapter.notifyDataSetChanged();
     }
 
 
@@ -117,13 +119,80 @@ public class NavigationDrawerController
 
     public void loadNavigationDrawerItems() {
         // clear current special nav drawer items
-        removeAllDynamicMenuItemsFromDrawer();
+        removeAllItemsFromDrawer();
+
+        mLastRoot = 0;
+        String title = null;
+        String summary = null;
+
+        // Determine display mode
+        boolean showRoot = FileManagerApplication.getAccessMode().compareTo(AccessMode.SAFE) != 0;
+        NavigationDrawerItemType itemType = showRoot ?
+                NavigationDrawerItemType.DOUBLE : NavigationDrawerItemType.SINGLE;
+
+        // Load Header
+        mNavigationDrawerItemList.add(new NavigationDrawerItem(0, NavigationDrawerItemType.HEADER,
+                null, null, 0, 0));
+
+        // Load Home and Favorites
+        title = mCtx.getResources().getString(R.string.navigation_item_title_home);
+        summary = null;
+        mNavigationDrawerItemList.add(new NavigationDrawerItem(R.id.navigation_item_home,
+                NavigationDrawerItemType.SINGLE, title, summary, R.drawable.ic_home,
+                R.color.default_primary));
+        title = mCtx.getResources().getString(R.string.navigation_item_title_favorites);
+        summary = null;
+        mNavigationDrawerItemList.add(new NavigationDrawerItem(R.id.navigation_item_favorites,
+                NavigationDrawerItemType.SINGLE, title, summary, R.drawable.ic_favorite_on,
+                R.color.favorites_primary));
+
+        // Divider
+        mNavigationDrawerItemList.add(new NavigationDrawerItem(0, NavigationDrawerItemType.DIVIDER,
+                null, null, 0, 0));
+
+        // Load Local Storage
+        title = mCtx.getResources().getString(R.string.navigation_item_title_local);
+        summary = null;
+        mNavigationDrawerItemList.add(new NavigationDrawerItem(R.id.navigation_item_internal,
+                itemType, title, summary, R.drawable.ic_source_internal, R.color.default_primary));
 
         // Show/hide root
-        boolean showRoot = FileManagerApplication.getAccessMode().compareTo(AccessMode.SAFE) != 0;
-        mNavigationDrawer.getMenu().findItem(R.id.navigation_item_root_d).setVisible(showRoot);
+        if (showRoot) {
+            title = mCtx.getResources().getString(R.string.navigation_item_title_root);
+            summary = null;
+            mNavigationDrawerItemList.add(new NavigationDrawerItem(R.id.navigation_item_root_d,
+                    itemType, title, null, R.drawable.ic_source_root_d, R.color.root_primary));
+        }
 
-        loadExternalStorageItems();
+        //loadExternalStorageItems();
+
+        //loadSecureStorage();
+        //R.id.navigation_item_protected
+
+        // Grab storageapi providers insertion spot in list.
+        mLastRoot = mNavigationDrawerItemList.size();
+
+        // Divider
+        mNavigationDrawerItemList.add(new NavigationDrawerItem(0, NavigationDrawerItemType.DIVIDER,
+                null, null, 0, 0));
+
+        // Load manage storage and settings
+        title = mCtx.getResources().getString(R.string.navigation_item_title_manage);
+        summary = null;
+        mNavigationDrawerItemList.add(new NavigationDrawerItem(R.id.navigation_item_manage,
+                NavigationDrawerItemType.SINGLE, title, summary, R.drawable.ic_storage_sources,
+                R.color.misc_primary));
+        title = mCtx.getResources().getString(R.string.navigation_item_title_settings);
+        summary = null;
+        mNavigationDrawerItemList.add(new NavigationDrawerItem(R.id.navigation_item_settings,
+                NavigationDrawerItemType.SINGLE, title, summary, R.drawable.ic_settings,
+                R.color.misc_primary));
+
+        // Notify dataset changed here because we aren't sure when/if storage providers will return.
+        mAdapter.notifyDataSetChanged();
+
+        // Load storage providers, This is done last because and is asynchronous, and it has its own
+        // call to notifiyDataSetChanged.
         StorageApi storageApi = StorageApi.getInstance();
         storageApi.fetchProviders(this);
     }
@@ -190,45 +259,38 @@ public class NavigationDrawerController
     }
 
     private void addMenuItemToDrawer(int hash, String title, int iconDrawable) {
-        if (mNavigationDrawer.getMenu().findItem(hash) == null) {
+        /*if (mNavigationDrawer.getMenu().findItem(hash) == null) {
             mNavigationDrawer.getMenu()
                     .add(R.id.navigation_group_roots, hash, 0, title)
                     .setIcon(iconDrawable);
-        }
+        }*/
     }
 
     private void addMenuItemToDrawer(int hash, String title, Drawable iconDrawable) {
-        if (mNavigationDrawer.getMenu().findItem(hash) == null) {
+        /*if (mNavigationDrawer.getMenu().findItem(hash) == null) {
             mNavigationDrawer.getMenu()
                     .add(R.id.navigation_group_roots, hash, 0, title)
                     .setIcon(iconDrawable);
-        }
+        }*/
     }
 
-    public void removeMenuItemFromDrawer(int hash) {
-        mNavigationDrawer.getMenu().removeItem(hash);
-    }
+    public void removeAllItemsFromDrawer() {
+        // reset menu list
+        mNavigationDrawerItemList.clear();
+        mLastRoot = 0;
 
-    public void removeAllDynamicMenuItemsFromDrawer() {
-        for (int key : mStorageBookmarks.keySet()) {
-            removeMenuItemFromDrawer(key);
-        }
-        for (int key : mProvidersMap.keySet()) {
-            removeMenuItemFromDrawer(key);
-        }
         // reset hashmaps
         mStorageBookmarks.clear();
         mProvidersMap.clear();
     }
 
     public void addProviderInfoItem(int providerHashCode, StorageProviderInfo providerInfo) {
-        // Concatenate title and summary
-        // TODO: Change to two line menu items
-        String title = providerInfo.getTitle() + " " + providerInfo.getSummary();
         Drawable icon = StorageProviderUtils.loadPackageIcon(mCtx, providerInfo.getAuthority(),
                 providerInfo.getIcon());
         mProvidersMap.put(providerHashCode, providerInfo);
-        addMenuItemToDrawer(providerHashCode, title, icon);
+        mNavigationDrawerItemList.add(mLastRoot++, new NavigationDrawerItem(providerHashCode,
+                NavigationDrawerItemType.DOUBLE, providerInfo.getTitle(), providerInfo.getSummary(),
+                icon, R.color.misc_primary));
     }
 
     public StorageProviderInfo getProviderInfoFromMenuItem(int key) {
