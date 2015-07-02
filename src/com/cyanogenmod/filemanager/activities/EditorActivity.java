@@ -26,6 +26,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -33,6 +34,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceActivity;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.SpannableStringBuilder;
@@ -75,6 +78,7 @@ import com.cyanogenmod.filemanager.console.ConsoleBuilder;
 import com.cyanogenmod.filemanager.console.InsufficientPermissionsException;
 import com.cyanogenmod.filemanager.console.java.JavaConsole;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
+import com.cyanogenmod.filemanager.model.User;
 import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
 import com.cyanogenmod.filemanager.preferences.Preferences;
 import com.cyanogenmod.filemanager.ui.ThemeManager;
@@ -92,11 +96,13 @@ import com.cyanogenmod.filemanager.util.ResourcesHelper;
 import com.cyanogenmod.filemanager.util.StringHelper;
 import org.mozilla.universalchardet.UniversalDetector;
 
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -1010,67 +1016,219 @@ public class EditorActivity extends Activity implements TextWatcher {
         // Set the title of the dialog
         File f = new File(path);
         this.mTitle.setText(f.getName());
+        boolean isStandardFile = true;
 
         // Check that the file exists (the real file, not the symlink)
         try {
             this.mFso = CommandHelper.getFileInfo(this, path, true, null);
             if (this.mFso == null) {
-                DialogHelper.showToast(
-                        this, R.string.editor_file_not_found_msg, Toast.LENGTH_SHORT);
-                return;
+                isStandardFile = false;
             }
         } catch (Exception e) {
+            isStandardFile = false;
             Log.e(TAG, "Failed to get file reference", e); //$NON-NLS-1$
-            DialogHelper.showToast(
-                    this, R.string.editor_file_not_found_msg, Toast.LENGTH_SHORT);
-            return;
         }
 
-        // Check that we can handle the length of the file (by device)
-        if (this.mMaxFileSize < this.mFso.getSize()) {
-            DialogHelper.showToast(
-                    this, R.string.editor_file_exceed_size_msg, Toast.LENGTH_SHORT);
-            return;
+        if (isStandardFile) {
+            // Check that we can handle the length of the file (by device)
+            if (this.mMaxFileSize < this.mFso.getSize()) {
+                DialogHelper.showToast(
+                        this, R.string.editor_file_exceed_size_msg, Toast.LENGTH_SHORT);
+                return;
+            }
+
+            // Get the syntax highlight processor
+            SyntaxHighlightFactory shpFactory =
+                    SyntaxHighlightFactory.getDefaultFactory(new ResourcesResolver());
+            this.mSyntaxHighlightProcessor = shpFactory.getSyntaxHighlightProcessor(f);
+            if (this.mSyntaxHighlightProcessor != null) {
+                this.mSyntaxHighlightProcessor.initialize();
+            }
+
+            // Check that we have read access
+            try {
+                FileHelper.ensureReadAccess(
+                        ConsoleBuilder.getConsole(this),
+                        this.mFso,
+                        null);
+
+                // Read the file in background
+                asyncRead();
+
+            } catch (Exception ex) {
+                ExceptionUtil.translateException(
+                        this, ex, false, true, new OnRelaunchCommandResult() {
+                            @Override
+                            public void onSuccess() {
+                                // Read the file in background
+                                asyncRead();
+                            }
+
+                            @Override
+                            public void onFailed(Throwable cause) {
+                                finish();
+                            }
+
+                            @Override
+                            public void onCancelled() {
+                                finish();
+                            }
+                        });
+            }
+        } else {
+            asyncReadContentURI(getIntent().getData());
+
         }
+    }
 
-        // Get the syntax highlight processor
-        SyntaxHighlightFactory shpFactory =
-                SyntaxHighlightFactory.getDefaultFactory(new ResourcesResolver());
-        this.mSyntaxHighlightProcessor = shpFactory.getSyntaxHighlightProcessor(f);
-        if (this.mSyntaxHighlightProcessor != null) {
-            this.mSyntaxHighlightProcessor.initialize();
-        }
+    /**
+     * Method that does the read of a content uri in the background
+     * @hide
+     */
+    void asyncReadContentURI(Uri uri) {
+        // Do the load of the file
+        AsyncTask<Uri, Integer, Boolean> mReadTask =
+                new AsyncTask<Uri, Integer, Boolean>() {
 
-        // Check that we have read access
-        try {
-            FileHelper.ensureReadAccess(
-                    ConsoleBuilder.getConsole(this),
-                    this.mFso,
-                    null);
+                    private Exception mCause;
+                    private boolean changeToBinaryMode;
+                    private boolean changeToDisplaying;
+                    private String tempText;
 
-            // Read the file in background
-            asyncRead();
+                    @Override
+                    protected void onPreExecute() {
+                        // Show the progress
+                        this.changeToBinaryMode = false;
+                        this.changeToDisplaying = false;
+                        doProgress(true, 0);
+                    }
 
-        } catch (Exception ex) {
-            ExceptionUtil.translateException(
-                    this, ex, false, true, new OnRelaunchCommandResult() {
-                @Override
-                public void onSuccess() {
-                    // Read the file in background
-                    asyncRead();
-                }
+                    @Override
+                    protected Boolean doInBackground(Uri... params) {
 
-                @Override
-                public void onFailed(Throwable cause) {
-                    finish();
-                }
+                        // Only one argument (the file to open)
+                        Uri fso = params[0];
+                        this.mCause = null;
 
-                @Override
-                public void onCancelled() {
-                    finish();
-                }
-            });
-        }
+                        // Read the file in an async listener
+                        try {
+
+                            publishProgress(Integer.valueOf(0));
+
+                            InputStream is = getContentResolver().openInputStream(fso);
+
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            int readBytes;
+                            byte[] buffer = new byte[1024];
+                            try {
+                                while ((readBytes = is.read(buffer, 0, buffer.length)) != -1) {
+                                    baos.write(buffer, 0, readBytes);
+                                    publishProgress(Integer.valueOf((readBytes * 100) / buffer.length));
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            // 100%
+                            publishProgress(new Integer(100));
+                            tempText = new String(baos.toByteArray(), "UTF-8");
+                            Log.i(TAG, "Bytes read: " + baos.toByteArray().length); //$NON-NLS-1$
+
+                            // 100%
+                            this.changeToDisplaying = true;
+                            publishProgress(new Integer(0));
+
+                        } catch (Exception e) {
+                            this.mCause = e;
+                            return Boolean.FALSE;
+                        }
+
+                        return Boolean.TRUE;
+
+                    }
+
+                    @Override
+                    protected void onProgressUpdate(Integer... values) {
+                        // Do progress
+                        doProgress(true, values[0].intValue());
+                    }
+
+                    @Override
+                    protected void onPostExecute(Boolean result) {
+                        final EditorActivity activity = EditorActivity.this;
+                        // Is error?
+                        if (!result.booleanValue()) {
+                            if (this.mCause != null) {
+                                ExceptionUtil.translateException(activity, this.mCause);
+                                activity.mEditor.setEnabled(false);
+                            }
+                        } else {
+                            // Now we have the buffer, set the text of the editor
+                            activity.mEditor.setText(
+                                    tempText, BufferType.EDITABLE);
+
+                            // Highlight editor text syntax
+                            if (activity.mSyntaxHighlight &&
+                                    activity.mSyntaxHighlightProcessor != null) {
+                                try {
+                                    activity.mSyntaxHighlightProcessor.process(
+                                            activity.mEditor.getText());
+                                } catch (Exception ex) {
+                                    // An error in a syntax library, should not break down app.
+                                    Log.e(TAG, "Syntax highlight failed.", ex); //$NON-NLS-1$
+                                }
+                            }
+
+                            setDirty(false);
+                            activity.mEditor.setEnabled(!activity.mReadOnly);
+
+                            // Notify read-only mode
+                            if (activity.mReadOnly) {
+                                DialogHelper.showToast(
+                                        activity,
+                                        R.string.editor_read_only_mode,
+                                        Toast.LENGTH_SHORT);
+                            }
+                        }
+
+                        doProgress(false, 0);
+                    }
+
+                    @Override
+                    protected void onCancelled() {
+                        // Hide the progress
+                        doProgress(false, 0);
+                    }
+
+                    /**
+                     * Method that update the progress status
+                     *
+                     * @param visible If the progress bar need to be hidden
+                     * @param progress The progress
+                     */
+                    private void doProgress(boolean visible, int progress) {
+                        final EditorActivity activity = EditorActivity.this;
+
+                        // Show the progress bar
+                        activity.mProgressBar.setProgress(progress);
+                        activity.mProgress.setVisibility(visible ? View.VISIBLE : View.GONE);
+
+                        if (this.changeToBinaryMode) {
+                            mWordWrapView.setVisibility(View.GONE);
+                            mNoWordWrapView.setVisibility(View.GONE);
+                            mBinaryEditor.setVisibility(View.VISIBLE);
+
+                            // Show hex dumping text
+                            activity.mProgressBarMsg.setText(R.string.dumping_message);
+                            this.changeToBinaryMode = false;
+                        }
+                        else if (this.changeToDisplaying) {
+                            activity.mProgressBarMsg.setText(R.string.displaying_message);
+                            this.changeToDisplaying = false;
+                        }
+                    }
+                };
+        mReadTask.execute(uri);
     }
 
     /**
@@ -1352,18 +1510,18 @@ public class EditorActivity extends Activity implements TextWatcher {
         } catch (Exception ex) {
             ExceptionUtil.translateException(
                     this, ex, false, true, new OnRelaunchCommandResult() {
-                @Override
-                public void onSuccess() {
-                    // Write the file
-                    ensureSyncWrite();
-                }
+                        @Override
+                        public void onSuccess() {
+                            // Write the file
+                            ensureSyncWrite();
+                        }
 
-                @Override
-                public void onFailed(Throwable cause) {/**NON BLOCK**/}
+                        @Override
+                        public void onFailed(Throwable cause) {/**NON BLOCK**/}
 
-                @Override
-                public void onCancelled() {/**NON BLOCK**/}
-            });
+                        @Override
+                        public void onCancelled() {/**NON BLOCK**/}
+                    });
         }
     }
 
