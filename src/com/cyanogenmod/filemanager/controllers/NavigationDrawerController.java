@@ -67,6 +67,8 @@ public class NavigationDrawerController implements ResultCallback<ProviderInfoLi
     private static boolean DEBUG = false;
     private static final String STR_USB = "usb"; // $NON-NLS-1$
 
+    public static final int NAVIGATION_DRAWER_HOME = 1;
+
     private Context mCtx;
     private NavigationView mNavigationDrawer;
     private NavigationDrawerAdapter mAdapter;
@@ -85,7 +87,7 @@ public class NavigationDrawerController implements ResultCallback<ProviderInfoLi
         mStorageBookmarks = new HashMap<Integer, Bookmark>();
         mNavigationDrawerItemList = new ArrayList<NavigationDrawerItem>();
         mLastRoot = 0;
-        mCurrentSelection = -1;
+        mCurrentSelection = 1;
         ListView listView = (ListView)mNavigationDrawer.findViewById(R.id.navigation_view_listview);
         listView.setOnItemClickListener(((MainActivity)mCtx));
         mAdapter = new NavigationDrawerAdapter(mCtx, mNavigationDrawerItemList);
@@ -105,7 +107,10 @@ public class NavigationDrawerController implements ResultCallback<ProviderInfoLi
         for (StorageProviderInfo providerInfo : mProviderInfoList) {
             StorageApi sapi = StorageApi.getInstance();
 
-            if (!providerInfo.needAuthentication()) {
+            if (!providerInfo.needAuthentication() &&
+                    !TextUtils.isEmpty(providerInfo.getPackage()) &&
+                    !TextUtils.isEmpty(providerInfo.getTitle()) &&
+                    !TextUtils.isEmpty(providerInfo.getSummary())) {
                 int providerHashCode = StorageApiConsole.getHashCodeFromProvider(providerInfo);
 
                 // Verify console exists, or create one
@@ -115,7 +120,7 @@ public class NavigationDrawerController implements ResultCallback<ProviderInfoLi
                 addProviderInfoItem(providerHashCode, providerInfo);
             }
         }
-        mAdapter.notifyDataSetChanged();
+        updateDataSet();
     }
 
 
@@ -199,7 +204,7 @@ public class NavigationDrawerController implements ResultCallback<ProviderInfoLi
                 NavigationDrawerItemType.SINGLE, title, summary, R.drawable.ic_settings, color));
 
         // Notify dataset changed here because we aren't sure when/if storage providers will return.
-        mAdapter.notifyDataSetChanged();
+        updateDataSet();
 
         // Load storage providers, This is done last because and is asynchronous, and it has its own
         // call to notifiyDataSetChanged.
@@ -296,6 +301,18 @@ public class NavigationDrawerController implements ResultCallback<ProviderInfoLi
         }
     }
 
+    private void updateDataSet() {
+        if (mCurrentSelection > 0 && mCurrentSelection < mNavigationDrawerItemList.size()) {
+            NavigationDrawerItem item = mNavigationDrawerItemList.get(mCurrentSelection);
+            NavigationDrawerItemType type = item.getType();
+            if (type != NavigationDrawerItemType.DIVIDER &&
+                    type != NavigationDrawerItemType.HEADER) {
+                item.setSelected(true);
+            }
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
     public void removeAllItemsFromDrawer() {
         // reset menu list
         mNavigationDrawerItemList.clear();
@@ -332,13 +349,7 @@ public class NavigationDrawerController implements ResultCallback<ProviderInfoLi
             item.setSelected(false);
         }
 
-        // Set new selection
-        if (position > 0 && position < mNavigationDrawerItemList.size()) {
-            NavigationDrawerItem item = mNavigationDrawerItemList.get(position);
-            item.setSelected(true);
-        }
-
         mCurrentSelection = position;
-        mAdapter.notifyDataSetChanged();
+        updateDataSet();
     }
 }
