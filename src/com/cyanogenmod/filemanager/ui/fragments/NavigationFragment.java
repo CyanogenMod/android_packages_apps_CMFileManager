@@ -1975,16 +1975,8 @@ public class NavigationFragment extends Fragment
             int cc = realHistory.getPosition();
             for (int i = this.mHistory.size() - 1; i >= cc; i--) {
                 this.mHistory.remove(i);
-                mDrawerHistory.removeViewAt(0);
             }
 
-            if (mDrawerHistory.getChildCount() == 0) {
-                mDrawerHistoryEmpty.setVisibility(View.VISIBLE);
-            }
-
-            //Navigate
-            boolean clearHistory = mHistoryTab.isSelected() && mHistory.size() > 0;
-            mClearHistory.setVisibility(clearHistory ? View.VISIBLE : View.GONE);
             return true;
 
         } catch (Throwable ex) {
@@ -2025,6 +2017,11 @@ public class NavigationFragment extends Fragment
                 String path = ((NavigationViewInfoParcelable)h.getItem()).getCurrentDir();
 
                 try {
+                    boolean storageProvider = StorageApiConsole.getStorageApiConsoleForPath(path)
+                            != null;
+                    if (storageProvider) {
+                        break;
+                    }
                     FileSystemObject info = CommandHelper.getFileInfo(getActivity(), path, null);
                     if (info != null) {
                         break;
@@ -2045,7 +2042,6 @@ public class NavigationFragment extends Fragment
         }
 
         //Nothing to apply
-        mClearHistory.setVisibility(View.GONE);
         return false;
     }
 
