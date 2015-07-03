@@ -17,20 +17,20 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <plurals name="n_folders">
-    <item quantity="one">תקייה <xliff:g id="folders">%1$d</xliff:g></item>
-    <item quantity="other"><xliff:g id="folders">%1$d</xliff:g> תקיות</item>
+    <item quantity="one">תיקייה <xliff:g id="folders">%1$d</xliff:g></item>
+    <item quantity="other"><xliff:g id="folders">%1$d</xliff:g> תיקיות</item>
   </plurals>
   <plurals name="n_files">
     <item quantity="one">קובץ <xliff:g id="files">%1$d</xliff:g></item>
     <item quantity="other"><xliff:g id="files">%1$d</xliff:g> קבצים</item>
   </plurals>
   <plurals name="search_found_items">
-    <item quantity="one">איבר <xliff:g id="count">%1$d</xliff:g> נמצא</item>
-    <item quantity="other"><xliff:g id="count">%d</xliff:g> איברים נמצאו</item>
+    <item quantity="one">פריט <xliff:g id="count">%1$d</xliff:g> נמצא</item>
+    <item quantity="other"><xliff:g id="count">%d</xliff:g> פריטים נמצאו</item>
   </plurals>
   <plurals name="selection_folders">
     <item quantity="one">נבחרה תיקייה <xliff:g id="folders">%1$d</xliff:g>.</item>
-    <item quantity="other">נבחרו <xliff:g id="folders">%1$d</xliff:g> תקיות.</item>
+    <item quantity="other">נבחרו <xliff:g id="folders">%1$d</xliff:g> תיקיות.</item>
   </plurals>
   <plurals name="selection_files">
     <item quantity="one">נבחר קובץ <xliff:g id="files">%1$d</xliff:g>.</item>

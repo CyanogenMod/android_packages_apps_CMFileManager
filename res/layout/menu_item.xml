@@ -26,25 +26,25 @@
     android:id="@+id/menu_item_check"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_alignParentRight="true"
+    android:layout_alignParentEnd="true"
     android:layout_centerVertical="true"
     android:contentDescription="@null"
     android:focusable="false"
     android:focusableInTouchMode="false"
-    android:paddingRight="@dimen/extra_margin"
+    android:paddingEnd="@dimen/extra_margin"
     android:src="@drawable/checkable_selector" />
 
   <TextView
     android:id="@+id/menu_item_text"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_toLeftOf="@id/menu_item_check"
+    android:layout_toStartOf="@id/menu_item_check"
     android:layout_alignWithParentIfMissing="true"
     android:focusable="false"
     android:focusableInTouchMode="false"
-    android:gravity="left|center_vertical"
-    android:paddingLeft="@dimen/extra_margin"
-    android:paddingRight="@dimen/extra_margin"
+    android:gravity="start|center_vertical"
+    android:paddingStart="@dimen/extra_margin"
+    android:paddingEnd="@dimen/extra_margin"
     android:singleLine="true"
     android:textAppearance="@style/primary_text_appearance_nohighlight" />
 

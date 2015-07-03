@@ -134,13 +134,6 @@ public class SettingsPreferences extends PreferenceActivity {
 
         // Retrieve the about header
         Header aboutHeader = target.get(target.size()-1);
-        try {
-            String appver =
-                    this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
-            aboutHeader.summary = getString(R.string.pref_about_summary, appver);
-        } catch (Exception e) {
-            aboutHeader.summary = getString(R.string.pref_about_summary, ""); //$NON-NLS-1$
-        }
         aboutHeader.intent = new Intent(getApplicationContext(), ChangeLogActivity.class);
     }
 

@@ -42,7 +42,7 @@
       android:layout_height="wrap_content"
       android:singleLine="false"
       android:maxLength="@integer/editor_max_file_size"
-      android:gravity="top|left"
+      android:gravity="top|start"
       android:cursorVisible="true"
       android:background="@null"
       android:imeOptions="actionDone|flagNoFullscreen"

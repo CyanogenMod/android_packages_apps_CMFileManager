@@ -42,7 +42,7 @@
   <string name="copy_text_cd">Wybierz, aby skopiować tekst do schowka</string>
   <string name="copy_text_msg">Skopiowano tekst do schowka</string>
   <string name="warning_title">Uwaga</string>
-  <string name="error_title">Napotkano błąd</string>
+  <string name="error_title">Błąd</string>
   <string name="confirm_operation">Potwierdź operację</string>
   <string name="confirm_overwrite">Potwierdź nadpisanie</string>
   <string name="confirm_deletion">Potwierdź usunięcie</string>
@@ -52,9 +52,11 @@
   <string name="msgs_privileged_console_alloc_failed">Nie można uruchomić w trybie dostępu do roota. Aktywowany zostanie tryb bezpieczny.</string>
   <string name="msgs_settings_save_failure">Ustawienie nie może zostać aktywowane lub zachowane.</string>
   <string name="msgs_settings_invalid_initial_directory">Początkowy folder \"<xliff:g id="initial_dir">%1$s</xliff:g>\" jest nieprawidłowy. Zmieniono na folder główny.</string>
+  <string name="root_not_available_msg">Root nie jest dostępny na tym urządzeniu. Nie można wykonać tej operacji.</string>
   <string name="msgs_success">Operacja zakończyła się sukcesem.</string>
   <string name="msgs_unknown">Napotkano błąd. Operacja się nie powiodła.</string>
   <string name="msgs_insufficient_permissions">Ta operacja wymaga podwyższonych uprawnień. Spróbuj po aktywacji trybu dostępu do roota.</string>
+  <string name="msgs_no_disk_space">Ta operacja nie powiodła się, ponieważ na urządzeniu nie ma wolnego miejsca.</string>
   <string name="msgs_file_not_found">Nie znaleziono pliku lub folderu.</string>
   <string name="msgs_command_not_found">Nie znaleziono polecenia operacji lub ma ono nieprawidłową definicję.</string>
   <string name="msgs_io_failed">Niepowodzenie zapisu/odczytu.</string>
@@ -65,7 +67,7 @@
   <string name="msgs_read_only_filesystem">System plików jest dostępny tylko do odczytu. Przed ponowieniem operacji spróbuj zamontować system plików w trybie zapisu.</string>
   <string name="msgs_illegal_argument">Niedozwolony argument. Wywołanie nie powiodło się.</string>
   <string name="msgs_unresolved_inconsistencies">Operacja nie jest możliwa, ponieważ spowodowałaby niespójności.</string>
-  <string name="msgs_operation_not_allowed_in_current_directory">Operacja nie jest dozwolona w bieżącym folderze.\n\nDocelowy folder nie może być podfolderem źródła lub taki sam jak źródło.</string>
+  <string name="msgs_operation_not_allowed_in_current_directory">Folder docelowy nie może być podfolderem źródła lub być taki sam jak źródło.</string>
   <string name="msgs_push_again_to_exit">Naciśnij ponownie, aby wyjść.</string>
   <string name="msgs_not_registered_app">Nie znaleziono żadnej aplikacji zdolnej do uruchomienia wskazanego typu pliku.</string>
   <string name="msgs_overwrite_files">Niektóre pliki już istnieją w folderze docelowym.\n\nNadpisać?</string>
@@ -84,10 +86,15 @@
   <string name="actionbar_button_overflow_cd">Więcej opcji</string>
   <string name="actionbar_button_storage_cd">Woluminy pamięci</string>
   <string name="actionbar_button_save_cd">Zapisz</string>
+  <string name="actionbar_button_print_cd">Drukuj</string>
   <string name="sort_by_name_asc">Wg nazwy ▲</string>
   <string name="sort_by_name_desc">Wg nazwy ▼</string>
   <string name="sort_by_date_asc">Wg daty ▲</string>
   <string name="sort_by_date_desc">Wg daty ▼</string>
+  <string name="sort_by_size_asc">Wg rozmiaru \u25B2</string>
+  <string name="sort_by_size_desc">Wg rozmiaru \u25BC</string>
+  <string name="sort_by_type_asc">Wg typu \u25B2</string>
+  <string name="sort_by_type_desc">Wg typu \u25BC</string>
   <string name="layout_icons">Ikony</string>
   <string name="layout_simple">Prosty</string>
   <string name="layout_details">Szczegółowy</string>
@@ -103,12 +110,13 @@
   <string name="filesystem_info_dialog_title">Informacje o systemie plików</string>
   <string name="filesystem_info_dialog_tab_info">Informacje</string>
   <string name="filesystem_info_dialog_tab_disk_usage">Użycie dysku</string>
-  <string name="filesystem_info_dialog_status">Status:</string>
+  <string name="filesystem_info_dialog_status">Zamontowano:</string>
   <string name="filesystem_info_dialog_mount_point">Punkt montowania:</string>
   <string name="filesystem_info_dialog_device">Urządzenie:</string>
   <string name="filesystem_info_dialog_type">Typ:</string>
   <string name="filesystem_info_dialog_options">Opcje:</string>
   <string name="filesystem_info_dialog_dump_pass">Luka / przejście:</string>
+  <string name="filesystem_info_dialog_virtual">Wirtualny:</string>
   <string name="filesystem_info_dialog_total_disk_usage">Łącznie:</string>
   <string name="filesystem_info_dialog_used_disk_usage">Zajęte:</string>
   <string name="filesystem_info_dialog_free_disk_usage">Wolne:</string>
@@ -169,6 +177,8 @@
   <string name="bookmarks_home">Folder domowy</string>
   <string name="bookmarks_root_folder">Folder główny</string>
   <string name="bookmarks_system_folder">Folder systemowy</string>
+  <string name="bookmarks_secure">Bezpieczna pamięć</string>
+  <string name="bookmarks_remote">Przenośna pamięć</string>
   <string name="bookmarks_button_config_cd">Ustaw folder początkowy.</string>
   <string name="bookmarks_button_remove_bookmark_cd">Usuń zakładkę.</string>
   <string name="bookmarks_msgs_add_success">Zakładka została dodana pomyślnie.</string>
@@ -237,10 +247,12 @@
   <string name="actions_menu_open_parent_folder">Otwórz folder nadrzędny</string>
   <string name="actions_menu_compute_checksum">Oblicz sumę kontrolną</string>
   <string name="actions_menu_print">Drukuj</string>
+  <string name="actions_menu_set_as_home">Ustaw jako dom</string>
   <string name="actions_ask_undone_operation_msg">Ta czynność nie może zostać cofnięta. Czy chcesz kontynuować?</string>
   <string name="input_name_dialog_label">Nazwa:</string>
   <string name="input_name_dialog_message_empty_name">Nazwa nie może być pusta.</string>
   <string name="input_name_dialog_message_invalid_path_name">Nieprawidłowa nazwa. Znaki \'<xliff:g id="invalid_characters">%1$s</xliff:g>\' są niedozwolone.</string>
+  <string name="input_name_dialog_message_invalid_name_length">Osiągnięto maksymalną liczbę znaków.</string>
   <string name="input_name_dialog_message_invalid_name">Nieprawidłowa nazwa. Nazwy \'.\' and \'..\' są niedozwolone.</string>
   <string name="input_name_dialog_message_name_exists">Nazwa już istnieje.</string>
   <string name="associations_dialog_title">Skojarzenia</string>
@@ -267,6 +279,22 @@
   <string name="filetime_format_mode_MMddyyyy_HHmmss">mm/dd/rrrr gg:mm:ss</string>
   <string name="filetime_format_mode_yyyyMMdd_HHmmss">rrrr-mm-dd gg:mm:ss</string>
   <string name="selection_folders_and_files">Zaznaczono <xliff:g id="folders">%1$s</xliff:g> i <xliff:g id="files">%2$s</xliff:g>.</string>
+  <string name="category_system">SYSTEM</string>
+  <string name="category_app">APLIKACJE</string>
+  <string name="category_binary">PLIKI BINARNE</string>
+  <string name="category_text">TEKST</string>
+  <string name="category_document">DOKUMENT</string>
+  <string name="category_ebook">EBOOK</string>
+  <string name="category_mail">POCZTA</string>
+  <string name="category_compress">ARCHIWA</string>
+  <string name="category_exec">WYKONYWALNE</string>
+  <string name="category_database">BAZY DANYCH</string>
+  <string name="category_font">CZCIONKI</string>
+  <string name="category_image">OBRAZY</string>
+  <string name="category_audio">PLIKI AUDIO</string>
+  <string name="category_video">PLIKI WIDEO</string>
+  <string name="category_security">BEZPIECZEŃSTWO</string>
+  <string name="category_all">WSZYSTKIE</string>
   <string name="compression_mode_title">Tryb kompresji</string>
   <string name="shortcut_failed_msg">Nie udało się wykonać skrótu.</string>
   <string name="shortcut_creation_success_msg">Skrót utworzony pomyślnie.</string>
@@ -274,11 +302,10 @@
   <string name="pref">Ustawienia</string>
   <string name="pref_general">Główne ustawienia</string>
   <string name="pref_search">Opcje wyszukiwania</string>
+  <string name="pref_storage">Opcje pamięci masowej</string>
   <string name="pref_editor">Opcje edytora</string>
   <string name="pref_themes">Motywy</string>
   <string name="pref_about">O aplikacji</string>
-  <string name="pref_about_summary">Menedżer plików v<xliff:g id="version">%1$s</xliff:g>
-Copyright \u00A9 2013 Projekt CyanogenMod</string>
   <string name="pref_general_behaviour_category">Generalne</string>
   <string name="pref_case_sensitive_sort">Uwzględnianie wielkości liter</string>
   <string name="pref_case_sensitive_sort_summary">Uwzględniaj wielkość liter w trakcie nawigacji i sortowania wyników wyszukiwania</string>
@@ -314,7 +341,12 @@ Copyright \u00A9 2013 Projekt CyanogenMod</string>
   <string name="pref_save_search_terms_off">Wyszukiwane frazy nie będą zapisywane</string>
   <string name="pref_remove_saved_search_terms">Usuń zapisane wyszukiwane frazy</string>
   <string name="pref_remove_saved_search_terms_summary">Wybierz by usunąć wszystkie zapisane wyszukiwane frazy</string>
-  <string name="pref_remove_saved_search_terms_msg">Wszystkie zapisane wyszukiwane frazy zostały usunięte.</string>
+  <string name="pref_remove_saved_search_terms_msg">Wszystkie zapisane wyszukiwane frazy zostały usunięte</string>
+  <string name="pref_secure_storage_category">Bezpieczna pamięć</string>
+  <string name="pref_secure_storage_delayed_sync_title">Opóźnienie synchronizacji</string>
+  <string name="pref_secure_storage_delayed_sync_summary">Synchronizacja zabezpieczonych plików jest kosztowną operacją. Włącz tę opcję, aby umożliwić lepsze czasy odpowiedzi po każdej operacji. Wykonywana jest, gdy system plików jest w nieużywany, kosztem niezsynchronizowania informacji, jeśli aplikacja ulegnie awarii.</string>
+  <string name="pref_secure_storage_reset_password_title">Zmień hasło</string>
+  <string name="pref_secure_storage_delete_storage_title">Usuń pamięć</string>
   <string name="pref_editor_behaviour_category">Zachowanie</string>
   <string name="pref_no_suggestions">Brak podpowiedzi</string>
   <string name="pref_no_suggestions_desc">Nie wyświetlaj podpowiedzi w trakcie edycji pliku</string>
@@ -323,7 +355,7 @@ Copyright \u00A9 2013 Projekt CyanogenMod</string>
   <string name="pref_hexdump_desc">Gdy otwierasz plik binarny generuj heksadecymalny zrzut pliku i otwórz go w przeglądarce plików heksadecymalnych</string>
   <string name="pref_editor_syntax_highlight_category">Podświetlanie składni</string>
   <string name="pref_syntax_highlight">Podświetlanie składni</string>
-  <string name="pref_syntax_highlight_desc">Podświetlaj składnię plików otwartych w edytorze (tylko, jeśli dany typ pliku jest obsługiwany przez moduł podświetlania)</string>
+  <string name="pref_syntax_highlight_desc">Podświetlanie składni pliku wyświetlane w edytorze (tylko wtedy, gdy procesor podświetlania składni jest dostępny dla danego typu pliku)</string>
   <string name="pref_syntax_highlight_color_scheme">Schemat kolorów</string>
   <string name="pref_syntax_highlight_color_scheme_desc">Wybierz schemat kolorów podświetlenia składni</string>
   <string name="pref_syntax_sh_use_theme_default">Użyj domyślnego</string>
@@ -351,6 +383,26 @@ Copyright \u00A9 2013 Projekt CyanogenMod</string>
   <string name="ash_keyword">Słowo kluczowe</string>
   <string name="ash_quoted_string">Fraza w cudzysłowie</string>
   <string name="ash_variable">Zmienna</string>
+  <string name="secure_storage_unlock_title">Odblokuj pamięć</string>
+  <string name="secure_storage_create_title">Utwórz pamięć</string>
+  <string name="secure_storage_reset_title">Resetuj hasło</string>
+  <string name="secure_storage_delete_title">Usuń pamięć</string>
+  <string name="secure_storage_unlock_key_prompt_msg">Wpisz hasło, aby bezpiecznie odblokować przechowywane pliki.</string>
+  <string name="secure_storage_unlock_key_new_msg">Wpisz hasło, aby chronić przechowywane pliki.</string>
+  <string name="secure_storage_unlock_key_reset_msg">Podaj obecne i nowe hasło, aby zresetować chroniony system plików.</string>
+  <string name="secure_storage_unlock_key_delete_msg">Wpisz aktualne hasło, aby usunąć bezpieczne przechowywanie plików.</string>
+  <string name="secure_storage_unlock_old_key_title">Stare hasło:</string>
+  <string name="secure_storage_unlock_new_key_title">Nowe hasło:</string>
+  <string name="secure_storage_unlock_key_title">Hasło:</string>
+  <string name="secure_storage_unlock_repeat_title">Powtórz hasło:</string>
+  <string name="secure_storage_create_button">Utwórz</string>
+  <string name="secure_storage_unlock_button">Odblokuj</string>
+  <string name="secure_storage_reset_button">Przywróć domyślne</string>
+  <string name="secure_storage_delete_button">Usuń</string>
+  <string name="secure_storage_unlock_failed">Nie można odblokować pamięci</string>
+  <string name="secure_storage_unlock_validation_length">Hasło musi mieć co najmniej <xliff:g id="characters"> %1$d </xliff:g> znaków.</string>
+  <string name="secure_storage_unlock_validation_equals">Podane hasła różnią się.</string>
+  <string name="secure_storage_open_file_warning">To skopiuje plik do tymczasowej, niezabezpieczonej lokalizacji. Pliki z tego miejsca zostaną usunięte po godzinie.</string>
   <string name="print_unsupported_document">Nieobsługiwany format dokumentu</string>
   <string name="print_unsupported_image">Nieobsługiwany format obrazu</string>
   <string name="print_document_header">Dokument: <xliff:g id="document_name">%1$s</xliff:g></string>
@@ -359,4 +411,5 @@ Copyright \u00A9 2013 Projekt CyanogenMod</string>
   <string name="changelog_title">Lista zmian</string>
   <string name="welcome_title">Witaj</string>
   <string name="welcome_msg">\n    Witaj w Menedżerze plików CyanogenMod.\n    \n\nAplikacja ta pozwala Ci przeglądać pliki systemowe i wykonywać czynności, które mogą uszkodzić urządzenie. Aby zapobiec ewentualnym szkodom, aplikacja zostanie uruchomiona w bezpiecznym trybie bez podwyższonych uprawnień.\n    \n\nTryb z pełnymi uprawnieniami możesz aktywować w ustawieniach aplikacji. Ponosisz odpowiedzialność za to, by swoimi działaniami nie doprowadzić do uszkodzenia systemu.\n    \n\nZespół CyanogenMod.\n</string>
+  <string name="activity_not_found_exception">Nie znaleziono aplikacji do otwarcia tego pliku</string>
 </resources>

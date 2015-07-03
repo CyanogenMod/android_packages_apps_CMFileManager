@@ -42,7 +42,7 @@
   <string name="copy_text_cd">탭하여 텍스트를 클립보드로 복사</string>
   <string name="copy_text_msg">텍스트가 클립보드에 복사되었습니다.</string>
   <string name="warning_title">경고</string>
-  <string name="error_title">오류 발생</string>
+  <string name="error_title">오류</string>
   <string name="confirm_operation">작업 확인</string>
   <string name="confirm_overwrite">덮어쓰기 확인</string>
   <string name="confirm_deletion">삭제 확인</string>
@@ -52,9 +52,11 @@
   <string name="msgs_privileged_console_alloc_failed">루트 액세스 모드를 실행할 수 없습니다. 안전 모드로 전환합니다.</string>
   <string name="msgs_settings_save_failure">설정을 적용하거나 저장하지 못했습니다.</string>
   <string name="msgs_settings_invalid_initial_directory">시작 폴더 \'<xliff:g id="initial_dir">%1$s</xliff:g>\'이(가) 올바르지 않습니다. 루트 폴더로 변경합니다.</string>
+  <string name="root_not_available_msg">루트 권한을 사용할 수 없습니다. 작업을 수행할 수 없습니다.</string>
   <string name="msgs_success">작업을 성공적으로 완료했습니다.</string>
   <string name="msgs_unknown">오류가 발생하였습니다. 작업에 실패하였습니다.</string>
   <string name="msgs_insufficient_permissions">이 작업은 더 높은 권한을 필요로 합니다. 루트 액세스 모드로 변경합니다.</string>
+  <string name="msgs_no_disk_space">기기에 여유 공간이 없어 작업에 실패하였습니다.</string>
   <string name="msgs_file_not_found">파일 또는 폴더를 찾을 수 없습니다.</string>
   <string name="msgs_command_not_found">작업의 명령을 찾을 수 없거나 명령에 잘못된 정의가 있습니다.</string>
   <string name="msgs_io_failed">읽기/쓰기에 실패했습니다.</string>
@@ -65,7 +67,7 @@
   <string name="msgs_read_only_filesystem">이 파일 시스템은 읽기 전용입니다. 작업을 시도하기 전에 파일 시스템을 읽기-쓰기로 마운트해보십시오.</string>
   <string name="msgs_illegal_argument">잘못된 인수입니다. 호출에 실패했습니다.</string>
   <string name="msgs_unresolved_inconsistencies">해당 작업은 불일치성을 만들 수 있으므로 금지되었습니다.</string>
-  <string name="msgs_operation_not_allowed_in_current_directory">이 작업은 현재 폴더에서 허용되지 않습니다.\n\n작업 목적 폴더는 원본 경로와 같거나 그 하위 경로일 수 없습니다.</string>
+  <string name="msgs_operation_not_allowed_in_current_directory">대상 폴더는 하위 폴더나 원본 폴더가 될 수 없습니다.</string>
   <string name="msgs_push_again_to_exit">한 번 더 누르면 종료됩니다.</string>
   <string name="msgs_not_registered_app">선택된 파일을 실행할 수 있는 앱이 없습니다.</string>
   <string name="msgs_overwrite_files">대상 폴더에 해당 파일이 이미 존재합니다.\n\n덮어쓸까요?</string>
@@ -84,10 +86,15 @@
   <string name="actionbar_button_overflow_cd">기타 옵션</string>
   <string name="actionbar_button_storage_cd">저장소 볼륨</string>
   <string name="actionbar_button_save_cd">저장</string>
+  <string name="actionbar_button_print_cd">인쇄</string>
   <string name="sort_by_name_asc">이름순 \u25B2</string>
   <string name="sort_by_name_desc">이름순 \u25BC</string>
   <string name="sort_by_date_asc">날짜순 \u25B2</string>
   <string name="sort_by_date_desc">날짜순 \u25BC</string>
+  <string name="sort_by_size_asc">크기순 \u25B2</string>
+  <string name="sort_by_size_desc">크기순 \u25BC</string>
+  <string name="sort_by_type_asc">종류순 \u25B2</string>
+  <string name="sort_by_type_desc">종류순 \u25BC</string>
   <string name="layout_icons">아이콘</string>
   <string name="layout_simple">단순하게</string>
   <string name="layout_details">자세하게</string>
@@ -103,12 +110,13 @@
   <string name="filesystem_info_dialog_title">파일 시스템 정보</string>
   <string name="filesystem_info_dialog_tab_info">정보</string>
   <string name="filesystem_info_dialog_tab_disk_usage">디스크 사용량</string>
-  <string name="filesystem_info_dialog_status">상태:</string>
+  <string name="filesystem_info_dialog_status">마운트됨:</string>
   <string name="filesystem_info_dialog_mount_point">마운트 지점:</string>
   <string name="filesystem_info_dialog_device">장치:</string>
   <string name="filesystem_info_dialog_type">종류:</string>
   <string name="filesystem_info_dialog_options">옵션:</string>
   <string name="filesystem_info_dialog_dump_pass">덤프 / 패스:</string>
+  <string name="filesystem_info_dialog_virtual">가상:</string>
   <string name="filesystem_info_dialog_total_disk_usage">총 용량:</string>
   <string name="filesystem_info_dialog_used_disk_usage">사용 중:</string>
   <string name="filesystem_info_dialog_free_disk_usage">여유 공간:</string>
@@ -169,6 +177,8 @@
   <string name="bookmarks_home">홈</string>
   <string name="bookmarks_root_folder">루트 폴더</string>
   <string name="bookmarks_system_folder">시스템 폴더</string>
+  <string name="bookmarks_secure">보안 저장소</string>
+  <string name="bookmarks_remote">원격 저장소</string>
   <string name="bookmarks_button_config_cd">시작 폴더를 설정합니다.</string>
   <string name="bookmarks_button_remove_bookmark_cd">북마크를 제거합니다.</string>
   <string name="bookmarks_msgs_add_success">즐겨찾기에 성공적으로 추가했습니다.</string>
@@ -228,10 +238,12 @@
   <string name="actions_menu_open_parent_folder">상위 폴더 열기</string>
   <string name="actions_menu_compute_checksum">체크섬 계산</string>
   <string name="actions_menu_print">인쇄</string>
+  <string name="actions_menu_set_as_home">홈으로 설정</string>
   <string name="actions_ask_undone_operation_msg">이 작업은 취소할 수 없습니다. 계속하시겠습니까?</string>
   <string name="input_name_dialog_label">이름:</string>
   <string name="input_name_dialog_message_empty_name">이름은 비워둘 수 없습니다.</string>
   <string name="input_name_dialog_message_invalid_path_name">잘못된 이름입니다. 문자 \'<xliff:g id="invalid_characters">%1$s</xliff:g>\'(은)는 허용되지 않습니다.</string>
+  <string name="input_name_dialog_message_invalid_name_length">최대 글자수에 도달했습니다.</string>
   <string name="input_name_dialog_message_invalid_name">잘못된 이름입니다. \'.\'와 \'..\'은 이름으로 사용할 수 없습니다.</string>
   <string name="input_name_dialog_message_name_exists">이 이름은 이미 존재합니다.</string>
   <string name="associations_dialog_title">연결</string>
@@ -258,6 +270,22 @@
   <string name="filetime_format_mode_MMddyyyy_HHmmss">mm/dd/yyyy hh:mm:ss</string>
   <string name="filetime_format_mode_yyyyMMdd_HHmmss">yyyy-mm-dd hh:mm:ss</string>
   <string name="selection_folders_and_files"><xliff:g id="folders">%1$s</xliff:g> 폴더와 <xliff:g id="files">%2$s</xliff:g> 파일이 선택되었습니다.</string>
+  <string name="category_system">시스템</string>
+  <string name="category_app">앱</string>
+  <string name="category_binary">바이너리</string>
+  <string name="category_text">텍스트</string>
+  <string name="category_document">문서</string>
+  <string name="category_ebook">이북</string>
+  <string name="category_mail">메일</string>
+  <string name="category_compress">압축</string>
+  <string name="category_exec">실행 파일</string>
+  <string name="category_database">데이터베이스</string>
+  <string name="category_font">글꼴</string>
+  <string name="category_image">이미지</string>
+  <string name="category_audio">오디오</string>
+  <string name="category_video">비디오</string>
+  <string name="category_security">보안</string>
+  <string name="category_all">전체</string>
   <string name="compression_mode_title">압축 방식</string>
   <string name="shortcut_failed_msg">바로가기를 처리하지 못했습니다.</string>
   <string name="shortcut_creation_success_msg">바로가기를 성공적으로 생성했습니다.</string>
@@ -265,10 +293,10 @@
   <string name="pref">설정</string>
   <string name="pref_general">일반 설정</string>
   <string name="pref_search">검색 설정</string>
+  <string name="pref_storage">저장소 설정</string>
   <string name="pref_editor">편집기 설정</string>
   <string name="pref_themes">테마</string>
   <string name="pref_about">정보</string>
-  <string name="pref_about_summary">파일 관리자 v<xliff:g id="version">%1$s</xliff:g>\nCopyright \u00A9 2012-2014 The CyanogenMod Project</string>
   <string name="pref_general_behaviour_category">일반</string>
   <string name="pref_case_sensitive_sort">대소문자 구분</string>
   <string name="pref_case_sensitive_sort_summary">검색 결과를 정렬하거나 탐색할 때 대소문자를 구별합니다</string>
@@ -304,7 +332,12 @@
   <string name="pref_save_search_terms_off">검색어를 저장하지 않습니다</string>
   <string name="pref_remove_saved_search_terms">저장된 검색어 제거</string>
   <string name="pref_remove_saved_search_terms_summary">탭하여 모든 저장된 검색어를 제거합니다</string>
-  <string name="pref_remove_saved_search_terms_msg">모든 저장된 검색어가 제거되었습니다.</string>
+  <string name="pref_remove_saved_search_terms_msg">저장된 검색어가  모두 제거되었습니다</string>
+  <string name="pref_secure_storage_category">보호된 저장소</string>
+  <string name="pref_secure_storage_delayed_sync_title">지연된 동기</string>
+  <string name="pref_secure_storage_delayed_sync_summary">보호된 파일 시스템의 동기화는 많은 자원이 필요한 작업입니다. 이 옵션을 사용하면 파일 시스템이 사용 중이 아닐 때 동기화를 수행함으로써 각 작업의 반응 속도를 높일 수 있으나, 앱이 비정상적으로 종료될 경우 동기화되지 않은 정보가 손실됩니다.</string>
+  <string name="pref_secure_storage_reset_password_title">비밀번호 변경</string>
+  <string name="pref_secure_storage_delete_storage_title">저장소 삭제</string>
   <string name="pref_editor_behaviour_category">행동</string>
   <string name="pref_no_suggestions">제안 안 함</string>
   <string name="pref_no_suggestions_desc">파일을 편집할 때 사전 제안을 표시하지 않습니다</string>
@@ -313,7 +346,7 @@
   <string name="pref_hexdump_desc">바이너리 파일을 열 때 헥스 덤프를 생성하여 헥스 뷰어로 엽니다</string>
   <string name="pref_editor_syntax_highlight_category">구문 강조</string>
   <string name="pref_syntax_highlight">구문 강조</string>
-  <string name="pref_syntax_highlight_desc">에디터에서 열린 파일의 구문을 강조합니다 (구문 강조 프로세서가 해당 형식의 파일을 지원할 때만)</string>
+  <string name="pref_syntax_highlight_desc">편집기에서 보여진 파일의 구문을 강조함 (파일의 형식이 구문 강조가 가능할 때만)</string>
   <string name="pref_syntax_highlight_color_scheme">색 구성</string>
   <string name="pref_syntax_highlight_color_scheme_desc">구문을 강조할 색 구성을 선택합니다</string>
   <string name="pref_syntax_sh_use_theme_default">테마 기본값 사용</string>
@@ -341,6 +374,26 @@
   <string name="ash_keyword">키워드</string>
   <string name="ash_quoted_string">따옴표 붙은 문자열</string>
   <string name="ash_variable">변수</string>
+  <string name="secure_storage_unlock_title">저장소 잠금 해제</string>
+  <string name="secure_storage_create_title">저장소 만들기</string>
+  <string name="secure_storage_reset_title">비밀번호 재설정</string>
+  <string name="secure_storage_delete_title">저장소 삭제</string>
+  <string name="secure_storage_unlock_key_prompt_msg">보호된 저장소의 파일 시스템에 접근하기 위한 암호를 입력하세요.</string>
+  <string name="secure_storage_unlock_key_new_msg">보호된 저장소에 접근할 때 사용할 새 비밀번호를 입력하세요.</string>
+  <string name="secure_storage_unlock_key_reset_msg">보호된 저장소의 암호를 재설정하려면 이전 암호와 새 암호를 입력하세요.</string>
+  <string name="secure_storage_unlock_key_delete_msg">보호된 저장소를 삭제하려면 현재 암호를 입력하세요.</string>
+  <string name="secure_storage_unlock_old_key_title">이전 암호:</string>
+  <string name="secure_storage_unlock_new_key_title">새 암호:</string>
+  <string name="secure_storage_unlock_key_title">암호:</string>
+  <string name="secure_storage_unlock_repeat_title">암호 재입력:</string>
+  <string name="secure_storage_create_button">만들기</string>
+  <string name="secure_storage_unlock_button">잠금 해제</string>
+  <string name="secure_storage_reset_button">초기화</string>
+  <string name="secure_storage_delete_button">삭제</string>
+  <string name="secure_storage_unlock_failed">저장소의 잠금을 해제할 수 없습니다</string>
+  <string name="secure_storage_unlock_validation_length">저장소의 암호는 최소 <xliff:g id="characters">%1$d</xliff:g>자 이상이어야 합니다.</string>
+  <string name="secure_storage_unlock_validation_equals">암호가 일치하지 않습니다.</string>
+  <string name="secure_storage_open_file_warning">암호화되지 않은 임시 위치로 파일을 복사합니다. 이 파일은 1시간 후 삭제됩니다.</string>
   <string name="print_unsupported_document">지원되지 않는 문서 형식</string>
   <string name="print_unsupported_image">지원되지 않는 이미지 형식</string>
   <string name="print_document_header">문서: <xliff:g id="document_name">%1$s</xliff:g></string>
@@ -349,4 +402,5 @@
   <string name="changelog_title">변경 사항</string>
   <string name="welcome_title">환영합니다</string>
   <string name="welcome_msg">CyanogenMod 파일 관리자에 오신 것을 환영합니다.\n\n이 앱은 파일 시스템을 탐색할 수 있게 해주며, 장치를 망가뜨리는 작업을 할 수도 있습니다. 이러한 손상을 방지하기 위해, 이 앱은 권한이 적은 안전 모드로 시작됩니다.\n\n앱의 설정을 통해 높은 권한의 모드로 변경할 수 있습니다. 높은 권한 모드로 작업할 때엔 시스템을 망가뜨리지 않도록 조심해주십시오. 저희는 그에 대한 책임을 지지 않습니다.\n\nThe CyanogenMod Team</string>
+  <string name="activity_not_found_exception">이 파일을 열 수 있는 앱이 없음</string>
 </resources>

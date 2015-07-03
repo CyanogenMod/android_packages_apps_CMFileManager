@@ -24,7 +24,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/extra_large_margin"
-    android:gravity="left|center_vertical"
+    android:gravity="start|center_vertical"
     android:textAppearance="@style/primary_text_appearance"
     android:textStyle="normal" />
 

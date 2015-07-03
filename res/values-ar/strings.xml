@@ -42,7 +42,6 @@
   <string name="copy_text_cd">اضغط لنسخ النص إلى \"الحافظة\"</string>
   <string name="copy_text_msg">النص نسخ إلى الحافظة</string>
   <string name="warning_title">تحذير</string>
-  <string name="error_title">تم الكشف عن خطأ</string>
   <string name="confirm_operation">تأكيد عملية</string>
   <string name="confirm_overwrite">تأكيد الكتابة فوق</string>
   <string name="confirm_deletion">تأكيد الحذف</string>
@@ -65,7 +64,6 @@
   <string name="msgs_read_only_filesystem">ملفات النظام للقراءة فقط. محاولة تحويل نظام الملفات الى القراءة والكتابة قبل محاولة تنفيذ العملية.</string>
   <string name="msgs_illegal_argument">البرهان غير المشروعة. فشل استدعاء.</string>
   <string name="msgs_unresolved_inconsistencies">غير مسموح العملية نظراً لأن من شأنه أن يسبب تناقضات.</string>
-  <string name="msgs_operation_not_allowed_in_current_directory">غير مسموح للعملية في المجلد. \n\n مكان المجلد الحالي يتعذر متابعة مصدر أو شبيه المصدر.</string>
   <string name="msgs_push_again_to_exit">اضغط الزر مرة أخرى للخروج.</string>
   <string name="msgs_not_registered_app">لا يوجدالتطبيق مسجل للتعامل مع نوع الملف المحدد.</string>
   <string name="msgs_overwrite_files">بعض الملفات موجودة بالفعل في مسار المجلد \n\n كتابة؟</string>
@@ -94,12 +92,10 @@
   <string name="filesystem_info_warning_title">لا توجد معلومات</string>
   <string name="filesystem_info_warning_msg">لا تتوفر أي معلومات عن نظام الملفات.</string>
   <string name="filesystem_info_cant_be_mounted_msg">نظام الملفات لا يمكن أن تكون محملة/غير محملة .</string>
-  <string name="filesystem_info_mount_not_allowed_msg">عمليات تركيب نظام الملفات لا تسمح للوضع الأمن. اضغط لتغيير إلى وضع صلاحيات الجذر.</string>
   <string name="filesystem_info_mount_failed_msg">فشل نظام ملف تصاعد العملية. لا يمكن بعض أنظمة الملفات، مثل بطاقات SD، شنت مكوم لأنهم المدمج كأنظمة ملف للقراءة فقط.</string>
   <string name="filesystem_info_dialog_title">معلومات ملف النظام</string>
   <string name="filesystem_info_dialog_tab_info">معلومات</string>
   <string name="filesystem_info_dialog_tab_disk_usage">استخدام القرص</string>
-  <string name="filesystem_info_dialog_status">الحالة:</string>
   <string name="filesystem_info_dialog_mount_point">نقطة تحميل:</string>
   <string name="filesystem_info_dialog_device">الجهاز:</string>
   <string name="filesystem_info_dialog_type">النوع:</string>
@@ -263,7 +259,6 @@
   <string name="pref_editor">خيارات المحرر</string>
   <string name="pref_themes">الثيمات</string>
   <string name="pref_about">حول</string>
-  <string name="pref_about_summary">مدير ملفات v<xliff:g id="version">%1$s</xliff:g>\nنسخة \u00A9 2012-2014 مشروع CyanogenMod</string>
   <string name="pref_general_behaviour_category">اعدادات عامة</string>
   <string name="pref_case_sensitive_sort">حساسية حالة الأحرف</string>
   <string name="pref_case_sensitive_sort_summary">النظر في القضية عند التنقل أو فرز نتائج البحث</string>
@@ -299,16 +294,13 @@
   <string name="pref_save_search_terms_off">لن يتم حفظ مصطلحات البحث</string>
   <string name="pref_remove_saved_search_terms">إزالة حفظ مصطلحات البحث</string>
   <string name="pref_remove_saved_search_terms_summary">انقر لإزالة كافة مصطلحات البحث المحفوظ</string>
-  <string name="pref_remove_saved_search_terms_msg">تم إزالة كافة مصطلحات البحث المحفوظة.</string>
   <string name="pref_editor_behaviour_category">سلوك</string>
   <string name="pref_no_suggestions">لا اقتراحات</string>
   <string name="pref_no_suggestions_desc">لا يتم عرض اقتراحات قاموس أثناء تحرير الملف</string>
   <string name="pref_word_wrap">اللتفاف النص</string>
   <string name="pref_hexdump">الملفات الثنائية Hexdump</string>
   <string name="pref_hexdump_desc">عند فتح ملف ثنائي، تولد Hexdump الملف وفتحه في عارض سداسي عشري</string>
-  <string name="pref_editor_syntax_highlight_category">تسليط الضوء على بناء الجملة</string>
   <string name="pref_syntax_highlight">تسليط الضوء على بناء الجملة</string>
-  <string name="pref_syntax_highlight_desc">تسليط الضوء على بناء الجملة للملف المعروض في المحرر (فقط عندما يتوفر معالج تسليط الضوء على بناء جملة لنوع الملف)</string>
   <string name="pref_syntax_highlight_color_scheme">نظام الألوان</string>
   <string name="pref_syntax_highlight_color_scheme_desc">حدد نظام الألوان تسليط الضوء على بناء الجملة</string>
   <string name="pref_syntax_sh_use_theme_default">استخدام السمة الافتراضية</string>

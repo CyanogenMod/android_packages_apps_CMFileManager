@@ -34,7 +34,7 @@
                         android:id="@+id/ab_settings"
                         android:layout_width="@dimen/default_buttom_width"
                         android:layout_height="match_parent"
-                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentEnd="true"
                         android:contentDescription="@string/menu_settings"
                         android:onClick="onActionBarItemClick"
                         android:src="@drawable/ic_material_light_settings"/>
@@ -43,7 +43,7 @@
                         android:id="@+id/ab_clear_history"
                         android:layout_width="@dimen/default_buttom_width"
                         android:layout_height="match_parent"
-                        android:layout_toRightOf="@id/ab_settings"
+                        android:layout_toEndOf="@id/ab_settings"
                         android:contentDescription="@string/menu_clear_history"
                         android:onClick="onActionBarItemClick"
                         android:src="@drawable/ic_material_light_delete"/>
@@ -79,7 +79,7 @@
                                 android:scaleType="centerCrop"/>
                         <TextView
                                 android:layout_gravity="bottom"
-                                android:paddingLeft="10dp"
+                                android:paddingStart="10dp"
                                 android:paddingBottom="10dp"
                                 android:layout_height="wrap_content"
                                 android:layout_width="match_parent"
@@ -137,8 +137,8 @@
                             android:id="@+id/drawer_bookmarks"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/default_margin"
-                            android:layout_marginRight="@dimen/default_margin"
+                            android:layout_marginStart="@dimen/default_margin"
+                            android:layout_marginEnd="@dimen/default_margin"
                             android:orientation="vertical">
 
                         <ProgressBar
@@ -164,8 +164,8 @@
                             android:id="@+id/drawer_history"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/default_margin"
-                            android:layout_marginRight="@dimen/default_margin"
+                            android:layout_marginStart="@dimen/default_margin"
+                            android:layout_marginEnd="@dimen/default_margin"
                             android:orientation="vertical"
                             android:visibility="gone">
 

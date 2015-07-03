@@ -26,7 +26,9 @@ import android.util.Log;
 import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.commands.SyncResultExecutable;
+import com.cyanogenmod.filemanager.commands.java.Program;
 import com.cyanogenmod.filemanager.commands.shell.ResolveLinkCommand;
+import com.cyanogenmod.filemanager.console.CancelledOperationException;
 import com.cyanogenmod.filemanager.console.Console;
 import com.cyanogenmod.filemanager.console.ExecutionException;
 import com.cyanogenmod.filemanager.console.InsufficientPermissionsException;
@@ -77,6 +79,11 @@ import java.util.UUID;
 public final class FileHelper {
 
     private static final String TAG = "FileHelper"; //$NON-NLS-1$
+
+    // Scheme for file and directory picking
+    public static final String FILE_URI_SCHEME = "file"; //$NON-NLS-1$
+    public static final String FOLDER_URI_SCHEME = "folder"; //$NON-NLS-1$
+    public static final String DIRECTORY_URI_SCHEME = "directory"; //$NON-NLS-1$
 
     /**
      * Special extension for compressed tar files
@@ -195,16 +202,20 @@ public final class FileHelper {
                                  R.string.size_gigabytes
                                 };
 
-        long aux = size;
+        double aux = size;
         int cc = magnitude.length;
         for (int i = 0; i < cc; i++) {
-            long s = aux / 1024;
             if (aux < 1024) {
-                return Long.toString(aux) + " " + res.getString(magnitude[i]); //$NON-NLS-1$
+                double cleanSize = Math.round(aux * 100);
+                return Double.toString(cleanSize / 100) +
+                        " " + res.getString(magnitude[i]); //$NON-NLS-1$
+            } else {
+                aux = aux / 1024;
             }
-            aux = s;
         }
-        return Long.toString(aux) + " " + res.getString(magnitude[cc - 1]); //$NON-NLS-1$
+        double cleanSize = Math.round(aux * 100);
+        return Double.toString(cleanSize / 100) +
+                " " + res.getString(magnitude[cc - 1]); //$NON-NLS-1$
     }
 
     /**
@@ -634,6 +645,64 @@ public final class FileHelper {
     }
 
     /**
+     * Determines if a file system object complies w/ a user's display preferences implying that
+     * the user is interested in this file
+     * (sort mode, hidden files, ...).
+     *
+     * @param fso The file
+     * @param restrictions The restrictions to apply when displaying files
+     * @param chRooted If app run with no privileges
+     * @return boolean indicating user's interest
+     */
+    public static boolean compliesWithDisplayPreferences(
+            FileSystemObject fso, Map<DisplayRestrictions, Object> restrictions, boolean chRooted) {
+        //Retrieve user preferences
+        SharedPreferences prefs = Preferences.getSharedPreferences();
+        FileManagerSettings showHiddenPref = FileManagerSettings.SETTINGS_SHOW_HIDDEN;
+        FileManagerSettings showSystemPref = FileManagerSettings.SETTINGS_SHOW_SYSTEM;
+        FileManagerSettings showSymlinksPref = FileManagerSettings.SETTINGS_SHOW_SYMLINKS;
+
+        //Hidden files
+        if (!prefs.getBoolean(
+                showHiddenPref.getId(),
+                ((Boolean)showHiddenPref.getDefaultValue()).booleanValue()) || chRooted) {
+            if (fso.isHidden()) {
+                return false;
+            }
+        }
+
+        //System files
+        if (!prefs.getBoolean(
+                showSystemPref.getId(),
+                ((Boolean)showSystemPref.getDefaultValue()).booleanValue()) || chRooted) {
+            if (fso instanceof SystemFile) {
+                return false;
+            }
+        }
+
+        //Symlinks files
+        if (!prefs.getBoolean(
+                showSymlinksPref.getId(),
+                ((Boolean)showSymlinksPref.getDefaultValue()).booleanValue()) || chRooted) {
+            if (fso instanceof Symlink) {
+                return false;
+            }
+        }
+
+        // Restrictions (only apply to files)
+        if (restrictions != null) {
+            if (!isDirectory(fso)) {
+                if (!isDisplayAllowed(fso, restrictions)) {
+                    return false;
+                }
+            }
+        }
+
+        // all checks passed
+        return true;
+    }
+
+    /**
      * Method that check if a file should be displayed according to the restrictions
      *
      * @param fso The file system object to check
@@ -663,14 +732,28 @@ public final class FileHelper {
                     break;
 
                 case MIME_TYPE_RESTRICTION:
+                    String[] mimeTypes = null;
                     if (value instanceof String) {
-                        String mimeType = (String)value;
-                        if (mimeType.compareTo(MimeTypeHelper.ALL_MIME_TYPES) != 0) {
+                        mimeTypes = new String[] {(String) value};
+                    } else if (value instanceof String[]) {
+                        mimeTypes = (String[]) value;
+                    }
+                    if (mimeTypes != null) {
+                        boolean matches = false;
+                        for (String mimeType : mimeTypes) {
+                            if (mimeType.compareTo(MimeTypeHelper.ALL_MIME_TYPES) == 0) {
+                                matches = true;
+                                break;
+                            }
                             // NOTE: We don't need the context here, because mime-type
                             // database should be loaded prior to this call
-                            if (!MimeTypeHelper.matchesMimeType(null, fso, mimeType)) {
-                                return false;
+                            if (MimeTypeHelper.matchesMimeType(null, fso, mimeType)) {
+                                matches = true;
+                                break;
                             }
+                        }
+                        if (!matches) {
+                            return false;
                         }
                     }
                     break;
@@ -711,7 +794,7 @@ public final class FileHelper {
 
     /**
      * Method that resolve the symbolic links of the list of files passed as argument.<br />
-     * This method invokes the {@link ResolveLinkCommand} in those files that hasn't a valid
+     * This method invokes the {@link ResolveLinkCommand} in those files that have a valid
      * symlink reference
      *
      * @param context The current context
@@ -721,13 +804,25 @@ public final class FileHelper {
         int cc = files.size();
         for (int i = 0; i < cc; i++) {
             FileSystemObject fso = files.get(i);
-            if (fso instanceof Symlink && ((Symlink)fso).getLinkRef() == null) {
-                try {
-                    FileSystemObject symlink =
-                            CommandHelper.resolveSymlink(context, fso.getFullPath(), null);
-                    ((Symlink)fso).setLinkRef(symlink);
-                } catch (Throwable ex) {/**NON BLOCK**/}
-            }
+            resolveSymlink(context, fso);
+        }
+    }
+
+    /**
+     * Method that resolves the symbolic link of a file passed in as argument.<br />
+     * This method invokes the {@link ResolveLinkCommand} on the file that has a valid
+     * symlink reference
+     *
+     * @param context The current context
+     * @param fso FileSystemObject to resolve symlink
+     */
+    public static void resolveSymlink(Context context, FileSystemObject fso) {
+        if (fso instanceof Symlink && ((Symlink)fso).getLinkRef() == null) {
+            try {
+                FileSystemObject symlink =
+                        CommandHelper.resolveSymlink(context, fso.getFullPath(), null);
+                ((Symlink)fso).setLinkRef(symlink);
+            } catch (Throwable ex) {/**NON BLOCK**/}
         }
     }
 
@@ -1016,7 +1111,8 @@ public final class FileHelper {
      * @throws ExecutionException If a problem was detected in the operation
      */
     public static boolean copyRecursive(
-            final File src, final File dst, int bufferSize) throws ExecutionException {
+            final File src, final File dst, int bufferSize, Program program)
+                throws ExecutionException, CancelledOperationException {
         if (src.isDirectory()) {
             // Create the directory
             if (dst.exists() && !dst.isDirectory()) {
@@ -1033,14 +1129,20 @@ public final class FileHelper {
             File[] files = src.listFiles();
             if (files != null) {
                 for (int i = 0; i < files.length; i++) {
-                    if (!copyRecursive(files[i], new File(dst, files[i].getName()), bufferSize)) {
+                    // Short circuit if we've been cancelled. Show's over :(
+                    if (program.isCancelled()) {
+                        throw new CancelledOperationException();
+                    }
+
+                    if (!copyRecursive(files[i], new File(dst, files[i].getName()), bufferSize,
+                                       program)) {
                         return false;
                     }
                 }
             }
         } else {
             // Copy the directory
-            if (!bufferedCopy(src, dst,bufferSize)) {
+            if (!bufferedCopy(src, dst,bufferSize, program)) {
                 return false;
             }
         }
@@ -1056,7 +1158,8 @@ public final class FileHelper {
      * @return boolean If the operation complete successfully
      */
     public static boolean bufferedCopy(final File src, final File dst,
-        int bufferSize) throws ExecutionException {
+        int bufferSize, Program program)
+            throws ExecutionException, CancelledOperationException {
         BufferedInputStream bis = null;
         BufferedOutputStream bos = null;
         try {
@@ -1065,6 +1168,10 @@ public final class FileHelper {
             int read = 0;
             byte[] data = new byte[bufferSize];
             while ((read = bis.read(data, 0, bufferSize)) != -1) {
+                // Short circuit if we've been cancelled. Show's over :(
+                if (program.isCancelled()) {
+                    throw new CancelledOperationException();
+                }
                 bos.write(data, 0, read);
             }
             return true;
@@ -1078,6 +1185,9 @@ public final class FileHelper {
             if (e.getCause() instanceof ErrnoException
                         && ((ErrnoException)e.getCause()).errno == OsConstants.ENOSPC) {
                 throw new ExecutionException(R.string.msgs_no_disk_space);
+            } if (e instanceof CancelledOperationException) {
+                // If the user cancelled this operation, let it through.
+                throw (CancelledOperationException)e;
             }
 
             return false;
@@ -1092,6 +1202,11 @@ public final class FileHelper {
                     bos.close();
                 }
             } catch (Throwable e) {/**NON BLOCK**/}
+            if (program.isCancelled()) {
+                if (!dst.delete()) {
+                    Log.e(TAG, "Failed to delete the dest file: " + dst);
+                }
+            }
         }
     }
 
@@ -1411,5 +1526,20 @@ public final class FileHelper {
             return false;
         }
         return src.getAbsolutePath().startsWith(dir.getAbsolutePath());
+    }
+
+    /**
+     * Method that checks if both path are the same (by checking sensitive cases).
+     *
+     * @param src The source path
+     * @param dst The destination path
+     * @return boolean If both are the same path
+     */
+    public static boolean isSamePath(String src, String dst) {
+        // This is only true if both are exactly the same path or the same file in insensitive
+        // file systems
+        File o1 = new File(src);
+        File o2 = new File(dst);
+        return o1.equals(o2);
     }
 }

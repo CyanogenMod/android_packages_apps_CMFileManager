@@ -42,7 +42,7 @@
   <string name="copy_text_cd">Raak om teks te kopieer na knipbord</string>
   <string name="copy_text_msg">Teks gekopieer na die knipbord</string>
   <string name="warning_title">Pasop</string>
-  <string name="error_title">Fout gevind</string>
+  <string name="error_title">Fout</string>
   <string name="confirm_operation">Bevestig werking</string>
   <string name="confirm_overwrite">Bevestig oorskrywing</string>
   <string name="confirm_deletion">Bevestig verwydering</string>
@@ -52,9 +52,11 @@
   <string name="msgs_privileged_console_alloc_failed">Kry nie \'root\' toegang nie. Het verander na veilige modus.</string>
   <string name="msgs_settings_save_failure">Die instelling kan nie toegepas of gestoor word nie.</string>
   <string name="msgs_settings_invalid_initial_directory">Die aanvanklike vouergids\"<xliff:g id="initial_dir">%1$s</xliff:g>\" is ongeldig. Verander na \'root\' vouergids.</string>
+  <string name="root_not_available_msg">Root is nie beskikbaar in hierdie toestel. Kan nie die operasie voltooi nie.</string>
   <string name="msgs_success">Die aksie was suksesvol voltooi.</string>
   <string name="msgs_unknown">\'n Fout het voorgekom. Die aksie was onsuksesvol.</string>
   <string name="msgs_insufficient_permissions">Hierdie aksie vereis verhoogde regte. Probeer \'root\' toegang.</string>
+  <string name="msgs_no_disk_space">Die aksie kan nie voltooi word nie a.g.v. geen vry spasie op die toestel nie.</string>
   <string name="msgs_file_not_found">Die lêer of vouergids was nie gevind nie.</string>
   <string name="msgs_command_not_found">Die werking se opdrag is nie gevind nie of het \'n ongeldige definisie.</string>
   <string name="msgs_io_failed">Lees/skryf mislukking.</string>
@@ -65,8 +67,7 @@
   <string name="msgs_read_only_filesystem">Die lêerstelsel is slegs leesbaar. Probeer om die lêerstelsel as lees-en-skryf aan te heg.</string>
   <string name="msgs_illegal_argument">Onwettige argument. Aktivering het misluk.</string>
   <string name="msgs_unresolved_inconsistencies">Die werking word nie toegelaat nie want dit skep teenstrydighede.</string>
-  <string name="msgs_operation_not_allowed_in_current_directory">
-    Die operasie word nie toegelaat in die huidige vouergids nie.\n\nBestemmings vouergids kan nie \'n sub-vouergids van bron of dieselfde as die bron wees nie.</string>
+  <string name="msgs_operation_not_allowed_in_current_directory">Bestemming vouer kan nie \'n subvouer van die bron wees nie of dieselfde as bron wees nie.</string>
   <string name="msgs_push_again_to_exit">Raak weer om te beeindig.</string>
   <string name="msgs_not_registered_app">Daar is geen program geregistreer om die tipe lêer oop te maak nie.</string>
   <string name="msgs_overwrite_files">Sommige van die lêers bestaan reeds in die teiken vouergids.\n\nOorskryf??</string>
@@ -85,10 +86,15 @@
   <string name="actionbar_button_overflow_cd">Meer opsies</string>
   <string name="actionbar_button_storage_cd">Skyf volumes</string>
   <string name="actionbar_button_save_cd">Stoor</string>
+  <string name="actionbar_button_print_cd">Druk</string>
   <string name="sort_by_name_asc">Volgens naam ▲</string>
   <string name="sort_by_name_desc">Volgens naam ▼</string>
   <string name="sort_by_date_asc">Volgens datum ▲</string>
   <string name="sort_by_date_desc">Volgens datum ▼</string>
+  <string name="sort_by_size_asc">Volgens grootte \u25B2</string>
+  <string name="sort_by_size_desc">Volgens grootte \u25BC</string>
+  <string name="sort_by_type_asc">Volgens tipe \u25B2</string>
+  <string name="sort_by_type_desc">Volgens tipe \u25BC</string>
   <string name="layout_icons">Ikone</string>
   <string name="layout_simple">Eenvoudig</string>
   <string name="layout_details">Besonderhede</string>
@@ -99,17 +105,18 @@
   <string name="filesystem_info_warning_title">Geen inligting</string>
   <string name="filesystem_info_warning_msg">Daar is geen inligting beskikbaar vir die lêerstelsel nie.</string>
   <string name="filesystem_info_cant_be_mounted_msg">Die lêerstelsel kan nie geheg/ontheg word nie.</string>
-  <string name="filesystem_info_mount_not_allowed_msg">Lêerstelsel hegging word nie toegelaat in die veilige modus nie. Raak om toegang na \'root\' modus te verander.</string>
+  <string name="filesystem_info_mount_not_allowed_msg">Lêerstelsel hegging word nie toegelaat in veilige modus nie. Raak om toegang na admin modus te verander.</string>
   <string name="filesystem_info_mount_failed_msg">Die lêerstelsel hegging het misluk. Sommige lêerstelsels, soos SD kaarte, kan nie geheg/ontheg word nie aangesien hulle leesalleen lêerstelsels is.</string>
   <string name="filesystem_info_dialog_title">Lêerstelsel inligting</string>
   <string name="filesystem_info_dialog_tab_info">Inligting</string>
   <string name="filesystem_info_dialog_tab_disk_usage">Bergingspasie</string>
-  <string name="filesystem_info_dialog_status">Status:</string>
+  <string name="filesystem_info_dialog_status">Gemonteer:</string>
   <string name="filesystem_info_dialog_mount_point">Aanheggingspunt:</string>
   <string name="filesystem_info_dialog_device">Toestel:</string>
   <string name="filesystem_info_dialog_type">Tipe:</string>
   <string name="filesystem_info_dialog_options">Opsies:</string>
   <string name="filesystem_info_dialog_dump_pass">Stort/Slaag:</string>
+  <string name="filesystem_info_dialog_virtual">Virtuele:</string>
   <string name="filesystem_info_dialog_total_disk_usage">Totaal:</string>
   <string name="filesystem_info_dialog_used_disk_usage">Gebruik:</string>
   <string name="filesystem_info_dialog_free_disk_usage">Gratis:</string>
@@ -172,6 +179,8 @@
   <string name="bookmarks_home">Tuis</string>
   <string name="bookmarks_root_folder">\'root\' vouergids</string>
   <string name="bookmarks_system_folder">Stelsel vouergids</string>
+  <string name="bookmarks_secure">Veilige berging</string>
+  <string name="bookmarks_remote">Afgeleë berging</string>
   <string name="bookmarks_button_config_cd">Stoor die aanvanklike vouergids.</string>
   <string name="bookmarks_button_remove_bookmark_cd">Verwyder boekmerk</string>
   <string name="bookmarks_msgs_add_success">Die boekmerk was bygevoeg.</string>
@@ -244,11 +253,13 @@
   <string name="actions_menu_open_parent_folder">Maak vouer oop</string>
   <string name="actions_menu_compute_checksum">Bereken kontrolesom</string>
   <string name="actions_menu_print">Druk</string>
+  <string name="actions_menu_set_as_home">Stel as tuis</string>
   <string name="actions_ask_undone_operation_msg">Hierdie aksie kan nie teruggestel word nie. Wil jy voortgaan?</string>
   <string name="input_name_dialog_label">Naam:</string>
   <string name="input_name_dialog_message_empty_name">Die naam kan nie leeg wees nie.</string>
   <string name="input_name_dialog_message_invalid_path_name">Ongeldige naam. Die karakters
     \'<xliff:g id="invalid_characters">%1$s</xliff:g>\' word nie toegelaat nie.</string>
+  <string name="input_name_dialog_message_invalid_name_length">Maksimum karakter limiet is bereik.</string>
   <string name="input_name_dialog_message_invalid_name">Ongeldige naam. Die karakter \'.\' en
     \'..\' word nie toegelaat nie.</string>
   <string name="input_name_dialog_message_name_exists">Die naam bestaan alreeds.</string>
@@ -277,6 +288,22 @@
   <string name="filetime_format_mode_MMddyyyy_HHmmss">mm/dd/yyyy hh:mm:ss</string>
   <string name="filetime_format_mode_yyyyMMdd_HHmmss">yyyy-mm-dd hh:mm:ss</string>
   <string name="selection_folders_and_files"><xliff:g id="folders">%1$s</xliff:g> en <xliff:g id="files">%2$s</xliff:g> geselekteer.</string>
+  <string name="category_system">STELSEL</string>
+  <string name="category_app">PROGRAM</string>
+  <string name="category_binary">BINÊRE</string>
+  <string name="category_text">TEKS</string>
+  <string name="category_document">DOKUMENT</string>
+  <string name="category_ebook">EBOEK</string>
+  <string name="category_mail">POS</string>
+  <string name="category_compress">VERKLEIN</string>
+  <string name="category_exec">UITVOERBAAR</string>
+  <string name="category_database">DATABASIS</string>
+  <string name="category_font">LETTER TIPE</string>
+  <string name="category_image">BEELD</string>
+  <string name="category_audio">OUDIO</string>
+  <string name="category_video">VIDEO</string>
+  <string name="category_security">SEKURITEIT</string>
+  <string name="category_all">ALLES</string>
   <string name="compression_mode_title">Verkleinings metode</string>
   <string name="shortcut_failed_msg">Kon nie van die loodskortpad gebruik maak nie.</string>
   <string name="shortcut_creation_success_msg">Loodskortpad suksesvol geskep.</string>
@@ -284,11 +311,10 @@
   <string name="pref">Instellings</string>
   <string name="pref_general">Algemeen</string>
   <string name="pref_search">Soek opsies</string>
+  <string name="pref_storage">Stoor opsies</string>
   <string name="pref_editor">Redigeerder opsies</string>
   <string name="pref_themes">Temas</string>
   <string name="pref_about">Aangaande</string>
-  <string name="pref_about_summary">Lêer-verkenner v<xliff:g id="version">%1$s</xliff:g>
-    \nKopiereg \u00A9 2013 Die CyanogenMod Projek</string>
   <string name="pref_general_behaviour_category">Algemeen</string>
   <string name="pref_case_sensitive_sort">Gebruik letter-sensitiewe sortering</string>
   <string name="pref_case_sensitive_sort_summary">Oorweeg letter-sensitiewe navigasie en sortering van soek resultate</string>
@@ -326,16 +352,21 @@
   <string name="pref_save_search_terms_off">Soekterme sal nie gestoor word nie</string>
   <string name="pref_remove_saved_search_terms">Vee soekterme uit</string>
   <string name="pref_remove_saved_search_terms_summary">Raak om al die gestoorde soekterme uit te vee</string>
-  <string name="pref_remove_saved_search_terms_msg">Alle gestoorde soekterme is uitgevee.</string>
+  <string name="pref_remove_saved_search_terms_msg">Alle gestoorde soekterme is uitgevee</string>
+  <string name="pref_secure_storage_category">Veilige berging</string>
+  <string name="pref_secure_storage_delayed_sync_title">Vertraagde sinchronisasie</string>
+  <string name="pref_secure_storage_delayed_sync_summary">Sinchronisasie van veilige lêer stelsels is \'n stadige operasie. Aktiveer hierdie opsie om vinniger reaksies toe te laat na elke operasie, die uitvoering van die sinchronisasie wanneer die lêerstelsel in \'n ongebruikte staat is, maar data verlies kan voorkom indien die program ineenstort.</string>
+  <string name="pref_secure_storage_reset_password_title">Verander wagwoord</string>
+  <string name="pref_secure_storage_delete_storage_title">Verwyder berging</string>
   <string name="pref_editor_behaviour_category">Gedrag</string>
   <string name="pref_no_suggestions">Geen voorstelle</string>
   <string name="pref_no_suggestions_desc">Moet nie woordeboek items voorstel tydens verandering van \'n lêer nie</string>
   <string name="pref_word_wrap">Woord oorvloei</string>
   <string name="pref_hexdump">\'Hexdump\' binêre lêers</string>
   <string name="pref_hexdump_desc">Met die opening van \'n binêre lêer, genereer \'n \'hexdump\' van die lêer en maak dit oop in die \'hex-viewer\'</string>
-  <string name="pref_editor_syntax_highlight_category">Sintaks beklemtoning</string>
+  <string name="pref_editor_syntax_highlight_category">Sintaks verligting</string>
   <string name="pref_syntax_highlight">Sintaks beklemtoon</string>
-  <string name="pref_syntax_highlight_desc">Beklemtoon die sintaks van die lêer wat vertoon word in die redigeerder (slegs wanneer \'n sintaks beklemtoning verwerker beskikbaar is vir die tipe lêer)</string>
+  <string name="pref_syntax_highlight_desc">Verlig die sintaks van die lêer. (Slegs wanneer die sintaks verligter beskikbaar is vir die lêer tipe)</string>
   <string name="pref_syntax_highlight_color_scheme">Kleur skema</string>
   <string name="pref_syntax_highlight_color_scheme_desc">Kies die sintaks verlig kleurskema</string>
   <string name="pref_syntax_sh_use_theme_default">Gebruik standaard tema</string>
@@ -363,6 +394,26 @@
   <string name="ash_keyword">Sleutelwoord</string>
   <string name="ash_quoted_string">Aangehaalde teks</string>
   <string name="ash_variable">Veranderlike</string>
+  <string name="secure_storage_unlock_title">Ontsluit berging</string>
+  <string name="secure_storage_create_title">Skep berging</string>
+  <string name="secure_storage_reset_title">Herstel wagwoord</string>
+  <string name="secure_storage_delete_title">Verwyder berging</string>
+  <string name="secure_storage_unlock_key_prompt_msg">Tik die wagwoord in om die veilige berging lêerstelsel te ontsluit.</string>
+  <string name="secure_storage_unlock_key_new_msg">Tik \'n wagwoord om die veilige berging lêerstelsel te beskerm.</string>
+  <string name="secure_storage_unlock_key_reset_msg">Tik die huidige en nuwe wagwoorde in om die veilige berging lêerstelsel te herstel.</string>
+  <string name="secure_storage_unlock_key_delete_msg">Tik die huidige wagwoord in om die veilige berging lêerstelsel te verwyder.</string>
+  <string name="secure_storage_unlock_old_key_title">Vorige Wagwoord:</string>
+  <string name="secure_storage_unlock_new_key_title">Nuwe Wagwoord:</string>
+  <string name="secure_storage_unlock_key_title">Wagwoord:</string>
+  <string name="secure_storage_unlock_repeat_title">Herhaal wagwoord:</string>
+  <string name="secure_storage_create_button">Skep</string>
+  <string name="secure_storage_unlock_button">Ontsluit</string>
+  <string name="secure_storage_reset_button">Stel terug</string>
+  <string name="secure_storage_delete_button">Verwyder</string>
+  <string name="secure_storage_unlock_failed">Kan nie die stoor spasie ontsluit</string>
+  <string name="secure_storage_unlock_validation_length">Wagwoord moet ten minste <xliff:g id="characters">%1$d</xliff:g> karakters hê.</string>
+  <string name="secure_storage_unlock_validation_equals">Wagwoorde stem nie ooreen nie.</string>
+  <string name="secure_storage_open_file_warning">Dit sal die lêer uit kopieer na \'n tydelike ongeënkripteerde plek. Dit sal na 1 uur verwyder word.</string>
   <string name="print_unsupported_document">Nie-ondersteunde dokument formaat</string>
   <string name="print_unsupported_image">Nie-ondersteunde foto-formaat</string>
   <string name="print_document_header">Dokument: <xliff:g id="document_name">%1$s</xliff:g></string>
@@ -377,4 +428,5 @@
     \n\nMet hierdie program kan jy die lêerstelsel verken en moontlik die toestel beskadig. Om dit te voorkom, sal die program begin in \'n veilige, lae-bevoorregte modus.
     \n\nU kan toegang tot \'n gevorderde, volbevoorregte modus verkry deur instellings. Dit is jou verantwoordelikheid om te verseker dat enige aksie wat gedoen word nie die stelsel beskadig nie.
     \n\nDie CyanogenMod span.</string>
+  <string name="activity_not_found_exception">Kon nie \'n program vind om hierdie lêer oop te maak</string>
 </resources>

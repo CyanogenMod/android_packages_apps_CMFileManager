@@ -40,15 +40,15 @@
     android:layout_width="0dp"
     android:layout_height="match_parent"
     android:layout_weight="1"
-    android:layout_marginRight="@dimen/extra_margin">
+    android:layout_marginEnd="@dimen/extra_margin">
 
     <TextView
       android:id="@+id/navigation_view_item_name"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
       android:layout_alignParentTop="true"
-      android:layout_marginLeft="@dimen/default_margin"
+      android:layout_marginStart="@dimen/default_margin"
       android:layout_marginTop="@dimen/default_margin"
       android:ellipsize="middle"
       android:singleLine="true"
@@ -59,9 +59,9 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentBottom="true"
-      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
       android:layout_marginBottom="@dimen/default_margin"
-      android:layout_marginLeft="@dimen/default_margin"
+      android:layout_marginStart="@dimen/default_margin"
       android:singleLine="true"
       android:textAppearance="@style/secondary_text_appearance" />
 
@@ -70,7 +70,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentBottom="true"
-      android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="true"
       android:layout_marginBottom="@dimen/default_margin"
       android:singleLine="true"
       android:textAppearance="@style/secondary_text_appearance"

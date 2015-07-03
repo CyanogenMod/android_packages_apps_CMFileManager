@@ -202,7 +202,8 @@ public class CompressCommand extends AsyncResultProgram implements CompressExecu
      * {@inheritDoc}
      */
     @Override
-    public void onParsePartialResult(final String partialIn) {
+    public void onParsePartialResult(final byte[] in) {
+        String partialIn = new String(in);
         if (partialIn == null || partialIn.length() ==0) return;
         boolean endsWithNewLine = partialIn.endsWith("\n"); //$NON-NLS-1$
         String[] lines = partialIn.split("\n"); //$NON-NLS-1$
@@ -240,7 +241,7 @@ public class CompressCommand extends AsyncResultProgram implements CompressExecu
      * {@inheritDoc}
      */
     @Override
-    public void onParseErrorPartialResult(String partialErr) {/**NON BLOCK**/}
+    public void onParseErrorPartialResult(byte[] partialErr) {/**NON BLOCK**/}
 
     /**
      * {@inheritDoc}

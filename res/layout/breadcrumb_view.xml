@@ -34,8 +34,8 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:layout_alignBottom="@id/ab_filesystem_info"
-    android:layout_alignLeft="@id/ab_filesystem_info"
-    android:layout_alignRight="@id/ab_filesystem_info"
+    android:layout_alignStart="@id/ab_filesystem_info"
+    android:layout_alignEnd="@id/ab_filesystem_info"
     android:layout_alignTop="@id/ab_filesystem_info"
     android:layout_centerHorizontal="true"
     android:layout_centerVertical="true"
@@ -49,7 +49,7 @@
     android:id="@+id/breadcrumb_scrollview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_toRightOf="@id/ab_filesystem_info"
+    android:layout_toEndOf="@id/ab_filesystem_info"
     android:scrollbars="none" >
 
     <LinearLayout
@@ -57,8 +57,8 @@
       android:layout_width="wrap_content"
       android:layout_height="match_parent"
       android:orientation="horizontal"
-      android:paddingLeft="@dimen/small_margin"
-      android:paddingRight="@dimen/small_margin" />
+      android:paddingStart="@dimen/small_margin"
+      android:paddingEnd="@dimen/small_margin" />
   </HorizontalScrollView>
 
   <ProgressBar
@@ -66,12 +66,12 @@
     style="?android:attr/progressBarStyleHorizontal"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_alignLeft="@id/breadcrumb_scrollview"
+    android:layout_alignStart="@id/breadcrumb_scrollview"
     android:layout_alignParentBottom="true"
-    android:layout_alignRight="@id/breadcrumb_scrollview"
+    android:layout_alignEnd="@id/breadcrumb_scrollview"
     android:layout_marginBottom="@dimen/min_margin"
-    android:layout_marginLeft="@dimen/default_margin"
-    android:layout_marginRight="@dimen/default_margin"
+    android:layout_marginStart="@dimen/default_margin"
+    android:layout_marginEnd="@dimen/default_margin"
     android:progress="@integer/default_progress_value"
     android:visibility="invisible" />
 

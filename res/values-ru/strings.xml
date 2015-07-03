@@ -42,7 +42,7 @@
   <string name="copy_text_cd">Нажмите, чтобы скопировать текст в буфер обмена</string>
   <string name="copy_text_msg">Текст скопирован в буфер обмена</string>
   <string name="warning_title">Внимание</string>
-  <string name="error_title">Обнаружена ошибка</string>
+  <string name="error_title">Ошибка</string>
   <string name="confirm_operation">Подтвердите операцию</string>
   <string name="confirm_overwrite">Подтвердите замену</string>
   <string name="confirm_deletion">Подтвердите удаление</string>
@@ -52,9 +52,11 @@
   <string name="msgs_privileged_console_alloc_failed">Запуск в режиме суперпользователя невозможен. Переключение в безопасный режим</string>
   <string name="msgs_settings_save_failure">Не удалось сохранить настройки</string>
   <string name="msgs_settings_invalid_initial_directory">Начальная папка «<xliff:g id="initial_dir">%1$s</xliff:g>» недоступна. Переход в корневую папку\u2026</string>
+  <string name="root_not_available_msg">Права суперпользователя недоступны, выполнение действия невозможно.</string>
   <string name="msgs_success">Действие выполнено</string>
   <string name="msgs_unknown">Произошла ошибка. Операция завершилась неудачно.</string>
   <string name="msgs_insufficient_permissions">Эта операция требует повышенных привилегий. Попробуйте переключиться в режим суперпользователя.</string>
+  <string name="msgs_no_disk_space">Сбой выполнения операции: на устройстве не осталось свободного места.</string>
   <string name="msgs_file_not_found">Файл или папка не найдены</string>
   <string name="msgs_command_not_found">Команда для выполнения операции не найдена или неверна</string>
   <string name="msgs_io_failed">Ошибка ввода-вывода</string>
@@ -65,7 +67,7 @@
   <string name="msgs_read_only_filesystem">Файловая система доступна только для чтения. Попробуйте смонтировать файловую систему для чтения/записи</string>
   <string name="msgs_illegal_argument">Недопустимый аргумент. Вызов не удался</string>
   <string name="msgs_unresolved_inconsistencies">Невозможно выполнить операцию.\n\nЭто приведёт к созданию несоответствий файловой системы.</string>
-  <string name="msgs_operation_not_allowed_in_current_directory">Невозможно выполнить операцию.\n\nНельзя переместить папку саму в себя.</string>
+  <string name="msgs_operation_not_allowed_in_current_directory">Невозможно перенести папку саму в себя.</string>
   <string name="msgs_push_again_to_exit">Нажмите ещё раз для выхода</string>
   <string name="msgs_not_registered_app">Не найдено приложений для открытия файлов данного типа</string>
   <string name="msgs_overwrite_files">Некоторые файлы уже существуют в папке назначения.\n\nЗаменить?</string>
@@ -84,10 +86,15 @@
   <string name="actionbar_button_overflow_cd">Дополнительные действия</string>
   <string name="actionbar_button_storage_cd">Накопительные устройства</string>
   <string name="actionbar_button_save_cd">Сохранить</string>
+  <string name="actionbar_button_print_cd">Печать</string>
   <string name="sort_by_name_asc">По имени ▲</string>
   <string name="sort_by_name_desc">По имени ▼</string>
   <string name="sort_by_date_asc">По дате ▲</string>
   <string name="sort_by_date_desc">По дате ▼</string>
+  <string name="sort_by_size_asc">По размеру ▲</string>
+  <string name="sort_by_size_desc">По размеру ▼</string>
+  <string name="sort_by_type_asc">По типу ▲</string>
+  <string name="sort_by_type_desc">По типу ▼</string>
   <string name="layout_icons">Значки</string>
   <string name="layout_simple">Список</string>
   <string name="layout_details">Подробный список</string>
@@ -98,17 +105,18 @@
   <string name="filesystem_info_warning_title">Нет информации</string>
   <string name="filesystem_info_warning_msg">Нет доступной информации о файловой системе</string>
   <string name="filesystem_info_cant_be_mounted_msg">Файловая система не может быть смонтирована/отмонтирована</string>
-  <string name="filesystem_info_mount_not_allowed_msg">Перемонтирование файловой системы в безопасном режиме невозможно. Нажмите для переключения в режим суперпользователя.</string>
+  <string name="filesystem_info_mount_not_allowed_msg">Монтирование файловой системы невозможно в безопасном режиме. Нажмите для переключения в режим суперпользователя.</string>
   <string name="filesystem_info_mount_failed_msg">Не удалось смонтировать файловую систему. Некоторые файловые системы, такие как SD-карты, не могут быть смонтированы/отмонтированы, потому что они имеют встроенную файловую систему только для чтения</string>
   <string name="filesystem_info_dialog_title">Информация о файловой системе</string>
   <string name="filesystem_info_dialog_tab_info">Информация</string>
   <string name="filesystem_info_dialog_tab_disk_usage">Диск</string>
-  <string name="filesystem_info_dialog_status">Статус:</string>
+  <string name="filesystem_info_dialog_status">Подключены:</string>
   <string name="filesystem_info_dialog_mount_point">Точка монт.:</string>
   <string name="filesystem_info_dialog_device">Устройство:</string>
   <string name="filesystem_info_dialog_type">Тип ФС:</string>
   <string name="filesystem_info_dialog_options">Опции монт.:</string>
   <string name="filesystem_info_dialog_dump_pass">Dump / Pass:</string>
+  <string name="filesystem_info_dialog_virtual">Виртуальн.:</string>
   <string name="filesystem_info_dialog_total_disk_usage">Объём:</string>
   <string name="filesystem_info_dialog_used_disk_usage">Исп.:</string>
   <string name="filesystem_info_dialog_free_disk_usage">Своб.:</string>
@@ -169,6 +177,8 @@
   <string name="bookmarks_home">Домой</string>
   <string name="bookmarks_root_folder">Корневая папка</string>
   <string name="bookmarks_system_folder">Системная папка</string>
+  <string name="bookmarks_secure">Защищённое хранилище</string>
+  <string name="bookmarks_remote">Удалённое хранилище</string>
   <string name="bookmarks_button_config_cd">Установить начальной папкой</string>
   <string name="bookmarks_button_remove_bookmark_cd">Удалить из закладок</string>
   <string name="bookmarks_msgs_add_success">Закладка успешно создана</string>
@@ -235,10 +245,12 @@
   <string name="actions_menu_open_parent_folder">Открыть папку с файлом</string>
   <string name="actions_menu_compute_checksum">Контрольные суммы</string>
   <string name="actions_menu_print">Печать</string>
+  <string name="actions_menu_set_as_home">Установить домашней папкой</string>
   <string name="actions_ask_undone_operation_msg">Это действие необратимо. Вы хотите продолжить?</string>
   <string name="input_name_dialog_label">Имя:</string>
   <string name="input_name_dialog_message_empty_name">Имя не может быть пустым</string>
   <string name="input_name_dialog_message_invalid_path_name">Недопустимое имя. Нельзя использовать символы: <xliff:g id="invalid_characters">%1$s</xliff:g></string>
+  <string name="input_name_dialog_message_invalid_name_length">Достигнуто максимальное число знаков.</string>
   <string name="input_name_dialog_message_invalid_name">Недопустимое имя. Имена «.» и «..» не разрешены</string>
   <string name="input_name_dialog_message_name_exists">Имя уже используется в этой папке</string>
   <string name="associations_dialog_title">Ассоциации</string>
@@ -265,6 +277,22 @@
   <string name="filetime_format_mode_MMddyyyy_HHmmss">мм/дд/гггг чч:мм:сс</string>
   <string name="filetime_format_mode_yyyyMMdd_HHmmss">гггг-мм-дд чч:мм:сс</string>
   <string name="selection_folders_and_files">Выделены <xliff:g id="folders">%1$s</xliff:g> и <xliff:g id="files">%2$s</xliff:g></string>
+  <string name="category_system">СИСТЕМА</string>
+  <string name="category_app">ПРИЛОЖЕНИЕ</string>
+  <string name="category_binary">ДВОИЧНЫЙ</string>
+  <string name="category_text">ТЕКСТ</string>
+  <string name="category_document">ДОКУМЕНТ</string>
+  <string name="category_ebook">ЭЛ. КНИГА</string>
+  <string name="category_mail">ПОЧТА</string>
+  <string name="category_compress">СЖАТЫЙ</string>
+  <string name="category_exec">ИСПОЛН. ФАЙЛ</string>
+  <string name="category_database">БАЗА ДАННЫХ</string>
+  <string name="category_font">ШРИФТ</string>
+  <string name="category_image">ИЗОБРАЖЕНИЕ</string>
+  <string name="category_audio">АУДИО</string>
+  <string name="category_video">ВИДЕО</string>
+  <string name="category_security">ЗАЩИТА</string>
+  <string name="category_all">ВСЕ</string>
   <string name="compression_mode_title">Формат сжатия</string>
   <string name="shortcut_failed_msg">Не удалось обработать ярлык</string>
   <string name="shortcut_creation_success_msg">Ярлык создан успешно</string>
@@ -272,10 +300,10 @@
   <string name="pref">Настройки</string>
   <string name="pref_general">Основные настройки</string>
   <string name="pref_search">Поиск</string>
+  <string name="pref_storage">Память</string>
   <string name="pref_editor">Редактор</string>
   <string name="pref_themes">Темы</string>
   <string name="pref_about">О приложении</string>
-  <string name="pref_about_summary">Файловый менеджер, версия <xliff:g id="version">%1$s</xliff:g>\n\u00A9 Проект CyanogenMod, 2014</string>
   <string name="pref_general_behaviour_category">Основные</string>
   <string name="pref_case_sensitive_sort">Учитывать регистр при сортировке</string>
   <string name="pref_case_sensitive_sort_summary">Сортировка результатов при поиске или навигации</string>
@@ -312,6 +340,11 @@
   <string name="pref_remove_saved_search_terms">Удалить сохранённые запросы</string>
   <string name="pref_remove_saved_search_terms_summary">Нажмите для удаления всех сохранённых поисковых запросов</string>
   <string name="pref_remove_saved_search_terms_msg">Сохранённые поисковые запросы удалены</string>
+  <string name="pref_secure_storage_category">Защищённое хранилище</string>
+  <string name="pref_secure_storage_delayed_sync_title">Отложенная синхронизация</string>
+  <string name="pref_secure_storage_delayed_sync_summary">Синхронизация защищённых ФС требует дополнительного времени. Включение этой опции позволит увеличить производительность за счёт выполнения синхронизации только при отсутствии файловой активности, однако в этом случае при падении приложения могут быть утеряны данные.</string>
+  <string name="pref_secure_storage_reset_password_title">Смена пароля</string>
+  <string name="pref_secure_storage_delete_storage_title">Удалить хранилище</string>
   <string name="pref_editor_behaviour_category">Поведение</string>
   <string name="pref_no_suggestions">Не предлагать исправления</string>
   <string name="pref_no_suggestions_desc">Не показывать варианты исправлений при редактировании файла</string>
@@ -320,7 +353,7 @@
   <string name="pref_hexdump_desc">Вывод содержимого бинарных файлов в шестнадцатеричном формате</string>
   <string name="pref_editor_syntax_highlight_category">Подсветка синтаксиса</string>
   <string name="pref_syntax_highlight">Включить подсветку синтаксиса</string>
-  <string name="pref_syntax_highlight_desc">Подсвечивать синтаксис редактируемого файла (для поддерживаемых редактором типов файлов)</string>
+  <string name="pref_syntax_highlight_desc">Подсвечивать синтаксис редактируемого файла (только для поддерживаемых редактором типов файлов)</string>
   <string name="pref_syntax_highlight_color_scheme">Цветовая схема</string>
   <string name="pref_syntax_highlight_color_scheme_desc">Выбор цветовой схемы подсветки синтаксиса</string>
   <string name="pref_syntax_sh_use_theme_default">Схема по умолчанию</string>
@@ -348,6 +381,26 @@
   <string name="ash_keyword">Ключевое слово</string>
   <string name="ash_quoted_string">Строка в кавычках</string>
   <string name="ash_variable">Переменная</string>
+  <string name="secure_storage_unlock_title">Разблокировка хранилища</string>
+  <string name="secure_storage_create_title">Создание хранилища</string>
+  <string name="secure_storage_reset_title">Изменить пароль</string>
+  <string name="secure_storage_delete_title">Удалить хранилище</string>
+  <string name="secure_storage_unlock_key_prompt_msg">Введите пароль для разблокировки файлов защищённого хранилища.</string>
+  <string name="secure_storage_unlock_key_new_msg">Введите пароль для защиты ФС защищённого хранилища.</string>
+  <string name="secure_storage_unlock_key_reset_msg">Введите текущий и новый пароли для повторной инициализации ФС защищённого хранилища.</string>
+  <string name="secure_storage_unlock_key_delete_msg">Введите текущий пароль для удаления ФС защищённого хранилища.</string>
+  <string name="secure_storage_unlock_old_key_title">Старый пароль:</string>
+  <string name="secure_storage_unlock_new_key_title">Новый пароль:</string>
+  <string name="secure_storage_unlock_key_title">Пароль:</string>
+  <string name="secure_storage_unlock_repeat_title">Повторите пароль:</string>
+  <string name="secure_storage_create_button">Создать</string>
+  <string name="secure_storage_unlock_button">Разблокировать</string>
+  <string name="secure_storage_reset_button">Сброс</string>
+  <string name="secure_storage_delete_button">Удалить</string>
+  <string name="secure_storage_unlock_failed">Не удалось разблокировать хранилище</string>
+  <string name="secure_storage_unlock_validation_length">Пароль должен содержать минимум <xliff:g id="characters">%1$d</xliff:g> символов.</string>
+  <string name="secure_storage_unlock_validation_equals">Пароли не совпадают.</string>
+  <string name="secure_storage_open_file_warning">Файл будет скопирован во временную незашифрованную область. Она будет очищена через час.</string>
   <string name="print_unsupported_document">Формат документа не поддерживается</string>
   <string name="print_unsupported_image">Формат изображения не поддерживается</string>
   <string name="print_document_header">Документ: <xliff:g id="document_name">%1$s</xliff:g></string>
@@ -357,4 +410,5 @@
   <string name="welcome_title">Добро пожаловать!</string>
   <string name="welcome_msg">
     Добро пожаловать в файловый менеджер CyanogenMod.\n\nЭто приложение поможет вам получить доступ к файловой системе и выполнять операции, которые могут вывести из строя ваше устройство. Для предотвращения этого, оно запустится в безопасном режиме с минимальными привилегиями. \n\nВы можете получить доступ к расширенным, полнопривилегированным функциям в настройках. Это ваша ответственность. Убедитесь, чтобы ваши действия не нарушили файловую систему. \n\nКоманда CyanogenMod\n</string>
+  <string name="activity_not_found_exception">Не найдено приложения для открытия этого файла</string>
 </resources>

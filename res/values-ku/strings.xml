@@ -42,7 +42,7 @@
   <string name="copy_text_cd">پەنجەی پێدا بنێ بۆ لەبەرگرتنەوەی دەق بۆ فۆڵدەری کاتی</string>
   <string name="copy_text_msg">دەق لەبەریگیرایەوە بۆ فۆڵدەری کاتی</string>
   <string name="warning_title">ئاگادارکردنەوە</string>
-  <string name="error_title">هەڵە ڕوویدا</string>
+  <string name="error_title">هەڵە</string>
   <string name="confirm_operation">دڵنیاکردنەوەی فرمان</string>
   <string name="confirm_overwrite">دڵنیاکردنەوە لە گۆڕین</string>
   <string name="confirm_deletion">دڵنیاکردنەوی سڕینەوە</string>
@@ -52,9 +52,11 @@
   <string name="msgs_privileged_console_alloc_failed">نەیتوانی دەست پێبکات لە دۆخی بەر دەست بوونی  ڕووت.</string>
   <string name="msgs_settings_save_failure">ئەم ڕێکبەندە نەتوانرا پاشەکەوت بکرێت.</string>
   <string name="msgs_settings_invalid_initial_directory">فۆڵدەری سەرەکی \'<xliff:g id="initial_dir">%1$s</xliff:g>\' ناڕاستە. گۆڕین بۆ فۆڵدەری ڕووت.</string>
+  <string name="root_not_available_msg">ڕووت لە کارە نیە لەسەر ئامێرەکەت. ناتوانرێت ئەم کارە ئەنجام بدرێت.</string>
   <string name="msgs_success">ئەم کردارە بەسەرکەوتوویی تەواو بوو.</string>
   <string name="msgs_unknown">هەڵەیەک ڕوویدا. کردارەکە سەرکەوتوو نەبوو.</string>
   <string name="msgs_insufficient_permissions">ئەم کردارە پێویستی بە ڕێگەپێدانە تاییبەتەکانە. هەوڵ بە بۆ گۆڕین بۆ دۆخی دەست پێگەیشتنی ڕووت.</string>
+  <string name="msgs_no_disk_space">ئەم کردارە پوچکرایەوە لەبەر ئەوە هیچ شوێنێک نیە لەسەر ئامێرەکە.</string>
   <string name="msgs_file_not_found">فایل یان فۆڵدەر نەدۆزرانەوە.</string>
   <string name="msgs_command_not_found">فەرمانی ئەم کردارە نەدۆزرایەوە یان پێناسەیەکی ناڕاستی هەیە.</string>
   <string name="msgs_io_failed">خوێندنەوە\نووسین سەرکەوتوو نەبوو.</string>
@@ -65,7 +67,6 @@
   <string name="msgs_read_only_filesystem">پەڕگەی سیستەم تەنها-خوێندەوەیە. پێش لە هەوڵدانەوە بۆ کردارەکە پەڕگەی سیستەم وەکوو خوێندنەوە-نووسین جێگیر بکە.</string>
   <string name="msgs_illegal_argument">گفت و گۆی نایاسایی.داواکردن سه‌رکه‌وتوونه‌بوو.</string>
   <string name="msgs_unresolved_inconsistencies">کارپێکردن ڕێپێنادرێت له‌به‌ر دروستکردنی جیاوازی.</string>
-  <string name="msgs_operation_not_allowed_in_current_directory">کارپێکردن ڕێپێنادرێت له‌م بوخچه‌یه‌دا.\n\nبوخچه‌ی لادان ناتوانرێت ببێ به‌ نیمچه‌-بوخچه‌ له‌ سه‌رچاوه‌ یان هه‌مان سه‌رچاوه‌.</string>
   <string name="msgs_push_again_to_exit">دووبارە پەنجەی پێدا بنێ بۆ دەرچوون.</string>
   <string name="msgs_not_registered_app">هیچ به‌رنامه‌یه‌ک نییه‌ تۆمارکرابیت بۆ سه‌رپه‌رشتی کردنی جۆری ئه‌م په‌ڕگه‌یه‌.</string>
   <string name="msgs_overwrite_files">هه‌ندێک له‌ فایله‌کان پێشتر هه‌ن له‌ بوخچه‌ی مه‌به‌ست.\n\nجێگه‌بگرنه‌وه‌؟</string>
@@ -84,6 +85,7 @@
   <string name="actionbar_button_overflow_cd">هەڵبژاردنی زیاتر</string>
   <string name="actionbar_button_storage_cd">قەبارەی یادگەکان</string>
   <string name="actionbar_button_save_cd">پاراستن</string>
+  <string name="actionbar_button_print_cd">چاپکردن</string>
   <string name="sort_by_name_asc">بەپێی ناوی \u25B2</string>
   <string name="sort_by_name_desc">بەپێی ناوی \u25BC</string>
   <string name="sort_by_date_asc">بەپێی بەرواری \u25B2</string>
@@ -91,20 +93,23 @@
   <string name="layout_icons">وێنۆچکه‌</string>
   <string name="layout_simple">ساده‌</string>
   <string name="layout_details">زانیاری زیاتر</string>
+  <string name="cm_filemanager_show_dirs_first">پیشاندانی فۆڵدەرەکان لەپێشدا</string>
+  <string name="cm_filemanager_show_hidden">پیشاندانی فایلە شاراوەکان</string>
+  <string name="cm_filemanager_show_system">پیشاندانی فایلەکانی سیستەم</string>
+  <string name="cm_filemanager_show_symlinks">symlinks پیشاندانی</string>
   <string name="filesystem_info_warning_title">زانیاری نیە</string>
   <string name="filesystem_info_warning_msg">هیچ زانیارییەک لەبەردەستدا نیە بۆ فایلی سیستەم.</string>
   <string name="filesystem_info_cant_be_mounted_msg">په‌ڕگه‌ی سیسته‌م ناتوانرێ ده‌ربکرێ/پێوه‌بکرێ.</string>
-  <string name="filesystem_info_mount_not_allowed_msg">لێکردنه‌وه‌ی په‌ڕگه‌ی سیسته‌م ڕێگه‌پێنه‌دراوه‌ له‌ باری سه‌لامه‌تیدا. ته‌پ بکه‌ بۆ گۆڕینی ده‌سته‌ڵاتی ڕووت.</string>
   <string name="filesystem_info_mount_failed_msg">لێکردنه‌وه‌ی په‌ڕگه‌ی سیسته‌م سه‌رکه‌وتوونه‌بوو.هه‌ندێ په‌ڕگه‌ی سیسته‌م، وه‌ک بیرگه‌ی ناوه‌کی. ناتوانرێ لێبکرێته‌وه‌/]ێوه‌بکرێ له‌به‌ر ئه‌وه‌ی ئه‌وان ته‌نیا له‌ باری خوێندنه‌وه‌دان.</string>
   <string name="filesystem_info_dialog_title">زانیاری په‌ڕگه‌ی سیسته‌م</string>
   <string name="filesystem_info_dialog_tab_info">زانیاری</string>
   <string name="filesystem_info_dialog_tab_disk_usage">یادگەی بەکارهاتوو</string>
-  <string name="filesystem_info_dialog_status">دۆخ:</string>
   <string name="filesystem_info_dialog_mount_point">خاڵی به‌ستن:</string>
   <string name="filesystem_info_dialog_device">ئامێر:</string>
   <string name="filesystem_info_dialog_type">جۆر:</string>
   <string name="filesystem_info_dialog_options">هەڵبژاردنەکان:</string>
   <string name="filesystem_info_dialog_dump_pass">بڕین / ده‌مپ :</string>
+  <string name="filesystem_info_dialog_virtual">ڕاستی:</string>
   <string name="filesystem_info_dialog_total_disk_usage">سەرجەم:</string>
   <string name="filesystem_info_dialog_used_disk_usage">بەکارهاتوو:</string>
   <string name="filesystem_info_dialog_free_disk_usage">بەتاڵ:</string>
@@ -165,6 +170,8 @@
   <string name="bookmarks_home">سەرەتا</string>
   <string name="bookmarks_root_folder">Root فۆڵدەری ڕۆت</string>
   <string name="bookmarks_system_folder">فۆڵدەری سیستەم</string>
+  <string name="bookmarks_secure">پارێزگاری بیرگە</string>
+  <string name="bookmarks_remote">کۆگای دوور</string>
   <string name="bookmarks_button_config_cd">دانانی بوخچه‌ی سه‌ره‌تایی.</string>
   <string name="bookmarks_button_remove_bookmark_cd">سڕینه‌وه‌ی دڵخواز.</string>
   <string name="bookmarks_msgs_add_success">نیشانەکراو بەسەرکەوتوویی زیادکرا.</string>
@@ -223,6 +230,8 @@
   <string name="actions_menu_add_shortcut">زیادکردنی قەدبڕ</string>
   <string name="actions_menu_open_parent_folder">چالاکردنی شوێن</string>
   <string name="actions_menu_compute_checksum">ژماردنی پشکنه‌بڕ</string>
+  <string name="actions_menu_print">چاپکردن</string>
+  <string name="actions_menu_set_as_home">دانان وەکو سەرەتا</string>
   <string name="actions_ask_undone_operation_msg">ئه‌م کاره‌ ناتوانرێ بگه‌ڕێنریته‌وه‌.ئه‌ته‌وێ به‌رده‌وام بیت؟</string>
   <string name="input_name_dialog_label">ناو:</string>
   <string name="input_name_dialog_message_empty_name">ناو نابێ بەتاڵ بێت.</string>
@@ -253,6 +262,22 @@
   <string name="filetime_format_mode_MMddyyyy_HHmmss">mm/dd/yyyy hh:mm:ss</string>
   <string name="filetime_format_mode_yyyyMMdd_HHmmss">yyyy-mm-dd hh:mm:ss</string>
   <string name="selection_folders_and_files"><xliff:g id="folders">%1$s</xliff:g> وه‌  <xliff:g id="files">%2$s</xliff:g> دیاریکراون.</string>
+  <string name="category_system">سیستەم</string>
+  <string name="category_app">بەرنامە</string>
+  <string name="category_binary">فایلی کاتی</string>
+  <string name="category_text">دەق</string>
+  <string name="category_document">بەڵگەنامە</string>
+  <string name="category_ebook">پەرتووکی ئەلکتۆنی</string>
+  <string name="category_mail">پۆست</string>
+  <string name="category_compress">پەستێنراو</string>
+  <string name="category_exec">جێبه‌جێکه‌ر</string>
+  <string name="category_database">داتابەیس</string>
+  <string name="category_font">فۆنت</string>
+  <string name="category_image">وێنە</string>
+  <string name="category_audio">دەنگ</string>
+  <string name="category_video">ڤیدیۆ</string>
+  <string name="category_security">پارێزگاری</string>
+  <string name="category_all">هەموو</string>
   <string name="compression_mode_title">شێوازی پەستاندن</string>
   <string name="shortcut_failed_msg">سه‌رکه‌وتوو نه‌بوو له‌ ڕێکخستنی کورته‌وێنۆچکه‌.</string>
   <string name="shortcut_creation_success_msg">کورتە وێنۆچکه‌ بەسەرکەوتوویی دروستکرا.</string>
@@ -260,10 +285,10 @@
   <string name="pref">ڕێکخستنه‌کان</string>
   <string name="pref_general">ڕێکخستنی گشتی</string>
   <string name="pref_search">هەڵبژاردنەکانی گەڕان</string>
+  <string name="pref_storage">هەڵبژاردنەکانی بیرگە</string>
   <string name="pref_editor">هەڵبژاردنەکانی دەستکاریکەر</string>
   <string name="pref_themes">ڕووکارەکان</string>
   <string name="pref_about">دەربارەی</string>
-  <string name="pref_about_summary">بەڕێوەبەری فایل وەشانی<xliff:g id="version">%1$s</xliff:g>\nمافی لەبەرگرتنەوەی پارێزراوە بۆ \u00A9 2012-2014 پڕۆژەی سیانۆجین مۆد</string>
   <string name="pref_general_behaviour_category">گشتی</string>
   <string name="pref_case_sensitive_sort">شێوازی هەستیاری</string>
   <string name="pref_case_sensitive_sort_summary">ڕه‌چاوکردنی به‌رگ کاتێک ئاڕاسته‌ده‌کات یان ئه‌نجامی گه‌ڕان ڕیز ده‌کات</string>
@@ -299,16 +324,19 @@
   <string name="pref_save_search_terms_off">مه‌رجه‌کانی گه‌ڕان پاشه‌که‌وت ناکرێ</string>
   <string name="pref_remove_saved_search_terms">سڕینه‌وه‌ی مه‌رجه‌ گه‌ڕانه‌کان که‌ پاشه‌که‌وت کرابون</string>
   <string name="pref_remove_saved_search_terms_summary">تاپ بکه‌ بۆ سڕینه‌وه‌ی هه‌موو مه‌رجه‌ گه‌ڕانه‌ پاشه‌که‌وتکراوه‌کان</string>
-  <string name="pref_remove_saved_search_terms_msg">هه‌موو مه‌رجه‌ گه‌ڕانه‌ پاشه‌که‌وتکراوه‌کان سڕدرانه‌وه‌.</string>
+  <string name="pref_remove_saved_search_terms_msg">هه‌موو مه‌رجه‌ گه‌ڕانه‌ پاشه‌که‌وتکراوه‌کان سڕدرانه‌وه‌</string>
+  <string name="pref_secure_storage_category">پارێزگاری بیرگە</string>
+  <string name="pref_secure_storage_delayed_sync_title">دواین هاوکاتکراو</string>
+  <string name="pref_secure_storage_delayed_sync_summary">هاوکاتسازیی پەڕگە پارێزراوەکانی سیستەم کردارێکی بەنرخە. ئەم بژاردەیە چالاک بکە بۆ خێراترکردنی کاردانەوەی هەر یەک لە کردارەکان و هەروەها جێبەجێکردنی هاوکاتگەری کاتێک پەڕگەی سیستەم لە دۆخێکی ناکارادایە بەڵام ئەگەر بەرنامەکە کەوتە تێکشکانەوە، ئەو زانیارییانەی کە ماونەتەوە بە بەهای لەدەستدانیان هاوکاتگەری ناکرێن.</string>
+  <string name="pref_secure_storage_reset_password_title">وشەتێپەڕ گۆڕین</string>
+  <string name="pref_secure_storage_delete_storage_title">سڕینەوەی بیرگە</string>
   <string name="pref_editor_behaviour_category">ڕه‌وشت</string>
   <string name="pref_no_suggestions">پێشنیار نەکراوە</string>
   <string name="pref_no_suggestions_desc">پێشنیاری فه‌رهه‌نگ پیشان نه‌درێت کاتێک ده‌سه‌تکاری په‌ڕگه‌ ده‌کرێت</string>
   <string name="pref_word_wrap">پێچانی ده‌ق</string>
   <string name="pref_hexdump">ده‌مپی هێکس و په‌ڕگه‌ی باینه‌ری</string>
   <string name="pref_hexdump_desc">کاتێک کار له‌سه‌ر په‌ڕگه‌یه‌کی باینه‌ری ده‌که‌یت، ده‌مپی هێکس بکه‌ بۆ په‌ڕگه‌که‌ و به‌ بینه‌ری هێکس بیکه‌ره‌وه‌</string>
-  <string name="pref_editor_syntax_highlight_category">ڕێزمانی به‌رچاو</string>
   <string name="pref_syntax_highlight">ڕێزمانی به‌رچاو</string>
-  <string name="pref_syntax_highlight_desc">به‌رچاوکردنی ڕێزمانی په‌ڕگه‌ی نیشانراو له‌ ده‌ستکاریکه‌ر (ته‌نیا کاتێک که‌ ڕێزمان به‌رچاوبێت له‌ پرۆسه‌ی ئاماده‌ی جۆری په‌ڕگه‌)</string>
   <string name="pref_syntax_highlight_color_scheme">ڕەنگی ڕووکار</string>
   <string name="pref_syntax_highlight_color_scheme_desc">ڕێزمانی به‌رچاوی پلانی ڕه‌نگ هه‌ڵبژێره‌</string>
   <string name="pref_syntax_sh_use_theme_default">بەکارهێنانی ڕووکاری سەرەکی</string>
@@ -336,6 +364,29 @@
   <string name="ash_keyword">ووشە</string>
   <string name="ash_quoted_string">ده‌زووی وه‌رگیراو</string>
   <string name="ash_variable">گۆڕاو</string>
+  <string name="secure_storage_unlock_title">کردنەوەی قفڵی بیرگە</string>
+  <string name="secure_storage_create_title">دروستکردنی بیرگە</string>
+  <string name="secure_storage_reset_title">ڕێکخستنەوەی تێپەڕە ووشە</string>
+  <string name="secure_storage_delete_title">سڕینەوەی بیرگە</string>
+  <string name="secure_storage_unlock_key_prompt_msg">تێپەڕەوشەکە بنووسە بۆ کردنەوەی کۆگا پارێزراوەکەی پەڕگەی سیستەم.</string>
+  <string name="secure_storage_unlock_key_new_msg">تێپەڕەوشەکە بنووسە بۆ پاراستنی کۆگا دڵنیاکەی پەڕگەی سیستەم.</string>
+  <string name="secure_storage_unlock_key_reset_msg">تێپەڕەوشەکانی هەنووکەیی و نوێ بنووسە بۆ رێکخستنەوەی کۆگای دڵنیاکراوی پەڕگەی سیستەم.</string>
+  <string name="secure_storage_unlock_key_delete_msg">تێپەڕەوشە هەنووکەیییەکە بنووسە بۆ سڕینەوەی کۆگای دڵنیاکراوی پەڕگەی سیستەم.</string>
+  <string name="secure_storage_unlock_old_key_title">تێپەڕە ووسەی کۆن:</string>
+  <string name="secure_storage_unlock_new_key_title">تێپەڕە وشەی نوێ:</string>
+  <string name="secure_storage_unlock_key_title">تێپەڕە ووشە:</string>
+  <string name="secure_storage_unlock_repeat_title">دووبارە تێپەڕە ووشە:</string>
+  <string name="secure_storage_create_button">دروستکردن</string>
+  <string name="secure_storage_unlock_button">کردنەوە</string>
+  <string name="secure_storage_reset_button">ڕێکخستنەوه</string>
+  <string name="secure_storage_delete_button">سڕینەوە</string>
+  <string name="secure_storage_unlock_failed">ناتوانرێت بیرگە بکرێتەوە</string>
+  <string name="secure_storage_unlock_validation_length">تێپەڕەوشە دەبێ لانیکەم <xliff:g id="characters">%1$d</xliff:g> نووسە بێت.</string>
+  <string name="secure_storage_unlock_validation_equals">تێپەڕە ووشەکان لەیەک ناچن.</string>
+  <string name="print_unsupported_document">جۆری فایلی بەڵگەنامەیی نەگونجاوە</string>
+  <string name="print_unsupported_image">جۆری فایلی وێنەیی نەگونجاوە</string>
+  <string name="print_document_header">بەڵگەنامەی: <xliff:g id="document_name">%1$s</xliff:g></string>
+  <string name="print_document_footer">پەڕەی <xliff:g id="page_number">%1$s</xliff:g></string>
   <string name="security_warning_extract">ئاگاداربه‌!!\n\nده‌رهێنانی په‌ڕگه‌کانی ئه‌رشیفێک له‌گه‌ڵ ڕێژه‌ یان ته‌واوی ڕێره‌و له‌وانه‌یه‌ هۆکاری ڕوخانی ئامێره‌که‌ت بێت به‌ جێگه‌خستنه‌وه‌ی په‌ڕگه‌کانی سیسته‌م.\n\nئه‌ته‌وێ به‌رده‌وام بیت؟</string>
   <string name="changelog_title">تۆماری گۆڕانکاری</string>
   <string name="welcome_title">بە خێربێيت</string>

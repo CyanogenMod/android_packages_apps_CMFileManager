@@ -527,7 +527,8 @@ public class FilesystemInfoDialog implements OnClickListener, OnCheckedChangeLis
         v = this.mContentView.findViewById(R.id.filesystem_info_msg);
         theme.setTextColor(this.mContext, (TextView)v, "text_color"); //$NON-NLS-1$
         ((TextView)v).setCompoundDrawablesWithIntrinsicBounds(
-                theme.getDrawable(this.mContext, "filesystem_warning_drawable"), //$NON-NLS-1$
+                theme.getDrawable(this.mContext,
+                        "filesystem_dialog_warning_drawable"), //$NON-NLS-1$
                 null, null, null);
 
         v = this.mContentView.findViewById(R.id.filesystem_info_total_disk_usage_label);

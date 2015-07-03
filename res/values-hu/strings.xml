@@ -42,7 +42,7 @@
   <string name="copy_text_cd">Érintse meg a szöveg vágólapra másolásához</string>
   <string name="copy_text_msg">Szöveg vágólapra másolva</string>
   <string name="warning_title">Figyelmeztetés</string>
-  <string name="error_title">Hiba történt</string>
+  <string name="error_title">Hiba</string>
   <string name="confirm_operation">Művelet megerősítése</string>
   <string name="confirm_overwrite">Felülírás megerősítése</string>
   <string name="confirm_deletion">Törlés megerősítése</string>
@@ -52,9 +52,11 @@
   <string name="msgs_privileged_console_alloc_failed">Nem lehet futtatni rendszergazda módban. Váltás biztonságos módba.</string>
   <string name="msgs_settings_save_failure">A beállítást nem lehet alkalmazni, vagy elmenteni.</string>
   <string name="msgs_settings_invalid_initial_directory">A kezdő könyvtár \"<xliff:g id="initial_dir">%1$s</xliff:g>\" érvénytelen. Váltás a gyökérkönyvtárra.</string>
+  <string name="root_not_available_msg">Rendszergazdai jogosultság nem érhető el ezen az eszközön. A művelet nem hajtható végre.</string>
   <string name="msgs_success">A művelet sikeresen befejeződött.</string>
   <string name="msgs_unknown">A művelet sikertelen, hiba történt.</string>
   <string name="msgs_insufficient_permissions">Ehhez a művelethez nincs jogosultsága.</string>
+  <string name="msgs_no_disk_space">A művelet nem sikerült, mert nincs hely az eszközön.</string>
   <string name="msgs_file_not_found">A fájl vagy a könyvtár nem található.</string>
   <string name="msgs_command_not_found">A műveleti parancs nem található, vagy érvénytelen.</string>
   <string name="msgs_io_failed">Olvasási / írási hiba.</string>
@@ -65,7 +67,7 @@
   <string name="msgs_read_only_filesystem">A fájlrendszer csak olvasható. Próbálja meg írhatóként újracsatlakoztatni a művelet előtt.</string>
   <string name="msgs_illegal_argument">Érvénytelen paraméter, sikertelen futtatás.</string>
   <string name="msgs_unresolved_inconsistencies">A művelet nem engedélyezett, mert következetlenséget okozna.</string>
-  <string name="msgs_operation_not_allowed_in_current_directory">A művelet nem engedélyezett a jelenlegi könyvtárban.\n\nA célkönyvtár nem lehet azonos a forrás könyvtárral, és nem lehet annak alkönyvtára.</string>
+  <string name="msgs_operation_not_allowed_in_current_directory">Célmappa nem lehet a forrás almappája, vagy ugyanaz, mint a forrás.</string>
   <string name="msgs_push_again_to_exit">Nyomja meg mégegyszer a kilépéshez.</string>
   <string name="msgs_not_registered_app">A kijelölt fájltípushoz nincs alkalmazás társítva.</string>
   <string name="msgs_overwrite_files">Néhány fájl már létezik a célkönyvtárban.\n\nFelülírja?</string>
@@ -84,10 +86,15 @@
   <string name="actionbar_button_overflow_cd">További opciók</string>
   <string name="actionbar_button_storage_cd">Tárhely kötetek</string>
   <string name="actionbar_button_save_cd">Mentés</string>
+  <string name="actionbar_button_print_cd">Nyomtatás</string>
   <string name="sort_by_name_asc">Név szerint \u25B2</string>
   <string name="sort_by_name_desc">Név szerint \u25BC</string>
   <string name="sort_by_date_asc">Dátum szerint \u25B2</string>
   <string name="sort_by_date_desc">Dátum szerint \u25BC</string>
+  <string name="sort_by_size_asc">Méret szerint \u25B2</string>
+  <string name="sort_by_size_desc">Méret szerint \u25BC</string>
+  <string name="sort_by_type_asc">Típus szerint \u25B2</string>
+  <string name="sort_by_type_desc">Típus szerint \u25BC</string>
   <string name="layout_icons">Ikonok</string>
   <string name="layout_simple">Egyszerű</string>
   <string name="layout_details">Részletek</string>
@@ -103,12 +110,13 @@
   <string name="filesystem_info_dialog_title">Fájlrendszer-információ</string>
   <string name="filesystem_info_dialog_tab_info">Információ</string>
   <string name="filesystem_info_dialog_tab_disk_usage">Tárhelyhasználat</string>
-  <string name="filesystem_info_dialog_status">Státusz:</string>
+  <string name="filesystem_info_dialog_status">Csatlakoztatva:</string>
   <string name="filesystem_info_dialog_mount_point">Csatolási pont:</string>
   <string name="filesystem_info_dialog_device">Eszköz:</string>
   <string name="filesystem_info_dialog_type">Típus:</string>
   <string name="filesystem_info_dialog_options">Opciók:</string>
   <string name="filesystem_info_dialog_dump_pass">További információk</string>
+  <string name="filesystem_info_dialog_virtual">Virtuális:</string>
   <string name="filesystem_info_dialog_total_disk_usage">Teljes:</string>
   <string name="filesystem_info_dialog_used_disk_usage">Foglalt:</string>
   <string name="filesystem_info_dialog_free_disk_usage">Szabad:</string>
@@ -169,6 +177,8 @@
   <string name="bookmarks_home">Kezdőlap</string>
   <string name="bookmarks_root_folder">Gyökérkönyvtár</string>
   <string name="bookmarks_system_folder">Rendszerkönyvtár</string>
+  <string name="bookmarks_secure">Biztonsági tároló</string>
+  <string name="bookmarks_remote">Távoli tároló</string>
   <string name="bookmarks_button_config_cd">Kezdőkönyvtár beállítsa.</string>
   <string name="bookmarks_button_remove_bookmark_cd">Könyvjelző eltávolítása.</string>
   <string name="bookmarks_msgs_add_success">A könyvjelző sikeresen hozzáadva.</string>
@@ -228,10 +238,12 @@
   <string name="actions_menu_open_parent_folder">Szülő könyvtár megnyitása</string>
   <string name="actions_menu_compute_checksum">Ellenőrzőösszeg számolása</string>
   <string name="actions_menu_print">Nyomtatás</string>
+  <string name="actions_menu_set_as_home">Kezdőlapnak beállít</string>
   <string name="actions_ask_undone_operation_msg">A művelet nem visszavonható. Biztosan folytatja?</string>
   <string name="input_name_dialog_label">Név:</string>
   <string name="input_name_dialog_message_empty_name">A név mező nem lehet üres.</string>
   <string name="input_name_dialog_message_invalid_path_name">Helytelen név. A \"<xliff:g id="invalid_characters">%1$s</xliff:g>\" karakterek nem megengedettek.</string>
+  <string name="input_name_dialog_message_invalid_name_length">Elérte a maximális karakterek számát.</string>
   <string name="input_name_dialog_message_invalid_name">Helytelen név. A \'.\' és a \'..\' nem megengedett.</string>
   <string name="input_name_dialog_message_name_exists">A név már létezik.</string>
   <string name="associations_dialog_title">Társítások</string>
@@ -258,6 +270,22 @@
   <string name="filetime_format_mode_MMddyyyy_HHmmss">hh/nn/éééé óó:pp:mm</string>
   <string name="filetime_format_mode_yyyyMMdd_HHmmss">éééé/hh/nn óó:pp:mm</string>
   <string name="selection_folders_and_files"><xliff:g id="folders">%1$s</xliff:g> és <xliff:g id="files">%2$s</xliff:g> kiválasztva.</string>
+  <string name="category_system">RENDSZER</string>
+  <string name="category_app">ALKALMAZÁS</string>
+  <string name="category_binary">BINÁRIS</string>
+  <string name="category_text">SZÖVEG</string>
+  <string name="category_document">DOKUMENTUM</string>
+  <string name="category_ebook">E-BOOK</string>
+  <string name="category_mail">E-MAIL</string>
+  <string name="category_compress">TÖMÖRÍTETT</string>
+  <string name="category_exec">FUTTATHATÓ</string>
+  <string name="category_database">ADATBÁZIS</string>
+  <string name="category_font">BETŰTÍPUS</string>
+  <string name="category_image">KÉP</string>
+  <string name="category_audio">HANG</string>
+  <string name="category_video">VIDEÓ</string>
+  <string name="category_security">BIZTONSÁGI</string>
+  <string name="category_all">ÖSSZES</string>
   <string name="compression_mode_title">Tömörítési mód</string>
   <string name="shortcut_failed_msg">Nem lehet kezelni a parancsikont.</string>
   <string name="shortcut_creation_success_msg">Parancsikon sikeresen létrehozva.</string>
@@ -265,10 +293,10 @@
   <string name="pref">Beállítások</string>
   <string name="pref_general">Általános beállítások</string>
   <string name="pref_search">Keresési opciók</string>
+  <string name="pref_storage">Tároló beállításai</string>
   <string name="pref_editor">Szerkesztő beállítások</string>
   <string name="pref_themes">Témák</string>
   <string name="pref_about">Névjegy</string>
-  <string name="pref_about_summary">Fájlkezelő v<xliff:g id="version">%1$s</xliff:g>\nCopyright \u00A9 2012-2014 The CyanogenMod Project</string>
   <string name="pref_general_behaviour_category">Általános</string>
   <string name="pref_case_sensitive_sort">Kis-/nagybetű helyes rendezés</string>
   <string name="pref_case_sensitive_sort_summary">Kis-/nagybetű figyelembe vétele navigáláskor, illetve találatok sorba rendezésekor</string>
@@ -304,7 +332,12 @@
   <string name="pref_save_search_terms_off">A keresési feltételek nem lesznek elmentve</string>
   <string name="pref_remove_saved_search_terms">Keresési feltételek törlése</string>
   <string name="pref_remove_saved_search_terms_summary">Érintse meg az összes keresési feltételek törléséhez</string>
-  <string name="pref_remove_saved_search_terms_msg">Az összes keresési feltétel törölve.</string>
+  <string name="pref_remove_saved_search_terms_msg">Az összes mentett keresési feltétel törölve</string>
+  <string name="pref_secure_storage_category">Biztonsági tároló</string>
+  <string name="pref_secure_storage_delayed_sync_title">Késleltetett szinkronizálás</string>
+  <string name="pref_secure_storage_delayed_sync_summary">A biztonsági fájlrendszer szinkronizálása költséges művelet. Engedélyezve ezt a beállítást jobb válaszidőt kap minden művelet után, a szinkronizálás elvégzése a fájlrendszer nem használt állapotában történik, annak rovására, hogy a függőben lévő információk nem kerülnek szinkronizálásra, ha az alkalmazás összeomlik.</string>
+  <string name="pref_secure_storage_reset_password_title">Jelszó megváltoztatása</string>
+  <string name="pref_secure_storage_delete_storage_title">Tároló törlése</string>
   <string name="pref_editor_behaviour_category">Viselkedés</string>
   <string name="pref_no_suggestions">Nincs javaslat</string>
   <string name="pref_no_suggestions_desc">Fájl szerkesztéskor ne legyenek szótár javaslatok</string>
@@ -313,7 +346,7 @@
   <string name="pref_hexdump_desc">Bináris fájlt hexadecimális nézetben jelenítsen meg</string>
   <string name="pref_editor_syntax_highlight_category">Szintaxis kiemelés</string>
   <string name="pref_syntax_highlight">Szintaxis kiemelés</string>
-  <string name="pref_syntax_highlight_desc">Szintaxis kiemelés a megjelenített fájlban (ha elérhető szintaxis feldolgozó az adott fájltípushoz)</string>
+  <string name="pref_syntax_highlight_desc">A szerkesztőben található fájl szintaxisának kiemelése (amennyiben a szintaxis kiemelés engedélyezve van az adott fájltípusra)</string>
   <string name="pref_syntax_highlight_color_scheme">Színséma</string>
   <string name="pref_syntax_highlight_color_scheme_desc">Szintaxis-kiemelés színsémájának kiválasztása</string>
   <string name="pref_syntax_sh_use_theme_default">Téma alapértelmezése</string>
@@ -341,6 +374,26 @@
   <string name="ash_keyword">Kulcsszó</string>
   <string name="ash_quoted_string">Idézett karakterlánc</string>
   <string name="ash_variable">Változó</string>
+  <string name="secure_storage_unlock_title">Tároló feloldása</string>
+  <string name="secure_storage_create_title">Tároló létrehozása</string>
+  <string name="secure_storage_reset_title">Jelszó visszaállítása</string>
+  <string name="secure_storage_delete_title">Tároló törlése</string>
+  <string name="secure_storage_unlock_key_prompt_msg">A jelszó megadásával feloldhatja a biztonságos tároló fájlrendszert.</string>
+  <string name="secure_storage_unlock_key_new_msg">Jelszó megadása a biztonsági tároló védelméhez.</string>
+  <string name="secure_storage_unlock_key_reset_msg">Írja be a jelenlegi és az új jelszót a biztonsági tároló fájlrendszerének alaphelyzetbe állításához.</string>
+  <string name="secure_storage_unlock_key_delete_msg">Írja be a jelenlegi jelszót a biztonsági tároló fájlrendszerének törléséhez.</string>
+  <string name="secure_storage_unlock_old_key_title">Régi jelszó:</string>
+  <string name="secure_storage_unlock_new_key_title">Új jelszó:</string>
+  <string name="secure_storage_unlock_key_title">Jelszó:</string>
+  <string name="secure_storage_unlock_repeat_title">Ismételje meg a jelszót:</string>
+  <string name="secure_storage_create_button">Létrehozás</string>
+  <string name="secure_storage_unlock_button">Feloldás</string>
+  <string name="secure_storage_reset_button">Visszaállítás</string>
+  <string name="secure_storage_delete_button">Törlés</string>
+  <string name="secure_storage_unlock_failed">Tároló feloldása nem sikerült</string>
+  <string name="secure_storage_unlock_validation_length">Jelszó legalább <xliff:g id="characters">%1$d</xliff:g> karakter kell legyen.</string>
+  <string name="secure_storage_unlock_validation_equals">A megadott jelszavak nem egyeznek.</string>
+  <string name="secure_storage_open_file_warning">Ezzel ideiglenesen a fájlt egy titkosítatlan helyre másolja. 1 óra után törlődni fog.</string>
   <string name="print_unsupported_document">Nem támogatott dokumentum formátum</string>
   <string name="print_unsupported_image">Nem támogatott kép formátum</string>
   <string name="print_document_header">Dokumentum: <xliff:g id="document_name">%1$s</xliff:g></string>
@@ -349,4 +402,5 @@
   <string name="changelog_title">Változások</string>
   <string name="welcome_title">Üdvözöljük</string>
   <string name="welcome_msg">Üdvözöli a CyanogenMod fájlkezelő.\n\nEz az alkalmazás lehetővé teszi a fájlrendszer böngészését és olyan műveletek végrehajtását is, melyek esetleg károsíthatják az eszközt. A károsodás elkerülése érdekében az alkalmazás védett, alacsony jogosultsággal indul.\n\nLehetősége van a speciális beállításoknál a teljes privilegizált módú futtatásra is. Az Ön felelőssége annak biztosítása, hogy az egyes műveletek ne károsítsák a rendszert.\n\nA CyanogenMod csapata.\n</string>
+  <string name="activity_not_found_exception">Nem található alkalmazás a fájl megnyitásához</string>
 </resources>

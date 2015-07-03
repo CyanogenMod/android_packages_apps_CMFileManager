@@ -24,10 +24,13 @@ import com.cyanogenmod.filemanager.console.ExecutionException;
 import com.cyanogenmod.filemanager.console.NoSuchFileOrDirectory;
 import com.cyanogenmod.filemanager.console.secure.SecureConsole;
 import com.cyanogenmod.filemanager.model.FolderUsage;
+import com.cyanogenmod.filemanager.util.FileHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
 
 import de.schlichtherle.truezip.file.TFile;
+
+import java.io.File;
 
 /**
  * A class for retrieve the disk usage of a folder.
@@ -149,8 +152,12 @@ public class FolderUsageCommand extends Program implements FolderUsageExecutable
                     } else {
                         this.mFolderUsage.addFile();
                         // Compute statistics and size
+                        File file = files[i];
+                        String ext = FileHelper.getExtension(file.getName());
                         MimeTypeCategory category =
-                                MimeTypeHelper.getCategory(null, files[i]);
+                                MimeTypeHelper.getCategoryFromExt(null,
+                                                                  ext,
+                                                                  file.getAbsolutePath());
                         this.mFolderUsage.addFileToCategory(category);
                         this.mFolderUsage.addSize(files[i].length());
                     }

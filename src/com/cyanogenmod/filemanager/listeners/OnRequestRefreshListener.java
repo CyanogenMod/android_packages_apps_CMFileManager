@@ -48,4 +48,9 @@ public interface OnRequestRefreshListener {
      * @param o The object where to navigate to
      */
     void onNavigateTo(Object o);
+
+    /**
+     * Invoked on action cancel
+     */
+    void onCancel();
 }

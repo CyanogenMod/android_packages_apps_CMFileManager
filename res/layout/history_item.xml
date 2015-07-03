@@ -27,7 +27,7 @@
         android:id="@+id/history_item_icon"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginRight="2dp"
+        android:layout_marginEnd="2dp"
         android:contentDescription="@null"
         android:padding="8dp"
         android:src="@null" />
@@ -43,6 +43,7 @@
             android:id="@+id/history_item_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="viewStart"
             android:ellipsize="end"
             android:singleLine="true"
             android:textAppearance="@style/primary_text_appearance" />
@@ -51,6 +52,7 @@
             android:id="@+id/history_item_directory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="viewStart"
             android:singleLine="true"
             android:ellipsize="middle"
             android:textAppearance="@style/secondary_text_appearance" />

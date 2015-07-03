@@ -154,6 +154,7 @@
     <drawable name="ic_copy_drawable">@drawable/ic_material_light_copy</drawable>
     <drawable name="ic_secure_drawable">@drawable/ic_material_light_secure</drawable>
     <drawable name="ic_remote_drawable">@drawable/ic_material_light_remote</drawable>
+    <drawable name="ic_edit_home_bookmark_drawable">@drawable/ic_edit_home_bookmark</drawable>
 
     <!-- Disk usage graph -->
     <color name="disk_usage_total_color">@color/disk_usage_total</color>

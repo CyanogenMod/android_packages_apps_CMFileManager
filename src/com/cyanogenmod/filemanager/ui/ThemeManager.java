@@ -636,8 +636,7 @@ public final class ThemeManager {
          */
         private void applyButtonStyle(Context ctx, Button button) {
             if (button != null) {
-                setBackgroundDrawable(ctx, button, "selectors_button_drawable"); //$NON-NLS-1$
-                setTextColor(ctx, button, "text_color"); //$NON-NLS-1$
+                setTextColor(ctx, button, "dialog_text_color"); //$NON-NLS-1$
             }
         }
 

@@ -71,7 +71,7 @@
     <!-- Warning dialog title -->
     <string name="warning_title">Warning</string>
     <!-- Error dialog title -->
-    <string name="error_title">Error detected</string>
+    <string name="error_title">Error</string>
     <!-- Confirm operation dialog title -->
     <string name="confirm_operation">Confirm operation</string>
     <!-- Confirm overwrite dialog title -->
@@ -94,7 +94,7 @@
     <!-- The initial directory has an invalid or inaccessible reference -->
     <string name="msgs_settings_invalid_initial_directory">The initial folder \'<xliff:g id="initial_dir">%1$s</xliff:g>\' is invalid. Changing to root folder.</string>
     <!-- Root is not available message -->
-    <string name="root_not_available_msg">Root is not available in this device. Cannot perform this operation.</string>
+    <string name="root_not_available_msg">Root is not available on this device. Cannot perform this operation.</string>
 
     <!-- Success -->
     <string name="msgs_success">The operation was completed successfully.</string>
@@ -126,8 +126,8 @@
     <string name="msgs_illegal_argument">Illegal argument. Invocation failed.</string>
     <!-- The operation will cause inconsistencies -->
     <string name="msgs_unresolved_inconsistencies">The operation is not permitted because it would create inconsistencies.</string>
-    <!-- Operation not permitted in current directory -->
-    <string name="msgs_operation_not_allowed_in_current_directory">The operation is not permitted in current folder.\n\nDestination folder cannot be subfolder of source or be same as source.</string>
+    <!-- Operation not permitted in the current directory -->
+    <string name="msgs_operation_not_allowed_in_current_directory">Destination folder cannot be a subfolder of source or be the same as source.</string>
 
     <!-- The advice message prior to exit the app -->
     <string name="msgs_push_again_to_exit">Press again to exit.</string>
@@ -214,7 +214,7 @@
     <!-- Filesystem Info - Filesystem couldn't be mounted -->
     <string name="filesystem_info_cant_be_mounted_msg">The file system cannot be mounted/unmounted.</string>
     <!-- Filesystem Info - Not allowed message -->
-    <string name="filesystem_info_mount_not_allowed_msg">File system mounting operations are not allowedin Safe mode. Tap to change to Root Access mode.</string>
+    <string name="filesystem_info_mount_not_allowed_msg">File system mounting operations are not allowed in Safe mode. Tap to change to Root Access mode.</string>
     <!-- Filesystem Info - Mount failed -->
     <string name="filesystem_info_mount_failed_msg">File system mounting operation failed. Some file systems, like SD cards, cannot be mounted/unmounted because they are built-in as read-only file systems.</string>
     <!-- Filesystem Info Dialog - Title -->
@@ -224,7 +224,7 @@
     <!-- Filesystem Info Dialog - Tab - Disk Usage -->
     <string name="filesystem_info_dialog_tab_disk_usage">Disk usage</string>
     <!-- Filesystem Info Dialog - Status Label -->
-    <string name="filesystem_info_dialog_status">Status:</string>
+    <string name="filesystem_info_dialog_status">Mounted:</string>
     <!-- Filesystem Info Dialog - Mount Point Label -->
     <string name="filesystem_info_dialog_mount_point">Mount point:</string>
     <!-- Filesystem Info Dialog - Device Label -->
@@ -507,6 +507,8 @@
     <string name="input_name_dialog_message_empty_name">The name cannot be empty.</string>
     <!-- Enter Name Dialog - Message - Invalid name -->
     <string name="input_name_dialog_message_invalid_path_name">Invalid name. The characters \'<xliff:g id="invalid_characters">%1$s</xliff:g>\' are not allowed.</string>
+    <!-- Enter Name Dialog - Message - Invalid name length -->
+    <string name="input_name_dialog_message_invalid_name_length">Maximum character limit reached.</string>
     <!-- Enter Name Dialog - Message - Invalid name -->
     <string name="input_name_dialog_message_invalid_name">Invalid name. The names \'.\' and \'..\' are not allowed.</string>
     <!-- Enter Name Dialog - Message - Name exists -->
@@ -618,8 +620,6 @@
     <string name="pref_themes">Themes</string>
     <!-- Preferences - About title -->
     <string name="pref_about">About</string>
-    <!-- Preferences - About summary -->
-    <string name="pref_about_summary">File Manager v<xliff:g id="version">%1$s</xliff:g>\nCopyright \u00A9 2012&#8211;2014 The CyanogenMod Project</string>
 
     <!-- Preferences - General - Behaviour category -->
     <string name="pref_general_behaviour_category">General</string>
@@ -701,8 +701,8 @@
     <string name="pref_secure_storage_delayed_sync_title">Delayed synchronization</string>
     <!-- Preferences - Storage - Secure Storage - Delayed sync summary -->
     <string name="pref_secure_storage_delayed_sync_summary">Synchronization of secure file systems is a costly operation. Enable this option to allow faster responses after every operation, performing the synchronization when the filesystem is in unused state, but at the expense of losing the pending information not synced if the app crashes.</string>
-    <!-- Preferences - Storage - Secure Storage - Reset password title -->
-    <string name="pref_secure_storage_reset_password_title">Reset password</string>
+    <!-- Preferences - Storage - Secure Storage - Change password title -->
+    <string name="pref_secure_storage_reset_password_title">Change password</string>
     <!-- Preferences - Storage - Secure Storage - Delete storage title -->
     <string name="pref_secure_storage_delete_storage_title">Delete storage</string>
     <!-- Preferences - Editor - Behaviour category -->
@@ -718,11 +718,11 @@
     <!-- Preferences - Editor - Hex dump desc -->
     <string name="pref_hexdump_desc">When opening a binary file, generate a hex dump of the file and open it in the hex viewer</string>
     <!-- Preferences - Editor - Syntax highlight category -->
-    <string name="pref_editor_syntax_highlight_category">Syntax highlight</string>
+    <string name="pref_editor_syntax_highlight_category">Syntax highlighting</string>
     <!-- Preferences - Editor - Syntax highlight -->
     <string name="pref_syntax_highlight">Syntax highlight</string>
     <!-- Preferences - Editor - Syntax highlight summary -->
-    <string name="pref_syntax_highlight_desc">Highlight the syntax of the file displayed in the editor (only when a syntax highlight processor is available for the type of file)</string>
+    <string name="pref_syntax_highlight_desc">Highlight the syntax of the file displayed in the editor (only when a syntax highlighting processor for the file type is available)</string>
     <!-- Preferences - Editor - Syntax highlight color scheme -->
     <string name="pref_syntax_highlight_color_scheme">Color scheme</string>
     <!-- Preferences - Editor - Syntax highlight color scheme summary -->
@@ -815,6 +815,8 @@
     <string name="secure_storage_unlock_validation_length">Password must have at least <xliff:g id="characters">%1$d</xliff:g> characters.</string>
     <!-- Secure Storage unlock validation, equal -->
     <string name="secure_storage_unlock_validation_equals">Passwords do not match.</string>
+    <!-- Secure storage open file warning -->
+    <string name="secure_storage_open_file_warning">This will copy the file out to a temporary unencrypted location. This will be cleared after 1 hour.</string>
 
     <!-- Print messages -->
     <!-- Unsupported document format -->
@@ -836,4 +838,7 @@
     <string name="welcome_title">Welcome</string>
     <!-- Welcome Dialog - Message -->
     <string name="welcome_msg">Welcome to the CyanogenMod file manager.\n\nThis app allows you to explore the file system and do operations that could break your device. To prevent damage, the app will start in a safe, low-privileged mode.\n\nYou can access the advanced, full-privileged mode via Settings. It\'s your responsibility to ensure that an operation doesn\'t break your system.\n\nThe CyanogenMod Team</string>
+
+    <string name="activity_not_found_exception">Couldn\'t find an app to open this file</string>
+
 </resources>

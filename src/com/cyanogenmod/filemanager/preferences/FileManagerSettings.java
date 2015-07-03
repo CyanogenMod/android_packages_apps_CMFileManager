@@ -103,7 +103,7 @@ public enum FileManagerSettings {
      * @hide
      */
     SETTINGS_COMPUTE_FOLDER_STATISTICS(
-            "cm_filemanager_compute_folder_statistics", Boolean.FALSE), //$NON-NLS-1$
+            "cm_filemanager_compute_folder_statistics", Boolean.TRUE), //$NON-NLS-1$
     /**
      * When to display thumbs of pictures, videos, ...
      * @hide
@@ -180,13 +180,6 @@ public enum FileManagerSettings {
      */
     SETTINGS_EDITOR_SYNTAX_HIGHLIGHT(
             "cm_filemanager_editor_syntax_highlight", Boolean.TRUE), //$NON-NLS-1$
-
-    /**
-     * When to editor should use the default color scheme of the theme for syntax highlight
-     * @hide
-     */
-    SETTINGS_EDITOR_SH_USE_THEME_DEFAULT(
-            "cm_filemanager_editor_sh_use_theme_default", Boolean.TRUE), //$NON-NLS-1$
 
     /**
      * When to editor should use the default color scheme of the theme for syntax highlight

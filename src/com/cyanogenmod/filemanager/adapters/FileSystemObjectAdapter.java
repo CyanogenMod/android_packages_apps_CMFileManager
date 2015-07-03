@@ -511,6 +511,10 @@ public class FileSystemObjectAdapter
         //Select or deselect the item
         int pos = ((Integer)v.getTag()).intValue();
 
+        if (pos >= getCount() || pos < 0) {
+            return;
+        }
+
         //Retrieve data holder
         final FileSystemObject fso = getItem(pos);
 

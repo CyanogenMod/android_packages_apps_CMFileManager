@@ -23,7 +23,6 @@
   <string name="size_megabytes">MB</string>
   <string name="size_gigabytes">GB</string>
   <string name="datetime_format_order">%1$s %2$s</string>
-  <string name="device_blockdevice">塊設備</string>
   <string name="device_characterdevice">字符設備</string>
   <string name="device_namedpipe">命名管道</string>
   <string name="device_domainsocket">網域終端 (Domain socket)</string>
@@ -42,7 +41,6 @@
   <string name="copy_text_cd">輕按以複製文字到剪貼簿</string>
   <string name="copy_text_msg">文字已複製到剪貼簿</string>
   <string name="warning_title">警告</string>
-  <string name="error_title">偵測到錯誤</string>
   <string name="confirm_operation">確認操作</string>
   <string name="confirm_overwrite">確認覆寫</string>
   <string name="confirm_deletion">確認刪除</string>
@@ -65,7 +63,6 @@
   <string name="msgs_read_only_filesystem">檔案系統正是唯讀。嘗試使用讀寫模式掛載檔案系統後，再次執行操作。</string>
   <string name="msgs_illegal_argument">無效參數。調用失敗。</string>
   <string name="msgs_unresolved_inconsistencies">此操作不被允許，因爲它會產生不一致性。</string>
-  <string name="msgs_operation_not_allowed_in_current_directory">此操作在目前所在的資料夾是不被允許的。\n\n目標資料夾不能爲源本的資料夾或與源本的子資料夾相同。</string>
   <string name="msgs_push_again_to_exit">再次按下即可退出。</string>
   <string name="msgs_not_registered_app">沒有應用程式註冊來為已選的檔案類型進行處理。</string>
   <string name="msgs_overwrite_files">有些檔案已存在於目標資料夾內。\n\n是否覆寫？</string>
@@ -98,12 +95,10 @@
   <string name="filesystem_info_warning_title">無資訊</string>
   <string name="filesystem_info_warning_msg">沒有關於此檔案系統可用的資訊。</string>
   <string name="filesystem_info_cant_be_mounted_msg">無法掛載或卸載檔案系統。</string>
-  <string name="filesystem_info_mount_not_allowed_msg">在安全模式下不允許掛載檔案系統的操作。輕按以切換至超級使用者存取模式。</string>
   <string name="filesystem_info_mount_failed_msg">檔案系統掛載失敗。有些檔案系統 (例如 SD 卡) 是被設計爲唯讀檔案系統的。所以不能被掛載或卸載。</string>
   <string name="filesystem_info_dialog_title">檔案系統資訊</string>
   <string name="filesystem_info_dialog_tab_info">資訊</string>
   <string name="filesystem_info_dialog_tab_disk_usage">儲存使用情況</string>
-  <string name="filesystem_info_dialog_status">狀態：</string>
   <string name="filesystem_info_dialog_mount_point">掛載點：</string>
   <string name="filesystem_info_dialog_device">裝置：</string>
   <string name="filesystem_info_dialog_type">類型：</string>
@@ -268,7 +263,6 @@
   <string name="pref_editor">編輯器選項</string>
   <string name="pref_themes">主題</string>
   <string name="pref_about">關於</string>
-  <string name="pref_about_summary">檔案管理器 v<xliff:g id="version">%1$s</xliff:g>\n版權所有 \u00A9 2012-2014 CyanogenMod 計畫</string>
   <string name="pref_general_behaviour_category">一般</string>
   <string name="pref_case_sensitive_sort">區分大小寫</string>
   <string name="pref_case_sensitive_sort_summary">導航或排列搜尋結果時區分大小寫</string>
@@ -304,14 +298,11 @@
   <string name="pref_save_search_terms_off">搜尋關鍵字將不會被儲存</string>
   <string name="pref_remove_saved_search_terms">移除已保存的搜尋關鍵字</string>
   <string name="pref_remove_saved_search_terms_summary">輕按以移除所有儲存的搜尋關鍵字</string>
-  <string name="pref_remove_saved_search_terms_msg">所有儲存的搜尋關鍵字已被移除。</string>
   <string name="pref_editor_behaviour_category">行爲</string>
   <string name="pref_no_suggestions">沒有建議</string>
   <string name="pref_no_suggestions_desc">編輯檔案時不要顯示字典建議</string>
   <string name="pref_word_wrap">自動換行</string>
-  <string name="pref_editor_syntax_highlight_category">語法突顯</string>
   <string name="pref_syntax_highlight">語法突顯</string>
-  <string name="pref_syntax_highlight_desc">突顯在編輯器內顯示的檔案的語法 (僅在能夠處理檔案類型的語法突顯處理器存在時)</string>
   <string name="pref_syntax_highlight_color_scheme">配色方案</string>
   <string name="pref_syntax_sh_use_theme_default">使用主題預設值</string>
   <string name="pref_syntax_sh_use_theme_default_desc">使用目前主題的預設語法突顯配色方案</string>

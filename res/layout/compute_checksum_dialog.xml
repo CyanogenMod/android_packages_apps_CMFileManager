@@ -24,10 +24,10 @@
     android:id="@+id/checksum_filename_label"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/extra_large_margin"
-    android:layout_marginRight="@dimen/extra_large_margin"
+    android:layout_marginStart="@dimen/extra_large_margin"
+    android:layout_marginEnd="@dimen/extra_large_margin"
     android:layout_marginTop="@dimen/extra_large_margin"
-    android:gravity="left|center_vertical"
+    android:gravity="start|center_vertical"
     android:text="@string/compute_checksum_filename_label"
     android:textAppearance="@style/primary_text_appearance" />
 
@@ -35,34 +35,34 @@
     android:id="@+id/checksum_filename"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/extra_large_margin"
-    android:layout_marginRight="@dimen/extra_large_margin"
-    android:gravity="left|center_vertical"
+    android:layout_marginStart="@dimen/extra_large_margin"
+    android:layout_marginEnd="@dimen/extra_large_margin"
+    android:gravity="start|center_vertical"
     android:textAppearance="@style/secondary_text_appearance" />
 
   <TextView
     android:id="@+id/checksum_md5_label"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/extra_large_margin"
-    android:layout_marginRight="@dimen/extra_large_margin"
+    android:layout_marginStart="@dimen/extra_large_margin"
+    android:layout_marginEnd="@dimen/extra_large_margin"
     android:layout_marginTop="@dimen/extra_large_margin"
-    android:gravity="left|center_vertical"
+    android:gravity="start|center_vertical"
     android:text="@string/compute_checksum_md5_label"
     android:textAppearance="@style/primary_text_appearance" />
 
   <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/extra_large_margin"
-    android:layout_marginRight="@dimen/extra_large_margin">
+    android:layout_marginStart="@dimen/extra_large_margin"
+    android:layout_marginEnd="@dimen/extra_large_margin">
 
     <com.cyanogenmod.filemanager.ui.widgets.ButtonItem
       android:id="@+id/bt_md5_clipboard"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentTop="true"
-      android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="true"
       android:contentDescription="@string/copy_text_cd" />
 
     <EditText
@@ -70,16 +70,16 @@
       android:layout_width="match_parent"
       android:layout_height="64dp"
       android:singleLine="false"
-      android:gravity="top|left"
+      android:gravity="top|start"
       android:cursorVisible="true"
       android:background="@color/console_bg"
       android:imeOptions="actionNone|flagNoFullscreen"
       android:inputType="textMultiLine|textImeMultiLine|textNoSuggestions"
       android:focusable="false"
-      android:layout_toLeftOf="@id/bt_md5_clipboard"
+      android:layout_toStartOf="@id/bt_md5_clipboard"
       android:layout_alignTop="@id/bt_md5_clipboard"
       android:layout_alignBottom="@id/bt_md5_clipboard"
-      android:layout_marginRight="@dimen/default_margin"
+      android:layout_marginEnd="@dimen/default_margin"
       android:text="@string/compute_checksum_computing_checksum_msg"
       android:textAppearance="@style/console_text_appearance" />
   </RelativeLayout>
@@ -88,18 +88,18 @@
     android:id="@+id/checksum_sha1_label"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/extra_large_margin"
-    android:layout_marginRight="@dimen/extra_large_margin"
+    android:layout_marginStart="@dimen/extra_large_margin"
+    android:layout_marginEnd="@dimen/extra_large_margin"
     android:layout_marginTop="@dimen/extra_large_margin"
-    android:gravity="left|center_vertical"
+    android:gravity="start|center_vertical"
     android:text="@string/compute_checksum_sha1_label"
     android:textAppearance="@style/primary_text_appearance" />
 
   <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/extra_large_margin"
-    android:layout_marginRight="@dimen/extra_large_margin"
+    android:layout_marginStart="@dimen/extra_large_margin"
+    android:layout_marginEnd="@dimen/extra_large_margin"
     android:layout_marginBottom="@dimen/extra_large_margin">
 
     <com.cyanogenmod.filemanager.ui.widgets.ButtonItem
@@ -107,7 +107,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentTop="true"
-      android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="true"
       android:contentDescription="@string/copy_text_cd" />
 
     <EditText
@@ -115,16 +115,16 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:singleLine="false"
-      android:gravity="top|left"
+      android:gravity="top|start"
       android:cursorVisible="true"
       android:background="@color/console_bg"
       android:imeOptions="actionNone|flagNoFullscreen"
       android:inputType="textMultiLine|textImeMultiLine|textNoSuggestions"
       android:focusable="false"
-      android:layout_toLeftOf="@id/bt_sha1_clipboard"
+      android:layout_toStartOf="@id/bt_sha1_clipboard"
       android:layout_alignTop="@id/bt_sha1_clipboard"
       android:layout_alignBottom="@id/bt_sha1_clipboard"
-      android:layout_marginRight="@dimen/default_margin"
+      android:layout_marginEnd="@dimen/default_margin"
       android:text="@string/compute_checksum_computing_checksum_msg"
       android:textAppearance="@style/console_text_appearance" />
   </RelativeLayout>

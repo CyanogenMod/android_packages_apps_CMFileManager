@@ -44,8 +44,8 @@ public class FindCommand extends Program implements FindExecutable {
     private final String[] mQueryRegExp;
     private final ConcurrentAsyncResultListener mAsyncResultListener;
 
-    private boolean mCancelled;
-    private boolean mEnded;
+    private volatile boolean mCancelled;
+    private volatile boolean mEnded;
     private final Object mSync = new Object();
 
     /**
@@ -117,6 +117,15 @@ public class FindCommand extends Program implements FindExecutable {
 
         // Find the data
         findRecursive(f);
+
+        // record program's execution termination
+        synchronized (mSync) {
+            mEnded = true;
+            // account for the delay between the end of findRecursive and setting program
+            // termination flag (mEnded)
+            // notify again in case a thread entered wait state since
+            mSync.notify();
+        }
 
         if (this.mAsyncResultListener != null) {
             this.mAsyncResultListener.onAsyncEnd(this.mCancelled);
@@ -198,7 +207,9 @@ public class FindCommand extends Program implements FindExecutable {
     @Override
     public boolean cancel() {
         try {
-            synchronized (this.mSync) {
+            // ensure the program is running before attempting to cancel
+            // there won't be a corresponding lock.notify() otherwise
+            if (!mEnded) {
                 this.mCancelled = true;
                 this.mSync.wait(5000L);
             }
@@ -212,7 +223,8 @@ public class FindCommand extends Program implements FindExecutable {
     @Override
     public boolean end() {
         try {
-            synchronized (this.mSync) {
+            // ensure the program is running before attempting to terminate
+            if (!mEnded) {
                 this.mEnded = true;
                 this.mSync.wait(5000L);
             }

@@ -21,7 +21,6 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -34,6 +33,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.storage.StorageVolume;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -114,11 +114,6 @@ public class PickerActivity extends Activity
     private static final String INTENT_FOLDER_SELECT = "com.android.fileexplorer.action.DIR_SEL";
     // String extra for folder selection
     private static final String EXTRA_FOLDER_PATH = "def_file_manager_result_dir";
-
-    // Scheme for file and directory picking
-    private static final String FILE_URI_SCHEME = "file"; //$NON-NLS-1$
-    private static final String FOLDER_URI_SCHEME = "folder"; //$NON-NLS-1$
-    private static final String DIRECTORY_URI_SCHEME = "directory"; //$NON-NLS-1$
 
     FileSystemObject mFso;  // The picked item
     FileSystemObject mCurrentDirectory;
@@ -208,6 +203,7 @@ public class PickerActivity extends Activity
         }
 
         // Display restrictions
+        Bundle extras = getIntent().getExtras();
         Map<DisplayRestrictions, Object> restrictions = new HashMap<DisplayRestrictions, Object>();
         //- Mime/Type restriction
         String mimeType = getIntent().getType();
@@ -220,9 +216,13 @@ public class PickerActivity extends Activity
                 mimeType = MimeTypeHelper.ALL_MIME_TYPES;
             }
             restrictions.put(DisplayRestrictions.MIME_TYPE_RESTRICTION, mimeType);
+        } else {
+            String[] mimeTypes = getIntent().getStringArrayExtra(Intent.EXTRA_MIME_TYPES);
+            if (mimeTypes != null && mimeTypes.length > 0) {
+                restrictions.put(DisplayRestrictions.MIME_TYPE_RESTRICTION, mimeTypes);
+            }
         }
         // Other restrictions
-        Bundle extras = getIntent().getExtras();
         Log.d(TAG, "PickerActivity. extras: " + String.valueOf(extras)); //$NON-NLS-1$
         if (extras != null) {
             //-- File size
@@ -281,7 +281,7 @@ public class PickerActivity extends Activity
 
         // Create the dialog
         this.mDialog = DialogHelper.createDialog(
-            this, R.drawable.ic_launcher,
+            this, R.mipmap.ic_launcher_filemanager,
             pickingDirectory ? R.string.directory_picker_title : R.string.picker_title,
             this.mRootView);
 
@@ -465,7 +465,7 @@ public class PickerActivity extends Activity
         }
         if (Intent.ACTION_PICK.equals(action)) {
             final Uri data = intent.getData();
-            if (data != null && FILE_URI_SCHEME.equals(data.getScheme())) {
+            if (data != null && FileHelper.FILE_URI_SCHEME.equals(data.getScheme())) {
                 return true;
             }
         }
@@ -480,7 +480,8 @@ public class PickerActivity extends Activity
 
         if (Intent.ACTION_PICK.equals(intent.getAction()) && intent.getData() != null) {
             String scheme = intent.getData().getScheme();
-            if (FOLDER_URI_SCHEME.equals(scheme) || DIRECTORY_URI_SCHEME.equals(scheme)) {
+            if (FileHelper.FOLDER_URI_SCHEME.equals(scheme)
+                    || FileHelper.DIRECTORY_URI_SCHEME.equals(scheme)) {
                 return true;
             }
         }
@@ -595,15 +596,28 @@ public class PickerActivity extends Activity
      */
     private void showStorageVolumesPopUp(View anchor) {
         // Create a list (but not checkable)
-        final StorageVolume[] volumes = StorageHelper.getStorageVolumes(PickerActivity.this);
+        final StorageVolume[] volumes = StorageHelper.getStorageVolumes(PickerActivity.this, false);
         List<CheckableItem> descriptions = new ArrayList<CheckableItem>();
         if (volumes != null) {
             int cc = volumes.length;
             for (int i = 0; i < cc; i++) {
-                String desc = StorageHelper.getStorageVolumeDescription(this, volumes[i]);
-                CheckableItem item = new CheckableItem(desc, false, false);
-                descriptions.add(item);
+                StorageVolume volume = volumes[i];
+                if (volumes[i] != null) {
+                    String mountedState = volumes[i].getState();
+                    String path = volumes[i].getPath();
+                    if (!Environment.MEDIA_MOUNTED.equalsIgnoreCase(mountedState) &&
+                            !Environment.MEDIA_MOUNTED_READ_ONLY.equalsIgnoreCase(mountedState)) {
+                        Log.w(TAG, "Ignoring '" + path + "' with state of '"+ mountedState + "'");
+                        continue;
+                    }
+                    if (!TextUtils.isEmpty(path)) {
+                        String desc = StorageHelper.getStorageVolumeDescription(this, volumes[i]);
+                        CheckableItem item = new CheckableItem(desc, false, false);
+                        descriptions.add(item);
+                    }
+                }
             }
+
         }
         CheckableListAdapter adapter =
                 new CheckableListAdapter(getApplicationContext(), descriptions);

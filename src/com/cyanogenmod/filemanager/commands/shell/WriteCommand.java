@@ -128,13 +128,13 @@ public class WriteCommand extends AsyncResultProgram implements WriteExecutable 
      * {@inheritDoc}
      */
     @Override
-    public void onParsePartialResult(final String partialIn) {/**NON BLOCK**/}
+    public void onParsePartialResult(final byte[] partialIn) {/**NON BLOCK**/}
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void onParseErrorPartialResult(String partialErr) {/**NON BLOCK**/}
+    public void onParseErrorPartialResult(byte[] partialErr) {/**NON BLOCK**/}
 
     /**
      * {@inheritDoc}

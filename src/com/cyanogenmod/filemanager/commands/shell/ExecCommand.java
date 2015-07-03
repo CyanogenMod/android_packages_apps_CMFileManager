@@ -65,7 +65,8 @@ public class ExecCommand extends AsyncResultProgram implements ExecExecutable {
      * {@inheritDoc}
      */
     @Override
-    public void onParsePartialResult(final String partialIn) {
+    public void onParsePartialResult(byte[] in) {
+        String partialIn = new String(in);
         //If a listener is defined, then send the partial result
         if (partialIn != null && partialIn.length() > 0) {
             if (getAsyncResultListener() != null) {
@@ -78,7 +79,8 @@ public class ExecCommand extends AsyncResultProgram implements ExecExecutable {
      * {@inheritDoc}
      */
     @Override
-    public void onParseErrorPartialResult(String partialErr) {
+    public void onParseErrorPartialResult(byte[] in) {
+        String partialErr = new String(in);
         //If a listener is defined, then send the partial result
         if (partialErr != null && partialErr.length() > 0) {
             if (getAsyncResultListener() != null) {

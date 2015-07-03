@@ -367,7 +367,7 @@ public class FsoPropertiesDialog
 
         // Check if we should show "Skip media scan" toggle
         if (!FileHelper.isDirectory(this.mFso) ||
-            !StorageHelper.isPathInStorageVolume(this.mFso.getFullPath())) {
+            !StorageHelper.isPathInStorageVolume(this.mFso.getFullPath()) || this.mFso.isSecure()) {
             LinearLayout fsoSkipMediaScanView =
                     (LinearLayout)contentView.findViewById(R.id.fso_skip_media_scan_view);
             fsoSkipMediaScanView.setVisibility(View.GONE);
@@ -520,10 +520,6 @@ public class FsoPropertiesDialog
 
                     // Apply the them
                     applyTabTheme();
-
-                    // Adjust the size of the spinners
-                    adjustSpinnerSize(this.mSpnOwner);
-                    adjustSpinnerSize(this.mSpnGroup);
                 }
                 this.mInfoMsgView.setVisibility(
                         mIsVirtual || this.mHasPrivileged || !this.mIsAdvancedMode
@@ -1169,27 +1165,6 @@ public class FsoPropertiesDialog
     }
 
     /**
-     * Method that adjust the size of the spinner to fit the window
-     *
-     * @param spinner The spinner
-     */
-    private void adjustSpinnerSize(final Spinner spinner) {
-        final View v = this.mContentView.findViewById(R.id.fso_properties_dialog_tabhost);
-        spinner.post(new Runnable() {
-            @Override
-            public void run() {
-                // Align with the last checkbox of the column
-                int vW = v.getMeasuredWidth();
-                int[] cbSpn = new int[2];
-                spinner.getLocationInWindow(cbSpn);
-
-                // Set the width
-                spinner.getLayoutParams().width = vW - cbSpn[0];
-            }
-        });
-    }
-
-    /**
      * Method that applies the current theme to the activity
      */
     private void applyTheme() {
@@ -1268,7 +1243,8 @@ public class FsoPropertiesDialog
         v = this.mContentView.findViewById(R.id.fso_info_msg);
         theme.setTextColor(this.mContext, (TextView)v, "text_color"); //$NON-NLS-1$
         ((TextView)v).setCompoundDrawablesWithIntrinsicBounds(
-                theme.getDrawable(this.mContext, "filesystem_warning_drawable"), //$NON-NLS-1$
+                theme.getDrawable(this.mContext,
+                        "filesystem_dialog_warning_drawable"), //$NON-NLS-1$
                 null, null, null);
     }
 

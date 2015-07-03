@@ -42,7 +42,7 @@
   <string name="copy_text_cd">Clicca per copiare il testo negli appunti</string>
   <string name="copy_text_msg">Testo copiato negli appunti</string>
   <string name="warning_title">Avviso</string>
-  <string name="error_title">Rilevato errore</string>
+  <string name="error_title">Errore</string>
   <string name="confirm_operation">Conferma</string>
   <string name="confirm_overwrite">Conferma sovrascrittura</string>
   <string name="confirm_deletion">Conferma l\'eliminazione</string>
@@ -52,9 +52,11 @@
   <string name="msgs_privileged_console_alloc_failed">Impossibile eseguire in modalità Root. Passaggio a modalità Safe.</string>
   <string name="msgs_settings_save_failure">Impossibile salvare l\'impostazione.</string>
   <string name="msgs_settings_invalid_initial_directory">La cartella iniziale \"<xliff:g id="initial_dir">%1$s</xliff:g>\" non è valida ed è stata sostituita con la cartella radice.</string>
+  <string name="root_not_available_msg">Accesso root non disponibile su questo dispositivo. Impossibile eseguire questa operazione.</string>
   <string name="msgs_success">Operazione completata con successo.</string>
   <string name="msgs_unknown">Operazione non completata a causa di un errore.</string>
   <string name="msgs_insufficient_permissions">Questa operazione richiede privilegi più elevati. Riprovare con modalità Root attivata.</string>
+  <string name="msgs_no_disk_space">Operazione fallita a causa di spazio insufficiente.</string>
   <string name="msgs_file_not_found">Impossibile trovare il file o la cartella.</string>
   <string name="msgs_command_not_found">Il comando richiesto non esiste o non è valido.</string>
   <string name="msgs_io_failed">Errore lettura/scrittura.</string>
@@ -65,7 +67,7 @@
   <string name="msgs_read_only_filesystem">Il file system è in sola lettura. Prima di procedere è necessario montarlo in lettura/scrittura.</string>
   <string name="msgs_illegal_argument">Argomento non valido. Chiamata al comando fallita.</string>
   <string name="msgs_unresolved_inconsistencies">Operazione non permessa, in quanto potrebbe produrre inconsistenze.</string>
-  <string name="msgs_operation_not_allowed_in_current_directory">Operazione non permessa nella cartella corrente.</string>
+  <string name="msgs_operation_not_allowed_in_current_directory">La cartella di destinazione non può essere una sottocartella d\'origine o essere la stessa dell\'origine.</string>
   <string name="msgs_push_again_to_exit">Premere ancora per uscire.</string>
   <string name="msgs_not_registered_app">Nessuna app registrata per gestire il tipo di file selezionato.</string>
   <string name="msgs_overwrite_files">Alcuni file esistono già nella cartella destinazione.\n\nSovrascrivere?</string>
@@ -84,10 +86,15 @@
   <string name="actionbar_button_overflow_cd">Altre opzioni</string>
   <string name="actionbar_button_storage_cd">Memorie</string>
   <string name="actionbar_button_save_cd">Salva</string>
+  <string name="actionbar_button_print_cd">Stampa</string>
   <string name="sort_by_name_asc">Per nome ▲</string>
   <string name="sort_by_name_desc">Per nome ▼</string>
   <string name="sort_by_date_asc">Per data ▲</string>
   <string name="sort_by_date_desc">Per data ▼</string>
+  <string name="sort_by_size_asc">Per dimensione \u25B2</string>
+  <string name="sort_by_size_desc">Per dimensione \u25B2</string>
+  <string name="sort_by_type_asc">Per tipo \u25B2</string>
+  <string name="sort_by_type_desc">Per tipo \u25B2</string>
   <string name="layout_icons">Icone</string>
   <string name="layout_simple">Semplice</string>
   <string name="layout_details">Dettagli</string>
@@ -98,17 +105,18 @@
   <string name="filesystem_info_warning_title">Nessuna informazione</string>
   <string name="filesystem_info_warning_msg">Non ci sono informazioni disponibili sul file system.</string>
   <string name="filesystem_info_cant_be_mounted_msg">Il file system non può essere montato/smontato.</string>
-  <string name="filesystem_info_mount_not_allowed_msg">Le operazioni di montaggio file system non sono permesse in modalità Safe. Passare a modalità Root.</string>
+  <string name="filesystem_info_mount_not_allowed_msg">Le operazioni di montaggio del file system non sono permesse in modalità sicura. Passare a modalità Root.</string>
   <string name="filesystem_info_mount_failed_msg">Montaggio del file system fallito. Alcuni file system, come le memorie SD, non possono essere montati/smontati perché sono dispositivi di sistema a sola lettura.</string>
   <string name="filesystem_info_dialog_title">Informazioni file system</string>
   <string name="filesystem_info_dialog_tab_info">Informazioni</string>
   <string name="filesystem_info_dialog_tab_disk_usage">Utilizzo del disco</string>
-  <string name="filesystem_info_dialog_status">Stato:</string>
+  <string name="filesystem_info_dialog_status">Montato:</string>
   <string name="filesystem_info_dialog_mount_point">Punto di montaggio:</string>
   <string name="filesystem_info_dialog_device">Dispositivo:</string>
   <string name="filesystem_info_dialog_type">Tipo:</string>
   <string name="filesystem_info_dialog_options">Opzioni:</string>
   <string name="filesystem_info_dialog_dump_pass">Dump / Pass:</string>
+  <string name="filesystem_info_dialog_virtual">Virtuale:</string>
   <string name="filesystem_info_dialog_total_disk_usage">Totale:</string>
   <string name="filesystem_info_dialog_used_disk_usage">Usati:</string>
   <string name="filesystem_info_dialog_free_disk_usage">Liberi:</string>
@@ -169,6 +177,8 @@
   <string name="bookmarks_home">Home</string>
   <string name="bookmarks_root_folder">Cartella radice</string>
   <string name="bookmarks_system_folder">Cartella di sistema</string>
+  <string name="bookmarks_secure">Archivio protetto</string>
+  <string name="bookmarks_remote">Memoria remota</string>
   <string name="bookmarks_button_config_cd">Impostare la cartella iniziale.</string>
   <string name="bookmarks_button_remove_bookmark_cd">Eliminare il segnalibro.</string>
   <string name="bookmarks_msgs_add_success">Segnalibro aggiunto.</string>
@@ -228,10 +238,12 @@
   <string name="actions_menu_open_parent_folder">Apri cartella sup.</string>
   <string name="actions_menu_compute_checksum">Calcola checksum</string>
   <string name="actions_menu_print">Stampa</string>
+  <string name="actions_menu_set_as_home">Imposta come home</string>
   <string name="actions_ask_undone_operation_msg">Questa operazione non può essere annullata. Continuare?</string>
   <string name="input_name_dialog_label">Nome:</string>
   <string name="input_name_dialog_message_empty_name">Il nome non può essere vuoto.</string>
   <string name="input_name_dialog_message_invalid_path_name">Nome non valido. I caratteri \'<xliff:g id="invalid_characters">%1$s</xliff:g>\' non sono consentiti.</string>
+  <string name="input_name_dialog_message_invalid_name_length">Raggiunto il limite massimo di caratteri.</string>
   <string name="input_name_dialog_message_invalid_name">Nome non valido. I nomi \'.\' e \'..\' non sono consentiti.</string>
   <string name="input_name_dialog_message_name_exists">Il nome è già esistente.</string>
   <string name="associations_dialog_title">Associazioni</string>
@@ -258,6 +270,22 @@
   <string name="filetime_format_mode_MMddyyyy_HHmmss">mm/dd/yyyy hh:mm:ss</string>
   <string name="filetime_format_mode_yyyyMMdd_HHmmss">yyyy-mm-dd hh:mm:ss</string>
   <string name="selection_folders_and_files"><xliff:g id="folders">%1$s</xliff:g> e <xliff:g id="files">%2$s</xliff:g> selezionati.</string>
+  <string name="category_system">SISTEMA</string>
+  <string name="category_app">APP</string>
+  <string name="category_binary">BINARIO</string>
+  <string name="category_text">TESTO</string>
+  <string name="category_document">DOCUMENTO</string>
+  <string name="category_ebook">EBOOK</string>
+  <string name="category_mail">MAIL</string>
+  <string name="category_compress">COMPRESSO</string>
+  <string name="category_exec">ESEGUIBILE</string>
+  <string name="category_database">DATABASE</string>
+  <string name="category_font">FONT</string>
+  <string name="category_image">IMMAGINE</string>
+  <string name="category_audio">AUDIO</string>
+  <string name="category_video">VIDEO</string>
+  <string name="category_security">SICUREZZA</string>
+  <string name="category_all">TUTTO</string>
   <string name="compression_mode_title">Modalità compressione</string>
   <string name="shortcut_failed_msg">Impossibile gestire il collegamento.</string>
   <string name="shortcut_creation_success_msg">Collegamento creato.</string>
@@ -265,10 +293,10 @@
   <string name="pref">Impostazioni</string>
   <string name="pref_general">Impostazioni generali</string>
   <string name="pref_search">Opzioni ricerca</string>
+  <string name="pref_storage">Opzioni memoria</string>
   <string name="pref_editor">Opzioni editor</string>
   <string name="pref_themes">Temi</string>
   <string name="pref_about">Info</string>
-  <string name="pref_about_summary">File Manager v<xliff:g id="version">%1$s</xliff:g>\nCopyright \u00A9 2012-2014 The CyanogenMod Project</string>
   <string name="pref_general_behaviour_category">Generale</string>
   <string name="pref_case_sensitive_sort">Ordinamento case sensitive</string>
   <string name="pref_case_sensitive_sort_summary">Ordinamento dei risultati di ricerca o della navigazione sensibile alle maiuscole</string>
@@ -304,16 +332,21 @@
   <string name="pref_save_search_terms_off">I termini di ricerca non verranno salvati</string>
   <string name="pref_remove_saved_search_terms">Rimuovi i termini di ricerca salvati</string>
   <string name="pref_remove_saved_search_terms_summary">Tocca per rimuovere tutti i termini di ricerca salvati</string>
-  <string name="pref_remove_saved_search_terms_msg">Tutti i termini di ricerca salvati sono stati eliminati.</string>
+  <string name="pref_remove_saved_search_terms_msg">Tutti i termini di ricerca salvati sono stati eliminati</string>
+  <string name="pref_secure_storage_category">Memoria sicura</string>
+  <string name="pref_secure_storage_delayed_sync_title">Ritardo di sincronizzazione</string>
+  <string name="pref_secure_storage_delayed_sync_summary">La sincronizzazione del filesystem protetto è un\'operazione dispendiosa. Abilita questa opzione per ottenere migliori performance ad ogni operazione, effettuando la sincronizzazione solo quando il filesystem non viene usato, ma con il rischio di perdere dei dati non sincronizzati in caso di crash dell\'app.</string>
+  <string name="pref_secure_storage_reset_password_title">Modifica la password</string>
+  <string name="pref_secure_storage_delete_storage_title">Elimina memoria</string>
   <string name="pref_editor_behaviour_category">Comportamento</string>
   <string name="pref_no_suggestions">Nessun suggerimento</string>
   <string name="pref_no_suggestions_desc">Non visualizzare i suggerimenti del dizionario durante la modifica del file</string>
   <string name="pref_word_wrap">A capo automatico</string>
   <string name="pref_hexdump">Dump hex file binari</string>
   <string name="pref_hexdump_desc">Quando si apre un file binario, genera un dump esadecimale del file e aprilo nel visualizzatore esadecimale</string>
-  <string name="pref_editor_syntax_highlight_category">Evidenziatore sintassi</string>
+  <string name="pref_editor_syntax_highlight_category">Evidenziazione sintassi</string>
   <string name="pref_syntax_highlight">Evidenziatore sintassi</string>
-  <string name="pref_syntax_highlight_desc">Evidenzia la sintassi del file visualizzato nell\'editor (solo quando un processore di evidenziazione della sintassi è disponibile per il tipo di file)</string>
+  <string name="pref_syntax_highlight_desc">Evidenziare la sintassi del file visualizzato nell\'editor (solo quando il processore evidenziazione sintassi per il tipo di file è disponibile)</string>
   <string name="pref_syntax_highlight_color_scheme">Schema colori</string>
   <string name="pref_syntax_highlight_color_scheme_desc">Seleziona lo schema di colore di evidenziazione della sintassi</string>
   <string name="pref_syntax_sh_use_theme_default">Usa tema predefinito</string>
@@ -341,6 +374,26 @@
   <string name="ash_keyword">Parola chiave</string>
   <string name="ash_quoted_string">Stringa tra virgolette</string>
   <string name="ash_variable">Variabile</string>
+  <string name="secure_storage_unlock_title">Sblocca memoria</string>
+  <string name="secure_storage_create_title">Crea memoria</string>
+  <string name="secure_storage_reset_title">Reimposta password</string>
+  <string name="secure_storage_delete_title">Elimina memoria</string>
+  <string name="secure_storage_unlock_key_prompt_msg">Inserisci la password per sbloccare il filesystem dell\'archivio protetto.</string>
+  <string name="secure_storage_unlock_key_new_msg">Inserisci una password per bloccare il filesystem dell\'archivio protetto.</string>
+  <string name="secure_storage_unlock_key_reset_msg">Inserisci la password attuale e quella nuova per resettare l\'archivio protetto.</string>
+  <string name="secure_storage_unlock_key_delete_msg">Inserisci la password per cancellare l\'archivio protetto.</string>
+  <string name="secure_storage_unlock_old_key_title">Vecchia password:</string>
+  <string name="secure_storage_unlock_new_key_title">Nuova password:</string>
+  <string name="secure_storage_unlock_key_title">Password:</string>
+  <string name="secure_storage_unlock_repeat_title">Ripeti password:</string>
+  <string name="secure_storage_create_button">Crea</string>
+  <string name="secure_storage_unlock_button">Sblocca</string>
+  <string name="secure_storage_reset_button">Ripristina</string>
+  <string name="secure_storage_delete_button">Elimina</string>
+  <string name="secure_storage_unlock_failed">Impossibile sbloccare la memoria</string>
+  <string name="secure_storage_unlock_validation_length">La password deve avere almeno <xliff:g id="characters">%1$d</xliff:g> caratteri.</string>
+  <string name="secure_storage_unlock_validation_equals">Le password non corrispondono.</string>
+  <string name="secure_storage_open_file_warning">Questo copierà il file in un percorso temporaneo non crittografato. Questo verrà eliminato dopo 1 ora.</string>
   <string name="print_unsupported_document">Formato documento non supportato</string>
   <string name="print_unsupported_image">Formato immagine non supportato</string>
   <string name="print_document_header">Documento: <xliff:g id="document_name">%1$s</xliff:g></string>
@@ -349,4 +402,5 @@
   <string name="changelog_title">Changelog</string>
   <string name="welcome_title">Benvenuti</string>
   <string name="welcome_msg">Benvenuti nel file manager di CyanogenMod.\n\nQuesta app permette di esplorare il file system ed effettuare operazioni che potrebbero danneggiare il vostro dispositivo. Per evitare danni, l\'app partirà in modalità sicura, a basso privilegio.\n\nE\' possibile accedere alla modalità avanzata, con pieni privilegi, dalle impostazioni. E\' responsabilità dell\'utente far sì che le operazioni effettuate con questa modalità non danneggino il sistema.\n\nIl Team CyanogenMod.\n</string>
+  <string name="activity_not_found_exception">Impossibile trovare un app per aprire questo file</string>
 </resources>

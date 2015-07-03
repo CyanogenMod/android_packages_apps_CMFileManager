@@ -19,6 +19,7 @@ package com.cyanogenmod.filemanager.commands.java;
 import android.util.Log;
 
 import com.cyanogenmod.filemanager.commands.CopyExecutable;
+import com.cyanogenmod.filemanager.console.CancelledOperationException;
 import com.cyanogenmod.filemanager.console.ExecutionException;
 import com.cyanogenmod.filemanager.console.InsufficientPermissionsException;
 import com.cyanogenmod.filemanager.console.NoSuchFileOrDirectory;
@@ -64,7 +65,8 @@ public class CopyCommand extends Program implements CopyExecutable {
      */
     @Override
     public void execute()
-            throws InsufficientPermissionsException, NoSuchFileOrDirectory, ExecutionException {
+            throws InsufficientPermissionsException, NoSuchFileOrDirectory, ExecutionException,
+                   CancelledOperationException {
         if (isTrace()) {
             Log.v(TAG,
                     String.format("Moving from %s to %s", //$NON-NLS-1$
@@ -81,7 +83,7 @@ public class CopyCommand extends Program implements CopyExecutable {
         }
 
         //Copy recursively
-        if (!FileHelper.copyRecursive(s, d, getBufferSize())) {
+        if (!FileHelper.copyRecursive(s, d, getBufferSize(), this)) {
             if (isTrace()) {
                 Log.v(TAG, "Result: FAIL. InsufficientPermissionsException"); //$NON-NLS-1$
             }

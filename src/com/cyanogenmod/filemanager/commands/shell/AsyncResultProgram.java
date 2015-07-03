@@ -47,16 +47,12 @@ public abstract class AsyncResultProgram
     /**
      * @hide
      */
-    final List<String> mPartialData;
+    final List<byte[]> mPartialData;
     /**
      * @hide
      */
     final List<Byte> mPartialDataType;
     final Object mSync = new Object();
-    /**
-     * @hide
-     */
-    final Object mTerminateSync = new Object();
 
     private boolean mCancelled;
     private OnCancelListener mOnCancelListener;
@@ -97,7 +93,7 @@ public abstract class AsyncResultProgram
         if (mAsyncResultListener instanceof ConcurrentAsyncResultListener) {
             ((ConcurrentAsyncResultListener) mAsyncResultListener).onRegister();
         }
-        this.mPartialData = Collections.synchronizedList(new ArrayList<String>());
+        this.mPartialData = Collections.synchronizedList(new ArrayList<byte[]>());
         this.mPartialDataType = Collections.synchronizedList(new ArrayList<Byte>());
         this.mTempBuffer = new StringBuffer();
         this.mOnCancelListener = null;
@@ -134,14 +130,11 @@ public abstract class AsyncResultProgram
             this.mWorkerThread.mAlive = false;
             this.mSync.notify();
         }
-        synchronized (this.mTerminateSync) {
-            if (this.mWorkerThread.isAlive()) {
-                try {
-                    this.mTerminateSync.wait();
-                } catch (Exception e) {
-                    /**NON BLOCK**/
-                }
-            }
+
+        try {
+            this.mWorkerThread.join();
+        } catch (InterruptedException e) {
+            // Ignore this.
         }
 
         //Notify end to command class
@@ -169,12 +162,12 @@ public abstract class AsyncResultProgram
     /**
      * Method that parse the result of a program invocation.
      *
-     * @param partialIn A partial standard input buffer (incremental buffer)
+     * @param input A partial standard input buffer (incremental buffer)
      * @hide
      */
-    public final void onRequestParsePartialResult(String partialIn) {
+    public final void onRequestParsePartialResult(byte[] input) {
+        String partialIn = new String(input);
         synchronized (this.mSync) {
-            String data = partialIn;
             String rest = ""; //$NON-NLS-1$
             if (parseOnlyCompleteLines()) {
                 int pos = partialIn.lastIndexOf(FileHelper.NEWLINE);
@@ -185,12 +178,11 @@ public abstract class AsyncResultProgram
                 }
 
                 //Retrieve the data
-                data = this.mTempBuffer.append(partialIn.substring(0, pos + 1)).toString();
                 rest = partialIn.substring(pos + 1);
             }
 
             this.mPartialDataType.add(STDIN);
-            this.mPartialData.add(data);
+            this.mPartialData.add(input);
             this.mTempBuffer = new StringBuffer(rest);
             this.mSync.notify();
         }
@@ -220,7 +212,7 @@ public abstract class AsyncResultProgram
             }
 
             this.mPartialDataType.add(STDERR);
-            this.mPartialData.add(data);
+            this.mPartialData.add(data.getBytes());
             this.mTempBuffer = new StringBuffer(rest);
             this.mSync.notify();
         }
@@ -381,7 +373,7 @@ public abstract class AsyncResultProgram
                        AsyncResultProgram.this.mSync.wait();
                        while (AsyncResultProgram.this.mPartialData.size() > 0) {
                            Byte type = AsyncResultProgram.this.mPartialDataType.remove(0);
-                           String data = AsyncResultProgram.this.mPartialData.remove(0);
+                           byte[] data = AsyncResultProgram.this.mPartialData.remove(0);
                            try {
                                if (type.compareTo(STDIN) == 0) {
                                    AsyncResultProgram.this.onParsePartialResult(data);
@@ -396,12 +388,6 @@ public abstract class AsyncResultProgram
                 }
             } catch (Exception e) {
                 /**NON BLOCK**/
-
-            } finally {
-                this.mAlive = false;
-                synchronized (AsyncResultProgram.this.mTerminateSync) {
-                    AsyncResultProgram.this.mTerminateSync.notify();
-                }
             }
         }
     }

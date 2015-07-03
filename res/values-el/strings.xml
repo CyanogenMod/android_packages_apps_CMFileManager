@@ -42,7 +42,7 @@
   <string name="copy_text_cd">Πιέστε για αντιγραφή του κειμένου στο πρόχειρο</string>
   <string name="copy_text_msg">Το κείμενο έχει αντιγραφεί στο πρόχειρο</string>
   <string name="warning_title">Προσοχή</string>
-  <string name="error_title">Εντοπίστηκε σφάλμα</string>
+  <string name="error_title">Σφάλμα</string>
   <string name="confirm_operation">Επιβεβαίωση δραστηριότητας</string>
   <string name="confirm_overwrite">Επιβεβαίωση αντικατάστασης</string>
   <string name="confirm_deletion">Επιβεβαίωση διαγραφής</string>
@@ -52,9 +52,11 @@
   <string name="msgs_privileged_console_alloc_failed">Δεν είναι δυνατή η πρόσβαση Root. Αλλαγή σε κατάσταση Ασφαλούς Λειτουργίας.</string>
   <string name="msgs_settings_save_failure">Η ρύθμιση δεν μπορεί να εφαρμοστεί ή να αποθηκευθεί.</string>
   <string name="msgs_settings_invalid_initial_directory">Ο αρχικός φάκελος \'<xliff:g id="initial_dir">%1$s</xliff:g>\' δεν είναι έγκυρος. Αλλαγή στο ριζικό φάκελο.</string>
+  <string name="root_not_available_msg">Δεν υπάρχει root σε αυτή την συσκευή. Δεν είναι δυνατή η εκτέλεση αυτής της λειτουργίας.</string>
   <string name="msgs_success">Η λειτουργία ολοκληρώθηκε με επιτυχία.</string>
   <string name="msgs_unknown">Ένα σφάλμα εντοπίστηκε. Η λειτουργία ήταν ανεπιτυχής.</string>
   <string name="msgs_insufficient_permissions">Αυτή η λειτουργία απαιτεί αυξημένα δικαιώματα. Προσπαθήστε να αλλάξετε σε λειτουργία πρόσβασης Root.</string>
+  <string name="msgs_no_disk_space">Αυτή η λειτουργία απέτυχε, επειδή δεν υπάρχει ελεύθερος χώρος στη συσκευή.</string>
   <string name="msgs_file_not_found">Το αρχείο ή ο φάκελος δεν βρέθηκε.</string>
   <string name="msgs_command_not_found">Η εντολή δεν βρέθηκε ή δεν έχει οριστεί σωστά.</string>
   <string name="msgs_io_failed">Αποτυχία ανάγνωσης/εγγραφής.</string>
@@ -65,7 +67,7 @@
   <string name="msgs_read_only_filesystem">Το σύστημα αρχείων είναι μόνο για ανάγνωση. Προσπαθήστε να προσαρτήσετε το σύστημα αρχείων για ανάγνωση/εγγραφή πριν εκτελέσετε τη λειτουργία.</string>
   <string name="msgs_illegal_argument">Μη έγκυρο επιχείρημα. Αποτυχία επίκλησης λειτουργίας.</string>
   <string name="msgs_unresolved_inconsistencies">Η λειτουργία δεν επιτρέπεται, διότι θα δημιουργούσε προβλήματα ασυνέπειας.</string>
-  <string name="msgs_operation_not_allowed_in_current_directory">Η λειτουργία δεν επιτρέπεται στον τρέχοντα φάκελο.\n\nΟ φάκελος προορισμού δεν μπορεί να είναι υποφάκελος του αρχικού ή ο ίδιος ο αρχικός.</string>
+  <string name="msgs_operation_not_allowed_in_current_directory">Ο φάκελος προορισμού δεν μπορεί να είναι υποφάκελος της πηγής ή να είναι ίδιος με την πηγή.</string>
   <string name="msgs_push_again_to_exit">Πιέστε ξανά για έξοδο.</string>
   <string name="msgs_not_registered_app">Δεν υπάρχει καμία εφαρμογή για να χειριστεί τον τύπο του αρχείου που έχετε επιλέξει.</string>
   <string name="msgs_overwrite_files">Μερικά από τα αρχεία υπάρχουν ήδη στο φάκελο προορισμού.\n\nΑντικατάσταση;</string>
@@ -84,10 +86,15 @@
   <string name="actionbar_button_overflow_cd">Περισσότερες επιλογές</string>
   <string name="actionbar_button_storage_cd">Μονάδες αποθήκευσης</string>
   <string name="actionbar_button_save_cd">Αποθήκευση</string>
+  <string name="actionbar_button_print_cd">Εκτύπωση</string>
   <string name="sort_by_name_asc">Κατά όνομα \u25B2</string>
   <string name="sort_by_name_desc">Κατά όνομα \u25BC</string>
   <string name="sort_by_date_asc">Κατά ημερομηνία \u25B2</string>
   <string name="sort_by_date_desc">Κατά ημερομηνία \u25BC</string>
+  <string name="sort_by_size_asc">Κατά μέγεθος ▲</string>
+  <string name="sort_by_size_desc">Κατά μέγεθος ▼</string>
+  <string name="sort_by_type_asc">Κατά τύπο ▲</string>
+  <string name="sort_by_type_desc">Κατά τύπο ▼</string>
   <string name="layout_icons">Εικονίδια</string>
   <string name="layout_simple">Απλή</string>
   <string name="layout_details">Λεπτομέρειες</string>
@@ -103,12 +110,13 @@
   <string name="filesystem_info_dialog_title">Πληροφορίες συστήματος αρχείων</string>
   <string name="filesystem_info_dialog_tab_info">Πληροφορίες</string>
   <string name="filesystem_info_dialog_tab_disk_usage">Χρήση δίσκου</string>
-  <string name="filesystem_info_dialog_status">Κατάσταση:</string>
+  <string name="filesystem_info_dialog_status">Προσαρτήθηκε:</string>
   <string name="filesystem_info_dialog_mount_point">Σημ. προσάρτησης:</string>
   <string name="filesystem_info_dialog_device">Συσκευή:</string>
   <string name="filesystem_info_dialog_type">Τύπος:</string>
   <string name="filesystem_info_dialog_options">Επιλογές:</string>
   <string name="filesystem_info_dialog_dump_pass">Dump / Pass:</string>
+  <string name="filesystem_info_dialog_virtual">Εικονικό:</string>
   <string name="filesystem_info_dialog_total_disk_usage">Συνολικά:</string>
   <string name="filesystem_info_dialog_used_disk_usage">Σε χρήση:</string>
   <string name="filesystem_info_dialog_free_disk_usage">Ελεύθερα:</string>
@@ -169,6 +177,8 @@
   <string name="bookmarks_home">Αρχική</string>
   <string name="bookmarks_root_folder">Ριζικός φάκελος</string>
   <string name="bookmarks_system_folder">Φάκελος συστήματος</string>
+  <string name="bookmarks_secure">Ασφαλής αποθ. χώρος</string>
+  <string name="bookmarks_remote">Απομακρυσμένος αποθ. χώρος</string>
   <string name="bookmarks_button_config_cd">Ρυθμίστε το αρχικό φάκελο.</string>
   <string name="bookmarks_button_remove_bookmark_cd">Αφαίρεση σελιδοδείκτη.</string>
   <string name="bookmarks_msgs_add_success">Ο σελιδοδείκτης προστέθηκε με επιτυχία.</string>
@@ -228,10 +238,12 @@
   <string name="actions_menu_open_parent_folder">Άνοιγμα γονικού</string>
   <string name="actions_menu_compute_checksum">Υπολογισμός checksum</string>
   <string name="actions_menu_print">Εκτύπωση</string>
+  <string name="actions_menu_set_as_home">Ορισμός ως αρχική σελίδα</string>
   <string name="actions_ask_undone_operation_msg">Αυτή η ενέργεια δεν μπορεί να αναιρεθεί. Θέλετε να συνεχίσετε;</string>
   <string name="input_name_dialog_label">Όνομα:</string>
   <string name="input_name_dialog_message_empty_name">Το όνομα δεν μπορεί να είναι κενό.</string>
   <string name="input_name_dialog_message_invalid_path_name">Μη έγκυρο όνομα. Οι χαρακτήρες \'<xliff:g id="invalid_characters">%1$s</xliff:g>\' δεν επιτρέπονται.</string>
+  <string name="input_name_dialog_message_invalid_name_length">Μέγιστο όριο χαρακτήρων.</string>
   <string name="input_name_dialog_message_invalid_name">Μη έγκυρο όνομα. Τα ονόματα \'.\' και \'..\' δεν επιτρέπονται.</string>
   <string name="input_name_dialog_message_name_exists">Το όνομα υπάρχει ήδη.</string>
   <string name="associations_dialog_title">Συσχετισμοί</string>
@@ -258,6 +270,22 @@
   <string name="filetime_format_mode_MMddyyyy_HHmmss">μμ/ηη/εεεε ωω:λλ:δδ</string>
   <string name="filetime_format_mode_yyyyMMdd_HHmmss">εεεε-μμ-ηη ωω:λλ:δδ</string>
   <string name="selection_folders_and_files">Επιλέχθηκαν <xliff:g id="folders">%1$s</xliff:g> και <xliff:g id="files">%2$s</xliff:g>.</string>
+  <string name="category_system">ΣΥΣΤΗΜΑ</string>
+  <string name="category_app">ΕΦΑΡΜΟΓΗ</string>
+  <string name="category_binary">BINARY</string>
+  <string name="category_text">ΚΕΙΜΕΝΟ</string>
+  <string name="category_document">ΕΓΓΡΑΦΟ</string>
+  <string name="category_ebook">EBOOK</string>
+  <string name="category_mail">ΜΗΝΥΜΑ</string>
+  <string name="category_compress">ΣΥΜΠΙΕΣΜΕΝΟ</string>
+  <string name="category_exec">ΕΚΤΕΛΕΣΙΜΟ</string>
+  <string name="category_database">ΒΑΣΗ ΔΕΔΟΜΕΝΩΝ</string>
+  <string name="category_font">ΓΡΑΜΜΑΤΟΣΕΙΡΑ</string>
+  <string name="category_image">ΕΙΚΟΝΑ</string>
+  <string name="category_audio">ΗΧΟΣ</string>
+  <string name="category_video">ΒΙΝΤΕΟ</string>
+  <string name="category_security">ΑΣΦΑΛΕΙΑ</string>
+  <string name="category_all">ΟΛΑ</string>
   <string name="compression_mode_title">Τύπος συμπίεσης</string>
   <string name="shortcut_failed_msg">Αποτυχία χειρισμού της συντόμευσης.</string>
   <string name="shortcut_creation_success_msg">Επιτυχής δημιουργία συντόμευσης.</string>
@@ -265,10 +293,10 @@
   <string name="pref">Ρυθμίσεις</string>
   <string name="pref_general">Γενικές ρυθμίσεις</string>
   <string name="pref_search">Επιλογές αναζήτησης</string>
+  <string name="pref_storage">Επιλογές αποθήκευσης</string>
   <string name="pref_editor">Επιλογές επεξεργασίας</string>
   <string name="pref_themes">Θέματα</string>
   <string name="pref_about">Σχετικά</string>
-  <string name="pref_about_summary">Διαχείριση αρχείων v<xliff:g id="version">%1$s</xliff:g>\nCopyright \u00A9 2012-2014 The CyanogenMod Project</string>
   <string name="pref_general_behaviour_category">Γενικά</string>
   <string name="pref_case_sensitive_sort">Πεζά-κεφαλαία</string>
   <string name="pref_case_sensitive_sort_summary">Ταξινόμηση με βάση πεζά-κεφαλαία κατά την πλοήγηση ή την εμφάνιση αποτελεσμάτων αναζήτησης</string>
@@ -304,7 +332,12 @@
   <string name="pref_save_search_terms_off">Οι όροι δεν θα αποθηκεύονται</string>
   <string name="pref_remove_saved_search_terms">Διαγραφή αποθηκευμένων όρων</string>
   <string name="pref_remove_saved_search_terms_summary">Πιέστε για διαγραφή όλων των αποθηκευμένων όρων αναζήτησης</string>
-  <string name="pref_remove_saved_search_terms_msg">Όλοι οι αποθηκευμένοι όροι αναζήτησης έχουν διαγραφεί.</string>
+  <string name="pref_remove_saved_search_terms_msg">Όλοι οι αποθηκευμένοι όροι αναζήτησης έχουν διαγραφεί</string>
+  <string name="pref_secure_storage_category">Ασφαλής αποθ. χώρος</string>
+  <string name="pref_secure_storage_delayed_sync_title">Καθυστερημένη συγχρονισμού</string>
+  <string name="pref_secure_storage_delayed_sync_summary">Ο συγχρονισμός των ασφαλών συστημάτων αρχείων είναι μια δαπανηρή διαδικασία. Ενεργοποιήστε αυτή την επιλογή για να επιτρέψετε ταχύτερη ανταπόκριση μετά από κάθε λειτουργία, εκτελώντας τον συγχρονισμό όταν το σύστημα αρχείων δεν χρησιμοποιείται, ρισκάροντας όμως την απώλεια των δεδομένων που δεν έχουν αποθηκευθεί ακόμη εάν η εφαρμογή παρουσιάσει σφάλμα.</string>
+  <string name="pref_secure_storage_reset_password_title">Αλλαγή κωδικού πρόσβασης</string>
+  <string name="pref_secure_storage_delete_storage_title">Διαγραφή αποθ. χώρου</string>
   <string name="pref_editor_behaviour_category">Συμπεριφορά</string>
   <string name="pref_no_suggestions">Απενεργοποίηση προτάσεων</string>
   <string name="pref_no_suggestions_desc">Να μην εμφανίζονται προτάσεις λεξικού κατά την επεξεργασία του αρχείου</string>
@@ -341,6 +374,26 @@
   <string name="ash_keyword">Λέξη-κλειδί</string>
   <string name="ash_quoted_string">Κείμενο σε εισαγωγικά</string>
   <string name="ash_variable">Μεταβλητή</string>
+  <string name="secure_storage_unlock_title">Ξεκλείδωμα αποθ. χώρου</string>
+  <string name="secure_storage_create_title">Δημιουργία αποθ. χώρου</string>
+  <string name="secure_storage_reset_title">Επαναφορά κωδικού πρόσβασης</string>
+  <string name="secure_storage_delete_title">Διαγραφή αποθ. χώρου</string>
+  <string name="secure_storage_unlock_key_prompt_msg">Πληκτρολογήστε τον κωδικό πρόσβασης για να ξεκλειδώσετε τον ασφαλή αποθ. χώρο.</string>
+  <string name="secure_storage_unlock_key_new_msg">Πληκτρολογήστε έναν κωδικό πρόσβασης για την προστασία του ασφαλούς αποθ. χώρου.</string>
+  <string name="secure_storage_unlock_key_reset_msg">Πληκτρολογήστε τον τρέχοντα και τον νέο κωδικό πρόσβασης για να επαναφέρετε τον ασφαλή αποθ. χώρο.</string>
+  <string name="secure_storage_unlock_key_delete_msg">Πληκτρολογήστε τον τρέχοντα κωδικό πρόσβασης για να διαγράψετε τον ασφαλή αποθ. χώρο.</string>
+  <string name="secure_storage_unlock_old_key_title">Παλιός κωδικός πρόσβασης:</string>
+  <string name="secure_storage_unlock_new_key_title">Νέος κωδικός πρόσβασης:</string>
+  <string name="secure_storage_unlock_key_title">Κωδικός πρόσβασης:</string>
+  <string name="secure_storage_unlock_repeat_title">Επανάληψη κωδικού πρόσβασης:</string>
+  <string name="secure_storage_create_button">Δημιουργία</string>
+  <string name="secure_storage_unlock_button">Ξεκλείδωμα</string>
+  <string name="secure_storage_reset_button">Επαναφορά</string>
+  <string name="secure_storage_delete_button">Διαγραφή</string>
+  <string name="secure_storage_unlock_failed">Δεν είναι δυνατό το ξεκλείδωμα του αποθ. χώρου</string>
+  <string name="secure_storage_unlock_validation_length">Ο κωδικός πρόσβασης πρέπει να αποτελείται από τουλάχιστον <xliff:g id="characters">%1$d</xliff:g> χαρακτήρες.</string>
+  <string name="secure_storage_unlock_validation_equals">Οι κωδικοί δεν ταιριάζουν.</string>
+  <string name="secure_storage_open_file_warning">Το αρχείο θα αντιγραφεί σε μια προσωρινή θέση χωρίς κρυπτογράφηση. Θα διαγραφεί μετά από 1 ώρα.</string>
   <string name="print_unsupported_document">Μη υποστηριζόμενη μορφή εγγράφου</string>
   <string name="print_unsupported_image">Μη υποστηριζόμενη μορφή εικόνας</string>
   <string name="print_document_header">Έγγραφο: <xliff:g id="document_name">%1$s</xliff:g></string>
@@ -349,4 +402,5 @@
   <string name="changelog_title">Αρχείο αλλαγών</string>
   <string name="welcome_title">Καλώς ήλθατε</string>
   <string name="welcome_msg">Καλώς ήλθατε στη Διαχείριση αρχείων του CyanogenMod.\n\nΗ εφαρμογή αυτή σας επιτρέπει να εξερευνήσετε το σύστημα αρχείων και να εκτελέσετε ενέργειες που ενδέχεται να χαλάσουν τη συσκευή σας. Για την αποφυγή πρόκλησης βλάβης, η εφαρμογή θα ξεκινήσει σε Ασφαλή Λειτουργία.\n\nΜπορείτε να αποκτήσετε πρόσβαση στην προηγμένη λειτουργία πρόσβασης Root μέσω των ρυθμίσεων. Είναι δική σας ευθύνη να διασφαλίσετε ότι μία ενέργεια είναι ασφαλής για την συσκευή σας.\n\nCyanogenMod Team.\n</string>
+  <string name="activity_not_found_exception">Δεν βρέθηκε εφαρμογή για το άνοιγμα αυτού του αρχείου</string>
 </resources>

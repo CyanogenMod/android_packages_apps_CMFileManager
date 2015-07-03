@@ -107,6 +107,7 @@
 
     <!-- The progress height -->
     <dimen name="default_progress_height">48dp</dimen>
+    <dimen name="default_progress_width">48dp</dimen>
 
     <!-- Theme button min width -->
     <dimen name="themes_min_width_button">300dp</dimen>
@@ -127,9 +128,10 @@
 
     <!-- usage graph stuff -->
     <dimen name="legend_title_textSize">9sp</dimen>
-    <dimen name="legend_title_paddingLeft">3dp</dimen>
+    <dimen name="legend_title_paddingStart">3dp</dimen>
     <dimen name="legend_padding">10dp</dimen>
 
-    <dimen name="easy_mode_type_icon_wh">48dp</dimen>
+    <dimen name="easy_mode_type_icon_wh">40dp</dimen>
+    <dimen name="easy_mode_type_icon_margin_lr">16dp</dimen>
 
 </resources>

@@ -17,6 +17,7 @@
 package com.cyanogenmod.filemanager.commands.java;
 
 import com.cyanogenmod.filemanager.commands.Executable;
+import com.cyanogenmod.filemanager.console.CancelledOperationException;
 import com.cyanogenmod.filemanager.console.ExecutionException;
 import com.cyanogenmod.filemanager.console.InsufficientPermissionsException;
 import com.cyanogenmod.filemanager.console.NoSuchFileOrDirectory;
@@ -29,6 +30,7 @@ public abstract class Program implements Executable {
 
     private boolean mTrace;
     private int mBufferSize;
+    private boolean mCancelled = false;
 
     /**
      * Constructor of <code>Program</code>
@@ -92,6 +94,14 @@ public abstract class Program implements Executable {
      * @throws ExecutionException If the operation returns a invalid exit code
      */
     public abstract void execute()
-            throws InsufficientPermissionsException, NoSuchFileOrDirectory, ExecutionException;
+            throws InsufficientPermissionsException, NoSuchFileOrDirectory, ExecutionException,
+                   CancelledOperationException;
 
+    public void requestCancel() {
+        mCancelled = true;
+    }
+
+    public boolean isCancelled() {
+        return mCancelled;
+    }
 }

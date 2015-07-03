@@ -89,8 +89,9 @@ public class ChecksumCommand extends AsyncResultProgram implements ChecksumExecu
      * {@inheritDoc}
      */
     @Override
-    public void onParsePartialResult(final String partialIn) {
-        if (partialIn == null || partialIn.length() ==0) return;
+    public void onParsePartialResult(final byte[] in) {
+        String partialIn = new String(in);
+        if (partialIn == null || partialIn.length() == 0) return;
         boolean endsWithNewLine = partialIn.endsWith("\n"); //$NON-NLS-1$
         String[] lines = partialIn.split("\n"); //$NON-NLS-1$
 
@@ -98,7 +99,7 @@ public class ChecksumCommand extends AsyncResultProgram implements ChecksumExecu
         lines[0] = this.mPartial + lines[0];
 
         // Return all the lines, except the last
-        for (int i = 0; i < lines.length-1; i++) {
+        for (int i = 0; i < lines.length - 1; i++) {
             if (getAsyncResultListener() != null) {
                 String data = processPartialResult(lines[i]);
                 if (data != null) {
@@ -110,7 +111,7 @@ public class ChecksumCommand extends AsyncResultProgram implements ChecksumExecu
         // Return the last line?
         if (endsWithNewLine) {
             if (getAsyncResultListener() != null) {
-                String data = processPartialResult(lines[lines.length-1]);
+                String data = processPartialResult(lines[lines.length - 1]);
                 if (data != null) {
                     getAsyncResultListener().onPartialResult(data);
                 }
@@ -118,7 +119,7 @@ public class ChecksumCommand extends AsyncResultProgram implements ChecksumExecu
             this.mPartial = ""; //$NON-NLS-1$
         } else {
             // Save the partial for next calls
-            this.mPartial = lines[lines.length-1];
+            this.mPartial = lines[lines.length - 1];
         }
     }
 
@@ -126,7 +127,7 @@ public class ChecksumCommand extends AsyncResultProgram implements ChecksumExecu
      * {@inheritDoc}
      */
     @Override
-    public void onParseErrorPartialResult(String partialErr) {/**NON BLOCK**/}
+    public void onParseErrorPartialResult(byte[] partialErr) {/**NON BLOCK**/}
 
     /**
      * {@inheritDoc}

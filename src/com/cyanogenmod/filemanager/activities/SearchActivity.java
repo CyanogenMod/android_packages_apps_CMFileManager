@@ -20,12 +20,16 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceActivity;
@@ -42,7 +46,6 @@ import android.widget.AdapterView.OnItemLongClickListener;
 
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -69,11 +72,9 @@ import com.cyanogenmod.filemanager.preferences.AccessMode;
 import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
 import com.cyanogenmod.filemanager.preferences.Preferences;
 import com.cyanogenmod.filemanager.providers.RecentSearchesContentProvider;
-import com.cyanogenmod.filemanager.tasks.SearchResultDrawingAsyncTask;
 import com.cyanogenmod.filemanager.ui.ThemeManager;
 import com.cyanogenmod.filemanager.ui.ThemeManager.Theme;
 import com.cyanogenmod.filemanager.ui.dialogs.ActionsDialog;
-import com.cyanogenmod.filemanager.ui.dialogs.MessageProgressDialog;
 import com.cyanogenmod.filemanager.ui.policy.DeleteActionPolicy;
 import com.cyanogenmod.filemanager.ui.policy.IntentsActionPolicy;
 import com.cyanogenmod.filemanager.ui.widgets.ButtonItem;
@@ -87,6 +88,7 @@ import com.cyanogenmod.filemanager.util.ExceptionUtil.OnRelaunchCommandResult;
 import com.cyanogenmod.filemanager.util.FileHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
+import com.cyanogenmod.filemanager.util.SearchHelper;
 import com.cyanogenmod.filemanager.util.StorageHelper;
 
 import java.io.FileNotFoundException;
@@ -155,7 +157,7 @@ public class SearchActivity extends Activity
                             // Recreate the adapter
                             int pos = SearchActivity.
                                         this.mSearchListView.getFirstVisiblePosition();
-                            drawResults();
+                            mAdapter.notifyDataSetChanged();
                             SearchActivity.this.mSearchListView.setSelection(pos);
                             return;
                         }
@@ -227,12 +229,8 @@ public class SearchActivity extends Activity
          */
         @Override
         public void onConcurrentAsyncStart() {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    SearchActivity.this.toggleResults(false, false);
-                }
-            });
+            mSearchInProgress = true;
+            mAdapter.startStreaming();
         }
 
         /**
@@ -240,21 +238,20 @@ public class SearchActivity extends Activity
          */
         @Override
         public void onConcurrentAsyncEnd(boolean cancelled) {
+            mSearchInProgress = false;
             mSearchListView.post(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        //Dismiss the dialog
-                        if (SearchActivity.this.mDialog != null) {
-                            SearchActivity.this.mDialog.dismiss();
+                        mExecutable = null;
+                        mAdapter.stopStreaming();
+                        int resultsSize = mAdapter.resultsSize();
+                        mStreamingSearchProgress.setVisibility(View.INVISIBLE);
+                        if (mMimeTypeCategories != null && mMimeTypeCategories.size() > 1) {
+                            mMimeTypeSpinner.setVisibility(View.VISIBLE);
                         }
-
-                        // Resolve the symlinks
-                        FileHelper.resolveSymlinks(
-                                SearchActivity.this, SearchActivity.this.mResultList);
-
-                        // Draw the results
-                        drawResults();
+                        mSearchListView.setVisibility(resultsSize > 0 ? View.VISIBLE : View.GONE);
+                        mEmptyListMsg.setVisibility(resultsSize > 0 ? View.GONE : View.VISIBLE);
 
                     } catch (Throwable ex) {
                         Log.e(TAG, "onAsyncEnd method fails", ex); //$NON-NLS-1$
@@ -270,11 +267,13 @@ public class SearchActivity extends Activity
         @SuppressWarnings("unchecked")
         public void onConcurrentPartialResult(final Object partialResults) {
             //Saved in the global result list, for save at the end
+            FileSystemObject result = null;
             if (partialResults instanceof FileSystemObject) {
                 FileSystemObject fso = (FileSystemObject) partialResults;
                 if (mMimeTypeCategories == null || mMimeTypeCategories.contains(MimeTypeHelper
                         .getCategory(SearchActivity.this, fso))) {
                     SearchActivity.this.mResultList.add((FileSystemObject) partialResults);
+                    showSearchResult((FileSystemObject) partialResults);
                 }
             } else {
                 List<FileSystemObject> fsoList = (List<FileSystemObject>) partialResults;
@@ -282,6 +281,7 @@ public class SearchActivity extends Activity
                     if (mMimeTypeCategories == null || mMimeTypeCategories.contains(MimeTypeHelper
                             .getCategory(SearchActivity.this, fso))) {
                         SearchActivity.this.mResultList.add(fso);
+                        showSearchResult(fso);
                     }
                 }
             }
@@ -290,10 +290,17 @@ public class SearchActivity extends Activity
             mSearchListView.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (SearchActivity.this.mDialog != null) {
-                        int progress = SearchActivity.this.mResultList.size();
-                        setProgressMsg(progress);
-                    }
+                    int progress = mAdapter.resultsSize();
+                    String foundItems =
+                            getResources().
+                                    getQuantityString(
+                                            R.plurals.search_found_items, progress,
+                                            Integer.valueOf(progress) );
+                    mSearchFoundItems.setText(
+                            getString(
+                                    R.string.search_found_items_in_directory,
+                                    foundItems,
+                                    mSearchDirectory));
                 }
             });
         }
@@ -314,10 +321,6 @@ public class SearchActivity extends Activity
         }
     };
 
-    /**
-     * @hide
-     */
-    MessageProgressDialog mDialog = null;
     /**
      * @hide
      */
@@ -361,8 +364,6 @@ public class SearchActivity extends Activity
      */
     SearchInfoParcelable mRestoreState;
 
-    private SearchResultDrawingAsyncTask mDrawingSearchResultTask;
-
     /**
      * @hide
      */
@@ -372,6 +373,10 @@ public class SearchActivity extends Activity
      * @hide
      */
     HashSet<MimeTypeCategory> mMimeTypeCategories;
+
+    private SearchResultAdapter mAdapter;
+    private ProgressBar mStreamingSearchProgress;
+    private boolean mSearchInProgress;
 
     /**
      * {@inheritDoc}
@@ -445,6 +450,7 @@ public class SearchActivity extends Activity
         } catch (Throwable ex) {
             /**NON BLOCK**/
         }
+        recycle();
 
         //All destroy. Continue
         super.onDestroy();
@@ -477,6 +483,10 @@ public class SearchActivity extends Activity
         //Set out transition
         overridePendingTransition(R.anim.hold_in, R.anim.translate_to_left_out);
         super.onPause();
+        // stop search if the activity moves out of the foreground
+        if (mExecutable != null) {
+            mExecutable.end();
+        }
     }
 
     /**
@@ -543,16 +553,6 @@ public class SearchActivity extends Activity
         configuration.setImageResource(R.drawable.ic_material_light_config);
         configuration.setVisibility(View.VISIBLE);
         actionBar.setCustomView(customTitle);
-
-        // Specify a SpinnerAdapter to populate the dropdown list.
-        Spinner typeSpinner = (Spinner) findViewById(R.id.search_status_type_spinner);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                R.layout.search_spinner_item,
-                MimeTypeHelper.MimeTypeCategory.getFriendlyLocalizedNames(this));
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        typeSpinner.setAdapter(adapter);
-        typeSpinner.setOnItemSelectedListener(this);
     }
 
     /**
@@ -580,12 +580,25 @@ public class SearchActivity extends Activity
 
         //Other components
         this.mSearchWaiting = (ProgressBar)findViewById(R.id.search_waiting);
+        mStreamingSearchProgress = (ProgressBar) findViewById(R.id.streaming_progress_bar);
+        mStreamingSearchProgress.getIndeterminateDrawable()
+                .setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
+
         this.mSearchFoundItems = (TextView)findViewById(R.id.search_status_found_items);
         setFoundItems(0, ""); //$NON-NLS-1$
         this.mSearchTerms = (TextView)findViewById(R.id.search_status_query_terms);
         this.mSearchTerms.setText(
                 Html.fromHtml(getString(R.string.search_terms, ""))); //$NON-NLS-1$
-        this.mMimeTypeSpinner = (Spinner) findViewById(R.id.search_status_type_spinner);
+
+        // populate Mime Types spinner for search results filtering
+        mMimeTypeSpinner = (Spinner) findViewById(R.id.search_status_type_spinner);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                R.layout.search_spinner_item,
+                MimeTypeHelper.MimeTypeCategory.getFriendlyLocalizedNames(this));
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mMimeTypeSpinner.setAdapter(adapter);
+        mMimeTypeSpinner.setOnItemSelectedListener(this);
     }
 
     /**
@@ -616,30 +629,13 @@ public class SearchActivity extends Activity
         Serializable mimeTypeExtra = getIntent().getSerializableExtra(EXTRA_SEARCH_MIMETYPE);
 
         if (mimeTypeExtra != null) {
-            MimeTypeCategory[] categories = (MimeTypeCategory[]) getIntent()
+            ArrayList<MimeTypeCategory> categories = (ArrayList<MimeTypeCategory>) getIntent()
                     .getSerializableExtra(EXTRA_SEARCH_MIMETYPE);
             // setting load factor to 1 to avoid the backing map's resizing
-            mMimeTypeCategories = new HashSet<MimeTypeCategory>(categories.length, 1);
+            mMimeTypeCategories = new HashSet<MimeTypeCategory>(categories.size(), 1);
             for (MimeTypeCategory category : categories) {
                 mMimeTypeCategories.add(category);
             }
-        }
-
-        //Stop any pending action
-        try {
-            if (SearchActivity.this.mDrawingSearchResultTask != null
-                    && SearchActivity.this.mDrawingSearchResultTask.isRunning()) {
-                SearchActivity.this.mDrawingSearchResultTask.cancel(true);
-            }
-        } catch (Throwable ex2) {
-            /**NON BLOCK**/
-        }
-        try {
-            if (SearchActivity.this.mDialog != null) {
-                SearchActivity.this.mDialog.dismiss();
-            }
-        } catch (Throwable ex2) {
-            /**NON BLOCK**/
         }
 
         //If data is not present, use root directory to do the search
@@ -650,7 +646,7 @@ public class SearchActivity extends Activity
         if (!TextUtils.isEmpty(searchDirectory)) {
             this.mSearchDirectory = searchDirectory;
         }
-
+        setFoundItems(0, mSearchDirectory);
         //Retrieve the query ¿from voice recognizer?
         boolean voiceQuery = true;
         List<String> userQueries =
@@ -763,10 +759,10 @@ public class SearchActivity extends Activity
             ((SearchResultAdapter)this.mSearchListView.getAdapter()).dispose();
         }
         this.mResultList = new ArrayList<FileSystemObject>();
-        SearchResultAdapter adapter =
+        mAdapter =
                 new SearchResultAdapter(this,
                         new ArrayList<SearchResult>(), R.layout.search_item, this.mQuery);
-        this.mSearchListView.setAdapter(adapter);
+        this.mSearchListView.setAdapter(mAdapter);
 
         //Set terms
         if (mMimeTypeCategories == null) {
@@ -787,43 +783,6 @@ public class SearchActivity extends Activity
             @Override
             public void run() {
                 try {
-                    //Retrieve the terms of the search
-                    String label = getString(R.string.searching_action_label);
-
-                    //Show a dialog for the progress
-                    SearchActivity.this.mDialog =
-                            new MessageProgressDialog(
-                                    SearchActivity.this,
-                                    0,
-                                    R.string.searching, label, true);
-                    // Initialize the
-                    setProgressMsg(0);
-
-                    // Set the cancel listener
-                    SearchActivity.this.mDialog.setOnCancelListener(
-                            new MessageProgressDialog.OnCancelListener() {
-                                @Override
-                                public boolean onCancel() {
-                                    //User has requested the cancellation of the search
-                                    //Broadcast the cancellation
-                                    if (!SearchActivity.this.mExecutable.isCancelled()) {
-                                        if (SearchActivity.this.mExecutable.cancel()) {
-                                            ListAdapter listAdapter =
-                                                    SearchActivity.
-                                                            this.mSearchListView.getAdapter();
-                                            if (listAdapter != null) {
-                                                SearchActivity.this.toggleResults(
-                                                        listAdapter.getCount() > 0, true);
-                                            }
-                                            return true;
-                                        }
-                                        return false;
-                                    }
-                                    return true;
-                                }
-                            });
-                    SearchActivity.this.mDialog.show();
-
                     // Execute the query (search in background)
                     SearchActivity.this.mExecutable =
                             CommandHelper.findFiles(
@@ -840,13 +799,6 @@ public class SearchActivity extends Activity
                     } catch (Throwable ex2) {
                         /**NON BLOCK**/
                     }
-                    try {
-                        if (SearchActivity.this.mDialog != null) {
-                            SearchActivity.this.mDialog.dismiss();
-                        }
-                    } catch (Throwable ex2) {
-                        /**NON BLOCK**/
-                    }
 
                     //Capture the exception
                     Log.e(TAG, "Search failed", ex); //$NON-NLS-1$
@@ -857,6 +809,27 @@ public class SearchActivity extends Activity
                 }
             }
         });
+    }
+
+    /**
+     * Ensures the search result meets user preferences and passes it to the adapter for display
+     *
+     * @param result FileSystemObject that matches the search result criteria
+     */
+    private void showSearchResult(FileSystemObject result) {
+        // check against user's display preferences
+        if ( !FileHelper.compliesWithDisplayPreferences(result, null, mChRooted) ) {
+            return;
+        }
+
+        // resolve sym links
+        FileHelper.resolveSymlink(this, result);
+
+        // convert to search result
+        SearchResult searchResult = SearchHelper.convertToResult(result, mQuery);
+
+        // add to adapter
+        mAdapter.addNewItem(searchResult);
     }
 
     /**
@@ -904,6 +877,8 @@ public class SearchActivity extends Activity
 
                     SearchActivity.this.mQuery = query;
                     SearchActivity.this.mSearchDirectory = mRestoreState.getSearchDirectory();
+
+                    mStreamingSearchProgress.setVisibility(View.INVISIBLE);
 
                 } catch (Throwable ex) {
                     //Capture the exception
@@ -999,14 +974,11 @@ public class SearchActivity extends Activity
      * {@inheritDoc}
      */
     @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_BACK:
-                back(true, null, false);
-                return true;
-            default:
-                return super.onKeyUp(keyCode, event);
-        }
+    public void onBackPressed() {
+       if (mExecutable != null) {
+            mExecutable.end();
+       }
+       back(true, null, false);
     }
 
     /**
@@ -1016,6 +988,10 @@ public class SearchActivity extends Activity
     public boolean onOptionsItemSelected(MenuItem item) {
        switch (item.getItemId()) {
           case android.R.id.home:
+              // release Console lock held by the async search task
+              if (mExecutable != null) {
+                  mExecutable.end();
+              }
               back(true, null, false);
               return true;
           default:
@@ -1028,6 +1004,11 @@ public class SearchActivity extends Activity
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        // cancel search query if in progress
+        // *need* to do this as the async query holds a lock on the Console and we need the Console
+        // to gather additional file info in order to process the click event
+        if (mSearchInProgress) mExecutable.end();
+
         try {
             SearchResult result = ((SearchResultAdapter)parent.getAdapter()).getItem(position);
             FileSystemObject fso = result.getFso();
@@ -1043,12 +1024,68 @@ public class SearchActivity extends Activity
                 fso = symlink.getLinkRef();
             }
 
-            // Open the file with the preferred registered app
+            // special treatment for video files
+            // all of the video files in the current search will also be sent as an extra in the
+            // intent along with the item that was clicked
+            MimeTypeCategory fileCategory = MimeTypeHelper.getCategoryFromExt(this,
+                    FileHelper.getExtension(fso), fso.getFullPath());
+            if (fileCategory == MimeTypeCategory.VIDEO) {
+
+                ArrayList<FileSystemObject> filteredList = filterSearchResults(fileCategory);
+                ArrayList<Uri> uris = new ArrayList<Uri>(filteredList.size());
+
+                for (FileSystemObject f : filteredList) {
+                    uris.add(f.getFileUri());
+                }
+
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setDataAndType(fso.getFileUri(), MimeTypeHelper.getMimeType(this, fso));
+                if (filteredList.size() > 1) {
+                    intent.putParcelableArrayListExtra("EXTRA_FILE_LIST", uris);
+                }
+
+                if (DEBUG) {
+                    Log.i(TAG, "video intent : " + intent);
+                }
+
+                try {
+                    startActivity(intent);
+                } catch(ActivityNotFoundException e) {
+                    Log.e(TAG, "ActivityNotFoundException when opening a video file");
+                    Toast.makeText(this, R.string.activity_not_found_exception, Toast.LENGTH_SHORT);
+                }
+
+                return;
+            }
+
+            // for other files, open them with their preferred registered app
             back(false, fso, false);
 
         } catch (Throwable ex) {
             ExceptionUtil.translateException(this.mSearchListView.getContext(), ex);
         }
+    }
+
+    /**
+     * Returns a subset of the search results falling into the given category
+     * @param category MimeTypeCategory
+     * @return list of FileSystemObjects that
+     */
+    private ArrayList<FileSystemObject> filterSearchResults(MimeTypeCategory category) {
+        ArrayList<FileSystemObject> filteredList = new ArrayList<FileSystemObject>();
+
+        if (mAdapter.getCount() < 1) return filteredList;
+
+        for (FileSystemObject fso : mAdapter.getFiles()) {
+            if (MimeTypeHelper.getCategoryFromExt(this,
+                                                  FileHelper.getExtension(fso),
+                                                  fso.getFullPath()) == category) {
+                filteredList.add(fso);
+            }
+        }
+
+        return filteredList;
     }
 
     /**
@@ -1145,7 +1182,6 @@ public class SearchActivity extends Activity
                 for (int i = 0; i < cc; i++) {
                     this.mResultList.add(results.get(i).getFso());
                 }
-                drawResults();
             }
         }
     }
@@ -1164,7 +1200,7 @@ public class SearchActivity extends Activity
     @Override
     public void onRequestRemove(Object o, boolean clearSelection) {
         if (o instanceof FileSystemObject) {
-            removeItem((FileSystemObject)o);
+            removeItem((FileSystemObject) o);
         }
     }
 
@@ -1176,6 +1212,11 @@ public class SearchActivity extends Activity
         if (o instanceof FileSystemObject) {
             back(false, (FileSystemObject) o, true);
         }
+    }
+
+    @Override
+    public void onCancel() {
+        // nop
     }
 
     /**
@@ -1192,10 +1233,6 @@ public class SearchActivity extends Activity
         boolean finish = true;
         if (cancelled) {
             final Intent intent =  new Intent();
-            if (SearchActivity.this.mDrawingSearchResultTask != null
-                    && SearchActivity.this.mDrawingSearchResultTask.isRunning()) {
-                SearchActivity.this.mDrawingSearchResultTask.cancel(true);
-            }
             if (this.mRestoreState != null) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(NavigationActivity.EXTRA_SEARCH_LAST_SEARCH_DATA,
@@ -1252,10 +1289,13 @@ public class SearchActivity extends Activity
      * Method invoked when the activity needs to exit
      */
     private void exit() {
+        finish();
+    }
+
+    private void recycle() {
         if (this.mSearchListView.getAdapter() != null) {
             ((SearchResultAdapter)this.mSearchListView.getAdapter()).dispose();
         }
-        finish();
     }
 
     /**
@@ -1291,25 +1331,6 @@ public class SearchActivity extends Activity
     }
 
     /**
-     * Method that draw the results in the listview
-     * @hide
-     */
-    void drawResults() {
-        //Toggle results
-        this.toggleResults(this.mResultList.size() > 0, true);
-        setFoundItems(this.mResultList.size(), this.mSearchDirectory);
-
-        //Create the task for drawing the data
-        this.mDrawingSearchResultTask =
-                                new SearchResultDrawingAsyncTask(
-                                        this.mSearchListView,
-                                        this.mSearchWaiting,
-                                        this.mResultList,
-                                        this.mQuery);
-        this.mDrawingSearchResultTask.execute();
-    }
-
-    /**
      * Method that creates a {@link SearchInfoParcelable} reference from
      * the current data.
      *
@@ -1321,21 +1342,6 @@ public class SearchActivity extends Activity
                 ((SearchResultAdapter)this.mSearchListView.getAdapter()).getData(),
                 mQuery);
         return parcel;
-    }
-
-    /**
-     * Method that set the progress of the search
-     *
-     * @param progress The progress
-     * @hide
-     */
-    void setProgressMsg(int progress) {
-        String msg =
-                getResources().getQuantityString(
-                        R.plurals.search_found_items,
-                        progress,
-                        Integer.valueOf(progress));
-        SearchActivity.this.mDialog.setProgress(Html.fromHtml(msg));
     }
 
     /**

@@ -16,17 +16,17 @@
 
 package com.cyanogenmod.filemanager.activities;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -39,7 +39,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -47,8 +46,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -61,20 +58,17 @@ import android.widget.LinearLayout;
 import android.widget.ListPopupWindow;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.ScrollView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import android.widget.Toolbar;
 import android.widget.ArrayAdapter;
+
 import com.android.internal.util.XmlUtils;
 import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.activities.preferences.SettingsPreferences;
-import com.cyanogenmod.filemanager.adapters.HighlightedSimpleMenuListAdapter;
 import com.cyanogenmod.filemanager.adapters.MenuSettingsAdapter;
-import com.cyanogenmod.filemanager.adapters.SimpleMenuListAdapter;
 import com.cyanogenmod.filemanager.console.Console;
 import com.cyanogenmod.filemanager.console.ConsoleAllocException;
 import com.cyanogenmod.filemanager.console.ConsoleBuilder;
@@ -319,18 +313,17 @@ public class NavigationActivity extends Activity
 
                 } else if (intent.getAction().compareTo(Intent.ACTION_TIME_CHANGED) == 0 ||
                            intent.getAction().compareTo(Intent.ACTION_DATE_CHANGED) == 0 ||
-                           intent.getAction().compareTo(Intent.ACTION_TIMEZONE_CHANGED) == 0) {
+                           intent.getAction().compareTo(Intent.ACTION_TIMEZONE_CHANGED) == 0 ||
+                           intent.getAction().compareTo(Intent.ACTION_LOCALE_CHANGED) == 0) {
                     // Refresh the data
                     synchronized (FileHelper.DATETIME_SYNC) {
                         FileHelper.sReloadDateTimeFormats = true;
                         NavigationActivity.this.getCurrentNavigationView().refresh();
                     }
                 } else if (intent.getAction().compareTo(
-                        FileManagerSettings.INTENT_MOUNT_STATUS_CHANGED) == 0) {
-                    onRequestBookmarksRefresh();
-                    removeUnmountedHistory();
-                    removeUnmountedSelection();
-                } else if(intent.getAction().equals(Intent.ACTION_MEDIA_MOUNTED)) {
+                        FileManagerSettings.INTENT_MOUNT_STATUS_CHANGED) == 0 ||
+                            intent.getAction().equals(Intent.ACTION_MEDIA_MOUNTED) ||
+                            intent.getAction().equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
                     onRequestBookmarksRefresh();
                     removeUnmountedHistory();
                     removeUnmountedSelection();
@@ -435,6 +428,7 @@ public class NavigationActivity extends Activity
             add(VIDEO);
             add(AUDIO);
             add(DOCUMENT);
+            add(APP);
         }
     };
 
@@ -473,7 +467,11 @@ public class NavigationActivity extends Activity
     private boolean mExitFlag = false;
     private long mExitBackTimeout = -1;
 
+    private Dialog mActiveDialog = null;
+
     private int mOrientation;
+
+    private boolean mNeedsEasyMode = false;
 
     /**
      * @hide
@@ -505,9 +503,16 @@ public class NavigationActivity extends Activity
         filter.addAction(Intent.ACTION_DATE_CHANGED);
         filter.addAction(Intent.ACTION_TIME_CHANGED);
         filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
+        filter.addAction(Intent.ACTION_LOCALE_CHANGED);
         filter.addAction(FileManagerSettings.INTENT_MOUNT_STATUS_CHANGED);
-        filter.addAction(Intent.ACTION_MEDIA_MOUNTED);
         registerReceiver(this.mNotificationReceiver, filter);
+
+        // This filter needs the file data scheme, so it must be defined separately.
+        IntentFilter newFilter = new IntentFilter();
+        newFilter.addAction(Intent.ACTION_MEDIA_MOUNTED);
+        newFilter.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
+        newFilter.addDataScheme(ContentResolver.SCHEME_FILE);
+        registerReceiver(mNotificationReceiver, newFilter);
 
         // Set the theme before setContentView
         Theme theme = ThemeManager.getCurrentTheme(this);
@@ -605,6 +610,8 @@ public class NavigationActivity extends Activity
                 .ic_em_music));
         EASY_MODE_ICONS.put(MimeTypeCategory.DOCUMENT, getResources().getDrawable(R.drawable
                 .ic_em_document));
+        EASY_MODE_ICONS.put(MimeTypeCategory.APP, getResources().getDrawable(R.drawable
+                .ic_em_application));
 
         //Save state
         super.onCreate(state);
@@ -628,6 +635,7 @@ public class NavigationActivity extends Activity
         if (curDir != null) {
             VirtualMountPointConsole vc = VirtualMountPointConsole.getVirtualConsoleForPath(
                     mNavigationViews[mCurrentNavigationView].getCurrentDir());
+            getCurrentNavigationView().refresh();
             if (vc != null && !vc.isMounted()) {
                 onRequestBookmarksRefresh();
                 removeUnmountedHistory();
@@ -677,6 +685,16 @@ public class NavigationActivity extends Activity
         if (mDrawerToggle.onOptionsItemSelected(item)) {
           return true;
         }
+
+        if (mNeedsEasyMode) {
+            if (item.getItemId() == android.R.id.home) {
+                if (mHistory.size() == 0 && !isEasyModeVisible()) {
+                    performShowEasyMode();
+                } else {
+                    back();
+                }
+            }
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -689,6 +707,10 @@ public class NavigationActivity extends Activity
             Log.d(TAG, "NavigationActivity.onDestroy"); //$NON-NLS-1$
         }
 
+        if (mActiveDialog != null && mActiveDialog.isShowing()) {
+            mActiveDialog.dismiss();
+        }
+
         // Unregister the receiver
         try {
             unregisterReceiver(this.mNotificationReceiver);
@@ -696,6 +718,7 @@ public class NavigationActivity extends Activity
             /**NON BLOCK**/
         }
 
+        recycle();
         //All destroy. Continue
         super.onDestroy();
     }
@@ -743,7 +766,7 @@ public class NavigationActivity extends Activity
             mDrawerLayout.openDrawer(Gravity.START);
 
             AlertDialog dialog = DialogHelper.createAlertDialog(this,
-                    R.drawable.ic_launcher, R.string.welcome_title,
+                    R.mipmap.ic_launcher_filemanager, R.string.welcome_title,
                     getString(R.string.welcome_msg), false);
             DialogHelper.delegateDialogShow(this, dialog);
 
@@ -958,6 +981,7 @@ public class NavigationActivity extends Activity
     private void performShowEasyMode() {
         mEasyModeListView.setVisibility(View.VISIBLE);
         getCurrentNavigationView().setVisibility(View.GONE);
+        performShowBackArrow(false);
     }
 
     /**
@@ -966,6 +990,16 @@ public class NavigationActivity extends Activity
     private void performHideEasyMode() {
         mEasyModeListView.setVisibility(View.GONE);
         getCurrentNavigationView().setVisibility(View.VISIBLE);
+    }
+
+    private void performShowBackArrow(boolean showBackArrow) {
+        if (mNeedsEasyMode) {
+            mDrawerToggle.setDrawerIndicatorEnabled(!showBackArrow);
+        }
+    }
+
+    private boolean isEasyModeVisible() {
+        return mEasyModeListView.getVisibility() != View.GONE;
     }
 
     /**
@@ -999,7 +1033,7 @@ public class NavigationActivity extends Activity
         Drawable action = null;
         String actionCd = null;
         if (bookmark.mType.compareTo(BOOKMARK_TYPE.HOME) == 0) {
-            action = iconholder.getDrawable("ic_config_drawable"); //$NON-NLS-1$
+            action = iconholder.getDrawable("ic_edit_home_bookmark_drawable"); //$NON-NLS-1$
             actionCd = getApplicationContext().getString(
                     R.string.bookmarks_button_config_cd);
         }
@@ -1074,6 +1108,7 @@ public class NavigationActivity extends Activity
                         } else {
                             performHideEasyMode();
                         }
+                        performShowBackArrow(!mDrawerToggle.isDrawerIndicatorEnabled());
                         getCurrentNavigationView().open(fso);
                         mDrawerLayout.closeDrawer(Gravity.START);
                     }
@@ -1298,7 +1333,7 @@ public class NavigationActivity extends Activity
         try {
             // Recovery sdcards from storage manager
             StorageVolume[] volumes = StorageHelper
-                    .getStorageVolumes(getApplication());
+                    .getStorageVolumes(getApplication(), true);
             for (StorageVolume volume: volumes) {
                 if (volume != null) {
                     String mountedState = volume.getState();
@@ -1421,7 +1456,7 @@ public class NavigationActivity extends Activity
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 convertView = (convertView == null) ?getLayoutInflater().inflate(R.layout
-                        .navigation_view_simple_item, null, true) : convertView;
+                        .navigation_view_simple_item, parent, false) : convertView;
                 MimeTypeCategory item = getItem(position);
                 String typeTitle = MIME_TYPE_LOCALIZED_NAMES[item.ordinal()];
                 TextView typeTitleTV = (TextView) convertView
@@ -1447,28 +1482,25 @@ public class NavigationActivity extends Activity
         intent.putExtra(SearchActivity.EXTRA_SEARCH_DIRECTORY,
                 getCurrentNavigationView().getCurrentDir());
         intent.putExtra(SearchManager.QUERY, "*"); // Use wild-card '*'
-        switch (position) {
-            case 0:
-                performHideEasyMode();
-                return;
-            case 1:
-                intent.putExtra(SearchActivity.EXTRA_SEARCH_MIMETYPE,
-                        new MimeTypeCategory[] { MimeTypeCategory.IMAGE });
-                break;
-            case 2:
-                intent.putExtra(SearchActivity.EXTRA_SEARCH_MIMETYPE,
-                        new MimeTypeCategory[] { MimeTypeCategory.VIDEO });
-                break;
-            case 3:
-                intent.putExtra(SearchActivity.EXTRA_SEARCH_MIMETYPE,
-                        new MimeTypeCategory[] { MimeTypeCategory.AUDIO });
-                break;
-            case 4:
-                // search for both DOCUMENT and TEXT mime types
-                MimeTypeCategory[] categories = { MimeTypeCategory.DOCUMENT, MimeTypeCategory.TEXT };
-                intent.putExtra(SearchActivity.EXTRA_SEARCH_MIMETYPE, categories);
-                break;
+
+        if (position == 0) {
+            // the user has selected all items, they want to see their folders so let's do that.
+            performHideEasyMode();
+            performShowBackArrow(true);
+            return;
+
+        } else {
+            ArrayList<MimeTypeCategory> searchCategories = new ArrayList<MimeTypeCategory>();
+            MimeTypeCategory selectedCategory = EASY_MODE_LIST.get(position);
+            searchCategories.add(selectedCategory);
+            // a one off case where we implicitly want to also search for TEXT mimetypes when the
+            // DOCUMENTS category is selected
+            if (selectedCategory == MimeTypeCategory.DOCUMENT) {
+                searchCategories.add(MimeTypeCategory.TEXT);
+            }
+            intent.putExtra(SearchActivity.EXTRA_SEARCH_MIMETYPE, searchCategories);
         }
+
         startActivity(intent);
     }
 
@@ -1543,14 +1575,25 @@ public class NavigationActivity extends Activity
         // Check if request navigation to directory (use as default), and
         // ensure chrooted and absolute path
         String navigateTo = intent.getStringExtra(EXTRA_NAVIGATE_TO);
+        String intentAction = intent.getAction();
         if (navigateTo != null && navigateTo.length() > 0) {
             initialDir = navigateTo;
+        } else if (intentAction != null && intentAction.equals(Intent.ACTION_VIEW)) {
+            Uri data = intent.getData();
+            if (data != null && (FileHelper.FILE_URI_SCHEME.equals(data.getScheme())
+                    || FileHelper.FOLDER_URI_SCHEME.equals(data.getScheme())
+                    || FileHelper.DIRECTORY_URI_SCHEME.equals(data.getScheme()))) {
+                File path = new File(data.getPath());
+                if (path.isDirectory()) {
+                    initialDir = path.getAbsolutePath();
+                }
+            }
         }
 
         // Add to history
         final boolean addToHistory = intent.getBooleanExtra(EXTRA_ADD_TO_HISTORY, true);
 
-        // We cannot navigate to a secure console if is unmount, go to root in that case
+        // We cannot navigate to a secure console if it is unmounted. So go to root in that case
         VirtualConsole vc = VirtualMountPointConsole.getVirtualConsoleForPath(initialDir);
         if (vc != null && vc instanceof SecureConsole && !((SecureConsole) vc).isMounted()) {
             initialDir = FileHelper.ROOT_DIRECTORY;
@@ -1560,9 +1603,17 @@ public class NavigationActivity extends Activity
             // Initial directory is the first external sdcard (sdcard, emmc, usb, ...)
             if (!StorageHelper.isPathInStorageVolume(initialDir)) {
                 StorageVolume[] volumes =
-                        StorageHelper.getStorageVolumes(this);
+                        StorageHelper.getStorageVolumes(this, false);
                 if (volumes != null && volumes.length > 0) {
                     initialDir = volumes[0].getPath();
+                    int count = volumes.length;
+                    for (int i = 0; i < count; i++) {
+                        StorageVolume volume = volumes[i];
+                        if (Environment.MEDIA_MOUNTED.equalsIgnoreCase(volume.getState())) {
+                            initialDir = volume.getPath();
+                            break;
+                        }
+                    }
                     //Ensure that initial directory is an absolute directory
                     initialDir = FileHelper.getAbsPath(initialDir);
                 } else {
@@ -1624,15 +1675,18 @@ public class NavigationActivity extends Activity
         }
 
         boolean needsEasyMode = false;
-        for (Bookmark bookmark :mSdBookmarks) {
-            if (bookmark.mPath.equalsIgnoreCase(initialDir)) {
-                needsEasyMode = true;
-                break;
+        if (mSdBookmarks != null ) {
+            for (Bookmark bookmark :mSdBookmarks) {
+                if (bookmark.mPath.equalsIgnoreCase(initialDir)) {
+                    needsEasyMode = true;
+                    break;
+                }
             }
         }
 
-        needsEasyMode = needsEasyMode
-                && getResources().getBoolean(R.bool.cmcc_show_easy_mode);
+        mNeedsEasyMode = getResources().getBoolean(R.bool.cmcc_show_easy_mode);
+
+        needsEasyMode = needsEasyMode && mNeedsEasyMode;
         if (needsEasyMode) {
             performShowEasyMode();
         } else {
@@ -1710,16 +1764,27 @@ public class NavigationActivity extends Activity
             }
             return true;
         }
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (checkBackAction()) {
-                performHideEasyMode();
-                return true;
-            }
-
-            // An exit event has occurred, force the destroy the consoles
-            exit();
-        }
         return super.onKeyUp(keyCode, event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(Gravity.START)) {
+            mDrawerLayout.closeDrawer(Gravity.START);
+            return;
+        }
+        if (checkBackAction()) {
+            performHideEasyMode();
+            return;
+        } else {
+            if (mNeedsEasyMode && !isEasyModeVisible()) {
+                performShowEasyMode();
+                return;
+            }
+        }
+
+        // An exit event has occurred, force the destroy the consoles
+        exit();
     }
 
     /**
@@ -1931,6 +1996,11 @@ public class NavigationActivity extends Activity
         // Ignored
     }
 
+    @Override
+    public void onCancel(){
+        // nop
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -2097,7 +2167,11 @@ public class NavigationActivity extends Activity
             //Communicate the user that the next time the application will be closed
             this.mExitBackTimeout = System.currentTimeMillis();
             DialogHelper.showToast(this, R.string.msgs_push_again_to_exit, Toast.LENGTH_SHORT);
-            return true;
+            if (mNeedsEasyMode) {
+                return isEasyModeVisible();
+            } else {
+                return true;
+            }
         }
 
         //Back action not applied
@@ -2438,6 +2512,10 @@ public class NavigationActivity extends Activity
      * @hide
      */
     void exit() {
+        finish();
+    }
+
+    private void recycle() {
         // Recycle the navigation views
         int cc = this.mNavigationViews.length;
         for (int i = 0; i < cc; i++) {
@@ -2453,7 +2531,6 @@ public class NavigationActivity extends Activity
         } catch (Throwable ex) {
             /**NON BLOCK**/
         }
-        finish();
     }
 
     /**
@@ -2707,4 +2784,7 @@ public class NavigationActivity extends Activity
         theme.setImageDrawable(this, (ButtonItem) v, "ab_delete_drawable"); //$NON-NLS-1$
     }
 
+    public void updateActiveDialog(Dialog dialog) {
+        mActiveDialog = dialog;
+    }
 }

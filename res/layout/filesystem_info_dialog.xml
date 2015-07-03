@@ -87,15 +87,15 @@
 
       <!-- Status -->
       <TableRow
-        android:layout_marginLeft="@dimen/extra_large_margin"
-        android:layout_marginRight="@dimen/extra_large_margin" >
+        android:layout_marginStart="@dimen/extra_large_margin"
+        android:layout_marginEnd="@dimen/extra_large_margin" >
 
         <TextView
           android:id="@+id/filesystem_info_status_label"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/default_margin"
-          android:gravity="left|center_vertical"
+          android:gravity="start|center_vertical"
           android:text="@string/filesystem_info_dialog_status"
           android:textAppearance="@style/primary_text_appearance" />
 
@@ -103,7 +103,7 @@
           android:id="@+id/filesystem_info_status"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_gravity="left"
+          android:layout_gravity="start"
           android:layout_margin="@dimen/default_margin"
           android:textOff="@string/mount_point_readonly"
           android:textOn="@string/mount_point_readwrite" />
@@ -111,40 +111,40 @@
 
       <!-- Mount Point -->
       <TableRow
-        android:layout_marginLeft="@dimen/extra_large_margin"
-        android:layout_marginRight="@dimen/extra_large_margin" >
+        android:layout_marginStart="@dimen/extra_large_margin"
+        android:layout_marginEnd="@dimen/extra_large_margin" >
 
         <TextView
           android:id="@+id/filesystem_info_mount_point_label"
-          android:layout_width="match_parent"
+          android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/default_margin"
-          android:gravity="left|center_vertical"
+          android:gravity="start|center_vertical"
           android:text="@string/filesystem_info_dialog_mount_point"
           android:textAppearance="@style/primary_text_appearance" />
 
         <TextView
           android:id="@+id/filesystem_info_mount_point"
-          android:layout_width="match_parent"
+          android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/default_margin"
-          android:paddingRight="@dimen/double_margin"
-          android:gravity="left|center_vertical"
+          android:paddingEnd="@dimen/double_margin"
+          android:gravity="start|center_vertical"
           android:singleLine="false"
           android:textAppearance="@style/secondary_text_appearance" />
       </TableRow>
 
       <!-- Device -->
       <TableRow
-        android:layout_marginLeft="@dimen/extra_large_margin"
-        android:layout_marginRight="@dimen/extra_large_margin" >
+        android:layout_marginStart="@dimen/extra_large_margin"
+        android:layout_marginEnd="@dimen/extra_large_margin" >
 
         <TextView
           android:id="@+id/filesystem_info_device_label"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/default_margin"
-          android:gravity="left|center_vertical"
+          android:gravity="start|center_vertical"
           android:text="@string/filesystem_info_dialog_device"
           android:textAppearance="@style/primary_text_appearance" />
 
@@ -153,23 +153,23 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/default_margin"
-          android:paddingRight="@dimen/double_margin"
-          android:gravity="left|center_vertical"
+          android:paddingEnd="@dimen/double_margin"
+          android:gravity="start|center_vertical"
           android:singleLine="false"
           android:textAppearance="@style/secondary_text_appearance" />
       </TableRow>
 
       <!-- Type -->
       <TableRow
-        android:layout_marginLeft="@dimen/extra_large_margin"
-        android:layout_marginRight="@dimen/extra_large_margin" >
+        android:layout_marginStart="@dimen/extra_large_margin"
+        android:layout_marginEnd="@dimen/extra_large_margin" >
 
         <TextView
           android:id="@+id/filesystem_info_type_label"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/default_margin"
-          android:gravity="left|top"
+          android:gravity="start|top"
           android:text="@string/filesystem_info_dialog_type"
           android:textAppearance="@style/primary_text_appearance" />
 
@@ -178,23 +178,23 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/default_margin"
-          android:paddingRight="@dimen/double_margin"
-          android:gravity="left|center_vertical"
+          android:paddingEnd="@dimen/double_margin"
+          android:gravity="start|center_vertical"
           android:singleLine="false"
           android:textAppearance="@style/secondary_text_appearance" />
       </TableRow>
 
       <!-- Options -->
       <TableRow
-        android:layout_marginLeft="@dimen/extra_large_margin"
-        android:layout_marginRight="@dimen/extra_large_margin" >
+        android:layout_marginStart="@dimen/extra_large_margin"
+        android:layout_marginEnd="@dimen/extra_large_margin" >
 
         <TextView
           android:id="@+id/filesystem_info_options_label"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/default_margin"
-          android:gravity="left|center_vertical"
+          android:gravity="start|center_vertical"
           android:text="@string/filesystem_info_dialog_options"
           android:textAppearance="@style/primary_text_appearance" />
 
@@ -203,8 +203,8 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/default_margin"
-          android:paddingRight="@dimen/double_margin"
-          android:gravity="left|center_vertical"
+          android:paddingEnd="@dimen/double_margin"
+          android:gravity="start|center_vertical"
           android:singleLine="false"
           android:maxLines="5"
           android:textAppearance="@style/secondary_text_appearance" />
@@ -212,15 +212,15 @@
 
       <!-- Dump/Pass -->
       <TableRow
-        android:layout_marginLeft="@dimen/extra_large_margin"
-        android:layout_marginRight="@dimen/extra_large_margin" >
+        android:layout_marginStart="@dimen/extra_large_margin"
+        android:layout_marginEnd="@dimen/extra_large_margin" >
 
         <TextView
           android:id="@+id/filesystem_info_dump_pass_label"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/default_margin"
-          android:gravity="left|center_vertical"
+          android:gravity="start|center_vertical"
           android:text="@string/filesystem_info_dialog_dump_pass"
           android:textAppearance="@style/primary_text_appearance" />
 
@@ -229,8 +229,8 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/default_margin"
-          android:paddingRight="@dimen/double_margin"
-          android:gravity="left|center_vertical"
+          android:paddingEnd="@dimen/double_margin"
+          android:gravity="start|center_vertical"
           android:singleLine="false"
           android:textAppearance="@style/secondary_text_appearance" />
       </TableRow>
@@ -241,12 +241,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="@dimen/extra_large_margin"
-        android:layout_marginRight="@dimen/extra_large_margin"
+        android:layout_marginStart="@dimen/extra_large_margin"
+        android:layout_marginEnd="@dimen/extra_large_margin"
         android:contentDescription="@null"
-        android:drawableLeft="@drawable/ic_material_light_fs_warning"
+        android:drawableStart="@drawable/ic_material_light_fs_warning"
         android:drawablePadding="@dimen/default_margin"
-        android:gravity="left|center_vertical"
+        android:gravity="start|center_vertical"
         android:singleLine="false"
         android:background="@drawable/material_selector"
         android:text="@string/filesystem_info_mount_not_allowed_msg"
@@ -275,22 +275,22 @@
       android:layout_width="0dip"
       android:layout_height="wrap_content"
       android:layout_weight=".70"
-      android:layout_gravity="left|center_vertical"
+      android:layout_gravity="start|center_vertical"
       android:paddingBottom="@dimen/extra_large_margin"
       android:paddingTop="@dimen/default_margin"
       android:shrinkColumns="1" >
 
       <!-- Total -->
       <TableRow
-        android:layout_marginLeft="@dimen/extra_large_margin"
-        android:layout_marginRight="@dimen/extra_large_margin" >
+        android:layout_marginStart="@dimen/extra_large_margin"
+        android:layout_marginEnd="@dimen/extra_large_margin" >
 
         <TextView
           android:id="@+id/filesystem_info_total_disk_usage_label"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/default_margin"
-          android:gravity="left|center_vertical"
+          android:gravity="start|center_vertical"
           android:text="@string/filesystem_info_dialog_total_disk_usage"
           android:textAppearance="@style/primary_text_appearance" />
 
@@ -299,21 +299,21 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/default_margin"
-          android:gravity="left|center_vertical"
+          android:gravity="start|center_vertical"
           android:textAppearance="@style/secondary_text_appearance" />
       </TableRow>
 
       <!-- Used -->
       <TableRow
-        android:layout_marginLeft="@dimen/extra_large_margin"
-        android:layout_marginRight="@dimen/extra_large_margin" >
+        android:layout_marginStart="@dimen/extra_large_margin"
+        android:layout_marginEnd="@dimen/extra_large_margin" >
 
         <TextView
           android:id="@+id/filesystem_info_used_disk_usage_label"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/default_margin"
-          android:gravity="left|center_vertical"
+          android:gravity="start|center_vertical"
           android:text="@string/filesystem_info_dialog_used_disk_usage"
           android:textAppearance="@style/primary_text_appearance" />
 
@@ -322,21 +322,21 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/default_margin"
-          android:gravity="left|center_vertical"
+          android:gravity="start|center_vertical"
           android:textAppearance="@style/secondary_text_appearance" />
       </TableRow>
 
       <!-- Free -->
       <TableRow
-        android:layout_marginLeft="@dimen/extra_large_margin"
-        android:layout_marginRight="@dimen/extra_large_margin" >
+        android:layout_marginStart="@dimen/extra_large_margin"
+        android:layout_marginEnd="@dimen/extra_large_margin" >
 
         <TextView
           android:id="@+id/filesystem_info_free_disk_usage_label"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/default_margin"
-          android:gravity="left|center_vertical"
+          android:gravity="start|center_vertical"
           android:text="@string/filesystem_info_dialog_free_disk_usage"
           android:textAppearance="@style/primary_text_appearance" />
 
@@ -345,7 +345,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/default_margin"
-          android:gravity="left|center_vertical"
+          android:gravity="start|center_vertical"
           android:textAppearance="@style/secondary_text_appearance" />
       </TableRow>
     </TableLayout>

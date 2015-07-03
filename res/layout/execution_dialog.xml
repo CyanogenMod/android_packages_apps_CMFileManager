@@ -30,7 +30,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/default_margin"
-      android:gravity="left|center_vertical"
+      android:gravity="start|center_vertical"
       android:text="@string/execution_console_script_name_label"
       android:textAppearance="@style/primary_text_appearance" />
     <TextView
@@ -39,7 +39,7 @@
       android:layout_height="wrap_content"
       android:layout_weight="1"
       android:layout_margin="@dimen/default_margin"
-      android:gravity="left|center_vertical"
+      android:gravity="start|center_vertical"
       android:text="@null"
       android:singleLine="true"
       android:ellipsize="end"
@@ -56,7 +56,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/default_margin"
-      android:gravity="left|center_vertical"
+      android:gravity="start|center_vertical"
       android:text="@string/execution_console_script_execution_time_label"
       android:textAppearance="@style/primary_text_appearance" />
     <TextView
@@ -65,7 +65,7 @@
       android:layout_height="wrap_content"
       android:layout_weight="1"
       android:layout_margin="@dimen/default_margin"
-      android:gravity="left|center_vertical"
+      android:gravity="start|center_vertical"
       android:text="@null"
       android:singleLine="true"
       android:ellipsize="end"
@@ -76,7 +76,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/default_margin"
-      android:gravity="left|center_vertical"
+      android:gravity="start|center_vertical"
       android:text="@string/execution_console_script_exitcode_label"
       android:textAppearance="@style/primary_text_appearance" />
     <TextView
@@ -85,7 +85,7 @@
       android:layout_height="wrap_content"
       android:layout_weight="1"
       android:layout_margin="@dimen/default_margin"
-      android:gravity="left|center_vertical"
+      android:gravity="start|center_vertical"
       android:text="@null"
       android:singleLine="true"
       android:ellipsize="end"

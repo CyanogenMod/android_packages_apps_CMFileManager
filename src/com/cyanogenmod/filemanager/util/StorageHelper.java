@@ -41,11 +41,12 @@ public final class StorageHelper {
      * as first parameter, that AOSP hasn't.
      *
      * @param ctx The current context
+     * @param reload If true, re-query the volumes and do not return the already cached list.
      * @return StorageVolume[] The storage volumes defined in the system
      */
     @SuppressWarnings("boxing")
-    public static synchronized StorageVolume[] getStorageVolumes(Context ctx) {
-        if (sStorageVolumes == null) {
+    public static synchronized StorageVolume[] getStorageVolumes(Context ctx, boolean reload) {
+        if (sStorageVolumes == null || reload) {
             //IMP!! Android SDK doesn't have a "getVolumeList" but is supported by CM10.
             //Use reflect to get this value (if possible)
             try {
@@ -129,7 +130,8 @@ public final class StorageHelper {
     public static boolean isPathInStorageVolume(String path) {
         String fso = FileHelper.getAbsPath(path);
         StorageVolume[] volumes =
-                getStorageVolumes(FileManagerApplication.getInstance().getApplicationContext());
+                getStorageVolumes(FileManagerApplication.getInstance().getApplicationContext(),
+                                  false);
         int cc = volumes.length;
         for (int i = 0; i < cc; i++) {
             StorageVolume vol = volumes[i];
@@ -148,7 +150,8 @@ public final class StorageHelper {
      */
     public static boolean isStorageVolume(String path) {
         StorageVolume[] volumes =
-                getStorageVolumes(FileManagerApplication.getInstance().getApplicationContext());
+                getStorageVolumes(FileManagerApplication.getInstance().getApplicationContext(),
+                                  false);
         int cc = volumes.length;
         for (int i = 0; i < cc; i++) {
             StorageVolume vol = volumes[i];
@@ -169,7 +172,8 @@ public final class StorageHelper {
      */
     public static String getChrootedPath(String path) {
         StorageVolume[] volumes =
-                getStorageVolumes(FileManagerApplication.getInstance().getApplicationContext());
+                getStorageVolumes(FileManagerApplication.getInstance().getApplicationContext(),
+                                  false);
         int cc = volumes.length;
         for (int i = 0; i < cc; i++) {
             StorageVolume vol = volumes[i];

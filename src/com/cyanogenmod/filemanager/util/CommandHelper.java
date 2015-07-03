@@ -766,10 +766,11 @@ public final class CommandHelper {
             CommandNotFoundException, OperationTimeoutException,
             ExecutionException, InvalidCommandDefinitionException, ReadOnlyFilesystemException,
             CancelledOperationException {
+
         Console cSrc = ensureConsoleForFile(context, console, src);
         Console cDst = ensureConsoleForFile(context, console, dst);
         boolean ret = true;
-        if (cSrc.equals(cDst)) {
+        if (cSrc.equals(cDst) && !FileHelper.isSamePath(src, dst)) {
             // Is safe to use the same console
             MoveExecutable executable =
                     cSrc.getExecutableFactory().newCreator().createMoveExecutable(src, dst);
@@ -858,10 +859,11 @@ public final class CommandHelper {
             CommandNotFoundException, OperationTimeoutException,
             ExecutionException, InvalidCommandDefinitionException, ReadOnlyFilesystemException,
             CancelledOperationException {
+
         Console cSrc = ensureConsoleForFile(context, console, src);
         Console cDst = ensureConsoleForFile(context, console, dst);
         boolean ret = true;
-        if (cSrc.equals(cDst)) {
+        if (cSrc.equals(cDst) && !FileHelper.isSamePath(src, dst)) {
             // Is safe to use the same console
             CopyExecutable executable =
                     cSrc.getExecutableFactory().newCreator().createCopyExecutable(src, dst);
@@ -2010,7 +2012,7 @@ public final class CommandHelper {
      * @throws IOException If initial directory couldn't be checked
      * @throws FileNotFoundException If the initial directory not exists
      */
-    private static Console ensureConsoleForFile(Context context, Console console, String src)
+    public static Console ensureConsoleForFile(Context context, Console console, String src)
             throws FileNotFoundException, IOException, InvalidCommandDefinitionException,
             ConsoleAllocException, InsufficientPermissionsException {
 

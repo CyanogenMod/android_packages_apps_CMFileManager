@@ -23,7 +23,7 @@
     <item quantity="other"><xliff:g id="files">%1$d</xliff:g> 個檔案</item>
   </plurals>
   <plurals name="search_found_items">
-    <item quantity="other">找到 <xliff:g id="count">%d</xliff:g> 項目</item>
+    <item quantity="other">找到 <xliff:g id="count">%d</xliff:g> 個項目</item>
   </plurals>
   <plurals name="selection_folders">
     <item quantity="other">已選取 <xliff:g id="folders">%1$d</xliff:g> 個資料夾。</item>

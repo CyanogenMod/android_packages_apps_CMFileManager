@@ -33,6 +33,7 @@ import com.cyanogenmod.filemanager.model.Symlink;
 import com.cyanogenmod.filemanager.model.SystemFile;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
@@ -212,7 +213,11 @@ public final class MimeTypeHelper {
      */
     public static final String ALL_MIME_TYPES = "*/*"; //$NON-NLS-1$
 
-    private static Map<String, MimeTypeInfo> sMimeTypes;
+    private static Map<String, ArrayList<MimeTypeInfo>> sMimeTypes;
+    /**
+     * Maps from a combination key of <extension> + <mimetype> to MimeTypeInfo objects.
+     */
+    private static HashMap<String, MimeTypeInfo> sExtensionMimeTypes;
 
     /**
      * Constructor of <code>MimeTypeHelper</code>.
@@ -239,10 +244,12 @@ public final class MimeTypeHelper {
             return false;
         }
 
-        for (MimeTypeInfo info : sMimeTypes.values()) {
-            String mimeTypeRegExp = convertToRegExp(mimeType);
-            if (info.mMimeType.matches(mimeTypeRegExp)) {
-                return true;
+        for (ArrayList<MimeTypeInfo> mimeTypeInfoList : sMimeTypes.values()) {
+            for (MimeTypeInfo info : mimeTypeInfoList) {
+                String mimeTypeRegExp = convertToRegExp(mimeType);
+                if (info.mMimeType.matches(mimeTypeRegExp)) {
+                    return true;
+                }
             }
         }
 
@@ -281,7 +288,8 @@ public final class MimeTypeHelper {
         //Get the extension and delivery
         String ext = FileHelper.getExtension(fso);
         if (ext != null) {
-            MimeTypeInfo mimeTypeInfo = sMimeTypes.get(ext.toLowerCase(Locale.ROOT));
+            MimeTypeInfo mimeTypeInfo = getMimeTypeInternal(fso, ext);
+
             if (mimeTypeInfo != null) {
                 // Create a new drawable
                 if (!TextUtils.isEmpty(mimeTypeInfo.mDrawable)) {
@@ -398,14 +406,74 @@ public final class MimeTypeHelper {
         return res.getString(R.string.mime_unknown);
     }
 
+    /**
+     * Gets the mimetype of a file, if there are multiple possibilities given it's extension.
+     * @param absolutePath The absolute path of the file for which to find the mimetype.
+     * @param ext The extension of the file.
+     * @return The correct mimetype for this file, or null if the mimetype cannot be determined
+     * or is not ambiguous.
+     */
+    private static final String getAmbiguousExtensionMimeType(String absolutePath, String ext) {
+        if (AmbiguousExtensionHelper.AMBIGUOUS_EXTENSIONS_MAP.containsKey(ext)) {
+            AmbiguousExtensionHelper helper =
+                    AmbiguousExtensionHelper.AMBIGUOUS_EXTENSIONS_MAP.get(ext);
+            String mimeType = helper.getMimeType(absolutePath, ext);
+            if (!TextUtils.isEmpty(mimeType)) {
+                return mimeType;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get the MimeTypeInfo that describes this file.
+     * @param fso The file.
+     * @param ext The extension of the file.
+     * @return The MimeTypeInfo object that describes this file, or null if it cannot be retrieved.
+     */
+    private static final MimeTypeInfo getMimeTypeInternal(FileSystemObject fso, String ext) {
+        return getMimeTypeInternal(fso.getFullPath(), ext);
+    }
+    /**
+     * Get the MimeTypeInfo that describes this file.
+     * @param absolutePath The absolute path of the file.
+     * @param ext The extension of the file.
+     * @return The MimeTypeInfo object that describes this file, or null if it cannot be retrieved.
+     */
+    private static final MimeTypeInfo getMimeTypeInternal(String absolutePath, String ext) {
+        MimeTypeInfo mimeTypeInfo = null;
+        ArrayList<MimeTypeInfo> mimeTypeInfoList = sMimeTypes.get(ext.toLowerCase(Locale.ROOT));
+        // Multiple mimetypes map to the same extension, try to resolve it.
+        if (mimeTypeInfoList != null && mimeTypeInfoList.size() > 1) {
+            if (absolutePath != null) {
+                String mimeType = getAmbiguousExtensionMimeType(absolutePath, ext);
+                mimeTypeInfo = sExtensionMimeTypes.get(ext + mimeType);
+            } else {
+                // We don't have the ability to read the file to resolve the ambiguity,
+                // so default to the first available mimetype.
+                mimeTypeInfo = mimeTypeInfoList.get(0);
+            }
+        } else if (mimeTypeInfoList != null && mimeTypeInfoList.size() == 1) {
+            // Only one possible mimetype, so pick that one.
+            mimeTypeInfo = mimeTypeInfoList.get(0);
+        }
+        return mimeTypeInfo;
+    }
+
     private static final String getMimeTypeFromExtension(final FileSystemObject fso) {
         String ext = FileHelper.getExtension(fso);
         if (ext == null) {
             return null;
         }
 
+        // If this extension is ambiguous, attempt to resolve it.
+        String mimeType = getAmbiguousExtensionMimeType(fso.getFullPath(), ext);
+        if (mimeType != null) {
+            return mimeType;
+        }
+
         //Load from the database of mime types
-        MimeTypeInfo mimeTypeInfo = sMimeTypes.get(ext.toLowerCase(Locale.ROOT));
+        MimeTypeInfo mimeTypeInfo = getMimeTypeInternal(fso, ext);
         if (mimeTypeInfo == null) {
             return null;
         }
@@ -418,9 +486,11 @@ public final class MimeTypeHelper {
      *
      * @param context The current context
      * @param ext The extension of the file
+     * @param absolutePath The absolute path of the file. Can be null if not available.
      * @return MimeTypeCategory The mime/type category
      */
-    public static final MimeTypeCategory getCategoryFromExt(Context context, String ext) {
+    public static final MimeTypeCategory getCategoryFromExt(Context context, String ext,
+                                                            String absolutePath) {
         // Ensure that have a context
         if (context == null && sMimeTypes == null) {
             // No category
@@ -432,7 +502,7 @@ public final class MimeTypeHelper {
         }
         if (ext != null) {
             //Load from the database of mime types
-            MimeTypeInfo mimeTypeInfo = sMimeTypes.get(ext.toLowerCase(Locale.ROOT));
+            MimeTypeInfo mimeTypeInfo = getMimeTypeInternal(absolutePath, ext);
             if (mimeTypeInfo != null) {
                 return mimeTypeInfo.mCategory;
             }
@@ -466,7 +536,9 @@ public final class MimeTypeHelper {
         }
 
         //Get the extension and delivery
-        return getCategoryFromExt(context, FileHelper.getExtension(file.getName()));
+        return getCategoryFromExt(context,
+                                  FileHelper.getExtension(file.getName()),
+                                  file.getAbsolutePath());
     }
 
     /**
@@ -497,7 +569,7 @@ public final class MimeTypeHelper {
 
         //Get the extension and delivery
         final MimeTypeCategory category = getCategoryFromExt(context,
-                FileHelper.getExtension(fso));
+                FileHelper.getExtension(fso), fso.getFullPath());
 
         // Check  system file
         if (category == MimeTypeCategory.NONE && fso instanceof SystemFile) {
@@ -558,20 +630,35 @@ public final class MimeTypeHelper {
 
                 // Parse the properties to an in-memory structure
                 // Format:  <extension> = <category> | <mime type> | <drawable>
-                sMimeTypes = new HashMap<String, MimeTypeInfo>(mimeTypes.size());
+                sMimeTypes = new HashMap<String, ArrayList<MimeTypeInfo>>();
+                sExtensionMimeTypes = new HashMap<String, MimeTypeInfo>();
                 Enumeration<Object> e = mimeTypes.keys();
                 while (e.hasMoreElements()) {
                     try {
                         String extension = (String)e.nextElement();
                         String data = mimeTypes.getProperty(extension);
-                        String[] mimeData = data.split("\\|");  //$NON-NLS-1$
+                        String[] datas = data.split(",");
+                        for (String theData : datas) {
+                            String[] mimeData = theData.split("\\|");  //$NON-NLS-1$
 
-                        // Create a reference of MimeType
-                        MimeTypeInfo mimeTypeInfo = new MimeTypeInfo();
-                        mimeTypeInfo.mCategory = MimeTypeCategory.valueOf(mimeData[0].trim());
-                        mimeTypeInfo.mMimeType = mimeData[1].trim();
-                        mimeTypeInfo.mDrawable = mimeData[2].trim();
-                        sMimeTypes.put(extension, mimeTypeInfo);
+                            // Create a reference of MimeType
+                            MimeTypeInfo mimeTypeInfo = new MimeTypeInfo();
+                            mimeTypeInfo.mCategory = MimeTypeCategory.valueOf(mimeData[0].trim());
+                            mimeTypeInfo.mMimeType = mimeData[1].trim();
+                            mimeTypeInfo.mDrawable = mimeData[2].trim();
+
+                            // If no list exists yet for this mimetype, create one.
+                            // Else, add it to the existing list.
+                            if (sMimeTypes.get(extension) == null) {
+                                ArrayList<MimeTypeInfo> infoList = new ArrayList<MimeTypeInfo>();
+                                infoList.add(mimeTypeInfo);
+                                sMimeTypes.put(extension, infoList);
+                            } else {
+                                sMimeTypes.get(extension).add(mimeTypeInfo);
+                            }
+                            sExtensionMimeTypes.put(extension + mimeTypeInfo.mMimeType,
+                                                    mimeTypeInfo);
+                        }
 
                     } catch (Exception e2) { /**NON BLOCK**/}
                 }

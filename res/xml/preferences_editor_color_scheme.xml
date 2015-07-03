@@ -17,14 +17,6 @@
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Use default theme color scheme -->
-    <SwitchPreference
-      android:key="cm_filemanager_editor_sh_use_theme_default"
-      android:title="@string/pref_syntax_sh_use_theme_default"
-      android:summary="@string/pref_syntax_sh_use_theme_default_desc"
-      android:persistent="true"
-      android:defaultValue="true" />
-
     <!-- Editor behaviour -->
     <PreferenceCategory
       android:key="editor_sh_items_category"

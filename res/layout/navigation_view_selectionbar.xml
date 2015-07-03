@@ -31,18 +31,18 @@
     android:src="@drawable/ic_material_light_accept" />
 
   <include layout="@layout/horizontal_divider"
-    android:layout_marginRight="@dimen/default_margin" />
+    android:layout_marginEnd="@dimen/default_margin" />
 
   <TextView
     android:id="@+id/navigation_status_selection_label"
     android:layout_width="0dp"
     android:layout_height="match_parent"
     android:layout_weight="1"
-    android:layout_marginLeft="@dimen/default_margin"
-    android:layout_marginRight="@dimen/default_margin"
+    android:layout_marginStart="@dimen/default_margin"
+    android:layout_marginEnd="@dimen/default_margin"
     android:singleLine="true"
     android:ellipsize="end"
-    android:gravity="left|center_vertical"
+    android:gravity="start|center_vertical"
     android:text="@null"
     android:textAppearance="@style/secondary_text_appearance" />
 

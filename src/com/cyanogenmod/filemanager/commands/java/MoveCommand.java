@@ -19,6 +19,7 @@ package com.cyanogenmod.filemanager.commands.java;
 import android.util.Log;
 
 import com.cyanogenmod.filemanager.commands.MoveExecutable;
+import com.cyanogenmod.filemanager.console.CancelledOperationException;
 import com.cyanogenmod.filemanager.console.ExecutionException;
 import com.cyanogenmod.filemanager.console.InsufficientPermissionsException;
 import com.cyanogenmod.filemanager.console.NoSuchFileOrDirectory;
@@ -64,7 +65,8 @@ public class MoveCommand extends Program implements MoveExecutable {
      */
     @Override
     public void execute()
-            throws InsufficientPermissionsException, NoSuchFileOrDirectory, ExecutionException {
+            throws InsufficientPermissionsException, NoSuchFileOrDirectory, ExecutionException,
+                   CancelledOperationException {
         if (isTrace()) {
             Log.v(TAG,
                     String.format("Creating from %s to %s", this.mSrc, this.mDst)); //$NON-NLS-1$
@@ -81,7 +83,7 @@ public class MoveCommand extends Program implements MoveExecutable {
 
         //Move or copy recursively
         if (d.exists()) {
-            if (!FileHelper.copyRecursive(s, d, getBufferSize())) {
+            if (!FileHelper.copyRecursive(s, d, getBufferSize(), this)) {
                 if (isTrace()) {
                     Log.v(TAG, "Result: FAIL. InsufficientPermissionsException"); //$NON-NLS-1$
                 }
@@ -95,7 +97,7 @@ public class MoveCommand extends Program implements MoveExecutable {
         } else {
             // Move between filesystem is not allow. If rename fails then use copy operation
             if (!s.renameTo(d)) {
-                if (!FileHelper.copyRecursive(s, d, getBufferSize())) {
+                if (!FileHelper.copyRecursive(s, d, getBufferSize(), this)) {
                     if (isTrace()) {
                         Log.v(TAG, "Result: FAIL. InsufficientPermissionsException"); //$NON-NLS-1$
                     }

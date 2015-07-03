@@ -27,8 +27,8 @@
     android:id="@+id/breadcrumb_view"
     android:layout_width="match_parent"
     android:layout_height="@dimen/default_row_height"
-    android:layout_marginLeft="@dimen/extra_large_margin"
-    android:layout_marginRight="@dimen/extra_large_margin"/>
+    android:layout_marginStart="@dimen/extra_large_margin"
+    android:layout_marginEnd="@dimen/extra_large_margin"/>
 
   <include layout="@layout/vertical_divider" />
 
@@ -38,8 +38,8 @@
     android:layout_width="match_parent"
     android:layout_height="0dp"
     android:layout_weight="1"
-    android:layout_marginLeft="@dimen/extra_margin"
-    android:layout_marginRight="@dimen/extra_margin"
+    android:layout_marginStart="@dimen/extra_margin"
+    android:layout_marginEnd="@dimen/extra_margin"
     filemanager:navigation="pickable" />
 
 </LinearLayout>

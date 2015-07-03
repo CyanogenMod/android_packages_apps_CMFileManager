@@ -24,7 +24,7 @@
     style="@style/breadcrumb_actionbar_buttom"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:layout_alignParentRight="true"
+    android:layout_alignParentEnd="true"
     android:contentDescription="@null"
     android:onClick="onActionBarItemClick"
     android:src="@drawable/ic_material_light_expander_open" />
@@ -33,6 +33,6 @@
     android:id="@+id/breadcrumb_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_toLeftOf="@id/ab_configuration" />
+    android:layout_toStartOf="@id/ab_configuration" />
 
 </RelativeLayout>

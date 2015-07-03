@@ -52,9 +52,11 @@
   <string name="msgs_privileged_console_alloc_failed">Неможливо запустити з Root правами. Переключення в безпечний режим.</string>
   <string name="msgs_settings_save_failure">Налаштування не може бути застосоване або збережене.</string>
   <string name="msgs_settings_invalid_initial_directory">Початкова папка \'<xliff:g id="initial_dir">%1$s</xliff:g>\' недоступна. Перехід в кореневу папку.</string>
+  <string name="root_not_available_msg">Пристрій не має Root-доступу. Не вдалося виконати цю операцію.</string>
   <string name="msgs_success">Операція пройшла успішно</string>
   <string name="msgs_unknown">Було виявлено помилки. Операція завершилась невдало.</string>
   <string name="msgs_insufficient_permissions">Ця операція вимагає підвищених привілеїв. Спробуйте змінити Root-режим.</string>
+  <string name="msgs_no_disk_space">Операція не вдалася, оскільки не залишилося вільного місця на пристрої.</string>
   <string name="msgs_file_not_found">Файл або папка не знайдені.</string>
   <string name="msgs_command_not_found">Операції команди не були знайдені або мають невірне значення.</string>
   <string name="msgs_io_failed">Помилка читання/запису.</string>
@@ -65,7 +67,7 @@
   <string name="msgs_read_only_filesystem">Файлова система доступна тільки для читання. Спробуйте змонтувати файлову систему для читання/запису.</string>
   <string name="msgs_illegal_argument">Неприпустимий аргумент. Виклик не вдався.</string>
   <string name="msgs_unresolved_inconsistencies">Операція не допускається, оскільки це створить невідповідності.</string>
-  <string name="msgs_operation_not_allowed_in_current_directory">Операція не допускається в поточній папці.\n\nПапка призначення не може бути вкладеною папкою джерела або самим джерелом.</string>
+  <string name="msgs_operation_not_allowed_in_current_directory">Неможливо перенести папку усередину цієї ж папки.</string>
   <string name="msgs_push_again_to_exit">Натисніть ще раз для виходу</string>
   <string name="msgs_not_registered_app">Не знайдено застосунків для відкриття файлів даного типу</string>
   <string name="msgs_overwrite_files">Деякі файли вже існують в папці призначення.\n\nЗамінити?</string>
@@ -84,10 +86,15 @@
   <string name="actionbar_button_overflow_cd">Додаткові налаштування</string>
   <string name="actionbar_button_storage_cd">Накопичувальні пристрої</string>
   <string name="actionbar_button_save_cd">Зберегти</string>
+  <string name="actionbar_button_print_cd">Друк</string>
   <string name="sort_by_name_asc">За ім’ям \u25B2</string>
   <string name="sort_by_name_desc">За ім’ям \u25BC</string>
   <string name="sort_by_date_asc">За датою \u25B2</string>
   <string name="sort_by_date_desc">За датою \u25BC</string>
+  <string name="sort_by_size_asc">За розміром \u25B2</string>
+  <string name="sort_by_size_desc">За розміром \u25B2</string>
+  <string name="sort_by_type_asc">За типом \u25B2</string>
+  <string name="sort_by_type_desc">За типом \u25B2</string>
   <string name="layout_icons">Іконки</string>
   <string name="layout_simple">Список</string>
   <string name="layout_details">Детально</string>
@@ -98,17 +105,18 @@
   <string name="filesystem_info_warning_title">Немає інформації</string>
   <string name="filesystem_info_warning_msg">Немає доступної інформації про файлову систему.</string>
   <string name="filesystem_info_cant_be_mounted_msg">Файлова система не може бути змонтована/розмонтована.</string>
-  <string name="filesystem_info_mount_not_allowed_msg">Монтування файлової системи неможливо в безпечному режимі. Натисніть для зміни режиму Root-доступу.</string>
+  <string name="filesystem_info_mount_not_allowed_msg">Операція підключення файлових систем не дозволена в безпечному режимі. Натисніть для переходу в режим root.</string>
   <string name="filesystem_info_mount_failed_msg">Не вдалося змонтувати файлову систему. Деякі файлові системи, такі як SD-карти, не можуть бути змонтовані/розмонтовані, тому що вони мають вбудовану файлову систему тільки для читання.</string>
   <string name="filesystem_info_dialog_title">Інформація про файлову систему</string>
   <string name="filesystem_info_dialog_tab_info">Інформація</string>
   <string name="filesystem_info_dialog_tab_disk_usage">Диск</string>
-  <string name="filesystem_info_dialog_status">Статус:</string>
+  <string name="filesystem_info_dialog_status">Підключено:</string>
   <string name="filesystem_info_dialog_mount_point">Точка монтування:</string>
   <string name="filesystem_info_dialog_device">Пристрій:</string>
   <string name="filesystem_info_dialog_type">Тип:</string>
   <string name="filesystem_info_dialog_options">Опції:</string>
   <string name="filesystem_info_dialog_dump_pass">Dump / Pass:</string>
+  <string name="filesystem_info_dialog_virtual">Віртуальний:</string>
   <string name="filesystem_info_dialog_total_disk_usage">Всього:</string>
   <string name="filesystem_info_dialog_used_disk_usage">Викор.:</string>
   <string name="filesystem_info_dialog_free_disk_usage">Вільно:</string>
@@ -169,6 +177,8 @@
   <string name="bookmarks_home">Додому</string>
   <string name="bookmarks_root_folder">Коренева папка</string>
   <string name="bookmarks_system_folder">Системна папка</string>
+  <string name="bookmarks_secure">Безпечне сховище</string>
+  <string name="bookmarks_remote">Віддалене сховище</string>
   <string name="bookmarks_button_config_cd">Встановити початковою папкою.</string>
   <string name="bookmarks_button_remove_bookmark_cd">Видалити з закладок.</string>
   <string name="bookmarks_msgs_add_success">Закладка успішно створена.</string>
@@ -228,10 +238,12 @@
   <string name="actions_menu_open_parent_folder">Відкрити власника</string>
   <string name="actions_menu_compute_checksum">Обчислити контрольну суму</string>
   <string name="actions_menu_print">Друк</string>
+  <string name="actions_menu_set_as_home">Встановити як домашню папку</string>
   <string name="actions_ask_undone_operation_msg">Ця дія безповоротна. Ви бажаєте продовжити?</string>
   <string name="input_name_dialog_label">Ім`я:</string>
   <string name="input_name_dialog_message_empty_name">Ім`я не може бути пустим</string>
   <string name="input_name_dialog_message_invalid_path_name">Неприпустиме ім’я. Не можна використовувати символи: \'<xliff:g id="invalid_characters">%1$s</xliff:g>\'</string>
+  <string name="input_name_dialog_message_invalid_name_length">Досягнуто граничної кількості символів.</string>
   <string name="input_name_dialog_message_invalid_name">Неприпустиме ім’я. Імена \'.\' і \'..\' не дозволяються</string>
   <string name="input_name_dialog_message_name_exists">Таке ім’я вже існує</string>
   <string name="associations_dialog_title">Асоціації</string>
@@ -258,6 +270,22 @@
   <string name="filetime_format_mode_MMddyyyy_HHmmss">мм/дд/рррр гг:хх:сс</string>
   <string name="filetime_format_mode_yyyyMMdd_HHmmss">рррр-мм-дд гг:хх:сс</string>
   <string name="selection_folders_and_files"><xliff:g id="folders">%1$s</xliff:g> і <xliff:g id="files">%2$s</xliff:g> вибрано.</string>
+  <string name="category_system">СИСТЕМА</string>
+  <string name="category_app">ДОДАТОК</string>
+  <string name="category_binary">ДВІЙКОВИЙ</string>
+  <string name="category_text">ТЕКСТ</string>
+  <string name="category_document">ДОКУМЕНТ</string>
+  <string name="category_ebook">ЕЛ. КНИГА</string>
+  <string name="category_mail">ПОШТА</string>
+  <string name="category_compress">СТИСНЕНИЙ</string>
+  <string name="category_exec">ВИКОН. ФАЙЛ</string>
+  <string name="category_database">БАЗА ДАНИХ</string>
+  <string name="category_font">ШРИФТ</string>
+  <string name="category_image">ЗОБРАЖЕННЯ</string>
+  <string name="category_audio">АУДІО</string>
+  <string name="category_video">ВІДЕО</string>
+  <string name="category_security">ЗАХИСТ</string>
+  <string name="category_all">ВСІ</string>
   <string name="compression_mode_title">Режим стиснення</string>
   <string name="shortcut_failed_msg">Не вдалося опрацювати ярлик</string>
   <string name="shortcut_creation_success_msg">Ярлик створений успішно</string>
@@ -265,11 +293,10 @@
   <string name="pref">Налаштування</string>
   <string name="pref_general">Основні налаштування</string>
   <string name="pref_search">Налаштування пошуку</string>
+  <string name="pref_storage">Налаштування сховища</string>
   <string name="pref_editor">Налаштування редактора</string>
   <string name="pref_themes">Теми</string>
   <string name="pref_about">Про програму</string>
-  <string name="pref_about_summary">Файловий менеджер v<xliff:g id="version">%1$s</xliff:g>
-Copyright \u00A9 2013 The CyanogenMod Project</string>
   <string name="pref_general_behaviour_category">Основні</string>
   <string name="pref_case_sensitive_sort">Враховувати регістр</string>
   <string name="pref_case_sensitive_sort_summary">Враховувати регістр при навігації чи сортуванні пошукових результатів</string>
@@ -306,15 +333,20 @@ Copyright \u00A9 2013 The CyanogenMod Project</string>
   <string name="pref_remove_saved_search_terms">Видалити збережені умови пошуку</string>
   <string name="pref_remove_saved_search_terms_summary">Натисніть для видалення всіх збережених умов пошуку</string>
   <string name="pref_remove_saved_search_terms_msg">Всі збережені умови пошуку були видалені</string>
+  <string name="pref_secure_storage_category">Безпечне сховище</string>
+  <string name="pref_secure_storage_delayed_sync_title">Відкладена синхронізація</string>
+  <string name="pref_secure_storage_delayed_sync_summary">Синхронізація безпечної файлової системи може займати більше часу. Увімкніть цей параметр, для швидшої відповіді після кожної операції, синхронізація виконується коли файлова система невикористовується. За рахунок можливої втрати інформації синхронізація не відбувається, якщо програма припиняє роботу.</string>
+  <string name="pref_secure_storage_reset_password_title">Змінити пароль</string>
+  <string name="pref_secure_storage_delete_storage_title">Видалити сховище</string>
   <string name="pref_editor_behaviour_category">Поведінка</string>
   <string name="pref_no_suggestions">Без припущень</string>
   <string name="pref_no_suggestions_desc">Не відображити припущення при редагуванні файлів</string>
   <string name="pref_word_wrap">Перенесення слів</string>
   <string name="pref_hexdump">Двійкові файли у HEX</string>
   <string name="pref_hexdump_desc">При відкритті двійкового файлу показувати шістнадцятковий дамп</string>
-  <string name="pref_editor_syntax_highlight_category">Підсвітка синтаксису</string>
+  <string name="pref_editor_syntax_highlight_category">Підсвічування синтаксису</string>
   <string name="pref_syntax_highlight">Підсвітка синтаксису</string>
-  <string name="pref_syntax_highlight_desc">Підсвічувати синтаксис файлу в редакторі (лише при наявному обробникові синтаксису для даного типу)</string>
+  <string name="pref_syntax_highlight_desc">Підсвічування синтаксису файлу під час редагування (тільки для типів файлів, які підтримуються редактором)</string>
   <string name="pref_syntax_highlight_color_scheme">Кольорова тема</string>
   <string name="pref_syntax_highlight_color_scheme_desc">Оберіть колірну схему підсвічування синтаксису</string>
   <string name="pref_syntax_sh_use_theme_default">Використовувати типову тему</string>
@@ -342,6 +374,26 @@ Copyright \u00A9 2013 The CyanogenMod Project</string>
   <string name="ash_keyword">Ключове слово</string>
   <string name="ash_quoted_string">Цитований рядок</string>
   <string name="ash_variable">Змінна</string>
+  <string name="secure_storage_unlock_title">Розблокувати сховище</string>
+  <string name="secure_storage_create_title">Створити сховище</string>
+  <string name="secure_storage_reset_title">Скинути пароль</string>
+  <string name="secure_storage_delete_title">Видалити сховище</string>
+  <string name="secure_storage_unlock_key_prompt_msg">Введіть пароль для розблокування файлової системи безпечного сховища.</string>
+  <string name="secure_storage_unlock_key_new_msg">Введіть пароль для захисту файлової системи безпечного сховища.</string>
+  <string name="secure_storage_unlock_key_reset_msg">Введіть поточний і новий паролі для скидання файлової системи безпечного сховища.</string>
+  <string name="secure_storage_unlock_key_delete_msg">Введіть поточний пароль, щоб видалити файлову систему безпечного сховища.</string>
+  <string name="secure_storage_unlock_old_key_title">Старий пароль:</string>
+  <string name="secure_storage_unlock_new_key_title">Новий Пароль:</string>
+  <string name="secure_storage_unlock_key_title">Пароль:</string>
+  <string name="secure_storage_unlock_repeat_title">Повторіть пароль:</string>
+  <string name="secure_storage_create_button">Створити</string>
+  <string name="secure_storage_unlock_button">Розблокувати</string>
+  <string name="secure_storage_reset_button">Скинути</string>
+  <string name="secure_storage_delete_button">Видалити</string>
+  <string name="secure_storage_unlock_failed">Не вдається розблокувати сховище</string>
+  <string name="secure_storage_unlock_validation_length">Пароль повинен мати принаймні <xliff:g id="characters">%1$d</xliff:g> символів.</string>
+  <string name="secure_storage_unlock_validation_equals">Паролі не співпадають.</string>
+  <string name="secure_storage_open_file_warning">Файл буде скопійовано до тимчасового не шифрованого сховища. Яке буде очищено через годину.</string>
   <string name="print_unsupported_document">Формат документа не підтримується</string>
   <string name="print_unsupported_image">Формат зображення не підтримується</string>
   <string name="print_document_header">Документ: <xliff:g id="document_name">%1$s</xliff:g></string>
@@ -350,4 +402,5 @@ Copyright \u00A9 2013 The CyanogenMod Project</string>
   <string name="changelog_title">Список змін</string>
   <string name="welcome_title">Ласкаво просимо!</string>
   <string name="welcome_msg">Ласкаво просимо до файлового менеджера CyanogenMod.\n\n Цей застосунок допоможе вам отримати доступ до файлової системи і виконувати операції, які можуть вивести з ладу ваш пристрій. Для запобігання цього, він запуститься в безпечному режимі з мінімальними привілеями. \n\n Ви можете отримати доступ до розширених функцій з повними правами в налаштуваннях. Це ваша відповідальність. Переконайтеся, щоб ваші дії не зашкодили файловій системі.\n\nКоманда CyanogenMod\n</string>
+  <string name="activity_not_found_exception">Не можу знайти додаток, щоб відкрити цей файл.</string>
 </resources>

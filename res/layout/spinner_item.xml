@@ -19,6 +19,6 @@
   android:id="@+id/spinner_item"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:gravity="left|center_vertical"
+  android:gravity="start|center_vertical"
   android:textAppearance="@style/secondary_text_appearance"
   android:ellipsize="marquee" />

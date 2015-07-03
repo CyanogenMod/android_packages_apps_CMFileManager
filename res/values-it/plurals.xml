@@ -20,6 +20,10 @@
     <item quantity="one"><xliff:g id="folders">%1$d</xliff:g> cartella</item>
     <item quantity="other">1 cartella</item>
   </plurals>
+  <plurals name="n_files">
+    <item quantity="one"><xliff:g id="files">%1$d</xliff:g> file</item>
+    <item quantity="other"><xliff:g id="files">%1$d</xliff:g> file</item>
+  </plurals>
   <plurals name="search_found_items">
     <item quantity="one"><xliff:g id="count">%1$d</xliff:g> elemento trovato</item>
     <item quantity="other">1 elemento trovato</item>

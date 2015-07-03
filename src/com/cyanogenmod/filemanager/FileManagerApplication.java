@@ -35,6 +35,7 @@ import com.cyanogenmod.filemanager.preferences.AccessMode;
 import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
 import com.cyanogenmod.filemanager.preferences.ObjectStringIdentifier;
 import com.cyanogenmod.filemanager.preferences.Preferences;
+import com.cyanogenmod.filemanager.providers.secure.SecureCacheCleanupService;
 import com.cyanogenmod.filemanager.service.MimeTypeIndexService;
 import com.cyanogenmod.filemanager.ui.ThemeManager;
 import com.cyanogenmod.filemanager.ui.ThemeManager.Theme;
@@ -182,6 +183,9 @@ public final class FileManagerApplication extends Application {
         File externalStorage = Environment.getExternalStorageDirectory();
         MimeTypeIndexService.indexFileRoot(this, externalStorage.getAbsolutePath());
         MimeTypeIndexService.indexFileRoot(this, Environment.getRootDirectory().getAbsolutePath());
+
+        // Schedule in case not scheduled (i.e. never booted with this app on device
+        SecureCacheCleanupService.scheduleCleanup(getApplicationContext());
 
     }
 

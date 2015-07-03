@@ -17,11 +17,11 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">מנהל קבצים</string>
-  <string name="app_description">מנהל הקבצים של CyanogenMod.</string>
-  <string name="size_bytes">בייט</string>
-  <string name="size_kilobytes">קילו בייט</string>
-  <string name="size_megabytes">מגה בייט</string>
-  <string name="size_gigabytes">ג\'יגה-בייט</string>
+  <string name="app_description">מנהל הקבצים של CyanogenMod</string>
+  <string name="size_bytes">ב\'</string>
+  <string name="size_kilobytes">ק\"ב</string>
+  <string name="size_megabytes">מ\"ב</string>
+  <string name="size_gigabytes">ג\"ב</string>
   <string name="datetime_format_order">%1$s %2$s</string>
   <string name="device_blockdevice">התקן בלוקים</string>
   <string name="device_characterdevice">התקן תווים</string>
@@ -42,7 +42,7 @@
   <string name="copy_text_cd">הקש כדי להעתיק טקסט ללוח</string>
   <string name="copy_text_msg">הטקסט הועתק ללוח</string>
   <string name="warning_title">אזהרה</string>
-  <string name="error_title">התגלתה שגיאה</string>
+  <string name="error_title">שגיאה</string>
   <string name="confirm_operation">אישור פעולה</string>
   <string name="confirm_overwrite">אישור החלפה</string>
   <string name="confirm_deletion">אישור מחיקה</string>
@@ -53,12 +53,14 @@
   <string name="msgs_settings_save_failure">נכשל בהחלת ההגדרה או שמירתה.</string>
   <string name="msgs_settings_invalid_initial_directory">התיקייה ההתחלתית
     \"<xliff:g id="initial_dir">%1$s</xliff:g>\" שגויה. עובר לתיקיית השורש.</string>
+  <string name="root_not_available_msg">גישת Root אינה זמינה במכשיר זה. אין אפשרות לבצע פעולה זאת.</string>
   <string name="msgs_success">הפעולה הושלמה בהצלחה.</string>
   <string name="msgs_unknown">התגלתה שגיאה. הפעולה נכשלה.</string>
   <string name="msgs_insufficient_permissions">פעולה זו דורשת הרשאות גבוהות. נסה לשנות למצב גישת Root.</string>
+  <string name="msgs_no_disk_space">הפעולה נכשלה מכיוון שלא נותר זיכרון פנוי במכשיר.</string>
   <string name="msgs_file_not_found">הקובץ או התיקייה לא נמצאו.</string>
   <string name="msgs_command_not_found">הפקודה לפעולה לא נמצאה או בעלת הגדרה שגויה.</string>
-  <string name="msgs_io_failed">כשלון בקריאה/כתיבה.</string>
+  <string name="msgs_io_failed">כישלון בקריאה/כתיבה.</string>
   <string name="msgs_operation_timeout">הזמן המוקצב לפעולה נגמר.</string>
   <string name="msgs_operation_failure">הפעולה נכשלה.</string>
   <string name="msgs_console_alloc_failure">התרחשה שגיאה פנימית.</string>
@@ -66,37 +68,42 @@
   <string name="msgs_read_only_filesystem">מערכת הקבצים היא לקריאה בלבד. נסה לעגן אותה כ\"קריאה/כתיבה\" לפני ביצוע הפעולה.</string>
   <string name="msgs_illegal_argument">טיעון בלתי חוקי. ההפעלה נכשלה.</string>
   <string name="msgs_unresolved_inconsistencies">הפעולה אסורה, היא תגרום לחוסר עקביות.</string>
-  <string name="msgs_operation_not_allowed_in_current_directory">הפעולה אסורה בתיקייה הנוכחית.\n\nתיקיית היעד אינה יכולה להיות תת-תיקייה של תיקיית המקור או זהה למקור.</string>
+  <string name="msgs_operation_not_allowed_in_current_directory">תיקיית היעד אינה יכולה להיות תיקיית משנה של המקור, או זהה למקור.</string>
   <string name="msgs_push_again_to_exit">לחץ שוב ליציאה.</string>
   <string name="msgs_not_registered_app">אין יישום הרשום לטיפול בסוג קובץ זה.</string>
   <string name="msgs_overwrite_files">חלק מהקבצים כבר קיימים בתיקיית היעד. \n\n להחליף?</string>
   <string name="msgs_action_association_failed">שיוך הפעולה ליישום נכשלה.</string>
   <string name="advise_insufficient_permissions">פעולה זו דורשת הרשאות גבוהות.\n\n לעבור למצב גישת Root?</string>
-  <string name="parent_dir">תיקיית הורה</string>
+  <string name="parent_dir">תיקיית אב</string>
   <string name="external_storage">אחסון חיצוני</string>
   <string name="usb_storage">אחסון USB</string>
   <string name="actionbar_button_filesystem_cd">מידע על מערכת הקבצים</string>
   <string name="actionbar_button_sort_mode_cd">אופן סידור</string>
   <string name="actionbar_button_layout_mode_cd">מצב תצוגה</string>
   <string name="actionbar_button_other_view_options_cd">אפשרויות תצוגה נוספות</string>
-  <string name="actionbar_button_selection_done_cd">בוצע</string>
+  <string name="actionbar_button_selection_done_cd">סיום</string>
   <string name="actionbar_button_actions_cd">פעולות</string>
   <string name="actionbar_button_search_cd">חיפוש</string>
   <string name="actionbar_button_overflow_cd">אפשרויות נוספות</string>
   <string name="actionbar_button_storage_cd">מחיצות אחסון</string>
   <string name="actionbar_button_save_cd">שמור</string>
-  <string name="sort_by_name_asc">לפי שם ▲</string>
-  <string name="sort_by_name_desc">לפי שם ▼</string>
-  <string name="sort_by_date_asc">לפי תאריך ▲</string>
-  <string name="sort_by_date_desc">לפי תאריך ▼</string>
+  <string name="actionbar_button_print_cd">הדפס</string>
+  <string name="sort_by_name_asc">לפי שם \u25B2</string>
+  <string name="sort_by_name_desc">לפי שם \u25BC</string>
+  <string name="sort_by_date_asc">לפי תאריך \u25B2</string>
+  <string name="sort_by_date_desc">לפי תאריך \u25BC</string>
+  <string name="sort_by_size_asc">לפי גודל \u25B2</string>
+  <string name="sort_by_size_desc">לפי גודל \u25BC</string>
+  <string name="sort_by_type_asc">לפי סוג \u25B2</string>
+  <string name="sort_by_type_desc">לפי סוג \u25BC</string>
   <string name="layout_icons">סמלים</string>
   <string name="layout_simple">פשוט</string>
   <string name="layout_details">פרטים</string>
-  <string name="cm_filemanager_show_dirs_first">הצג תיקיות קודם</string>
+  <string name="cm_filemanager_show_dirs_first">הצג תיקיות לפני קבצים</string>
   <string name="cm_filemanager_show_hidden">הצג קבצים מוסתרים</string>
   <string name="cm_filemanager_show_system">הצג קבצי מערכת</string>
   <string name="cm_filemanager_show_symlinks">הצג קישורים</string>
-  <string name="filesystem_info_warning_title">מידע לא קיים</string>
+  <string name="filesystem_info_warning_title">לא קיים מידע</string>
   <string name="filesystem_info_warning_msg">אין מידע זמין על מערכת הקבצים.</string>
   <string name="filesystem_info_cant_be_mounted_msg">לא ניתן לעגן או לבטל את עיגון מערכת הקבצים.</string>
   <string name="filesystem_info_mount_not_allowed_msg">פעולות עיגון של מערכות קבצים אסורות במצב בטוח. לחץ כדי לעבור למצב גישת Root.</string>
@@ -104,12 +111,13 @@
   <string name="filesystem_info_dialog_title">מידע על מערכת קבצים</string>
   <string name="filesystem_info_dialog_tab_info">מידע</string>
   <string name="filesystem_info_dialog_tab_disk_usage">שימוש בדיסק</string>
-  <string name="filesystem_info_dialog_status">מצב:</string>
+  <string name="filesystem_info_dialog_status">מעוגן:</string>
   <string name="filesystem_info_dialog_mount_point">נקודת עיגון:</string>
   <string name="filesystem_info_dialog_device">מכשיר:</string>
   <string name="filesystem_info_dialog_type">סוג:</string>
   <string name="filesystem_info_dialog_options">אפשרויות:</string>
   <string name="filesystem_info_dialog_dump_pass">לזרוק / להעביר:</string>
+  <string name="filesystem_info_dialog_virtual">וירטואלי:</string>
   <string name="filesystem_info_dialog_total_disk_usage">סה\"כ:</string>
   <string name="filesystem_info_dialog_used_disk_usage">תפוס:</string>
   <string name="filesystem_info_dialog_free_disk_usage">פנוי:</string>
@@ -126,7 +134,7 @@
   <string name="fso_properties_dialog_category">קטגוריה:</string>
   <string name="fso_properties_dialog_link">קישור:</string>
   <string name="fso_properties_dialog_size">גודל:</string>
-  <string name="fso_properties_dialog_contains">מכילה:</string>
+  <string name="fso_properties_dialog_contains">מכיל:</string>
   <string name="fso_properties_dialog_last_accessed_date">ניגש לאחרונה:</string>
   <string name="fso_properties_dialog_last_modified_date">נערך לאחרונה:</string>
   <string name="fso_properties_dialog_last_changed_date">השתנה לאחרונה:</string>
@@ -166,13 +174,15 @@
   <string name="editor_read_only_mode">הקובץ נפתח במצב \"קריאה בלבד\".</string>
   <string name="dumping_message">יוצר קובץ hex dump\u2026</string>
   <string name="displaying_message">מציג\u2026</string>
-  <string name="bookmarks">מועדפים</string>
+  <string name="bookmarks">סימניות</string>
   <string name="bookmarks_home">בית</string>
-  <string name="bookmarks_root_folder">תיקיית השורש</string>
-  <string name="bookmarks_system_folder">תיקיית המערכת</string>
+  <string name="bookmarks_root_folder">תיקיית שורש</string>
+  <string name="bookmarks_system_folder">תיקיית מערכת</string>
+  <string name="bookmarks_secure">אחסון מאובטח</string>
+  <string name="bookmarks_remote">אחסון מרוחק</string>
   <string name="bookmarks_button_config_cd">הגדר את התיקייה ההתחלתית.</string>
-  <string name="bookmarks_button_remove_bookmark_cd">מחק ממועדפים.</string>
-  <string name="bookmarks_msgs_add_success">נוסף בהצלחה למועדפים.</string>
+  <string name="bookmarks_button_remove_bookmark_cd">הסר את הסימנייה.</string>
+  <string name="bookmarks_msgs_add_success">הסימנייה הוספה בהצלחה.</string>
   <string name="initial_directory_dialog_title">תיקייה התחלתית</string>
   <string name="initial_directory_label">בחר את התיקייה ההתחלתית:</string>
   <string name="initial_directory_relative_msg">נתיבים יחסיים אסורים.</string>
@@ -189,27 +199,18 @@
     <xliff:g id="name">%1$s</xliff:g> - חדש<xliff:g id="extension">%2$s</xliff:g></string>
   <string name="waiting_dialog_msg">מבצע פעולה\u2026</string>
   <string name="waiting_dialog_copying_title">מעתיק\u2026</string>
-  <string name="waiting_dialog_copying_msg">
-    <![CDATA[<b>מ-</b>]]><xliff:g id="from">%1$s</xliff:g><![CDATA[<br/>]]>
-    <![CDATA[<b>אל</b>]]> <xliff:g id="to">%2$s</xliff:g></string>
+  <string name="waiting_dialog_copying_msg"><![CDATA[<b>מ-</b>]]><xliff:g id="from">%1$s</xliff:g><![CDATA[<br/><b>אל</b>]]> <xliff:g id="to">%2$s</xliff:g></string>
   <string name="waiting_dialog_moving_title">מעביר\u2026</string>
-  <string name="waiting_dialog_moving_msg">
-    <![CDATA[<b>מ-</b>]]><xliff:g id="from">%1$s</xliff:g><![CDATA[<br/>]]>
-    <![CDATA[<b>אל</b>]]> <xliff:g id="to">%2$s</xliff:g></string>
+  <string name="waiting_dialog_moving_msg"><![CDATA[<b>מ-</b>]]><xliff:g id="from">%1$s</xliff:g><![CDATA[<br/><b>אל</b>]]> <xliff:g id="to">%2$s</xliff:g></string>
   <string name="waiting_dialog_deleting_title">מוחק\u2026</string>
-  <string name="waiting_dialog_deleting_msg">
-    <![CDATA[<b>קובץ</b>]]> <xliff:g id="file">%1$s</xliff:g></string>
+  <string name="waiting_dialog_deleting_msg"><![CDATA[<b>קובץ</b>]]> <xliff:g id="file">%1$s</xliff:g></string>
   <string name="waiting_dialog_extracting_title">מחלץ\u2026</string>
-  <string name="waiting_dialog_extracting_msg">
-    <![CDATA[<b>קובץ</b>]]> <xliff:g id="file">%1$s</xliff:g></string>
+  <string name="waiting_dialog_extracting_msg"><![CDATA[<b>קובץ</b>]]> <xliff:g id="file">%1$s</xliff:g></string>
   <string name="waiting_dialog_compressing_title">דוחס\u2026</string>
-  <string name="waiting_dialog_compressing_msg">
-    <![CDATA[<b>קובץ</b>]]> <xliff:g id="file">%1$s</xliff:g></string>
+  <string name="waiting_dialog_compressing_msg"><![CDATA[<b>קובץ</b>]]> <xliff:g id="file">%1$s</xliff:g></string>
   <string name="waiting_dialog_analizing_msg"><![CDATA[<b>מנתח\u2026</b>]]></string>
-  <string name="msgs_extracting_success">פעולת החילוץ הושלמה בהצלחה. המידע חולץ אל
-    <xliff:g id="destination">%1$s</xliff:g>.</string>
-  <string name="msgs_compressing_success">פעולת הדחיסה הושלמה בהצלחה. המידע נדחס אל
-    <xliff:g id="destination">%1$s</xliff:g>.</string>
+  <string name="msgs_extracting_success">פעולת החילוץ הושלמה בהצלחה. המידע חולץ אל <xliff:g id="destination">%1$s</xliff:g>.</string>
+  <string name="msgs_compressing_success">פעולת הדחיסה הושלמה בהצלחה. המידע נדחס אל <xliff:g id="destination">%1$s</xliff:g>.</string>
   <string name="actions_dialog_title">פעולות</string>
   <string name="actions_menu_properties_current_folder">מאפיינים</string>
   <string name="actions_menu_refresh">רענן</string>
@@ -240,27 +241,27 @@
   <string name="actions_menu_open_parent_folder">פתח תיקיית הורה</string>
   <string name="actions_menu_compute_checksum">מחשב חתימה</string>
   <string name="actions_menu_print">הדפס</string>
+  <string name="actions_menu_set_as_home">הגדר כדף הבית</string>
   <string name="actions_ask_undone_operation_msg">לא ניתן לבטל פעולה זו. האם ברצונך להמשיך?</string>
   <string name="input_name_dialog_label">שם:</string>
   <string name="input_name_dialog_message_empty_name">השם אינו יכול להשאר ריק.</string>
-  <string name="input_name_dialog_message_invalid_path_name">שם שגוי. התווים
-    \'<xliff:g id="invalid_characters">%1$s</xliff:g>\' אסורים.</string>
-  <string name="input_name_dialog_message_invalid_name">שם שגוי. השמות \'.\' ו-\'..\' אסורים.</string>
+  <string name="input_name_dialog_message_invalid_path_name">שם לא חוקי. התווים \"<xliff:g id="invalid_characters">%1$s</xliff:g>\" אסורים.</string>
+  <string name="input_name_dialog_message_invalid_name_length">הגעת למגבלת התווים המרבית.</string>
+  <string name="input_name_dialog_message_invalid_name">שם לא חוקי. השמות \".\" ו-\"..\" אסורים.</string>
   <string name="input_name_dialog_message_name_exists">השם כבר קיים.</string>
   <string name="associations_dialog_title">שיוכים</string>
   <string name="associations_dialog_remember">זכור בחירה</string>
   <string name="associations_dialog_openwith_title">פתח באמצעות</string>
   <string name="associations_dialog_openwith_action">פתח</string>
-  <string name="associations_dialog_sendwith_title">שלח בעזרת</string>
+  <string name="associations_dialog_sendwith_title">שלח באמצעות</string>
   <string name="associations_dialog_sendwith_action">שלח</string>
   <string name="inline_autocomplete_tab_nothing_to_complete_msg">אין הצעות.</string>
   <string name="execution_console_title">מסוף</string>
   <string name="execution_console_script_name_label">סקריפט:</string>
   <string name="execution_console_script_execution_time_label">זמן ריצה:</string>
   <string name="execution_console_script_exitcode_label">קוד יציאה:</string>
-  <string name="execution_console_script_execution_time_text">
-    <xliff:g id="seconds">%1$s</xliff:g> שנ\'</string>
-  <string name="compute_checksum_title">מחשב חתימה</string>
+  <string name="execution_console_script_execution_time_text"><xliff:g id="seconds">%1$s</xliff:g> שנ\'</string>
+  <string name="compute_checksum_title">חשב חתימה</string>
   <string name="compute_checksum_filename_label">קובץ:</string>
   <string name="compute_checksum_computing_checksum_msg">מחשב חתימה\u2026</string>
   <string name="mime_folder">תיקייה</string>
@@ -272,6 +273,22 @@
   <string name="filetime_format_mode_MMddyyyy_HHmmss">mm/dd/yyyy hh:mm:ss</string>
   <string name="filetime_format_mode_yyyyMMdd_HHmmss">yyyy-mm-dd hh:mm:ss</string>
   <string name="selection_folders_and_files"><xliff:g id="folders">%1$s</xliff:g> ו-<xliff:g id="files">%2$s</xliff:g> נבחרו.</string>
+  <string name="category_system">מערכת</string>
+  <string name="category_app">יישום</string>
+  <string name="category_binary">בינארי</string>
+  <string name="category_text">טקסט</string>
+  <string name="category_document">מסמך</string>
+  <string name="category_ebook">ספר אלקטרוני</string>
+  <string name="category_mail">דוא\"ל</string>
+  <string name="category_compress">דחוס</string>
+  <string name="category_exec">ניתן להרצה</string>
+  <string name="category_database">בסיס נתונים</string>
+  <string name="category_font">גופן</string>
+  <string name="category_image">תמונה</string>
+  <string name="category_audio">אודיו</string>
+  <string name="category_video">וידאו</string>
+  <string name="category_security">אבטחה</string>
+  <string name="category_all">הכל</string>
   <string name="compression_mode_title">מצב דחיסה</string>
   <string name="shortcut_failed_msg">נכשל בניהול קיצור הדרך.</string>
   <string name="shortcut_creation_success_msg">קיצור הדרך נוצר בהצלחה.</string>
@@ -279,18 +296,18 @@
   <string name="pref">הגדרות</string>
   <string name="pref_general">הגדרות כלליות</string>
   <string name="pref_search">אפשרויות חיפוש</string>
+  <string name="pref_storage">אפשרויות אחסון</string>
   <string name="pref_editor">אפשרויות עורך</string>
-  <string name="pref_themes">ערכות נושא</string>
+  <string name="pref_themes">ערכות עיצוב</string>
   <string name="pref_about">אודות</string>
-  <string name="pref_about_summary">מנהל הקבצים v<xliff:g id="version">%1$s</xliff:g>\nזכויות יוצרים \u00A9 2012-2014 פרויקט ה-CyanogenMod</string>
   <string name="pref_general_behaviour_category">כללי</string>
-  <string name="pref_case_sensitive_sort">מיין לפי אותיות גדולות וקטנות</string>
+  <string name="pref_case_sensitive_sort">רגיש לאותיות גדולות/קטנות</string>
   <string name="pref_case_sensitive_sort_summary">שקול מקרה כאשר מנווטים או ממיינים תוצאות חיפוש</string>
   <string name="pref_filetime_format_mode">תבנית תאריך/שעה</string>
   <string name="pref_disk_usage_warning_level">אזהרות שימוש בדיסק</string>
-  <string name="pref_disk_usage_warning_level_summary" formatted="false">הצג צבע שונה בוידג\'טי שימוש בדיסק כשהם מגיעים ל-<xliff:g id="level">%1$s</xliff:g> אחוזים משטח הדיסק הפנוי</string>
+  <string name="pref_disk_usage_warning_level_summary" formatted="false">הצג צבע שונה בווידג\'טי שימוש בדיסק כשהם מגיעים ל-<xliff:g id="level">%1$s</xliff:g> אחוזים משטח הדיסק הפנוי</string>
   <string name="pref_compute_folder_statistics">חשב סטטיסטיקות תיקייה</string>
-  <string name="pref_compute_folder_statistics_on">אזהרה! חישוב סטטיסטיקות של תקיות יקר בזמן ומשאבי מערכת</string>
+  <string name="pref_compute_folder_statistics_on">אזהרה! חישוב הסטטיסטיקות של תיקייה הוא הליך היקר בזמן ובמשאבי מערכת</string>
   <string name="pref_display_thumbs">תצוגה מקדימה</string>
   <string name="pref_display_thumbs_summary">הצג תצוגה מקדימה של תמונה עבור אפליקציות, קבצי מוזיקה, וידאו ותמונות</string>
   <string name="pref_use_flinger">השתמש במחוות החלקה</string>
@@ -298,7 +315,7 @@
   <string name="pref_general_advanced_settings_category">מתקדם</string>
   <string name="pref_access_mode">מצב גישה</string>
   <string name="pref_access_mode_safe">מצב בטוח</string>
-  <string name="pref_access_mode_safe_summary">מצב בטוח\n\nהיישום רץ ללא הרשאות, מערכות הקבצים היחידות שנגישות הן מחיצות האחסון (כרטיסי זיכרון ו-USB)</string>
+  <string name="pref_access_mode_safe_summary">מצב בטוח\n\nהיישום רץ ללא הרשאות, מערכות הקבצים היחידות שנגישות הן מחיצות האחסון (כרטיסי SD ו-USB)</string>
   <string name="pref_access_mode_prompt">מצב התראה למשתמש</string>
   <string name="pref_access_mode_prompt_summary">מצב התראה למשתמש\n\nהיישום רץ עם הרשאות מלאות למערכת הקבצים, אך יתריע לפני ביצוע כל פעולה הדורשת הרשאות אלו</string>
   <string name="pref_access_mode_root">מצב גישת Root</string>
@@ -318,28 +335,33 @@
   <string name="pref_save_search_terms_off">תנאי החיפוש לא ישמרו</string>
   <string name="pref_remove_saved_search_terms">הסר תנאי חיפוש שמורים</string>
   <string name="pref_remove_saved_search_terms_summary">לחץ כדי להסיר את כל תנאי החיפוש השמורים</string>
-  <string name="pref_remove_saved_search_terms_msg">כל תנאי החיפוש השמורים הוסרו.</string>
+  <string name="pref_remove_saved_search_terms_msg">כל מונחי החיפוש השמורים הוסרו</string>
+  <string name="pref_secure_storage_category">אחסון מאובטח</string>
+  <string name="pref_secure_storage_delayed_sync_title">סנכרון מושהה</string>
+  <string name="pref_secure_storage_delayed_sync_summary">סינכרון של מערכות קבצים מאובטחות הוא פעולה יקרה. הפעל אפשרות זו כדי לאפשר תגובות מהירות יותר לאחר כל פעולה, כך שיתבצע סינכרון כאשר מערכת הקבצים איננה נמצאת בשימוש, אבל על חשבון איבוד המידע הממתין שלא הסתנכרן במידה והאפליקציה תקרוס.</string>
+  <string name="pref_secure_storage_reset_password_title">שנה סיסמה</string>
+  <string name="pref_secure_storage_delete_storage_title">מחיקת אחסון</string>
   <string name="pref_editor_behaviour_category">התנהגות</string>
   <string name="pref_no_suggestions">אין הצעות</string>
   <string name="pref_no_suggestions_desc">אל תציג הצעות מילון בעת עריכת קובץ</string>
   <string name="pref_word_wrap">גלישת מילים</string>
   <string name="pref_hexdump">קבצים בינארים של Hexdump</string>
   <string name="pref_hexdump_desc">כאשר פותחים קובץ בינארי, צור hexdump של הקובץ ופתח אותו באמצעות hex viewer</string>
-  <string name="pref_editor_syntax_highlight_category">הבלט תחביר</string>
+  <string name="pref_editor_syntax_highlight_category">הבלטת תחביר</string>
   <string name="pref_syntax_highlight">הבלט תחביר</string>
-  <string name="pref_syntax_highlight_desc">סמן את התחביר של הקובץ מוצג בעורך (יעבד סימון תחביר רק עבור קבצים עם מבנה זמין)</string>
+  <string name="pref_syntax_highlight_desc">הבלט את התחביר של הקובץ המוצג בעורך (רק כאשר מעבד הבלטת תחביר עבור סוג קובץ זה זמין)</string>
   <string name="pref_syntax_highlight_color_scheme">ערכת צבעים</string>
-  <string name="pref_syntax_highlight_color_scheme_desc">בחר את ערכת הצבעים של סימון תחביר</string>
-  <string name="pref_syntax_sh_use_theme_default">השתמש בערכת הנושא המוגדרת כברירת מחדל</string>
-  <string name="pref_syntax_sh_use_theme_default_desc">השתמש בנוסח הרגיל המודגש של הערכת נושא הנוכחית</string>
+  <string name="pref_syntax_highlight_color_scheme_desc">בחר את ערכת הצבעים של הבלטת תחביר</string>
+  <string name="pref_syntax_sh_use_theme_default">השתמש בברירת המחדל של ערכת העיצוב</string>
+  <string name="pref_syntax_sh_use_theme_default_desc">השתמש בהבלטת התחביר הרגילה של ערכת העיצוב הנוכחית</string>
   <string name="pref_editor_sh_item_category">פריטים</string>
-  <string name="pref_themes_selection_category">ערכות נושא</string>
-  <string name="pref_themes_set_theme">הגדר ערכת נושא</string>
-  <string name="pref_themes_confirmation">ערכת הנושא הוחלה בהצלחה.</string>
-  <string name="pref_themes_not_found">ערכת הנושא לא נמצאה.</string>
+  <string name="pref_themes_selection_category">ערכות עיצוב</string>
+  <string name="pref_themes_set_theme">הגדר ערכת עיצוב</string>
+  <string name="pref_themes_confirmation">ערכת העיצוב הוחלה בהצלחה.</string>
+  <string name="pref_themes_not_found">ערכת העיצוב לא נמצאה.</string>
   <string name="pref_debug_traces">תעד ניפוי שגיאות</string>
-  <string name="theme_default_name">ערכת נושא בהירה</string>
-  <string name="theme_default_description">ערכת נושא בהירה עבור מנהל הקבצים של CyanogenMod.</string>
+  <string name="theme_default_name">ערכת עיצוב בהירה</string>
+  <string name="theme_default_description">ערכת עיצוב בהירה עבור מנהל הקבצים של CyanogenMod.</string>
   <string name="themes_author">CyanogenMod</string>
   <string name="drawer_open">פתח תפריט ניווט</string>
   <string name="drawer_close">סגור תפריט ניווט</string>
@@ -347,7 +369,7 @@
   <string name="color_picker_current_text">נוכחי:</string>
   <string name="color_picker_new_text">חדש:</string>
   <string name="color_picker_color">צבע:</string>
-  <string name="ash_reset_color_scheme">שנה סכמת ערכת עיצוב ברירת מחדל</string>
+  <string name="ash_reset_color_scheme">שחזר את ערכת הצבעים הרגילה של ערכת העיצוב</string>
   <string name="ash_text">טקסט</string>
   <string name="ash_assignment">משימה</string>
   <string name="ash_singleline_comment">הערה בשורה בודדת</string>
@@ -355,17 +377,33 @@
   <string name="ash_keyword">מילת מפתח</string>
   <string name="ash_quoted_string">מחרוזת מצוטטת</string>
   <string name="ash_variable">משתנה</string>
+  <string name="secure_storage_unlock_title">בטל נעילת אחסון</string>
+  <string name="secure_storage_create_title">צור אחסון</string>
+  <string name="secure_storage_reset_title">איפוס סיסמה</string>
+  <string name="secure_storage_delete_title">מחק אחסון</string>
+  <string name="secure_storage_unlock_key_prompt_msg">הקלד את הסיסמה כדי לבטל את נעילת מערכת האחסון המאובטחת.</string>
+  <string name="secure_storage_unlock_key_new_msg">הקלד את הסיסמה כדי לנעול את מערכת האחסון המאובטחת.</string>
+  <string name="secure_storage_unlock_key_reset_msg">הקלד את העכשוית וסיסמה חדשה כדי לאפס את נעילת מערכת האחסון המאובטחת.</string>
+  <string name="secure_storage_unlock_key_delete_msg">הקלד את הסיסמה הנוכחית על מנת להסיר את הגנת הקבצים המאובטחת.</string>
+  <string name="secure_storage_unlock_old_key_title">סיסמה ישנה:</string>
+  <string name="secure_storage_unlock_new_key_title">סיסמה חדשה:</string>
+  <string name="secure_storage_unlock_key_title">סיסמה:</string>
+  <string name="secure_storage_unlock_repeat_title">הקלד סיסמה שנית:</string>
+  <string name="secure_storage_create_button">צור</string>
+  <string name="secure_storage_unlock_button">בטל נעילה</string>
+  <string name="secure_storage_reset_button">אתחל</string>
+  <string name="secure_storage_delete_button">מחק</string>
+  <string name="secure_storage_unlock_failed">לא יכול לבטל את נעילת אמצעי האחסון</string>
+  <string name="secure_storage_unlock_validation_length">הסיסמה חייבת להכיל לפחות <xliff:g id="characters">%1$d</xliff:g> תווים.</string>
+  <string name="secure_storage_unlock_validation_equals">הסיסמאות אינן תאומות.</string>
+  <string name="secure_storage_open_file_warning">פעולה זו תעתיק את הקובץ למיקום זמני לא מוצפן. הקובץ הזמני ינוקה לאחר שעה.</string>
   <string name="print_unsupported_document">פורמט מסמך לא נתמך</string>
   <string name="print_unsupported_image">פורמט תמונה לא נתמך</string>
   <string name="print_document_header">מסמך: <xliff:g id="document_name">%1$s</xliff:g></string>
   <string name="print_document_footer">דף <xliff:g id="page_number">%1$s</xliff:g></string>
   <string name="security_warning_extract">אזהרה!\n\nחילוץ קובץ ארכיון עם נתיבים יחסיים או מוחלטים עלול לגרום נזק למכשירך על ידי דריסת קבצי מערכת.\n\n האם ברצונך להמשיך?</string>
-  <string name="changelog_title">תיעוד שינויים</string>
+  <string name="changelog_title">רשימת שינויים</string>
   <string name="welcome_title">ברוכים הבאים</string>
-  <string name="welcome_msg">ברוכים הבאים למנהל הקבצים של CyanogenMod.
-    \n\nיישום זה מאפשר לך לסייר במערכת הקבצים ולבצע פעולות שעלולות להרוס את המכשיר.
-    כדי למנוע נזק, היישום יתחיל במצב בטוח, עם הרשאות נמוכות.
-    \n\nבאפשרותך לגשת למצב המתקדם, בעל הרשאות מלאות דרך ההגדרות. זוהי
-    אחריותך לוודא שפעולה שתבוצע לא תהרוס את מערכת ההפעלה.
-    \n\nצוות CyanogenMod.\n</string>
+  <string name="welcome_msg">ברוכים הבאים למנהל הקבצים של CyanogenMod.\n\nיישום זה מאפשר לך לסייר במערכת הקבצים ולבצע פעולות שעלולות להרוס את המכשיר. כדי למנוע נזק, היישום יתחיל במצב בטוח, עם הרשאות נמוכות.\n\nבאפשרותך לגשת למצב המתקדם, בעל הרשאות מלאות דרך ההגדרות. זוהי אחריותך לוודא שפעולה שתבוצע לא תהרוס את מערכת ההפעלה.\n\nקבוצת CyanogenMod</string>
+  <string name="activity_not_found_exception">לא ניתן למצוא יישום לפתיחת הקובץ</string>
 </resources>

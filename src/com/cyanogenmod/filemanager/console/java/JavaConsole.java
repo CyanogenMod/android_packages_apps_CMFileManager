@@ -23,6 +23,7 @@ import com.cyanogenmod.filemanager.commands.Executable;
 import com.cyanogenmod.filemanager.commands.ExecutableFactory;
 import com.cyanogenmod.filemanager.commands.java.JavaExecutableFactory;
 import com.cyanogenmod.filemanager.commands.java.Program;
+import com.cyanogenmod.filemanager.console.CancelledOperationException;
 import com.cyanogenmod.filemanager.console.CommandNotFoundException;
 import com.cyanogenmod.filemanager.console.ConsoleAllocException;
 import com.cyanogenmod.filemanager.console.ExecutionException;
@@ -43,6 +44,7 @@ public final class JavaConsole extends VirtualConsole {
     private static final String TAG = "JavaConsole"; //$NON-NLS-1$
 
     private final int mBufferSize;
+    private Program mActiveProgram;
 
     /**
      * Constructor of <code>JavaConsole</code>
@@ -78,8 +80,8 @@ public final class JavaConsole extends VirtualConsole {
     @Override
     public synchronized void execute(Executable executable, Context ctx)
             throws ConsoleAllocException, InsufficientPermissionsException, NoSuchFileOrDirectory,
-            OperationTimeoutException, ExecutionException, CommandNotFoundException,
-            ReadOnlyFilesystemException {
+                OperationTimeoutException, ExecutionException, CommandNotFoundException,
+                   CancelledOperationException, ReadOnlyFilesystemException {
         // Check that the program is a java program
         try {
             Program p = (Program)executable;
@@ -98,6 +100,7 @@ public final class JavaConsole extends VirtualConsole {
 
         // Execute the program
         final Program program = (Program)executable;
+        mActiveProgram = program;
         program.setTrace(isTrace());
         program.setBufferSize(this.mBufferSize);
         if (program.isAsynchronous()) {
@@ -123,4 +126,12 @@ public final class JavaConsole extends VirtualConsole {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean onCancel() {
+        mActiveProgram.requestCancel();
+        return true;
+    }
 }

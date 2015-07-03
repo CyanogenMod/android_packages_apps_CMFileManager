@@ -17,18 +17,23 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <plurals name="n_folders">
+    <item quantity="one"><xliff:g id="folders">%1$d</xliff:g> klasör</item>
     <item quantity="other"><xliff:g id="folders">%1$d</xliff:g> klasör</item>
   </plurals>
   <plurals name="n_files">
+    <item quantity="one"><xliff:g id="files">%1$d</xliff:g> dosya</item>
     <item quantity="other"><xliff:g id="files">%1$d</xliff:g> dosya</item>
   </plurals>
   <plurals name="search_found_items">
-    <item quantity="other"><xliff:g id="count">%1$d</xliff:g> dosya bulundu</item>
+    <item quantity="one"><xliff:g id="count">%1$d</xliff:g> öge bulundu</item>
+    <item quantity="other"><xliff:g id="count">%d</xliff:g> öge bulundu</item>
   </plurals>
   <plurals name="selection_folders">
+    <item quantity="one"><xliff:g id="folders">%1$d</xliff:g> klasör seçildi.</item>
     <item quantity="other"><xliff:g id="folders">%1$d</xliff:g> klasör seçildi.</item>
   </plurals>
   <plurals name="selection_files">
+    <item quantity="one"><xliff:g id="files">%1$d</xliff:g> dosya seçildi.</item>
     <item quantity="other"><xliff:g id="files">%1$d</xliff:g> dosya seçildi.</item>
   </plurals>
 </resources>

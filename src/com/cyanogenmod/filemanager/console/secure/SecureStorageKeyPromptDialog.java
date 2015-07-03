@@ -158,6 +158,11 @@ public class SecureStorageKeyPromptDialog
                 public void onDismiss(DialogInterface dialog) {
                     mDialog.dismiss();
                     finish();
+
+                    // Unlock the wait
+                    synchronized (WAIT_SYNC) {
+                        WAIT_SYNC.notify();
+                    }
                 }
             });
             mDialog.setOnCancelListener(new OnCancelListener() {
@@ -166,6 +171,11 @@ public class SecureStorageKeyPromptDialog
                     sUnlockKeyTemp = null;
                     mDialog.cancel();
                     finish();
+
+                    // Unlock the wait
+                    synchronized (WAIT_SYNC) {
+                        WAIT_SYNC.notify();
+                    }
                 }
             });
             mDialog.setCanceledOnTouchOutside(false);
@@ -181,16 +191,6 @@ public class SecureStorageKeyPromptDialog
             DialogHelper.delegateDialogShow(this, mDialog);
             mUnlock = mDialog.getButton(DialogInterface.BUTTON_POSITIVE);
             mUnlock.setEnabled(false);
-        }
-
-        @Override
-        protected void onDestroy() {
-            super.onDestroy();
-
-            // Unlock the wait
-            synchronized (WAIT_SYNC) {
-                WAIT_SYNC.notify();
-            }
         }
 
         @Override
@@ -276,7 +276,7 @@ public class SecureStorageKeyPromptDialog
                     "text_color");
             theme.setTextColor(ctx, mValidationMsg, "text_color");
             mValidationMsg.setCompoundDrawablesWithIntrinsicBounds(
-                    theme.getDrawable(ctx, "filesystem_warning_drawable"), //$NON-NLS-1$
+                    theme.getDrawable(ctx, "filesystem_dialog_warning_drawable"), //$NON-NLS-1$
                     null, null, null);
         }
     }

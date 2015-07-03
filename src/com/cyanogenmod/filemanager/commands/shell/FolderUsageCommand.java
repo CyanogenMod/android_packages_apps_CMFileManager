@@ -36,6 +36,7 @@ import com.cyanogenmod.filemanager.util.MimeTypeHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +90,8 @@ public class FolderUsageCommand extends AsyncResultProgram implements FolderUsag
      * {@inheritDoc}
      */
     @Override
-    public void onParsePartialResult(final String partialIn) {
+    public void onParsePartialResult(byte[] in) {
+        String partialIn = new String(in);
 
         // Check the in buffer to extract information
         BufferedReader br = null;
@@ -174,8 +176,11 @@ public class FolderUsageCommand extends AsyncResultProgram implements FolderUsag
                                 long size = Long.parseLong(fields[4]);
                                 String name = fields[fields.length-1];// We only need the extension
                                 String ext = FileHelper.getExtension(name);
+                                File file = new File(mDirectory, name);
                                 MimeTypeCategory category =
-                                        MimeTypeHelper.getCategoryFromExt(null, ext);
+                                        MimeTypeHelper.getCategoryFromExt(null,
+                                                                          ext,
+                                                                          file.getAbsolutePath());
                                 this.mFolderUsage.addFile();
                                 this.mFolderUsage.addFileToCategory(category);
                                 this.mFolderUsage.addSize(size);
@@ -220,7 +225,7 @@ public class FolderUsageCommand extends AsyncResultProgram implements FolderUsag
      * {@inheritDoc}
      */
     @Override
-    public void onParseErrorPartialResult(String partialErr) {/**NON BLOCK**/}
+    public void onParseErrorPartialResult(byte[] partialErr) {/**NON BLOCK**/}
 
     /**
      * {@inheritDoc}

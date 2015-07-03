@@ -42,7 +42,7 @@
   <string name="copy_text_cd">Metni panoya kopyalamak için dokunun</string>
   <string name="copy_text_msg">Metin panoya kopyalandı</string>
   <string name="warning_title">Uyarı</string>
-  <string name="error_title">Hata algılandı</string>
+  <string name="error_title">Hata</string>
   <string name="confirm_operation">İşlemi onayla</string>
   <string name="confirm_overwrite">Değiştirmeyi onayla</string>
   <string name="confirm_deletion">Silmeyi onayla</string>
@@ -52,9 +52,11 @@
   <string name="msgs_privileged_console_alloc_failed">Root Erişimi modunda çalışamıyor. Güvenli Moda geçiliyor.</string>
   <string name="msgs_settings_save_failure">Ayar uygulanamadı ya da saklanamadı.</string>
   <string name="msgs_settings_invalid_initial_directory">Başlangıç klasörü \"<xliff:g id="initial_dir">%1$s</xliff:g>\" geçersiz. Kök klasöre geçiliyor.</string>
+  <string name="root_not_available_msg">Bu cihazda root erişimi yok. Bu işlem gerçekleştirilemez.</string>
   <string name="msgs_success">İşlem başarıyla tamamlandı.</string>
   <string name="msgs_unknown">Bir hata algılandı. İşlem tamamlanamadı.</string>
   <string name="msgs_insufficient_permissions">Bu işlem arttırılmış izin istiyor. Root Erişimi moduna gelmeyi deneyin.</string>
+  <string name="msgs_no_disk_space">Cihazda yeterli bellek alanı kalmadığından bu işlem gerçekleşmedi.</string>
   <string name="msgs_file_not_found">Dosya veya dizin bulunamadı.</string>
   <string name="msgs_command_not_found">İşlem komutu bulunamadı ya da geçersiz tanım içeriyor.</string>
   <string name="msgs_io_failed">Okuma/yazma hatası.</string>
@@ -65,7 +67,7 @@
   <string name="msgs_read_only_filesystem">Dosya sistemi salt okunur. İşlemi gerçekleştirmeden önce dosya sistemini okunur-yazılır olarak bağlamayı deneyin.</string>
   <string name="msgs_illegal_argument">Kural dışı ifade. İşlem başarısız.</string>
   <string name="msgs_unresolved_inconsistencies">Kararsızlıklara yol açacağından işleme izin verilmiyor.</string>
-  <string name="msgs_operation_not_allowed_in_current_directory">Şimdiki klasörde işleme izin verilemiyor.\n\nHedef klasör kaynağın alt klasörü ya da kaynakla aynı klasör olamaz.</string>
+  <string name="msgs_operation_not_allowed_in_current_directory">Hedef klasör kaynak klasörün aynısı veya alt klasörü olamaz.</string>
   <string name="msgs_push_again_to_exit">Çıkmak için tekrar basın.</string>
   <string name="msgs_not_registered_app">Seçilen türde dosyayı işleyecek uygulama belirlenmedi.</string>
   <string name="msgs_overwrite_files">Bazı dosyalar hedef klasörde zaten var.\n\nÜzerine yazılsın mı?</string>
@@ -84,10 +86,15 @@
   <string name="actionbar_button_overflow_cd">Daha fazla ayarlar</string>
   <string name="actionbar_button_storage_cd">Depolama birimleri</string>
   <string name="actionbar_button_save_cd">Kaydet</string>
+  <string name="actionbar_button_print_cd">Yazdır</string>
   <string name="sort_by_name_asc">İsme göre \u25B2</string>
   <string name="sort_by_name_desc">İsme göre \u25BC</string>
   <string name="sort_by_date_asc">Tarihe göre \u25B2</string>
   <string name="sort_by_date_desc">Tarihe göre \u25BC</string>
+  <string name="sort_by_size_asc">Boyuta göre \u25B2</string>
+  <string name="sort_by_size_desc">Boyuta göre \u25BC</string>
+  <string name="sort_by_type_asc">Türe göre \u25B2</string>
+  <string name="sort_by_type_desc">Türe göre \u25BC</string>
   <string name="layout_icons">Simgeler</string>
   <string name="layout_simple">Basit</string>
   <string name="layout_details">Ayrıntılar</string>
@@ -98,17 +105,18 @@
   <string name="filesystem_info_warning_title">Bilgi yok</string>
   <string name="filesystem_info_warning_msg">Dosya sistemi için bilgi bulunamadı.</string>
   <string name="filesystem_info_cant_be_mounted_msg">Dosya sistemi bağlanamadı/çıkarılamadı.</string>
-  <string name="filesystem_info_mount_not_allowed_msg">Dosya sistemi bağlama işlemlerine Güvenli modda izin verilmiyor. Root Erişimi moduna geçmek için dokunun.</string>
+  <string name="filesystem_info_mount_not_allowed_msg">Güvenli modda dosya sistemi bağlama işlemlerine izin verilmiyor. Root Erişim moduna geçmek için dokunun.</string>
   <string name="filesystem_info_mount_failed_msg">Dosya sistemi bağlama başarısız oldu. SD kartlar gibi bazı dosya sistemleri bağlanamaz/çıkarılamaz çünkü sadece okunabilir dosya sistemi olarak dahil edilmişlerdir.</string>
   <string name="filesystem_info_dialog_title">Dosya sistemi bilgisi</string>
   <string name="filesystem_info_dialog_tab_info">Bilgi</string>
   <string name="filesystem_info_dialog_tab_disk_usage">Disk kullanımı</string>
-  <string name="filesystem_info_dialog_status">Durum:</string>
+  <string name="filesystem_info_dialog_status">Bağlı:</string>
   <string name="filesystem_info_dialog_mount_point">Bağlama noktası:</string>
   <string name="filesystem_info_dialog_device">Cihaz:</string>
   <string name="filesystem_info_dialog_type">Tipi:</string>
   <string name="filesystem_info_dialog_options">Ayarlar:</string>
   <string name="filesystem_info_dialog_dump_pass">Dump / Pass:</string>
+  <string name="filesystem_info_dialog_virtual">Sanal:</string>
   <string name="filesystem_info_dialog_total_disk_usage">Toplam:</string>
   <string name="filesystem_info_dialog_used_disk_usage">Kullanılan:</string>
   <string name="filesystem_info_dialog_free_disk_usage">Boş:</string>
@@ -169,6 +177,8 @@
   <string name="bookmarks_home">Ev</string>
   <string name="bookmarks_root_folder">Kök dizin</string>
   <string name="bookmarks_system_folder">Sistem dizini</string>
+  <string name="bookmarks_secure">Güvenli depolama</string>
+  <string name="bookmarks_remote">Uzak depolama</string>
   <string name="bookmarks_button_config_cd">Açılış klasörünü seçin.</string>
   <string name="bookmarks_button_remove_bookmark_cd">Yer imini sil.</string>
   <string name="bookmarks_msgs_add_success">Yer imi başarıyla eklendi.</string>
@@ -228,10 +238,12 @@
   <string name="actions_menu_open_parent_folder">Üst klasörü aç</string>
   <string name="actions_menu_compute_checksum">Kontrol özetini (checksum) hesapla</string>
   <string name="actions_menu_print">Yazdır</string>
+  <string name="actions_menu_set_as_home">Ana sayfa olarak ayarla</string>
   <string name="actions_ask_undone_operation_msg">Bu işlem geri alınamaz. Devam etmek istiyor musunuz?</string>
   <string name="input_name_dialog_label">İsim:</string>
   <string name="input_name_dialog_message_empty_name">İsim boş olamaz.</string>
   <string name="input_name_dialog_message_invalid_path_name">Geçersiz isim. \'<xliff:g id="invalid_characters">%1$s</xliff:g>\' karakterlerine izin verilmiyor.</string>
+  <string name="input_name_dialog_message_invalid_name_length">Azami karakter sınırına ulaşıldı.</string>
   <string name="input_name_dialog_message_invalid_name">Geçersiz isim. \'.\' ve \'..\' ya izin verilmiyor.</string>
   <string name="input_name_dialog_message_name_exists">İsim zaten mevcut.</string>
   <string name="associations_dialog_title">İlişkilendirmeler</string>
@@ -258,6 +270,22 @@
   <string name="filetime_format_mode_MMddyyyy_HHmmss">aa/gg/yyyy ss:dd:ss</string>
   <string name="filetime_format_mode_yyyyMMdd_HHmmss">yyyy-aa-gg ss:dd:ss</string>
   <string name="selection_folders_and_files"><xliff:g id="folders">%1$s</xliff:g> ve <xliff:g id="files">%2$s</xliff:g> seçildi.</string>
+  <string name="category_system">SİSTEM</string>
+  <string name="category_app">UYGULAMA</string>
+  <string name="category_binary">İKİLİ KOD</string>
+  <string name="category_text">METİN</string>
+  <string name="category_document">BELGE</string>
+  <string name="category_ebook">E-KİTAP</string>
+  <string name="category_mail">POSTA</string>
+  <string name="category_compress">SIKIŞTIR</string>
+  <string name="category_exec">ÇALIŞTIRILABİLİR</string>
+  <string name="category_database">VERİTABANI</string>
+  <string name="category_font">YAZI TİPİ</string>
+  <string name="category_image">RESİM</string>
+  <string name="category_audio">SES</string>
+  <string name="category_video">VİDEO</string>
+  <string name="category_security">GÜVENLİK</string>
+  <string name="category_all">TÜMÜ</string>
   <string name="compression_mode_title">Sıkıştırma modu</string>
   <string name="shortcut_failed_msg">Kısayolu işleme başarısız oldu.</string>
   <string name="shortcut_creation_success_msg">Kısayol başarıyla oluşturuldu.</string>
@@ -265,10 +293,10 @@
   <string name="pref">Ayarlar</string>
   <string name="pref_general">Genel ayarlar</string>
   <string name="pref_search">Arama seçenekleri</string>
+  <string name="pref_storage">Depolama seçenekleri</string>
   <string name="pref_editor">Düzenleyici ayarları</string>
   <string name="pref_themes">Temalar</string>
   <string name="pref_about">Hakkında</string>
-  <string name="pref_about_summary">Dosya Yöneticisi v<xliff:g id="version">%1$s</xliff:g>\nTelif Hakkı \u00A9 2012-2014 CyanogenMod Projesi</string>
   <string name="pref_general_behaviour_category">Genel</string>
   <string name="pref_case_sensitive_sort">Büyük/küçük harf duyarlı</string>
   <string name="pref_case_sensitive_sort_summary">Arama sonuçlarında dolaşırken ve sıralarken büyük/küçük ayrımını gözetin</string>
@@ -304,16 +332,21 @@
   <string name="pref_save_search_terms_off">Arama terimleri kaydedilmeyecek</string>
   <string name="pref_remove_saved_search_terms">Kaydedilen arama terimlerini temizle</string>
   <string name="pref_remove_saved_search_terms_summary">Kaydedilmiş tüm arama terimlerini silmek için dokunun</string>
-  <string name="pref_remove_saved_search_terms_msg">Tüm kaydedilen arama terimleri silindi.</string>
+  <string name="pref_remove_saved_search_terms_msg">Tüm kaydedilen arama terimleri silindi</string>
+  <string name="pref_secure_storage_category">Güvenli depolama</string>
+  <string name="pref_secure_storage_delayed_sync_title">Gecikmiş eşitleme</string>
+  <string name="pref_secure_storage_delayed_sync_summary">Güvenli dosya sistemlerinin eşitlenmesi riskli bir işlemdir.Her işlemden sonra daha hızlı süreler için bu seçeneği etkinleştirin. Eşitleme dosya sistemi kullanılmazken yapılır. Ancak eğer uygulama çökerse eşitlenmeyi bekleyen bilgiler kaybolabilir.</string>
+  <string name="pref_secure_storage_reset_password_title">Şifreyi değiştir</string>
+  <string name="pref_secure_storage_delete_storage_title">Depolamayı sil</string>
   <string name="pref_editor_behaviour_category">Davranış</string>
   <string name="pref_no_suggestions">Öneri yok</string>
   <string name="pref_no_suggestions_desc">Dosya düzenlerken sözlük önerilerini gösterme</string>
   <string name="pref_word_wrap">Sözcük kaydırma</string>
   <string name="pref_hexdump">İkili dosyaları hexdumpla</string>
   <string name="pref_hexdump_desc">İkili dosyaları açarken bir hexdump oluştur ve onaltılık görüntüleyicide göster</string>
-  <string name="pref_editor_syntax_highlight_category">Sözdizimi vurgulama</string>
+  <string name="pref_editor_syntax_highlight_category">Söz dizimi vurgulama</string>
   <string name="pref_syntax_highlight">Sözdizimi vurgulama</string>
-  <string name="pref_syntax_highlight_desc">Düzenleyicide görüntülünen dosyanın sözdizimini vurgula (sadece ilgili dosya türü için sözdizimi vurgulama kullanılabilirse)</string>
+  <string name="pref_syntax_highlight_desc">Düzenleyicide gösterilen dosyanın sözdizimini vurgular ( sadece dosya türü için söz dizimi vurgulama işlemcisi olduğunda)</string>
   <string name="pref_syntax_highlight_color_scheme">Renk planı</string>
   <string name="pref_syntax_highlight_color_scheme_desc">Sözdizimi vurgulama renk düzenini seç</string>
   <string name="pref_syntax_sh_use_theme_default">Varsayılan temayı kullan</string>
@@ -341,6 +374,26 @@
   <string name="ash_keyword">Anahtar kelime</string>
   <string name="ash_quoted_string">Alıntılanan dize</string>
   <string name="ash_variable">Değişken</string>
+  <string name="secure_storage_unlock_title">Depolama kilidini aç</string>
+  <string name="secure_storage_create_title">Depolama oluştur</string>
+  <string name="secure_storage_reset_title">Parolayı sıfırla</string>
+  <string name="secure_storage_delete_title">Depolamayı sil</string>
+  <string name="secure_storage_unlock_key_prompt_msg">Güvenli depolama dosya sistemini açmak için şifreyi girin.</string>
+  <string name="secure_storage_unlock_key_new_msg">Güvenli depolama dosya sistemini kilitlemek için bir şifre girin.</string>
+  <string name="secure_storage_unlock_key_reset_msg">Güvenli depolama dosya sistemini sıfırlamak için mevcut ve yeni şifrelerinizi girin.</string>
+  <string name="secure_storage_unlock_key_delete_msg">Güvenli depolama dosya sistemini silmek için mevcut şifrenizi girin.</string>
+  <string name="secure_storage_unlock_old_key_title">Eski şifre:</string>
+  <string name="secure_storage_unlock_new_key_title">Yeni Şifre:</string>
+  <string name="secure_storage_unlock_key_title">Şifre:</string>
+  <string name="secure_storage_unlock_repeat_title">Şifreyi tekrarla:</string>
+  <string name="secure_storage_create_button">Oluştur</string>
+  <string name="secure_storage_unlock_button">Kilidi kaldır</string>
+  <string name="secure_storage_reset_button">Sıfırla</string>
+  <string name="secure_storage_delete_button">Sil</string>
+  <string name="secure_storage_unlock_failed">Depolama kilidi açılamıyor</string>
+  <string name="secure_storage_unlock_validation_length">Şifre en az <xliff:g id="characters">%1$d</xliff:g> karakter olmalı.</string>
+  <string name="secure_storage_unlock_validation_equals">Parolalar uyuşmuyor.</string>
+  <string name="secure_storage_open_file_warning">Bu, dosyayı şifresiz geçici bir konuma kopyalayacak. 1 saat sonra temizlenecektir.</string>
   <string name="print_unsupported_document">Desteklenmeyen belge biçimi</string>
   <string name="print_unsupported_image">Desteklenmeyen resim biçimi</string>
   <string name="print_document_header">Belge: <xliff:g id="document_name">%1$s</xliff:g></string>
@@ -349,4 +402,5 @@
   <string name="changelog_title">Değişiklik kaydı</string>
   <string name="welcome_title">Hoş geldiniz</string>
   <string name="welcome_msg">CyanogenMod dosya yöneticisine hoş geldiniz.\n\nBu uygulama dosya sistemine göz atmanızı ve cihazınıza zarar verebilecek işlemler yapmanıza izin verir. Zararları engellemek için bu uygulama güvenli, düşük yetkili modda başlayacaktır.\n\nGelişmiş, tam yetkili moda Ayarlar aracılığıyla erişebilirsiniz. Yaptığınız işlemlerin sisteminize zarar vermemesini sağlamak sizin sorumluluğunuzda olacaktır.\n\nCyanogenMod Takımı</string>
+  <string name="activity_not_found_exception">Bu dosyayı açacak uygulama bulunamadı</string>
 </resources>

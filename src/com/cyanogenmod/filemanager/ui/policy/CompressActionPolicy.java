@@ -266,6 +266,11 @@ public final class CompressActionPolicy extends ActionsPolicy {
             }
 
             @Override
+            public void onCancel() {
+                // nop
+            }
+
+            @Override
             public void doInBackground(Object... params) throws Throwable {
                 this.mCause = null;
                 this.mStarted = true;
@@ -565,6 +570,11 @@ public final class CompressActionPolicy extends ActionsPolicy {
                 } else {
                     ActionsPolicy.showOperationSuccessMsg(ctx);
                 }
+            }
+
+            @Override
+            public void onCancel() {
+                // nop
             }
 
             @Override

@@ -16,6 +16,8 @@
 
 package com.cyanogenmod.filemanager.model;
 
+import android.content.ContentResolver;
+import android.net.Uri;
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.util.FileHelper;
 
@@ -333,6 +335,19 @@ public abstract class FileSystemObject implements Serializable, Comparable<FileS
             return this.mParent + this.mName;
         }
         return this.mParent + File.separator + this.mName;
+    }
+
+    /**
+     * creates a file uri that references this FileSystemObject
+     * @return a file uri
+     */
+    public Uri getFileUri() {
+        Uri uri = new Uri.Builder()
+                .scheme(ContentResolver.SCHEME_FILE)
+                .path(getFullPath())
+                .build();
+
+        return uri;
     }
 
     /**

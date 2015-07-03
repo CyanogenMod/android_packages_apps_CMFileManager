@@ -25,8 +25,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/double_margin"
-        android:layout_marginLeft="@dimen/extra_large_margin"
-        android:layout_marginRight="@dimen/extra_large_margin"
+        android:layout_marginStart="@dimen/extra_large_margin"
+        android:layout_marginEnd="@dimen/extra_large_margin"
         android:textAppearance="@style/primary_text_appearance" />
 
     <!-- Password -->
@@ -35,8 +35,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/double_margin"
-        android:layout_marginLeft="@dimen/extra_large_margin"
-        android:layout_marginRight="@dimen/extra_large_margin"
+        android:layout_marginStart="@dimen/extra_large_margin"
+        android:layout_marginEnd="@dimen/extra_large_margin"
         android:orientation="vertical">
         <TextView
             android:id="@+id/unlock_old_password_title"
@@ -60,8 +60,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/double_margin"
-        android:layout_marginLeft="@dimen/extra_large_margin"
-        android:layout_marginRight="@dimen/extra_large_margin"
+        android:layout_marginStart="@dimen/extra_large_margin"
+        android:layout_marginEnd="@dimen/extra_large_margin"
         android:orientation="vertical">
         <TextView
             android:id="@+id/unlock_password_title"
@@ -85,8 +85,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/double_margin"
-        android:layout_marginLeft="@dimen/extra_large_margin"
-        android:layout_marginRight="@dimen/extra_large_margin"
+        android:layout_marginStart="@dimen/extra_large_margin"
+        android:layout_marginEnd="@dimen/extra_large_margin"
         android:orientation="vertical">
         <TextView
             android:id="@+id/unlock_repeat_title"
@@ -110,13 +110,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="@dimen/extra_large_margin"
-        android:layout_marginRight="@dimen/extra_large_margin"
+        android:layout_marginStart="@dimen/extra_large_margin"
+        android:layout_marginEnd="@dimen/extra_large_margin"
         android:background="@drawable/material_selector"
         android:contentDescription="@null"
-        android:drawableLeft="@drawable/ic_material_light_fs_warning"
+        android:drawableStart="@drawable/ic_material_light_fs_warning"
         android:drawablePadding="@dimen/default_margin"
-        android:gravity="left|center_vertical"
+        android:gravity="start|center_vertical"
         android:singleLine="false"
         android:textSize="@dimen/note_text_size"
         android:visibility="invisible" />

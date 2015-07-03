@@ -42,7 +42,7 @@
   <string name="copy_text_cd">Trykk for å kopiere tekst til utklippstavlen</string>
   <string name="copy_text_msg">Tekst kopiert til utklippstavlen</string>
   <string name="warning_title">Advarsel</string>
-  <string name="error_title">Feil oppdaget</string>
+  <string name="error_title">Feil</string>
   <string name="confirm_operation">Bekreft operasjon</string>
   <string name="confirm_overwrite">Bekreft overskriving</string>
   <string name="confirm_deletion">Bekreft sletting</string>
@@ -52,9 +52,11 @@
   <string name="msgs_privileged_console_alloc_failed">Klarer ikke kjøre med Root-tilgang. Bytter til sikker tilgang.</string>
   <string name="msgs_settings_save_failure">Innstillingen kan ikke brukes eller lagres.</string>
   <string name="msgs_settings_invalid_initial_directory">Oppstartsmappen \"<xliff:g id="initial_dir">%1$s</xliff:g>\" er ugyldig. Bytter til rotmappen.</string>
+  <string name="root_not_available_msg">Root er ikke tilgjengelig på denne enheten. Kan ikke utføre denne operasjonen.</string>
   <string name="msgs_success">Operasjonen var vellykket.</string>
   <string name="msgs_unknown">En feil ble oppdaget. Operasjonen var mislykket.</string>
   <string name="msgs_insufficient_permissions">Denne operasjonen krever avanserte tillatelser. Prøv å bytt til root-tilgang.</string>
+  <string name="msgs_no_disk_space">Operasjonen mislyktes fordi det er ikke plass på enheten.</string>
   <string name="msgs_file_not_found">Filen eller mappen ble ikke funnet.</string>
   <string name="msgs_command_not_found">Operasjonens kommando ble ikke funnet, eller har en ugyldig definisjon.</string>
   <string name="msgs_io_failed">Lese/skrive feil.</string>
@@ -65,7 +67,7 @@
   <string name="msgs_read_only_filesystem">Filsystemet er skrivebeskyttet. Prøv å montere filsystemet som lese-skrive før du prøver operasjonen.</string>
   <string name="msgs_illegal_argument">Ulovlig argument. Påkalling mislyktes.</string>
   <string name="msgs_unresolved_inconsistencies">Operasjonen er ikke tillatt fordi den ville skapt uoverensstemmelser.</string>
-  <string name="msgs_operation_not_allowed_in_current_directory">Operasjonen er ikke tillatt i gjeldende mappe.\n\nDestinasjonen kan ikke være en undermappe av kilden eller den samme som kilden.</string>
+  <string name="msgs_operation_not_allowed_in_current_directory">Målmappen kan ikke være undermappe for kilde eller være det samme som kilde.</string>
   <string name="msgs_push_again_to_exit">Trykk igjen for å avslutte.</string>
   <string name="msgs_not_registered_app">Det er ikke noe program registrert som kan håndtere den valgte filtypen.</string>
   <string name="msgs_overwrite_files">Noen av filene finnes allerede.\n\nOverskriv?</string>
@@ -84,10 +86,15 @@
   <string name="actionbar_button_overflow_cd">Flere alternativer</string>
   <string name="actionbar_button_storage_cd">Lagringsvolumer</string>
   <string name="actionbar_button_save_cd">Lagre</string>
+  <string name="actionbar_button_print_cd">Skriv ut</string>
   <string name="sort_by_name_asc">Etter navn ▲</string>
   <string name="sort_by_name_desc">Etter navn ▼</string>
   <string name="sort_by_date_asc">Etter dato ▲</string>
   <string name="sort_by_date_desc">Etter dato ▼</string>
+  <string name="sort_by_size_asc">Av størrelse \u25B2</string>
+  <string name="sort_by_size_desc">Av størrelse \u25BC</string>
+  <string name="sort_by_type_asc">Av typen \u25B2</string>
+  <string name="sort_by_type_desc">Av typen \u25BC</string>
   <string name="layout_icons">Ikoner</string>
   <string name="layout_simple">Enkel</string>
   <string name="layout_details">Detaljer</string>
@@ -98,17 +105,18 @@
   <string name="filesystem_info_warning_title">Ingen informasjon</string>
   <string name="filesystem_info_warning_msg">Det er ingen tilgjengelig informasjon for filsystemet.</string>
   <string name="filesystem_info_cant_be_mounted_msg">Filsystemet kan ikke monteres/avmonteres.</string>
-  <string name="filesystem_info_mount_not_allowed_msg">Montering av filsystemer er ikke tillatt med sikker tilgang. Trykk for å endre til Root-tilgang.</string>
+  <string name="filesystem_info_mount_not_allowed_msg">Montering av filsystemer er ikke tillatt i sikker tilgang-modus. Trykk for å endre til Root-tilgangs modus.</string>
   <string name="filesystem_info_mount_failed_msg">Montering av filsystem feilet. Noen filsystemer, f.eks. SD-kort, kan ikke monteres/avmonteres fordi de er skrivebeskyttet.</string>
   <string name="filesystem_info_dialog_title">Informasjon on filsystem</string>
   <string name="filesystem_info_dialog_tab_info">Info</string>
   <string name="filesystem_info_dialog_tab_disk_usage">Bruk av diskplass</string>
-  <string name="filesystem_info_dialog_status">Status:</string>
+  <string name="filesystem_info_dialog_status">Montert:</string>
   <string name="filesystem_info_dialog_mount_point">Monteringspunkt:</string>
   <string name="filesystem_info_dialog_device">Enhet:</string>
   <string name="filesystem_info_dialog_type">Type:</string>
   <string name="filesystem_info_dialog_options">Alternativer:</string>
   <string name="filesystem_info_dialog_dump_pass">Dump / Bestå:</string>
+  <string name="filesystem_info_dialog_virtual">Virtuell:</string>
   <string name="filesystem_info_dialog_total_disk_usage">Totalt:</string>
   <string name="filesystem_info_dialog_used_disk_usage">Brukt:</string>
   <string name="filesystem_info_dialog_free_disk_usage">Ledig:</string>
@@ -169,6 +177,8 @@
   <string name="bookmarks_home">Hjem</string>
   <string name="bookmarks_root_folder">Rotmappe</string>
   <string name="bookmarks_system_folder">Systemmappe</string>
+  <string name="bookmarks_secure">Sikker lagring</string>
+  <string name="bookmarks_remote">Ekstern lagring</string>
   <string name="bookmarks_button_config_cd">Sett oppstartsmappe</string>
   <string name="bookmarks_button_remove_bookmark_cd">Fjern bokmerke.</string>
   <string name="bookmarks_msgs_add_success">Bokmerket ble lagt.</string>
@@ -235,10 +245,12 @@
   <string name="actions_menu_open_parent_folder">Åpne forelder</string>
   <string name="actions_menu_compute_checksum">Beregn checksum</string>
   <string name="actions_menu_print">Skriv ut</string>
+  <string name="actions_menu_set_as_home">Angi som hjem</string>
   <string name="actions_ask_undone_operation_msg">Denne handlingen kan ikke omgjøres. Vil du fortsette?</string>
   <string name="input_name_dialog_label">Navn:</string>
   <string name="input_name_dialog_message_empty_name">Navnet kan ikke være tomt.</string>
   <string name="input_name_dialog_message_invalid_path_name">Ugyldig navn. Tegnene \'<xliff:g id="invalid_characters">%1$s</xliff:g>\' er ikke tillatte.</string>
+  <string name="input_name_dialog_message_invalid_name_length">Maksimalt antall tegn er nådd.</string>
   <string name="input_name_dialog_message_invalid_name">Ugyldig navn. Navnene \'.\' og \'..\' er ikke tillatte.</string>
   <string name="input_name_dialog_message_name_exists">Navnet finnes alerede.</string>
   <string name="associations_dialog_title">Tilknytning</string>
@@ -265,6 +277,22 @@
   <string name="filetime_format_mode_MMddyyyy_HHmmss">mm/dd/åååå tt:mm:ss</string>
   <string name="filetime_format_mode_yyyyMMdd_HHmmss">åååå-mm-dd tt:mm:ss</string>
   <string name="selection_folders_and_files"><xliff:g id="folders">%1$s</xliff:g> og <xliff:g id="files">%2$s</xliff:g> valgt.</string>
+  <string name="category_system">SYSTEM</string>
+  <string name="category_app">APP</string>
+  <string name="category_binary">BINÆR</string>
+  <string name="category_text">TEKST</string>
+  <string name="category_document">DOKUMENT</string>
+  <string name="category_ebook">E-BOK</string>
+  <string name="category_mail">E-POST</string>
+  <string name="category_compress">KOMPRIMERT</string>
+  <string name="category_exec">KJØRBAR</string>
+  <string name="category_database">DATABASE</string>
+  <string name="category_font">SKRIFTTYPE</string>
+  <string name="category_image">BILDE</string>
+  <string name="category_audio">LYD</string>
+  <string name="category_video">VIDEO</string>
+  <string name="category_security">SIKKERHET</string>
+  <string name="category_all">ALLE</string>
   <string name="compression_mode_title">Komprimeringstype</string>
   <string name="shortcut_failed_msg">Klarte ikke å håndtere snarveien.</string>
   <string name="shortcut_creation_success_msg">Snarvei opprettet.</string>
@@ -272,10 +300,10 @@
   <string name="pref">Innstillinger</string>
   <string name="pref_general">Generelle innstillinger</string>
   <string name="pref_search">Søkealternativer</string>
+  <string name="pref_storage">Lagringsalternativer</string>
   <string name="pref_editor">Redigeringsmuligheter</string>
   <string name="pref_themes">Temaer</string>
   <string name="pref_about">Om</string>
-  <string name="pref_about_summary">Filbehandling v<xliff:g id="version">%1$s</xliff:g>\nCopyright \u00A9 2012-2014 The CyanogenMod Project</string>
   <string name="pref_general_behaviour_category">Generelt</string>
   <string name="pref_case_sensitive_sort">Skill mellom bokstaver</string>
   <string name="pref_case_sensitive_sort_summary">Skill mellom store/små bokstaver ved navigering eller sortering av søkeresultater</string>
@@ -311,16 +339,21 @@
   <string name="pref_save_search_terms_off">Søketermer vil ikke bli lagret</string>
   <string name="pref_remove_saved_search_terms">Fjern lagrede søketermer</string>
   <string name="pref_remove_saved_search_terms_summary">Trykk for å fjerne alle lagrede søketermer</string>
-  <string name="pref_remove_saved_search_terms_msg">Alle lagrede søketermer slettet.</string>
+  <string name="pref_remove_saved_search_terms_msg">Alle lagrede søkeordene ble fjernet</string>
+  <string name="pref_secure_storage_category">Sikker lagring</string>
+  <string name="pref_secure_storage_delayed_sync_title">Forsinket synkronisering</string>
+  <string name="pref_secure_storage_delayed_sync_summary">Synkronisering av sikre filsystemer er en kostbar operasjon. Aktiver dette alternativet for å få en raskere svartid etter hver operasjon, utføre synkronisering når filsystemet er i ubrukt tilstand, men på bekostning av tapt ventende informasjon som ikke synkroniserer hvis app\'en krasjer.</string>
+  <string name="pref_secure_storage_reset_password_title">Endre passord</string>
+  <string name="pref_secure_storage_delete_storage_title">Slett lagring</string>
   <string name="pref_editor_behaviour_category">Oppførsel</string>
   <string name="pref_no_suggestions">Ingen forslag</string>
   <string name="pref_no_suggestions_desc">Ikke vis forslag mens filer redigeres</string>
   <string name="pref_word_wrap">Tekstbryting</string>
   <string name="pref_hexdump">Hexdump av binære filer</string>
   <string name="pref_hexdump_desc">Generer en hex-dump av den binære filen og åpne den i en hex-editor</string>
-  <string name="pref_editor_syntax_highlight_category">Fremheving av syntaks</string>
+  <string name="pref_editor_syntax_highlight_category">Syntaks utheving</string>
   <string name="pref_syntax_highlight">Fremheving av syntaks</string>
-  <string name="pref_syntax_highlight_desc">Fremhev syntaksen i filen når den åpnes i editoren (Kun når editoren støtter det)</string>
+  <string name="pref_syntax_highlight_desc">Markering av syntaksen i filen vist i redigeringen (kun når syntaks uthevningsprosess for denne filtypen er tilgjengelig)</string>
   <string name="pref_syntax_highlight_color_scheme">Fargevalg</string>
   <string name="pref_syntax_highlight_color_scheme_desc">Fargevalg til syntaks utheving</string>
   <string name="pref_syntax_sh_use_theme_default">Bruk standard</string>
@@ -348,6 +381,26 @@
   <string name="ash_keyword">Nøkkelord</string>
   <string name="ash_quoted_string">Streng i anførselstegn</string>
   <string name="ash_variable">Variabel</string>
+  <string name="secure_storage_unlock_title">Lås opp lagring</string>
+  <string name="secure_storage_create_title">Lag lagringsområde</string>
+  <string name="secure_storage_reset_title">Tilbakestill Passord</string>
+  <string name="secure_storage_delete_title">Slett lagring</string>
+  <string name="secure_storage_unlock_key_prompt_msg">Skriv inn passordet for å låse opp Sikker lagring.</string>
+  <string name="secure_storage_unlock_key_new_msg">Skriv inn et passord for å beskytte sikker lagring.</string>
+  <string name="secure_storage_unlock_key_reset_msg">Skriv inn gjeldende og nye passordet for å tilbakestille Sikker lagring.</string>
+  <string name="secure_storage_unlock_key_delete_msg">Skriv inn gjeldende passord hvis du vil slette Sikker lagring.</string>
+  <string name="secure_storage_unlock_old_key_title">Gammelt passord:</string>
+  <string name="secure_storage_unlock_new_key_title">Nytt passord:</string>
+  <string name="secure_storage_unlock_key_title">Passord:</string>
+  <string name="secure_storage_unlock_repeat_title">Gjenta passord:</string>
+  <string name="secure_storage_create_button">Opprett</string>
+  <string name="secure_storage_unlock_button">Låse opp</string>
+  <string name="secure_storage_reset_button">Tilbakestille</string>
+  <string name="secure_storage_delete_button">Slett</string>
+  <string name="secure_storage_unlock_failed">Kan ikke låse opp lagring</string>
+  <string name="secure_storage_unlock_validation_length">Passord må ha minst <xliff:g id="characters"> %1$d </xliff:g> tegn.</string>
+  <string name="secure_storage_unlock_validation_equals">Passordene samsvarer ikke.</string>
+  <string name="secure_storage_open_file_warning">Dette kopierer filen til en midlertidig ukryptert plassering. Dette vil bli slettet etter 1 time.</string>
   <string name="print_unsupported_document">Ustøttet dokumentformat</string>
   <string name="print_unsupported_image">Ustøttet bildeformat</string>
   <string name="print_document_header">Dokument: <xliff:g id="document_name">%1$s</xliff:g></string>
@@ -356,4 +409,5 @@
   <string name="changelog_title">Endringslogg</string>
   <string name="welcome_title">Velkommen</string>
   <string name="welcome_msg">Velkommen til CyanogenMod filbehandler.\n\nDenne appen lar deg utforske filsystemet og å gjøre operasjoner som kan ødelegge enheten. For å unngå skader vil appen starte med trygg og lav-priviligert tilgang.\n\nDu får tilgang til den avanserte, full-priviligerte modusen via Innstillingene. Det er ditt ansvar å sørge for at en operasjon ikke ødelegger systemet.\n\nThe CyanogenMod Team.\n</string>
+  <string name="activity_not_found_exception">Kunne ikke finne en app for å åpne denne filen</string>
 </resources>

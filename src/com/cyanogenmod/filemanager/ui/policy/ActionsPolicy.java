@@ -77,6 +77,12 @@ public abstract class ActionsPolicy {
          * Method invoked when the operation was successfully
          */
         void onSuccess();
+
+        /**
+         * Method invoked to handle cancelling
+         */
+        void onCancel();
+
     }
 
     /**
@@ -117,7 +123,9 @@ public abstract class ActionsPolicy {
             this.mDialog.setOnCancelListener(new MessageProgressDialog.OnCancelListener() {
                 @Override
                 public boolean onCancel() {
-                    return task.cancel(true);
+                    mCallable.onCancel();
+                    task.cancel(true);
+                    return true;
                 }
             });
             Spanned progress = this.mCallable.requestProgress();
@@ -155,8 +163,7 @@ public abstract class ActionsPolicy {
 
         @Override
         protected void onCancelled() {
-            //Operation complete.
-            this.mCallable.onSuccess();
+            this.mCallable.onCancel();
         }
 
         @Override

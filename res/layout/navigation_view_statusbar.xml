@@ -31,7 +31,7 @@
         android:id="@+id/ab_overflow"
         android:layout_width="@dimen/default_buttom_width"
         android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:contentDescription="@string/actionbar_button_overflow_cd"
         android:onClick="onActionBarItemClick"
         android:src="@drawable/ic_material_light_overflow" />
@@ -48,14 +48,14 @@
       android:id="@+id/navigation_actionbar"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_toLeftOf="@id/ab_overflow"
-      android:layout_toRightOf="@id/ab_actions">
+      android:layout_toStartOf="@id/ab_overflow"
+      android:layout_toEndOf="@id/ab_actions">
 
       <com.cyanogenmod.filemanager.ui.widgets.ButtonItem
         android:id="@+id/ab_search"
         android:layout_width="@dimen/default_buttom_width"
         android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:contentDescription="@string/actionbar_button_search_cd"
         android:onClick="onActionBarItemClick"
         android:src="@drawable/ic_material_light_search"

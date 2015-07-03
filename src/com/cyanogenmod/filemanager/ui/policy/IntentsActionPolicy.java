@@ -17,7 +17,6 @@
 package com.cyanogenmod.filemanager.ui.policy;
 
 import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnDismissListener;
@@ -30,7 +29,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.activities.ShortcutActivity;
 import com.cyanogenmod.filemanager.console.secure.SecureConsole;
@@ -38,6 +36,9 @@ import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.model.RegularFile;
 import com.cyanogenmod.filemanager.providers.SecureResourceProvider;
 import com.cyanogenmod.filemanager.providers.SecureResourceProvider.AuthorizationResource;
+import com.cyanogenmod.filemanager.providers.secure.ISecureChoiceCompleteListener;
+import com.cyanogenmod.filemanager.providers.secure.SecureCacheCleanupService;
+import com.cyanogenmod.filemanager.providers.secure.SecureChoiceClickListener;
 import com.cyanogenmod.filemanager.ui.dialogs.AssociationsDialog;
 import com.cyanogenmod.filemanager.util.DialogHelper;
 import com.cyanogenmod.filemanager.util.ExceptionUtil;
@@ -100,11 +101,68 @@ public final class IntentsActionPolicy extends ActionsPolicy {
      */
     public static void openFileSystemObject(
             final Context ctx, final FileSystemObject fso, final boolean choose,
-            OnCancelListener onCancelListener, OnDismissListener onDismissListener) {
+            final OnCancelListener onCancelListener, final OnDismissListener onDismissListener) {
         try {
             // Create the intent to open the file
-            Intent intent = new Intent();
+            final Intent intent = new Intent();
             intent.setAction(android.content.Intent.ACTION_VIEW);
+
+            // [NOTE][MSB]: Short circuit to pop up dialog informing user we need to copy out the
+            // file until we find a better solution.
+            if (fso.isSecure()) {
+                // [TODO][MSB]: Check visible cache for existing file but I need to split up
+                // resolveIntent function properly for this to be successful
+                DialogHelper.createTwoButtonsQuestionDialog(
+                        ctx,
+                        R.string.ok,
+                        R.string.cancel,
+                        R.string.warning_title,
+                        ctx.getResources().getString(R.string.secure_storage_open_file_warning),
+                        new SecureChoiceClickListener(ctx, fso,
+                                new ISecureChoiceCompleteListener() {
+                                    private boolean isCancelled = false;
+                                    @Override
+                                    public void onComplete(File cacheFile) {
+                                        if (isCancelled) {
+                                            return;
+                                        }
+                                        // Schedule cleanup alarm
+                                        SecureCacheCleanupService.scheduleCleanup(ctx);
+
+                                        FileSystemObject cacheFso = FileHelper
+                                                .createFileSystemObject(cacheFile);
+                                        // Obtain the mime/type and passed it to intent
+                                        String mime = MimeTypeHelper.getMimeType(ctx, cacheFso);
+                                        if (mime != null) {
+                                            intent.setDataAndType(getUriFromFile(ctx, cacheFso),
+                                                    mime);
+                                        } else {
+                                            intent.setData(getUriFromFile(ctx, cacheFso));
+                                        }
+                                        // Resolve the intent
+                                        resolveIntent(
+                                                ctx,
+                                                intent,
+                                                choose,
+                                                createInternalIntents(ctx, cacheFso),
+                                                0,
+                                                R.string.associations_dialog_openwith_title,
+                                                R.string.associations_dialog_openwith_action,
+                                                true,
+                                                onCancelListener,
+                                                onDismissListener);
+                                    }
+
+                                    @Override
+                                    public void onCancelled() {
+                                        isCancelled = true;
+                                        Toast.makeText(ctx, R.string.cancelled_message, Toast
+                                                .LENGTH_SHORT).show();
+                                    }
+                                }))
+                        .show();
+                return;
+            }
 
             // Obtain the mime/type and passed it to intent
             String mime = MimeTypeHelper.getMimeType(ctx, fso);
@@ -119,7 +177,7 @@ public final class IntentsActionPolicy extends ActionsPolicy {
                     ctx,
                     intent,
                     choose,
-                    createInternalIntents(ctx,  fso),
+                    createInternalIntents(ctx, fso),
                     0,
                     R.string.associations_dialog_openwith_title,
                     R.string.associations_dialog_openwith_action,

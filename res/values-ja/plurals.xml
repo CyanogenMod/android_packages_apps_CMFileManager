@@ -23,7 +23,7 @@
     <item quantity="other"><xliff:g id="files">%1$d</xliff:g>個のファイル</item>
   </plurals>
   <plurals name="search_found_items">
-    <item quantity="other"><xliff:g id="count">%d</xliff:g>個の項目が見つかりました</item>
+    <item quantity="other"><xliff:g id="count">%d</xliff:g>個のアイテムが見つかりました</item>
   </plurals>
   <plurals name="selection_folders">
     <item quantity="other"><xliff:g id="folders">%1$d</xliff:g>個のフォルダを選択しています。</item>

@@ -22,7 +22,6 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
-import android.preference.SwitchPreference;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -45,7 +44,6 @@ public class EditorSHColorSchemePreferenceFragment extends TitlePreferenceFragme
 
     private static final String KEY_RESET_COLOR_SCHEME = "ash_reset_color_scheme"; //$NON-NLS-1$
 
-    private SwitchPreference mUseThemeDefault;
     private Preference mResetColorScheme;
     private ColorPickerPreference[] mColorScheme;
 
@@ -68,13 +66,7 @@ public class EditorSHColorSchemePreferenceFragment extends TitlePreferenceFragme
                             String.valueOf(newValue)));
             }
 
-            // Use theme default
-            if (key.compareTo(
-                    FileManagerSettings.SETTINGS_EDITOR_SH_USE_THEME_DEFAULT.getId()) == 0) {
-                boolean enabled = ((Boolean)newValue).booleanValue();
-                setColorSchemeEnabled(!enabled);
-
-            } else if (isColorSchemePreference(preference)) {
+            if (isColorSchemePreference(preference)) {
                 // Unify the color schemes property. Save the property here
                 int color = ((Integer)newValue).intValue();
                 try {
@@ -134,24 +126,10 @@ public class EditorSHColorSchemePreferenceFragment extends TitlePreferenceFragme
         // Color scheme (need to resolver color scheme prior to use theme default)
         loadDefaultColorScheme(false);
 
-        // Use Theme default
-        this.mUseThemeDefault =
-                (SwitchPreference)findPreference(
-                        FileManagerSettings.SETTINGS_EDITOR_SH_USE_THEME_DEFAULT.getId());
-        Boolean defaultValue = ((Boolean)FileManagerSettings.
-                SETTINGS_EDITOR_SH_USE_THEME_DEFAULT.getDefaultValue());
-        Boolean value =
-                Boolean.valueOf(
-                        Preferences.getSharedPreferences().getBoolean(
-                            FileManagerSettings.SETTINGS_EDITOR_SH_USE_THEME_DEFAULT.getId(),
-                            defaultValue.booleanValue()));
-
         // Reset to default theme color scheme
         this.mResetColorScheme = findPreference(KEY_RESET_COLOR_SCHEME);
 
         // Now the listeners
-        this.mOnChangeListener.onPreferenceChange(this.mUseThemeDefault, value);
-        this.mUseThemeDefault.setOnPreferenceChangeListener(this.mOnChangeListener);
         this.mResetColorScheme.setOnPreferenceClickListener(this.mOnClickListener);
 
         // Loaded
@@ -199,20 +177,6 @@ public class EditorSHColorSchemePreferenceFragment extends TitlePreferenceFragme
         } catch (Exception e) {
             ExceptionUtil.translateException(getActivity(), e);
         }
-    }
-
-    /**
-     * Method that set the enabled status of the color schemes preferences
-     *
-     * @param enable If the color scheme preferences should be enabled or not.
-     * @hide
-     */
-    void setColorSchemeEnabled(final boolean enable) {
-        int cc = this.mColorScheme.length;
-        for (int i = 0; i < cc; i++) {
-            this.mColorScheme[i].setEnabled(enable);
-        }
-        this.mResetColorScheme.setEnabled(enable);
     }
 
     /**

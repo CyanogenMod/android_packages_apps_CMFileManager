@@ -23,6 +23,7 @@ import android.text.Html;
 import android.text.Spanned;
 
 import com.cyanogenmod.filemanager.R;
+import com.cyanogenmod.filemanager.console.Console;
 import com.cyanogenmod.filemanager.console.NoSuchFileOrDirectory;
 import com.cyanogenmod.filemanager.console.RelaunchableException;
 import com.cyanogenmod.filemanager.listeners.OnRequestRefreshListener;
@@ -249,8 +250,9 @@ public final class CopyMoveActionPolicy extends ActionsPolicy {
             }
         }
         // 3.- Check the operation consistency
-        if (operation.compareTo(COPY_MOVE_OPERATION.MOVE) == 0) {
-            if (!checkMoveConsistency(ctx, files, currentDirectory)) {
+        if (operation.equals(COPY_MOVE_OPERATION.MOVE)
+                || operation.equals(COPY_MOVE_OPERATION.COPY)) {
+            if (!checkCopyOrMoveConsistency(ctx, files, currentDirectory, operation)) {
                 return;
             }
         }
@@ -269,8 +271,8 @@ public final class CopyMoveActionPolicy extends ActionsPolicy {
 
             @Override
             public int getDialogTitle() {
-                return this.mOperation.compareTo(COPY_MOVE_OPERATION.MOVE) == 0 ||
-                       this.mOperation.compareTo(COPY_MOVE_OPERATION.RENAME) == 0 ?
+                return this.mOperation.equals(COPY_MOVE_OPERATION.MOVE)
+                        || this.mOperation.equals(COPY_MOVE_OPERATION.RENAME) ?
                         R.string.waiting_dialog_moving_title :
                         R.string.waiting_dialog_copying_title;
             }
@@ -280,7 +282,7 @@ public final class CopyMoveActionPolicy extends ActionsPolicy {
             }
             @Override
             public boolean isDialogCancellable() {
-                return false;
+                return true;
             }
 
             @Override
@@ -292,17 +294,16 @@ public final class CopyMoveActionPolicy extends ActionsPolicy {
                 String progress =
                       this.mCtx.getResources().
                           getString(
-                              this.mOperation.compareTo(COPY_MOVE_OPERATION.MOVE) == 0 ||
-                              this.mOperation.compareTo(COPY_MOVE_OPERATION.RENAME) == 0 ?
-                                   R.string.waiting_dialog_moving_msg :
-                                   R.string.waiting_dialog_copying_msg,
+                              this.mOperation.equals(COPY_MOVE_OPERATION.MOVE)
+                              || this.mOperation.equals(COPY_MOVE_OPERATION.RENAME) ?
+                                  R.string.waiting_dialog_moving_msg :
+                                  R.string.waiting_dialog_copying_msg,
                               src.getAbsolutePath(),
                               dst.getAbsolutePath());
                 return Html.fromHtml(progress);
             }
 
-            @Override
-            public void onSuccess() {
+            private void refreshUIAfterCompletion() {
                 // Remove orphan bookmark paths
                 if (files != null) {
                     for (LinkedResource linkedFiles : files) {
@@ -315,6 +316,11 @@ public final class CopyMoveActionPolicy extends ActionsPolicy {
                   // The reference is not the same, so refresh the complete navigation view
                   this.mOnRequestRefreshListener.onRequestRefresh(null, true);
                 }
+            }
+
+            @Override
+            public void onSuccess() {
+                refreshUIAfterCompletion();
                 ActionsPolicy.showOperationSuccessMsg(ctx);
             }
 
@@ -341,6 +347,24 @@ public final class CopyMoveActionPolicy extends ActionsPolicy {
                 }
             }
 
+            @Override
+            public void onCancel() {
+                if (mSrcConsole != null) {
+                    mSrcConsole.onCancel();
+                }
+                if (mDstConsole != null) {
+                    mDstConsole.onCancel();
+                }
+                if (mOnRequestRefreshListener != null) {
+                    mOnRequestRefreshListener.onCancel();
+                }
+                refreshUIAfterCompletion();
+            }
+
+            // Handles required for issuing command death to the consoles
+            private Console mSrcConsole;
+            private Console mDstConsole;
+
             /**
              * Method that copy or move the file to another location
              *
@@ -360,21 +384,36 @@ public final class CopyMoveActionPolicy extends ActionsPolicy {
                     // under using absolute paths) Issue: CYAN-2791
                     String source = src.getAbsolutePath() +
                             (src.isDirectory() ? File.separator : "");
+                    String dest = dst.getAbsolutePath() +
+                            (dst.isDirectory() ? File.separator : "");
+
+                    /*
+                        There is a possibility that the src and dst can have different consoles.
+                        A possible case:
+                          - src is from sd card and dst is secure storage
+                        This could happen with anything that goes from a real console to a virtual
+                        console or visa versa.  Here we grab a handle on the console such that we
+                        may explicitly kill the actions happening in both consoles.
+                     */
+                    // Need to derive the console for the source
+                    mSrcConsole = CommandHelper.ensureConsoleForFile(ctx, null, source);
+                    // Need to derive the console for the destination
+                    mDstConsole = CommandHelper.ensureConsoleForFile(ctx, null, dest);
 
                     // Copy or move?
-                    if (operation.compareTo(COPY_MOVE_OPERATION.MOVE) == 0 ||
-                            operation.compareTo(COPY_MOVE_OPERATION.RENAME) == 0) {
+                    if (operation.equals(COPY_MOVE_OPERATION.MOVE)
+                            || operation.equals(COPY_MOVE_OPERATION.RENAME)) {
                         CommandHelper.move(
                                 ctx,
                                 source,
                                 dst.getAbsolutePath(),
-                                null);
+                                mSrcConsole);
                     } else {
                         CommandHelper.copy(
                                 ctx,
                                 source,
                                 dst.getAbsolutePath(),
-                                null);
+                                mSrcConsole);
                     }
                 } catch (Exception e) {
                     // Need to be relaunched?
@@ -496,23 +535,24 @@ public final class CopyMoveActionPolicy extends ActionsPolicy {
 
 
     /**
-     * Method that check the consistency of move operations.<br/>
+     * Method that check the consistency of copy or move operations.<br/>
      * <br/>
      * The method checks the following rules:<br/>
      * <ul>
-     * <li>Any of the files of the move operation can not include the
+     * <li>Any of the files of the copy or move operation can not include the
      * current directory.</li>
-     * <li>Any of the files of the move operation can not include the
+     * <li>Any of the files of the copy or move operation can not include the
      * current directory.</li>
      * </ul>
      *
      * @param ctx The current context
      * @param files The list of source/destination files
      * @param currentDirectory The current directory
+     * @param operation the operation is copy or move
      * @return boolean If the consistency is validate successfully
      */
-    private static boolean checkMoveConsistency(
-            Context ctx, List<LinkedResource> files, String currentDirectory) {
+    private static boolean checkCopyOrMoveConsistency(Context ctx, List<LinkedResource> files,
+            String currentDirectory, final COPY_MOVE_OPERATION operation) {
         int cc = files.size();
         for (int i = 0; i < cc; i++) {
             LinkedResource linkRes = files.get(i);
@@ -520,7 +560,8 @@ public final class CopyMoveActionPolicy extends ActionsPolicy {
             String dst = linkRes.mDst.getAbsolutePath();
 
             // 1.- Current directory can't be moved
-            if (currentDirectory != null && currentDirectory.startsWith(src)) {
+            if (operation.equals(COPY_MOVE_OPERATION.MOVE) &&
+                    currentDirectory != null && currentDirectory.startsWith(src)) {
                 // Operation not allowed
                 AlertDialog dialog =
                         DialogHelper.createErrorDialog(

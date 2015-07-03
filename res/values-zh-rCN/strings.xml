@@ -42,7 +42,7 @@
   <string name="copy_text_cd">点击将文本复制到剪贴板</string>
   <string name="copy_text_msg">文本已复制到剪贴板</string>
   <string name="warning_title">警告</string>
-  <string name="error_title">检测到错误</string>
+  <string name="error_title">错误</string>
   <string name="confirm_operation">确认此操作</string>
   <string name="confirm_overwrite">确认覆盖</string>
   <string name="confirm_deletion">确认删除</string>
@@ -53,9 +53,11 @@
   <string name="msgs_privileged_console_alloc_failed">无法在 Root 访问模式下运行. 正在切换至安全模式.</string>
   <string name="msgs_settings_save_failure">设置无法被应用与保存.</string>
   <string name="msgs_settings_invalid_initial_directory">初始文件夹 \"<xliff:g id="initial_dir">%1$s</xliff:g>\" 是无效的. 切换至 Root 文件夹.</string>
+  <string name="root_not_available_msg">此设备的 root 不可用 ，无法执行此操作。</string>
   <string name="msgs_success">操作已成功的完成.</string>
   <string name="msgs_unknown">检测到了一个错误. 此操作未能成功完成.</string>
   <string name="msgs_insufficient_permissions">此操作需要更高的权限. 请尝试切换到 Root 访问模式.</string>
+  <string name="msgs_no_disk_space">此操作失败，因为设备上没有剩余空间。</string>
   <string name="msgs_file_not_found">未找到文件或文件夹.</string>
   <string name="msgs_command_not_found">此操作的命令未被找到或带有无效的定义.</string>
   <string name="msgs_io_failed">读/写失败.</string>
@@ -66,7 +68,7 @@
   <string name="msgs_read_only_filesystem">只读文件系统. 请在再次尝试操作之前使用读写模式挂载文件系统.</string>
   <string name="msgs_illegal_argument">非法参数. 调用失败.</string>
   <string name="msgs_unresolved_inconsistencies">此操作不被允许，因为它会产生不一致性.</string>
-  <string name="msgs_operation_not_allowed_in_current_directory">当前文件夹不允许此操作。 \n\n目标文件夹不能为源文件夹的子文件夹或与源文件夹相同。</string>
+  <string name="msgs_operation_not_allowed_in_current_directory">目标文件夹不能是源文件夹的子文件夹，或者与源文件夹相同。</string>
   <string name="msgs_push_again_to_exit">再次点击即可退出.</string>
   <string name="msgs_not_registered_app">没有任何与此类型文件关联的应用。</string>
   <string name="msgs_overwrite_files">
@@ -87,10 +89,15 @@
   <string name="actionbar_button_overflow_cd">更多选项</string>
   <string name="actionbar_button_storage_cd">存储卷</string>
   <string name="actionbar_button_save_cd">保存</string>
+  <string name="actionbar_button_print_cd">打印</string>
   <string name="sort_by_name_asc">按名称排列 ▲</string>
   <string name="sort_by_name_desc">按名称排列 ▼</string>
   <string name="sort_by_date_asc">按日期排列 ▲</string>
   <string name="sort_by_date_desc">按日期排列 ▼</string>
+  <string name="sort_by_size_asc">按大小 \u25B2</string>
+  <string name="sort_by_size_desc">按大小 \u25BC</string>
+  <string name="sort_by_type_asc">按类型 \u25B2</string>
+  <string name="sort_by_type_desc">按类型 \u25BC</string>
   <string name="layout_icons">图标</string>
   <string name="layout_simple">简单</string>
   <string name="layout_details">详细信息</string>
@@ -101,18 +108,19 @@
   <string name="filesystem_info_warning_title">无信息</string>
   <string name="filesystem_info_warning_msg">没有关于此文件系统可用的信息.</string>
   <string name="filesystem_info_cant_be_mounted_msg">无法挂载或卸载文件系统.</string>
-  <string name="filesystem_info_mount_not_allowed_msg">在安全模式下不允许挂载文件系统的操作. 点击切换至超级用户访问模式.</string>
+  <string name="filesystem_info_mount_not_allowed_msg">在安全模式下不允许挂载文件系统的操作。点击切换至超级用户访问模式。</string>
   <string name="filesystem_info_mount_failed_msg">文件系统挂载失败.
     有些文件系统 (例如 SD 存储卡) 是被设计为只读文件系统的, 所以不能被挂载或卸载.</string>
   <string name="filesystem_info_dialog_title">文件系统信息</string>
   <string name="filesystem_info_dialog_tab_info">信息</string>
   <string name="filesystem_info_dialog_tab_disk_usage">磁盘使用情况</string>
-  <string name="filesystem_info_dialog_status">状态:</string>
+  <string name="filesystem_info_dialog_status">已挂载：</string>
   <string name="filesystem_info_dialog_mount_point">挂载点:</string>
   <string name="filesystem_info_dialog_device">设备:</string>
   <string name="filesystem_info_dialog_type">类型:</string>
   <string name="filesystem_info_dialog_options">选项:</string>
   <string name="filesystem_info_dialog_dump_pass">转储 / 传递:</string>
+  <string name="filesystem_info_dialog_virtual">虚拟：</string>
   <string name="filesystem_info_dialog_total_disk_usage">总数:</string>
   <string name="filesystem_info_dialog_used_disk_usage">已用:</string>
   <string name="filesystem_info_dialog_free_disk_usage">可用:</string>
@@ -176,6 +184,8 @@
   <string name="bookmarks_home">主页</string>
   <string name="bookmarks_root_folder">根目录</string>
   <string name="bookmarks_system_folder">系统文件夹</string>
+  <string name="bookmarks_secure">安全存储</string>
+  <string name="bookmarks_remote">远程存储</string>
   <string name="bookmarks_button_config_cd">设置初始文件夹.</string>
   <string name="bookmarks_button_remove_bookmark_cd">移除书签.</string>
   <string name="bookmarks_msgs_add_success">书签已成功加入.</string>
@@ -248,12 +258,13 @@
   <string name="actions_menu_open_parent_folder">打开父目录</string>
   <string name="actions_menu_compute_checksum">计算校验和</string>
   <string name="actions_menu_print">打印</string>
-  <string name="actions_menu_set_as_home">设置为主屏</string>
+  <string name="actions_menu_set_as_home">设置为主页</string>
   <string name="actions_ask_undone_operation_msg">
     此操作无法撤销. 您确定要继续?</string>
   <string name="input_name_dialog_label">名称:</string>
   <string name="input_name_dialog_message_empty_name">名称不能为空.</string>
   <string name="input_name_dialog_message_invalid_path_name">无效的名称. 名称中不能包涵以下字符: \'<xliff:g id="invalid_characters">%1$s</xliff:g>\'.</string>
+  <string name="input_name_dialog_message_invalid_name_length">已达到最大字符限制。</string>
   <string name="input_name_dialog_message_invalid_name">无效的名称. 名称中不能包涵 \'.\' 与
     \'..\' .</string>
   <string name="input_name_dialog_message_name_exists">此名称已存在.</string>
@@ -282,6 +293,22 @@
   <string name="filetime_format_mode_MMddyyyy_HHmmss">月/日/年 时:分:秒</string>
   <string name="filetime_format_mode_yyyyMMdd_HHmmss">年-月-日 时:分:秒</string>
   <string name="selection_folders_and_files">已选择 <xliff:g id="folders">%1$s</xliff:g>和 <xliff:g id="files">%2$s</xliff:g>。</string>
+  <string name="category_system">系统</string>
+  <string name="category_app">应用</string>
+  <string name="category_binary">二进制</string>
+  <string name="category_text">文本</string>
+  <string name="category_document">文档</string>
+  <string name="category_ebook">电子书</string>
+  <string name="category_mail">邮件</string>
+  <string name="category_compress">压缩文件</string>
+  <string name="category_exec">可执行文件</string>
+  <string name="category_database">数据库</string>
+  <string name="category_font">字体</string>
+  <string name="category_image">图像</string>
+  <string name="category_audio">音频</string>
+  <string name="category_video">视频</string>
+  <string name="category_security">安全</string>
+  <string name="category_all">所有</string>
   <string name="compression_mode_title">压缩方式</string>
   <string name="shortcut_failed_msg">快捷方式处理失败.</string>
   <string name="shortcut_creation_success_msg">快捷方式创建成功.</string>
@@ -293,8 +320,6 @@
   <string name="pref_editor">编辑器选项</string>
   <string name="pref_themes">主题</string>
   <string name="pref_about">关于</string>
-  <string name="pref_about_summary">文件管理器 v<xliff:g id="version">%1$s</xliff:g>
-    \n版权所有 \u00A9 2012-2014 CyanogenMod</string>
   <string name="pref_general_behaviour_category">常规</string>
   <string name="pref_case_sensitive_sort">排列时区分大小写</string>
   <string name="pref_case_sensitive_sort_summary">导航或排列搜索结果时区分大小写</string>
@@ -330,17 +355,22 @@
   <string name="pref_save_search_terms_off">搜索关键词将不会被保存</string>
   <string name="pref_remove_saved_search_terms">删除保存的关键词</string>
   <string name="pref_remove_saved_search_terms_summary">点击此将会删除所有保存的搜索关键词</string>
-  <string name="pref_remove_saved_search_terms_msg">所有保存的搜索关键词已被删除.</string>
+  <string name="pref_remove_saved_search_terms_msg">已删除所有搜索关键字</string>
   <string name="pref_secure_storage_category">安全存储</string>
+  <string name="pref_secure_storage_delayed_sync_title">延迟同步</string>
+  <string name="pref_secure_storage_delayed_sync_summary">安全文件系统同步是代价很高的操作。要在每次操作后得到更快的响应，以及在文件系统处于未使用状态时执行同步，请开启此选项；但这样做的代价是，如果应用崩溃，挂起的未同步的信息将会丢失。</string>
+  <string name="pref_secure_storage_reset_password_title">更改密码</string>
+  <string name="pref_secure_storage_delete_storage_title">删除存储</string>
   <string name="pref_editor_behaviour_category">行为</string>
   <string name="pref_no_suggestions">不显示建议</string>
   <string name="pref_no_suggestions_desc">编辑文件时不要显示字典建议</string>
   <string name="pref_word_wrap">自动换行</string>
   <string name="pref_hexdump">二进制文件十六进制转储</string>
   <string name="pref_hexdump_desc">打开二进制文件时，生成文件的十六进制转储并在十六进制查看器中打开。</string>
-  <string name="pref_editor_syntax_highlight_category">语法高亮</string>
+  <string name="pref_editor_syntax_highlight_category">语法高亮显示</string>
   <string name="pref_syntax_highlight">高亮语法</string>
-  <string name="pref_syntax_highlight_desc">高亮在编辑器内显示的文件的语法 (仅在能够处理文件类型的语法高亮处理器存在时)</string>
+  <string name="pref_syntax_highlight_desc">在编辑器中高亮显示语法（仅在为当前文件类型的语法高亮处理有效时）
+</string>
   <string name="pref_syntax_highlight_color_scheme">配色方案</string>
   <string name="pref_syntax_highlight_color_scheme_desc">选择语法高亮的颜色方案</string>
   <string name="pref_syntax_sh_use_theme_default">使用主题默认值</string>
@@ -368,6 +398,26 @@
   <string name="ash_keyword">关键词</string>
   <string name="ash_quoted_string">带引号的字符串</string>
   <string name="ash_variable">变量</string>
+  <string name="secure_storage_unlock_title">解锁存储</string>
+  <string name="secure_storage_create_title">创建存储</string>
+  <string name="secure_storage_reset_title">重置密码</string>
+  <string name="secure_storage_delete_title">删除存储</string>
+  <string name="secure_storage_unlock_key_prompt_msg">输入密码以解锁安全存储文件系统。</string>
+  <string name="secure_storage_unlock_key_new_msg">输入密码以保护安全存储文件系统。</string>
+  <string name="secure_storage_unlock_key_reset_msg">输入当前密码和新密码来重置安全存储文件系统。</string>
+  <string name="secure_storage_unlock_key_delete_msg">输入当前密码以删除安全存储文件系统。</string>
+  <string name="secure_storage_unlock_old_key_title">旧密码：</string>
+  <string name="secure_storage_unlock_new_key_title">新密码：</string>
+  <string name="secure_storage_unlock_key_title">密码：</string>
+  <string name="secure_storage_unlock_repeat_title">重复密码：</string>
+  <string name="secure_storage_create_button">创建</string>
+  <string name="secure_storage_unlock_button">解锁</string>
+  <string name="secure_storage_reset_button">重置</string>
+  <string name="secure_storage_delete_button">删除</string>
+  <string name="secure_storage_unlock_failed">无法解锁存储</string>
+  <string name="secure_storage_unlock_validation_length">密码必须有至少 <xliff:g id="characters"> %1$d </xliff:g> 个字符。</string>
+  <string name="secure_storage_unlock_validation_equals">密码不匹配。</string>
+  <string name="secure_storage_open_file_warning">这将复制文件到临时的未加密路径。将会在一小时后被清除。</string>
   <string name="print_unsupported_document">不受支持的文档格式</string>
   <string name="print_unsupported_image">不受支持的图像格式</string>
   <string name="print_document_header">文档: <xliff:g id="document_name">%1$s</xliff:g></string>
@@ -378,52 +428,5 @@
   <string name="changelog_title">更改记录</string>
   <string name="welcome_title">欢迎</string>
   <string name="welcome_msg">欢迎您使用 CyanogenMod 文件管理器。 \n\n本应用允许您浏览设备的文件系统并做出可能导致损伤的操作。为了避免损伤，此程序默认将会在低权限与安全的模式下开始运行。\n\n您可以通过设置切换到高级并拥有完全控制的模式。确保操作不会损坏系统与它的安全性将是您的责任。\n\nCyanogenMod 团队</string>
-    <string name="secure_storage_unlock_new_key_title">新密码</string>
-    <string name="category_ebook">电子书</string>
-    <string name="secure_storage_unlock_key_reset_msg">输入当前和新密码来重置安全存储的文件系统</string>
-    <string name="category_text">文本</string>
-    <string name="category_binary">二进制</string>
-    <string name="secure_storage_delete_title">删除存储系统</string>
-    <string name="category_system">系统</string>
-    <string name="pref_secure_storage_delete_storage_title">删除存储系统</string>
-    <string name="category_audio">音频</string>
-    <string name="pref_secure_storage_reset_password_title">重置密码</string>
-    <string name="pref_secure_storage_delayed_sync_summary">同步是一个繁琐的过程。启动这个选项可以延迟同步从而使操作更快， 但是可能会遗失信息，例如应用崩溃。</string>
-    <string name="sort_by_type_asc">按类型</string>
-    <string name="sort_by_size_desc">按大小</string>
-    <string name="secure_storage_create_title">新建安全存储</string>
-    <string name="category_app">应用</string>
-    <string name="secure_storage_unlock_button">解锁</string>
-    <string name="bookmarks_secure">安全存储</string>
-    <string name="sort_by_type_desc">按类型</string>
-    <string name="secure_storage_unlock_key_new_msg">输入密码保护安全文件系统</string>
-    <string name="secure_storage_unlock_validation_length">密码必须最少字符</string>
-    <string name="category_security">安全</string>
-    <string name="secure_storage_unlock_key_title">密码</string>
-    <string name="secure_storage_create_button">创建</string>
-    <string name="pref_secure_storage_delayed_sync_title">延迟同步</string>
-    <string name="secure_storage_unlock_failed">不能解锁</string>
-    <string name="secure_storage_unlock_repeat_title">重复密码</string>
-    <string name="secure_storage_reset_title">重置密码</string>
-    <string name="secure_storage_unlock_key_prompt_msg">输入密码解锁安全文件系统</string>
-    <string name="category_image">图片</string>
-    <string name="category_exec">可执行</string>
-    <string name="bookmarks_remote">远程存储</string>
-    <string name="secure_storage_unlock_validation_equals">密码错误</string>
-    <string name="category_video">视频</string>
-    <string name="category_document">文件</string>
-    <string name="secure_storage_unlock_old_key_title">原来的密码</string>
-    <string name="secure_storage_unlock_key_delete_msg">输入密码删除安全存储文件系统</string>
-    <string name="actionbar_button_print_cd">打印</string>
-    <string name="secure_storage_delete_button">删除</string>
-    <string name="secure_storage_reset_button">重置</string>
-    <string name="category_font">字体</string>
-    <string name="sort_by_size_asc">按大小</string>
-    <string name="msgs_no_disk_space">操作出错，存储盘已满</string>
-    <string name="category_compress">压缩</string>
-    <string name="category_mail">邮件</string>
-    <string name="category_all">所有</string>
-    <string name="root_not_available_msg">最高权限获取失败。这个设备不能执行这个操作。</string>
-    <string name="category_database">数据库</string>
-    <string name="secure_storage_unlock_title">解锁</string>
+  <string name="activity_not_found_exception">无可用于打开此文件的应用</string>
 </resources>

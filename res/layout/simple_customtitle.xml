@@ -22,7 +22,7 @@
     android:id="@+id/ab_button_cluster"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:layout_alignParentRight="true">
+    android:layout_alignParentEnd="true">
 
     <com.cyanogenmod.filemanager.ui.widgets.ButtonItem
       android:id="@+id/ab_button0"
@@ -53,16 +53,16 @@
 
   <TextView
     android:id="@+id/customtitle_title"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/default_margin"
-    android:layout_marginRight="@dimen/extra_large_margin"
+    android:layout_marginStart="@dimen/default_margin"
+    android:layout_marginEnd="@dimen/extra_large_margin"
     android:textAppearance="@style/title_text_appearance"
-    android:layout_alignParentLeft="true"
-    android:layout_toLeftOf="@id/ab_button0"
+    android:layout_alignParentStart="true"
+    android:layout_toStartOf="@id/ab_button_cluster"
     android:layout_alignWithParentIfMissing="true"
     android:contentDescription="@null"
-    android:gravity="left|center_vertical"
+    android:gravity="start|center_vertical"
     android:singleLine="true"
     android:ellipsize="end"
     android:text="@null" />

@@ -127,7 +127,8 @@ public class InitialDirectoryDialog implements DialogInterface.OnClickListener {
         theme.setTextColor(context, labelView, "text_color"); //$NON-NLS-1$
         theme.setTextColor(context, (TextView)msgView, "text_color"); //$NON-NLS-1$
         ((TextView)msgView).setCompoundDrawablesWithIntrinsicBounds(
-                theme.getDrawable(this.mContext, "filesystem_warning_drawable"), //$NON-NLS-1$
+                theme.getDrawable(this.mContext,
+                        "filesystem_dialog_warning_drawable"), //$NON-NLS-1$
                 null, null, null);
         this.mAutocomplete.applyTheme();
 

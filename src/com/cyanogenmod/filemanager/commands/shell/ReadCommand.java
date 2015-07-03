@@ -61,11 +61,11 @@ public class ReadCommand extends AsyncResultProgram implements ReadExecutable {
      * {@inheritDoc}
      */
     @Override
-    public void onParsePartialResult(final String partialIn) {
+    public void onParsePartialResult(byte[] in) {
         //If a listener is defined, then send the partial result
-        if (partialIn != null && partialIn.length() > 0) {
+        if (in != null && in.length > 0) {
             if (getAsyncResultListener() != null) {
-                getAsyncResultListener().onPartialResult(partialIn.getBytes());
+                getAsyncResultListener().onPartialResult(in);
             }
         }
     }
@@ -74,7 +74,7 @@ public class ReadCommand extends AsyncResultProgram implements ReadExecutable {
      * {@inheritDoc}
      */
     @Override
-    public void onParseErrorPartialResult(String partialErr) {/**NON BLOCK**/}
+    public void onParseErrorPartialResult(byte[] partialErr) {/**NON BLOCK**/}
 
     /**
      * {@inheritDoc}

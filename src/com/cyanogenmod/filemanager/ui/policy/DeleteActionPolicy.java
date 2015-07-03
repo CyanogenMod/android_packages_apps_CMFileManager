@@ -213,6 +213,11 @@ public final class DeleteActionPolicy extends ActionsPolicy {
             }
 
             @Override
+            public void onCancel() {
+
+            }
+
+            @Override
             public void doInBackground(Object... params) throws Throwable {
                 this.mCause = null;
 

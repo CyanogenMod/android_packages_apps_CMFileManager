@@ -164,6 +164,12 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
             try {
                 // Response if the item can be removed
                 FileSystemObjectAdapter adapter = (FileSystemObjectAdapter)parent.getAdapter();
+
+                // Short circuit to protect OOBE
+                if (position < 0 || position >= adapter.getCount()) {
+                    return false;
+                }
+
                 FileSystemObject fso = adapter.getItem(position);
                 if (fso != null) {
                     if (fso instanceof ParentDirectory) {
@@ -1139,6 +1145,9 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
 
         // Get the adapter and the fso
         FileSystemObjectAdapter adapter = ((FileSystemObjectAdapter)parent.getAdapter());
+        if (adapter == null || position < 0 || (position >= adapter.getCount())) {
+            return false;
+        }
         FileSystemObject fso = adapter.getItem(position);
 
         // Parent directory hasn't actions
@@ -1266,6 +1275,11 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
         // Ignored
     }
 
+    @Override
+    public void onCancel() {
+        // nop
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -1372,7 +1386,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
 
         //Change to first storage volume
         StorageVolume[] volumes =
-                StorageHelper.getStorageVolumes(getContext());
+                StorageHelper.getStorageVolumes(getContext(), false);
         if (volumes != null && volumes.length > 0) {
             changeCurrentDir(volumes[0].getPath(), false, true, false, null, null);
         }
@@ -1403,7 +1417,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
 
         // Check if the path is owned by one of the storage volumes
         if (!StorageHelper.isPathInStorageVolume(newDir)) {
-            StorageVolume[] volumes = StorageHelper.getStorageVolumes(getContext());
+            StorageVolume[] volumes = StorageHelper.getStorageVolumes(getContext(), false);
             if (volumes != null && volumes.length > 0) {
                 return volumes[0].getPath();
             }
