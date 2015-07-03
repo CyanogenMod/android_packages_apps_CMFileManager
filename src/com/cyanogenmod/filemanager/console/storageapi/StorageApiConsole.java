@@ -290,7 +290,7 @@ public class StorageApiConsole extends VirtualConsole {
      * @param fullPath
      */
     public static String getProviderPathFromFullPath(String fullPath) {
-        if (fullPath.contains(PATH_SEPARATOR)) {
+        if (!TextUtils.isEmpty(fullPath) && fullPath.contains(PATH_SEPARATOR)) {
             return fullPath.substring(fullPath.indexOf(PATH_SEPARATOR) + PATH_SEPARATOR.length());
         } else {
             return null;

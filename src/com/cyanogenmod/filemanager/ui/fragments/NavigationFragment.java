@@ -110,6 +110,7 @@ import com.cyanogenmod.filemanager.ui.widgets.Breadcrumb;
 import com.cyanogenmod.filemanager.ui.widgets.ButtonItem;
 import com.cyanogenmod.filemanager.ui.widgets.NavigationCustomTitleView;
 import com.cyanogenmod.filemanager.ui.widgets.NavigationView;
+import com.cyanogenmod.filemanager.ui.widgets.NavigationView.OnBackRequestListener;
 import com.cyanogenmod.filemanager.ui.widgets.NavigationView.OnNavigationRequestMenuListener;
 import com.cyanogenmod.filemanager.ui.widgets.NavigationView.OnNavigationSelectionChangedListener;
 import com.cyanogenmod.filemanager.ui.widgets.SelectionView;
@@ -217,6 +218,7 @@ public class NavigationFragment extends Fragment
     private View mTitleLayout;
     private View mStatusBar;
 
+    private OnBackRequestListener mOnBackRequestListener;
 
     private final BroadcastReceiver mNotificationReceiver = new BroadcastReceiver() {
         @Override
@@ -1342,6 +1344,7 @@ public class NavigationFragment extends Fragment
         //- 0
         this.mNavigationViews[0] = (NavigationView) mView.findViewById(R.id.navigation_view);
         this.mNavigationViews[0].setId(0);
+        this.mNavigationViews[0].setOnBackRequestListener(mOnBackRequestListener);
     }
 
     /**
@@ -1960,16 +1963,8 @@ public class NavigationFragment extends Fragment
             int cc = realHistory.getPosition();
             for (int i = this.mHistory.size() - 1; i >= cc; i--) {
                 this.mHistory.remove(i);
-                mDrawerHistory.removeViewAt(0);
             }
 
-            if (mDrawerHistory.getChildCount() == 0) {
-                mDrawerHistoryEmpty.setVisibility(View.VISIBLE);
-            }
-
-            //Navigate
-            boolean clearHistory = mHistoryTab.isSelected() && mHistory.size() > 0;
-            mClearHistory.setVisibility(clearHistory ? View.VISIBLE : View.GONE);
             return true;
 
         } catch (Throwable ex) {
@@ -2010,6 +2005,11 @@ public class NavigationFragment extends Fragment
                 String path = ((NavigationViewInfoParcelable)h.getItem()).getCurrentDir();
 
                 try {
+                    boolean storageProvider = StorageApiConsole.getStorageApiConsoleForPath(path)
+                            != null;
+                    if (storageProvider) {
+                        break;
+                    }
                     FileSystemObject info = CommandHelper.getFileInfo(getActivity(), path, null);
                     if (info != null) {
                         break;
@@ -2030,7 +2030,6 @@ public class NavigationFragment extends Fragment
         }
 
         //Nothing to apply
-        mClearHistory.setVisibility(View.GONE);
         return false;
     }
 
@@ -2454,5 +2453,14 @@ public class NavigationFragment extends Fragment
 
     public void updateActiveDialog(Dialog dialog) {
         mActiveDialog = dialog;
+    }
+
+    /*
+     * Methid that sets the listener for back requests
+     *
+     * @param onBackRequestListener The listener reference
+     */
+    public void setOnBackRequestListener(OnBackRequestListener onBackRequestListener) {
+        mOnBackRequestListener = onBackRequestListener;
     }
 }

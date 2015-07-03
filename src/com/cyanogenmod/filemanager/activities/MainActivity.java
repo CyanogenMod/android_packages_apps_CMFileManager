@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
@@ -52,6 +53,7 @@ import com.cyanogenmod.filemanager.preferences.Preferences;
 import com.cyanogenmod.filemanager.ui.fragments.HomeFragment;
 import com.cyanogenmod.filemanager.ui.fragments.LoginFragment;
 import com.cyanogenmod.filemanager.ui.fragments.NavigationFragment;
+import com.cyanogenmod.filemanager.ui.widgets.NavigationView.OnBackRequestListener;
 import com.cyanogenmod.filemanager.util.DialogHelper;
 import com.cyanogenmod.filemanager.util.FileHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
@@ -62,6 +64,8 @@ import java.io.InvalidClassException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.cyanogenmod.filemanager.controllers.NavigationDrawerController
+        .NAVIGATION_DRAWER_HOME;
 
 /**
  * The main navigation activity. This activity is the center of the application.
@@ -76,7 +80,7 @@ import java.util.List;
  * the app is killed, is restarted from his initial state.
  */
 public class MainActivity extends ActionBarActivity
-        implements OnItemClickListener {
+        implements OnItemClickListener, OnBackRequestListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -159,6 +163,16 @@ public class MainActivity extends ActionBarActivity
 
         showWelcomeMsg();
 
+        //FragmentManager.OnBackStackChangedListener
+        getSupportFragmentManager().addOnBackStackChangedListener(new OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                updateCurrentFragment();
+                if (isCurrentFragment(FragmentType.HOME)) {
+                    mNavigationDrawerController.setSelected(NAVIGATION_DRAWER_HOME);
+                }
+            }
+        });
         setCurrentFragment(FragmentType.HOME);
 
         //Initialize nfc adapter
@@ -193,35 +207,65 @@ public class MainActivity extends ActionBarActivity
     public void setCurrentFragment(FragmentType fragmentType) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         boolean noBackStack = false;
+        String fragmentTag = null;
 
         switch (fragmentType) {
             case NAVIGATION:
                 mPopBackStack = false;
                 currentFragment = new NavigationFragment();
+                ((NavigationFragment)currentFragment)
+                        .setOnBackRequestListener(this);
+                fragmentTag = fragmentType.name();
                 break;
             case LOGIN:
                 mPopBackStack = true;
                 currentFragment = LoginFragment.newInstance();
+                fragmentTag = fragmentType.name();
                 break;
             case HOME:
             default:
                 mPopBackStack = false;
-                noBackStack = true;
                 currentFragment = HomeFragment.newInstance();
+                fragmentTag = fragmentType.name();
+                mNavigationDrawerController.setSelected(NAVIGATION_DRAWER_HOME);
                 break;
         }
 
         if (noBackStack) {
             fragmentManager.beginTransaction()
-                    .replace(R.id.navigation_fragment_container, currentFragment)
+                    .replace(R.id.navigation_fragment_container, currentFragment, fragmentTag)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .commit();
         } else {
             fragmentManager.beginTransaction()
-                    .replace(R.id.navigation_fragment_container, currentFragment)
+                    .replace(R.id.navigation_fragment_container, currentFragment, fragmentTag)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .addToBackStack(null)
+                    .addToBackStack(fragmentTag)
                     .commit();
+        }
+    }
+
+    private void updateCurrentFragment() {
+        for (FragmentType type : FragmentType.values()) {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(type.name());
+            if (fragment != null && fragment.isVisible()) {
+                currentFragment = fragment;
+            }
+        }
+    }
+
+    private boolean isCurrentFragment(FragmentType fragmentType) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(fragmentType.name());
+        return (fragment != null && fragment.isVisible());
+    }
+
+    public void navigateToPath(String path) {
+        if (isCurrentFragment(FragmentType.NAVIGATION)) {
+            NavigationFragment fragment = (NavigationFragment) currentFragment;
+            fragment.getCurrentNavigationView().changeCurrentDir(path, true);
+        } else {
+            getIntent().putExtra(EXTRA_NAVIGATE_TO, path);
+            setCurrentFragment(FragmentType.NAVIGATION);
         }
     }
 
@@ -232,7 +276,6 @@ public class MainActivity extends ActionBarActivity
     public void updateActiveDialog(Dialog dialog) {
         // stub
     }
-
 
     /**
      * {@inheritDoc}
@@ -267,13 +310,11 @@ public class MainActivity extends ActionBarActivity
                 break;
             case R.id.navigation_item_internal:
                 if (DEBUG) Log.d(TAG, "onNavigationItemSelected::navigation_item_favorites");
-                getIntent().putExtra(EXTRA_NAVIGATE_TO, StorageHelper.getLocalStoragePath(this));
-                setCurrentFragment(FragmentType.NAVIGATION);
+                navigateToPath(StorageHelper.getLocalStoragePath(this));
                 break;
             case R.id.navigation_item_root_d:
                 if (DEBUG) Log.d(TAG, "onNavigationItemSelected::navigation_item_root_d");
-                getIntent().putExtra(EXTRA_NAVIGATE_TO, FileHelper.ROOT_DIRECTORY);
-                setCurrentFragment(FragmentType.NAVIGATION);
+                navigateToPath(FileHelper.ROOT_DIRECTORY);
                 break;
             case R.id.navigation_item_manage:
                 if (DEBUG) Log.d(TAG, "onNavigationItemSelected::navigation_item_manage");
@@ -306,8 +347,7 @@ public class MainActivity extends ActionBarActivity
 
                 if (!TextUtils.isEmpty(path)) {
                     // Check for item id in remote roots
-                    getIntent().putExtra(EXTRA_NAVIGATE_TO, path);
-                    setCurrentFragment(FragmentType.NAVIGATION);
+                    navigateToPath(path);
                 } else {
                     return;
                 }
@@ -492,5 +532,27 @@ public class MainActivity extends ActionBarActivity
             default:
                 return false;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(Gravity.START)) {
+            mDrawerLayout.closeDrawer(Gravity.START);
+            return;
+        }
+        if (currentFragment instanceof NavigationFragment) {
+            if (((NavigationFragment)currentFragment).back()) {
+                return;
+            }
+        }
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
+            finish();
+        }
+        super.onBackPressed();
+    }
+
+    @Override
+    public void onBackRequested() {
+        onBackPressed();
     }
 }

@@ -141,6 +141,17 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
     }
 
     /**
+     * An interface to communicate a request to go back to previous view
+     */
+    public interface OnBackRequestListener {
+        /**
+         * Method invoked when a back (previous view) is requested
+         *
+         */
+        void onBackRequested();
+    }
+
+    /**
      * The navigation view mode
      * @hide
      */
@@ -311,11 +322,6 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
                 }
                 if (ex instanceof CancelledOperationException ||
                         ex instanceof AuthenticationFailedException) {
-                    if (TextUtils.isEmpty(mCurrentDir)) {
-                        // If currentDir isn't set, load default
-                        // This is local storage or root depending on mode
-                        mCurrentDir = FileHelper.ROOT_DIRECTORY;
-                    }
                     return null;
                 }
 
@@ -390,8 +396,20 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
                 // Do animation
                 fadeEfect(false);
             } else {
-                // Reload current directory
-                changeCurrentDir(mCurrentDir);
+                if (TextUtils.isEmpty(mCurrentDir)) {
+                    if (mOnBackRequestListener != null) {
+                        // Go back to previous view
+                        post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mOnBackRequestListener.onBackRequested();
+                            }
+                        });
+                    }
+                } else {
+                    // Reload current directory
+                    changeCurrentDir(mCurrentDir);
+                }
             }
         }
 
@@ -431,6 +449,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
     private OnNavigationRequestMenuListener mOnNavigationRequestMenuListener;
     private OnFilePickedListener mOnFilePickedListener;
     private OnDirectoryChangedListener mOnDirectoryChangedListener;
+    private OnBackRequestListener mOnBackRequestListener;
 
     private boolean mChRooted;
 
@@ -725,6 +744,17 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
             OnDirectoryChangedListener onDirectoryChangedListener) {
         this.mOnDirectoryChangedListener = onDirectoryChangedListener;
     }
+
+    /**
+     * Method that sets the listener for back requests
+     *
+     * @param onBackRequestListener The listener reference
+     */
+    public void setOnBackRequestListener(
+            OnBackRequestListener onBackRequestListener) {
+        this.mOnBackRequestListener = onBackRequestListener;
+    }
+
 
     /**
      * Method that sets if the view should use flinger gesture detection.
