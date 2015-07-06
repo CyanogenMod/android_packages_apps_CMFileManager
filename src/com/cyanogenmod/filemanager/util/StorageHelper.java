@@ -22,11 +22,14 @@ import android.os.storage.StorageVolume;
 
 import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
+import com.cyanogenmod.filemanager.console.VirtualMountPointConsole;
 import com.cyanogenmod.filemanager.console.storageapi.StorageApiConsole;
+import com.cyanogenmod.filemanager.model.MountPoint;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -145,6 +148,40 @@ public final class StorageHelper {
             }
         }
         return false;
+    }
+
+    /**
+     * Method that returns the volume storage path that the parameter belongs to
+     *
+     * @param path The path
+     * @return volumePath, valid path if found, null if the path is not in a volume storage
+     */
+    public static String getStorageVolumeFromPath(String path) {
+        String volumePath = null;
+        if (StorageApiConsole.getStorageApiConsoleForPath(path) != null) {
+            return String.valueOf(StorageApiConsole.getHashCodeFromStorageApiPath(path));
+        }
+
+        String fso = FileHelper.getAbsPath(path);
+        List<MountPoint> mps = VirtualMountPointConsole.getVirtualMountPoints();
+        for (MountPoint mp : mps) {
+            if (mp.isSecure()) {
+                if (fso.startsWith(mp.getMountPoint())) {
+                    return mp.getMountPoint();
+                }
+            }
+        }
+        StorageVolume[] volumes =
+                getStorageVolumes(FileManagerApplication.getInstance().getApplicationContext(),
+                        false);
+        int cc = volumes.length;
+        for (int i = 0; i < cc; i++) {
+            StorageVolume vol = volumes[i];
+            if (fso.startsWith(vol.getPath())) {
+                return vol.getPath();
+            }
+        }
+        return volumePath;
     }
 
     /**
