@@ -22,11 +22,15 @@ import android.os.storage.StorageVolume;
 
 import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
+import com.cyanogenmod.filemanager.console.VirtualMountPointConsole;
 import com.cyanogenmod.filemanager.console.storageapi.StorageApiConsole;
+import com.cyanogenmod.filemanager.model.FileSystemObject;
+import com.cyanogenmod.filemanager.model.MountPoint;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -145,6 +149,59 @@ public final class StorageHelper {
             }
         }
         return false;
+    }
+
+    /**
+     * Method that returns the volume storage path that the parameter belongs to
+     *
+     * @param path The path
+     * @return volumePath, valid path if found, null if the path is not in a volume storage
+     */
+    public static String getStorageVolumeFromPath(String path) {
+        String volumePath = null;
+        if (StorageApiConsole.getStorageApiConsoleForPath(path) != null) {
+            return String.valueOf(StorageApiConsole.getHashCodeFromStorageApiPath(path));
+        }
+
+        String fso = FileHelper.getAbsPath(path);
+
+        // Check root
+        volumePath = fileStartsWithPath(fso, FileHelper.ROOT_DIRECTORY, volumePath);
+
+        // Check virtual mount points (secure storage)
+        List<MountPoint> mps = VirtualMountPointConsole.getVirtualMountPoints();
+        for (MountPoint mp : mps) {
+            if (mp.isSecure()) {
+                volumePath = fileStartsWithPath(fso, mp.getMountPoint(), volumePath);
+            }
+        }
+
+        // Check storage volumes (sdcard, usb, etc)
+        StorageVolume[] volumes =
+                getStorageVolumes(FileManagerApplication.getInstance().getApplicationContext(),
+                        false);
+        int cc = volumes.length;
+        for (int i = 0; i < cc; i++) {
+            StorageVolume vol = volumes[i];
+            volumePath = fileStartsWithPath(fso, vol.getPath(), volumePath);
+        }
+        return volumePath;
+    }
+
+    /**
+     * Method returns volume root path closer related to file specified
+     *
+     * @param file the file to find closest mount point of
+     * @param path the current path to check
+     * @param volumePath the current mount path which is determined to be closest to the file path
+     */
+    private static String fileStartsWithPath(String file, String path, String volumePath) {
+        if (file.startsWith(path)) {
+            if (volumePath == null || path.length() > volumePath.length()) {
+                volumePath = path;
+            }
+        }
+        return volumePath;
     }
 
     /**
