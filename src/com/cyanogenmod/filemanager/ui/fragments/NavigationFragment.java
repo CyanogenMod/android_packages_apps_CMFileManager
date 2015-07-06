@@ -110,6 +110,7 @@ import com.cyanogenmod.filemanager.ui.widgets.Breadcrumb;
 import com.cyanogenmod.filemanager.ui.widgets.ButtonItem;
 import com.cyanogenmod.filemanager.ui.widgets.NavigationCustomTitleView;
 import com.cyanogenmod.filemanager.ui.widgets.NavigationView;
+import com.cyanogenmod.filemanager.ui.widgets.NavigationView.OnDirectoryChangedListener;
 import com.cyanogenmod.filemanager.ui.widgets.NavigationView.OnNavigationRequestMenuListener;
 import com.cyanogenmod.filemanager.ui.widgets.NavigationView.OnNavigationSelectionChangedListener;
 import com.cyanogenmod.filemanager.ui.widgets.SelectionView;
@@ -216,6 +217,8 @@ public class NavigationFragment extends Fragment
     private InputMethodManager mImm;
     private View mTitleLayout;
     private View mStatusBar;
+
+    private OnDirectoryChangedListener mOnDirectoryChangedListener;
 
 
     private final BroadcastReceiver mNotificationReceiver = new BroadcastReceiver() {
@@ -1348,6 +1351,7 @@ public class NavigationFragment extends Fragment
         //- 0
         this.mNavigationViews[0] = (NavigationView) mView.findViewById(R.id.navigation_view);
         this.mNavigationViews[0].setId(0);
+        this.mNavigationViews[0].setOnDirectoryChangedListener(mOnDirectoryChangedListener);
     }
 
     /**
@@ -2465,5 +2469,19 @@ public class NavigationFragment extends Fragment
 
     public void updateActiveDialog(Dialog dialog) {
         mActiveDialog = dialog;
+    }
+
+    /**
+     * Method that sets the listener for directory changes
+     *
+     * @param onDirectoryChangedListener The listener reference
+     */
+    public void setOnDirectoryChangedListener(
+            OnDirectoryChangedListener onDirectoryChangedListener) {
+        mOnDirectoryChangedListener = onDirectoryChangedListener;
+        NavigationView current = getCurrentNavigationView();
+        if (current != null) {
+            current.setOnDirectoryChangedListener(mOnDirectoryChangedListener);
+        }
     }
 }

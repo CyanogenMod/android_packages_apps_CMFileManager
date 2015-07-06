@@ -222,6 +222,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
         private String mNewDirChecked;
         private final SearchInfoParcelable mSearchInfo;
         private final FileSystemObject mScrollTo;
+        private FileSystemObject mNewDirFSO;
 
         public NavigationTask(boolean useCurrent, boolean addToHistory, boolean reload,
                 SearchInfoParcelable searchInfo, FileSystemObject scrollTo) {
@@ -231,6 +232,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
             this.mSearchInfo = searchInfo;
             this.mReload = reload;
             this.mScrollTo = scrollTo;
+            this.mNewDirFSO = null;
         }
 
         /**
@@ -282,6 +284,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
                 List<FileSystemObject> files = NavigationView.this.mFiles;
                 if (!mUseCurrent) {
                     files = CommandHelper.listFiles(getContext(), mNewDirChecked, null);
+                    mNewDirFSO = CommandHelper.getFileInfo(getContext(), mNewDirChecked, null);
                 }
                 return files;
 
@@ -341,7 +344,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
                                 }
                                 onPostExecuteTask(
                                         mTaskFiles, mAddToHistory, mIsNewHistory, mHasChanged,
-                                        mSearchInfo, mNewDirChecked, mScrollTo);
+                                        mSearchInfo, mNewDirChecked, mNewDirFSO, mScrollTo);
                             }
                         });
                 final OnRelaunchCommandResult exListener =
@@ -385,7 +388,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
             // This means an exception. This method will be recalled then
             if (files != null) {
                 onPostExecuteTask(files, mAddToHistory, mIsNewHistory, mHasChanged,
-                        mSearchInfo, mNewDirChecked, mScrollTo);
+                        mSearchInfo, mNewDirChecked, mNewDirFSO, mScrollTo);
 
                 // Do animation
                 fadeEfect(false);
@@ -1061,13 +1064,14 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
      * @param hasChanged If current directory was changed
      * @param searchInfo The search information (if calling activity is {@link "SearchActivity"})
      * @param newDir The new directory
+     * @param newDirFSO the new directory in FSO form
      * @param scrollTo If not null, then listview must scroll to this item
      * @hide
      */
     void onPostExecuteTask(
             List<FileSystemObject> files, boolean addToHistory, boolean isNewHistory,
             boolean hasChanged, SearchInfoParcelable searchInfo,
-            String newDir, final FileSystemObject scrollTo) {
+            String newDir, final FileSystemObject newDirFSO, final FileSystemObject scrollTo) {
         try {
             //Check that there is not errors and have some data
             if (files == null) {
@@ -1111,7 +1115,8 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
             //The current directory is now the "newDir"
             this.mCurrentDir = newDir;
             if (this.mOnDirectoryChangedListener != null) {
-                FileSystemObject dir = FileHelper.createFileSystemObject(new File(newDir));
+                FileSystemObject dir = (newDirFSO != null) ?
+                        newDirFSO : FileHelper.createFileSystemObject(new File(newDir));
                 this.mOnDirectoryChangedListener.onDirectoryChanged(dir);
             }
         } finally {
