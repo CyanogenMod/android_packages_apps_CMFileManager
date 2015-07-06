@@ -170,7 +170,7 @@ public class MainActivity extends ActionBarActivity
             public void onBackStackChanged() {
                 updateCurrentFragment();
                 if (isCurrentFragment(FragmentType.HOME)) {
-                    mNavigationDrawerController.setSelected(NAVIGATION_DRAWER_HOME);
+                    mNavigationDrawerController.setSelected(R.id.navigation_item_home);
                 }
             }
         });
@@ -216,6 +216,8 @@ public class MainActivity extends ActionBarActivity
                 currentFragment = new NavigationFragment();
                 ((NavigationFragment)currentFragment)
                         .setOnBackRequestListener(this);
+		((NavigationFragment)currentFragment)
+                        .setOnDirectoryChangedListener(mNavigationDrawerController);
                 fragmentTag = fragmentType.name();
                 break;
             case LOGIN:
@@ -228,7 +230,7 @@ public class MainActivity extends ActionBarActivity
                 mPopBackStack = false;
                 currentFragment = HomeFragment.newInstance();
                 fragmentTag = fragmentType.name();
-                mNavigationDrawerController.setSelected(NAVIGATION_DRAWER_HOME);
+                mNavigationDrawerController.setSelected(R.id.navigation_item_home);
                 break;
         }
 
@@ -297,17 +299,17 @@ public class MainActivity extends ActionBarActivity
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        view.setSelected(true);
-        mNavigationDrawerController.setSelected(position);
         int itemId = view.getId();
         switch (itemId) {
             case R.id.navigation_item_home:
                 if (DEBUG) Log.d(TAG, "onNavigationItemSelected::navigation_item_home");
                 setCurrentFragment(FragmentType.HOME);
+                mNavigationDrawerController.setSelected(itemId);
                 break;
             case R.id.navigation_item_favorites:
                 // TODO: Implement this path
                 if (DEBUG) Log.d(TAG, "onNavigationItemSelected::navigation_item_favorites");
+                mNavigationDrawerController.setSelected(itemId);
                 break;
             case R.id.navigation_item_internal:
                 if (DEBUG) Log.d(TAG, "onNavigationItemSelected::navigation_item_favorites");
