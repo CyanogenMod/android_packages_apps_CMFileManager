@@ -205,6 +205,32 @@ public final class StorageHelper {
     }
 
     /**
+     * Method that returns the volume storage path that the parameter belongs to
+     *
+     * @param storageVolumePath The path
+     * @return mountedState, true if the path is in a mounted volume storage, else false
+     */
+    public static boolean isStorageVolumeMounted(String storageVolumePath) {
+        StorageVolume[] volumes =
+                getStorageVolumes(FileManagerApplication.getInstance().getApplicationContext(),
+                        false);
+        int cc = volumes.length;
+        for (int i = 0; i < cc; i++) {
+            StorageVolume vol = volumes[i];
+            String p = new File(storageVolumePath).getAbsolutePath();
+            String v = new File(vol.getPath()).getAbsolutePath();
+            if (p.compareTo(v) == 0) {
+                String volumeState = vol.getState();
+                if (Environment.MEDIA_MOUNTED.equalsIgnoreCase(volumeState) ||
+                        Environment.MEDIA_MOUNTED_READ_ONLY.equalsIgnoreCase(volumeState)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * Method that returns if the path is a storage volume
      *
      * @param path The path

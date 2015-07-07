@@ -31,9 +31,6 @@ import android.content.res.XmlResourceParser;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.nfc.NfcAdapter;
-import android.nfc.NfcEvent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -45,10 +42,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -59,12 +53,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListPopupWindow;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ArrayAdapter;
 
 import com.android.internal.util.XmlUtils;
 import com.cyanogenmod.filemanager.FileManagerApplication;
@@ -77,9 +69,7 @@ import com.cyanogenmod.filemanager.console.ConsoleAllocException;
 import com.cyanogenmod.filemanager.console.ConsoleBuilder;
 import com.cyanogenmod.filemanager.console.InsufficientPermissionsException;
 import com.cyanogenmod.filemanager.console.NoSuchFileOrDirectory;
-import com.cyanogenmod.filemanager.console.VirtualConsole;
 import com.cyanogenmod.filemanager.console.VirtualMountPointConsole;
-import com.cyanogenmod.filemanager.console.secure.SecureConsole;
 import com.cyanogenmod.filemanager.console.storageapi.StorageApiConsole;
 import com.cyanogenmod.filemanager.listeners.OnHistoryListener;
 import com.cyanogenmod.filemanager.listeners.OnRequestRefreshListener;
@@ -120,7 +110,6 @@ import com.cyanogenmod.filemanager.util.BookmarksHelper;
 import com.cyanogenmod.filemanager.util.CommandHelper;
 import com.cyanogenmod.filemanager.util.DialogHelper;
 import com.cyanogenmod.filemanager.util.ExceptionUtil;
-import com.cyanogenmod.filemanager.util.ExceptionUtil.OnRelaunchCommandResult;
 import com.cyanogenmod.filemanager.util.FileHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
 import com.cyanogenmod.filemanager.util.StorageHelper;
@@ -128,13 +117,11 @@ import com.cyanogenmod.filemanager.util.StorageHelper;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.*;
 import static com.cyanogenmod.filemanager.activities.PickerActivity.EXTRA_FOLDER_PATH;
 
 /**
@@ -355,9 +342,24 @@ public class NavigationFragment extends Fragment
                         FileManagerSettings.INTENT_MOUNT_STATUS_CHANGED) == 0 ||
                             intent.getAction().equals(Intent.ACTION_MEDIA_MOUNTED) ||
                             intent.getAction().equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
-                    onRequestBookmarksRefresh();
                     removeUnmountedHistory();
                     removeUnmountedSelection();
+                    if (intent.getAction().equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
+                        // Check if current path is within unmounted media
+                        String volumePath = StorageHelper.getStorageVolumeFromPath(
+                                getCurrentNavigationView().getCurrentDir());
+                        if (!StorageHelper.isStorageVolumeMounted(volumePath)) {
+                            if (mOnBackRequestListener != null) {
+                                // Go back to last valid view
+                                mHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mOnBackRequestListener.onBackRequested();
+                                    }
+                                });
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1934,14 +1936,11 @@ public class NavigationFragment extends Fragment
      */
     public synchronized boolean navigateToHistory(History history) {
         try {
-            //Gets the history
-            History realHistory = this.mHistory.get(history.getPosition());
-
             //Navigate to item. Check what kind of history is
-            if (realHistory.getItem() instanceof NavigationViewInfoParcelable) {
+            if (history.getItem() instanceof NavigationViewInfoParcelable) {
                 //Navigation
                 NavigationViewInfoParcelable info =
-                        (NavigationViewInfoParcelable)realHistory.getItem();
+                        (NavigationViewInfoParcelable)history.getItem();
                 int viewId = info.getId();
                 NavigationView view = getNavigationView(viewId);
                 // Selected items must not be restored from on history navigation
@@ -1950,9 +1949,9 @@ public class NavigationFragment extends Fragment
                     return true;
                 }
 
-            } else if (realHistory.getItem() instanceof SearchInfoParcelable) {
+            } else if (history.getItem() instanceof SearchInfoParcelable) {
                 //Search (open search with the search results)
-                SearchInfoParcelable info = (SearchInfoParcelable)realHistory.getItem();
+                SearchInfoParcelable info = (SearchInfoParcelable)history.getItem();
                 Intent searchIntent = new Intent(getActivity(), SearchActivity.class);
                 searchIntent.setAction(SearchActivity.ACTION_RESTORE);
                 searchIntent.putExtra(SearchActivity.EXTRA_SEARCH_RESTORE, (Parcelable)info);
@@ -1963,7 +1962,7 @@ public class NavigationFragment extends Fragment
             }
 
             //Remove the old history
-            int cc = realHistory.getPosition();
+            int cc = mHistory.lastIndexOf(history);
             for (int i = this.mHistory.size() - 1; i >= cc; i--) {
                 this.mHistory.remove(i);
             }
@@ -2122,24 +2121,9 @@ public class NavigationFragment extends Fragment
                     String p1 = ((NavigationViewInfoParcelable) history.getItem()).getCurrentDir();
                     if (p0.compareTo(p1) == 0) {
                         this.mHistory.remove(i);
-                        mDrawerHistory.removeViewAt(mDrawerHistory.getChildCount() - i - 1);
-                        mDrawerHistoryEmpty.setVisibility(
-                                mDrawerHistory.getChildCount() == 0 ? View.VISIBLE : View.GONE);
-                        updateHistoryPositions();
                     }
                 }
             }
-        }
-    }
-
-    /**
-     * Update the history positions after one of the history is removed from drawer
-     */
-    private void updateHistoryPositions() {
-        int cc = this.mHistory.size() - 1;
-        for (int i = 0; i <= cc ; i++) {
-            History history = this.mHistory.get(i);
-            history.setPosition(i + 1);
         }
     }
 
@@ -2344,7 +2328,6 @@ public class NavigationFragment extends Fragment
                 }
             }
         }
-        updateHistoryPositions();
     }
 
     /**
