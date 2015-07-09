@@ -145,7 +145,7 @@ public class ListCommand extends Program implements ListExecutable {
             if (documents != null && !documents.isEmpty()) {
                 for (Document document : documents) {
                     FileSystemObject fso =
-                            FileHelper.createFileSystemObject(document, providerPrefix);
+                            FileHelper.createFileSystemObject(document, current, providerPrefix);
                     if (fso != null) {
                         if (isTrace()) {
                             Log.v(TAG, String.valueOf(fso));
@@ -165,7 +165,8 @@ public class ListCommand extends Program implements ListExecutable {
 
         } else {
             // Build the parent information
-            FileSystemObject fso = FileHelper.createFileSystemObject(current, providerPrefix);
+            FileSystemObject fso =
+                    FileHelper.createFileSystemObject(current, current, providerPrefix);
             if (fso != null) {
                 if (isTrace()) {
                     Log.v(TAG, String.valueOf(fso));

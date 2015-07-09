@@ -21,6 +21,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
@@ -59,6 +60,7 @@ import java.util.List;
  */
 public class FileSystemObjectAdapter
     extends ArrayAdapter<FileSystemObject> implements OnClickListener {
+    private static final String TAG = FileSystemObjectAdapter.class.getSimpleName();
 
     /**
      * An interface to communicate selection changes events.
@@ -522,14 +524,19 @@ public class FileSystemObjectAdapter
      * @param item The path or the {@link FileSystemObject}
      */
     private void openPropertiesDialog(Object item) {
+        FileSystemObject fso = null;
         // Resolve the full path
         String path = String.valueOf(item);
         if (item instanceof FileSystemObject) {
             path = ((FileSystemObject)item).getFullPath();
+            fso = (FileSystemObject)item;
+        } else {
+            Log.e(TAG, "Failed to open Properties Dialog. Invalid file object.");
+            return;
         }
 
         // Prior to show the dialog, refresh the item reference
-        FileSystemObject fso = null;
+        /*FileSystemObject fso = null;
         try {
             fso = CommandHelper.getFileInfo(getContext(), path, false, null);
             if (fso == null) {
@@ -551,7 +558,7 @@ public class FileSystemObjectAdapter
                 }
             }
             return;
-        }
+        }*/
 
         // Show the dialog
         InfoActionPolicy.showPropertiesDialog(getContext(), fso, null);
