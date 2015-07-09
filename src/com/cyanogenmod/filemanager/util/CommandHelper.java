@@ -22,7 +22,7 @@ import android.media.MediaScannerConnection;
 import android.provider.MediaStore.Files;
 
 import android.provider.MediaStore;
-import com.cyanogen.ambient.storage.StorageApi;
+import android.util.Log;
 import com.cyanogenmod.filemanager.commands.AsyncResultListener;
 import com.cyanogenmod.filemanager.commands.ChangeOwnerExecutable;
 import com.cyanogenmod.filemanager.commands.ChangePermissionsExecutable;
@@ -98,7 +98,7 @@ import java.util.List;
  * A helper class with useful methods for deal with commands.
  */
 public final class CommandHelper {
-
+    private static final String TAG = CommandHelper.class.getSimpleName();
     /**
      * A wrapper class for asynchronous operations that need restore the filesystem
      * after the operation.
@@ -746,8 +746,11 @@ public final class CommandHelper {
      * @param context The current context (needed if console == null)
      * @param src The file system object to move
      * @param dst The destination file system object
-     * @param console The console in which execute the program. <code>null</code>
-     * to attach to the default console
+     * @param name The name of the destination file system object
+     * @param srcConsole The src console, which the src belongs to,
+     * in which execute the program. <code>null</code> to attach to the default console
+     * @param dstConsole The dst console, which the dst belongs to,
+     * in which execute the program. <code>null</code> to attach to the default console
      * @return boolean The operation result
      * @throws FileNotFoundException If the initial directory not exists
      * @throws IOException If initial directory couldn't be checked
@@ -762,20 +765,22 @@ public final class CommandHelper {
      * @throws CancelledOperationException If the operation was cancelled
      * @see MoveExecutable
      */
-    public static boolean move(Context context, String src, String dst, Console console)
+    public static boolean move(Context context, String src, String dst, String name,
+            Console srcConsole, Console dstConsole)
             throws FileNotFoundException, IOException, ConsoleAllocException,
             NoSuchFileOrDirectory, InsufficientPermissionsException,
             CommandNotFoundException, OperationTimeoutException,
             ExecutionException, InvalidCommandDefinitionException, ReadOnlyFilesystemException,
             CancelledOperationException {
 
-        Console cSrc = ensureConsoleForFile(context, console, src);
-        Console cDst = ensureConsoleForFile(context, console, dst);
-        boolean ret = true;
-        if (cSrc.equals(cDst) && !FileHelper.isSamePath(src, dst)) {
+        Console cSrc = ensureConsoleForFile(context, srcConsole, src);
+        Console cDst = ensureConsoleForFile(context, dstConsole, dst);
+        boolean ret = false;
+        if (cSrc.equals(cDst) && (!FileHelper.isSamePath(src, dst) ||
+                cSrc instanceof StorageApiConsole || cDst instanceof StorageApiConsole)) {
             // Is safe to use the same console
             MoveExecutable executable =
-                    cSrc.getExecutableFactory().newCreator().createMoveExecutable(src, dst);
+                    cSrc.getExecutableFactory().newCreator().createMoveExecutable(src, dst, null);
             writableExecute(context, executable, cSrc);
             ret = executable.getResult().booleanValue();
         } else {
@@ -788,24 +793,39 @@ public final class CommandHelper {
             try {
                 MoveExecutable moveExecutable =
                         cSrc.getExecutableFactory().newCreator().createMoveExecutable(
-                                src, tmp.getAbsolutePath());
+                                src, tmp.getAbsolutePath(), null);
                 writableExecute(context, moveExecutable, cSrc);
-                if (!moveExecutable.getResult().booleanValue()) {
-                    ret = false;
-                }
+                ret = moveExecutable.getResult().booleanValue();
 
                 // 2.- Move the temporary file to the final filesystem with the destination console
                 if (ret) {
-                    moveExecutable =
-                            cDst.getExecutableFactory().newCreator().createMoveExecutable(
-                                    tmp.getAbsolutePath(), dst);
-                    writableExecute(context, moveExecutable, cDst);
-                    if (!moveExecutable.getResult().booleanValue()) {
-                        ret = false;
+                    // Reset return status at start of next command
+                    ret = false;
+                    CopyExecutable copyExecutable =
+                            cDst.getExecutableFactory().newCreator().createCopyExecutable(
+                                    tmp.getAbsolutePath(), dst, name);
+                    writableExecute(context, copyExecutable, cDst);
+                    ret = copyExecutable.getResult().booleanValue();
+
+                    // User isn't alerted about a command failure unless an exception is thrown.
+                    if (!ret) {
+                        // Alert failed move operation
+                        throw new ExecutionException("Error moving file.");
                     }
                 }
 
             } finally {
+                // 3.- If unsuccessful, copy temp back to source files
+                if (!ret) {
+                    MoveExecutable moveExecutable =
+                            cSrc.getExecutableFactory().newCreator().createMoveExecutable(
+                                    tmp.getAbsolutePath(), src, null);
+                    writableExecute(context, moveExecutable, cSrc);
+                    if (!moveExecutable.getResult().booleanValue()) {
+                        Log.d(TAG, "Failed to restore file.");
+                    }
+                }
+
                 FileHelper.deleteFileOrFolder(tmp);
             }
         }
@@ -839,8 +859,11 @@ public final class CommandHelper {
      * @param context The current context (needed if console == null)
      * @param src The file system object to copy
      * @param dst The destination file system object
-     * @param console The console in which execute the program. <code>null</code>
-     * to attach to the default console
+     * @param name The name of the destination file system object
+     * @param srcConsole The src console, which the src belongs to,
+     * in which execute the program. <code>null</code> to attach to the default console
+     * @param dstConsole The dst console, which the dst belongs to,
+     * in which execute the program. <code>null</code> to attach to the default console
      * @return boolean The operation result
      * @throws FileNotFoundException If the initial directory not exists
      * @throws IOException If initial directory couldn't be checked
@@ -855,20 +878,22 @@ public final class CommandHelper {
      * @throws CancelledOperationException If the operation was cancelled
      * @see CopyExecutable
      */
-    public static boolean copy(Context context, String src, String dst, Console console)
+    public static boolean copy(Context context, String src, String dst, String name,
+                               Console srcConsole, Console dstConsole)
             throws FileNotFoundException, IOException, ConsoleAllocException,
             NoSuchFileOrDirectory, InsufficientPermissionsException,
             CommandNotFoundException, OperationTimeoutException,
             ExecutionException, InvalidCommandDefinitionException, ReadOnlyFilesystemException,
             CancelledOperationException {
 
-        Console cSrc = ensureConsoleForFile(context, console, src);
-        Console cDst = ensureConsoleForFile(context, console, dst);
+        Console cSrc = ensureConsoleForFile(context, srcConsole, src);
+        Console cDst = ensureConsoleForFile(context, dstConsole, dst);
         boolean ret = true;
-        if (cSrc.equals(cDst) && !FileHelper.isSamePath(src, dst)) {
+        if (cSrc.equals(cDst) && (!FileHelper.isSamePath(src, dst) ||
+                cSrc instanceof StorageApiConsole || cDst instanceof StorageApiConsole)) {
             // Is safe to use the same console
             CopyExecutable executable =
-                    cSrc.getExecutableFactory().newCreator().createCopyExecutable(src, dst);
+                    cSrc.getExecutableFactory().newCreator().createCopyExecutable(src, dst, null);
             writableExecute(context, executable, cSrc);
             ret = executable.getResult().booleanValue();
         } else {
@@ -881,7 +906,7 @@ public final class CommandHelper {
             try {
                 CopyExecutable copyExecutable =
                         cSrc.getExecutableFactory().newCreator().createCopyExecutable(
-                                src, tmp.getAbsolutePath());
+                                src, tmp.getAbsolutePath(), null);
                 writableExecute(context, copyExecutable, cSrc);
                 if (!copyExecutable.getResult().booleanValue()) {
                     ret = false;
@@ -891,7 +916,7 @@ public final class CommandHelper {
                 if (ret) {
                     MoveExecutable moveExecutable =
                             cDst.getExecutableFactory().newCreator().createMoveExecutable(
-                                    tmp.getAbsolutePath(), dst);
+                                    tmp.getAbsolutePath(), dst, name);
                     writableExecute(context, moveExecutable, cDst);
                     if (!moveExecutable.getResult().booleanValue()) {
                         ret = false;

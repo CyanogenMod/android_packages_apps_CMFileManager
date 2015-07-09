@@ -98,7 +98,7 @@ public class SecureExecutableCreator implements ExecutableCreator {
      * {@inheritDoc}
      */
     @Override
-    public CopyExecutable createCopyExecutable(String src, String dst)
+    public CopyExecutable createCopyExecutable(String src, String dst, String name)
             throws CommandNotFoundException {
         return new CopyCommand(mConsole, src, dst);
     }
@@ -259,7 +259,7 @@ public class SecureExecutableCreator implements ExecutableCreator {
      * {@inheritDoc}
      */
     @Override
-    public MoveExecutable createMoveExecutable(String src, String dst)
+    public MoveExecutable createMoveExecutable(String src, String dst, String name)
             throws CommandNotFoundException {
         return new MoveCommand(mConsole, src, dst);
     }
