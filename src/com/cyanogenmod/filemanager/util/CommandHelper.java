@@ -762,17 +762,19 @@ public final class CommandHelper {
      * @throws CancelledOperationException If the operation was cancelled
      * @see MoveExecutable
      */
-    public static boolean move(Context context, String src, String dst, Console console)
+    public static boolean move(Context context, String src, String dst,
+            Console srcConsole, Console dstConsole)
             throws FileNotFoundException, IOException, ConsoleAllocException,
             NoSuchFileOrDirectory, InsufficientPermissionsException,
             CommandNotFoundException, OperationTimeoutException,
             ExecutionException, InvalidCommandDefinitionException, ReadOnlyFilesystemException,
             CancelledOperationException {
 
-        Console cSrc = ensureConsoleForFile(context, console, src);
-        Console cDst = ensureConsoleForFile(context, console, dst);
+        Console cSrc = ensureConsoleForFile(context, srcConsole, src);
+        Console cDst = ensureConsoleForFile(context, dstConsole, dst);
         boolean ret = true;
-        if (cSrc.equals(cDst) && !FileHelper.isSamePath(src, dst)) {
+        if (cSrc.equals(cDst) && (!FileHelper.isSamePath(src, dst) ||
+                cSrc instanceof StorageApiConsole || cDst instanceof StorageApiConsole)) {
             // Is safe to use the same console
             MoveExecutable executable =
                     cSrc.getExecutableFactory().newCreator().createMoveExecutable(src, dst);

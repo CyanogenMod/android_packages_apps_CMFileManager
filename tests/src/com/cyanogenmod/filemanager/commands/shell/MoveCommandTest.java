@@ -51,7 +51,8 @@ public class MoveCommandTest extends AbstractConsoleTest {
         try {
             CommandHelper.createFile(getContext(), PATH_FILE_SRC, getConsole());
             boolean ret =
-                    CommandHelper.move(getContext(), PATH_FILE_SRC, PATH_FILE_DST, getConsole());
+                    CommandHelper.move(getContext(), PATH_FILE_SRC, PATH_FILE_DST,
+                            getConsole(), getConsole());
             assertTrue("response==false", ret); //$NON-NLS-1$
         } finally {
             try {
