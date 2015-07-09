@@ -51,7 +51,7 @@ public class CopyCommandTest extends AbstractConsoleTest {
         try {
             CommandHelper.createFile(getContext(), PATH_FILE_SRC, getConsole());
             boolean ret = CommandHelper.copy(
-                    getContext(), PATH_FILE_SRC, PATH_FILE_DST, getConsole());
+                    getContext(), PATH_FILE_SRC, PATH_FILE_DST, null, getConsole(), getConsole());
             assertTrue("response==false", ret); //$NON-NLS-1$
         } finally {
             try {

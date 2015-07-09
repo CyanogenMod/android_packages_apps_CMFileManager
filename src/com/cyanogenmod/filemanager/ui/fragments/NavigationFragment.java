@@ -19,11 +19,13 @@ package com.cyanogenmod.filemanager.ui.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
@@ -205,6 +207,8 @@ public class NavigationFragment extends Fragment
     private InputMethodManager mImm;
     private View mTitleLayout;
     private View mStatusBar;
+
+    private AsyncTask mOpenActionsDialogAsyncTask;
 
     private OnBackRequestListener mOnBackRequestListener;
     private OnGoHomeRequestListener mOnGoHomeRequestListener;
@@ -2069,43 +2073,88 @@ public class NavigationFragment extends Fragment
      * @param item The path or the {@link FileSystemObject}
      * @param global If the menu to display is the one with global actions
      */
-    public void openActionsDialog(Object item, boolean global) {
-        // Resolve the full path
-        String path = String.valueOf(item);
-        if (item instanceof FileSystemObject) {
-            path = ((FileSystemObject)item).getFullPath();
-        }
+    public void openActionsDialog(final Object item, final boolean global) {
+        final NavigationFragment backRef = this;
+        final OnRequestRefreshListener onRequestRefreshListener = this;
+        if (mOpenActionsDialogAsyncTask == null ||
+                mOpenActionsDialogAsyncTask.getStatus() == AsyncTask.Status.FINISHED) {
+            mOpenActionsDialogAsyncTask = new AsyncTask<Object, Void, FileSystemObject>() {
+                private ProgressDialog progressDialog;
 
-        // Prior to show the dialog, refresh the item reference
-        FileSystemObject fso = null;
-        try {
-            fso = CommandHelper.getFileInfo(getActivity(), path, false, null);
-            if (fso == null) {
-                throw new NoSuchFileOrDirectory(path);
-            }
+                @Override
+                protected FileSystemObject doInBackground(Object... params) {
+                    // Resolve the full path
+                    String path = String.valueOf(item);
+                    if (item instanceof FileSystemObject) {
+                        path = ((FileSystemObject) item).getFullPath();
+                    }
 
-        } catch (Exception e) {
-            // Notify the user
-            ExceptionUtil.translateException(getActivity(), e);
+                    // Prior to show the dialog, refresh the item reference
+                    FileSystemObject fso = null;
+                    try {
+                        fso = CommandHelper.getFileInfo(getActivity(), path, false, null);
+                        if (fso == null) {
+                            throw new NoSuchFileOrDirectory(path);
+                        }
 
-            // Remove the object
-            if (e instanceof FileNotFoundException || e instanceof NoSuchFileOrDirectory) {
-                // If have a FileSystemObject reference then there is no need to search
-                // the path (less resources used)
-                if (item instanceof FileSystemObject) {
-                    getCurrentNavigationView().removeItem((FileSystemObject)item);
-                } else {
-                    getCurrentNavigationView().removeItem((String)item);
+                    } catch (Exception e) {
+                        // Notify the user
+                        ExceptionUtil.translateException(getActivity(), e);
+
+                        // Remove the object
+                        if (e instanceof FileNotFoundException || e instanceof NoSuchFileOrDirectory) {
+                            // If have a FileSystemObject reference then there is no need to search
+                            // the path (less resources used)
+                            if (item instanceof FileSystemObject) {
+                                getCurrentNavigationView().removeItem((FileSystemObject) item);
+                            } else {
+                                getCurrentNavigationView().removeItem((String) item);
+                            }
+                        }
+                        return fso;
+                    }
+                    return fso;
                 }
-            }
-            return;
-        }
 
-        // Show the dialog
-        ActionsDialog dialog = new ActionsDialog(getActivity(), this, fso, global, false);
-        dialog.setOnRequestRefreshListener(this);
-        dialog.setOnSelectionListener(getCurrentNavigationView());
-        dialog.show();
+                @Override
+                protected void onPreExecute() {
+                    progressDialog = new ProgressDialog(getActivity());
+                    progressDialog.setMessage(getString(R.string.loading_message));
+                    progressDialog.setOnDismissListener(new OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            cancel(true);
+                        }
+                    });
+                    progressDialog.show();
+
+                }
+
+                @Override
+                protected void onPostExecute(final FileSystemObject fso) {
+                    if (progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
+                    if (fso != null) {
+                        // Show the dialog
+                        ActionsDialog dialog =
+                                new ActionsDialog(getActivity(), backRef, fso, global, false);
+                        dialog.setOnRequestRefreshListener(onRequestRefreshListener);
+                        dialog.setOnSelectionListener(getCurrentNavigationView());
+                        dialog.show();
+                    }
+                }
+
+                @Override
+                protected void onCancelled() {
+                    if (progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
+                }
+
+            };
+            mOpenActionsDialogAsyncTask.execute();
+        }
     }
 
     /**

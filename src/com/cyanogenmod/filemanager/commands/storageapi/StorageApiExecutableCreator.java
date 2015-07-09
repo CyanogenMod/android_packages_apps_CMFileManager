@@ -98,9 +98,9 @@ public class StorageApiExecutableCreator implements ExecutableCreator {
      * {@inheritDoc}
      */
     @Override
-    public CopyExecutable createCopyExecutable(String src, String dst)
+    public CopyExecutable createCopyExecutable(String src, String dst, String name)
             throws CommandNotFoundException {
-        throw new CommandNotFoundException("Not implemented"); //$NON-NLS-1$
+        return new CopyCommand(mConsole, src, dst, name);
     }
 
     /**
@@ -259,9 +259,9 @@ public class StorageApiExecutableCreator implements ExecutableCreator {
      * {@inheritDoc}
      */
     @Override
-    public MoveExecutable createMoveExecutable(String src, String dst)
+    public MoveExecutable createMoveExecutable(String src, String dst, String name)
             throws CommandNotFoundException {
-        throw new CommandNotFoundException("Not implemented"); //$NON-NLS-1$
+        return new MoveCommand(mConsole, src, dst, name);
     }
 
     /**

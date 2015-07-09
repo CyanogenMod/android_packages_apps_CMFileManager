@@ -197,7 +197,8 @@ public class CompressCommandTest extends AbstractConsoleTest {
         CompressExecutable cmd = null;
         try {
             // Copy a file to the folder of the test
-            CommandHelper.copy(getContext(), COMPRESS_DATA_SRC, COMPRESS_DATA_DST, getConsole());
+            CommandHelper.copy(getContext(), COMPRESS_DATA_SRC, COMPRESS_DATA_DST, null,
+                    getConsole(), getConsole());
 
             this.mNewPartialData = false;
             this.mNormalEnd = false;
