@@ -1117,7 +1117,7 @@ public final class FileHelper {
      * @param providerPrefix The prefix to file path that represents a specific provider
      * @return FileSystemObject The file system object reference
      */
-    public static FileSystemObject createFileSystemObject(Document document,
+    public static FileSystemObject createFileSystemObject(Document document, Document parent,
             String providerPrefix) {
         try {
             // The user and group name of the files. Use the defaults one for sdcards
@@ -1140,10 +1140,8 @@ public final class FileHelper {
             if (document.isDir()) {
                 return
                         new Directory(
-                                // TODO: Change from path to name
                                 document.getDisplayName(),
-                                // TODO: Add parent
-                                null, //document.getParent(),
+                                parent.getParentId(),
                                 providerPrefix,
                                 document.getId(),
                                 user, group, perm,
@@ -1153,15 +1151,52 @@ public final class FileHelper {
             // Build a regular file
             return
                     new RegularFile(
-                            // TODO: Change from path to name
                             document.getDisplayName(),
-                            // TODO: Add parent
-                            null, //document.getParent(),
+                            parent.getParentId(),
                             providerPrefix,
                             document.getId(),
                             user, group, perm,
                             document.getBytes(),
                             lastModified, lastModified, lastModified); // TODO: Get real dates
+        } catch (Exception e) {
+            Log.e(TAG, "Exception retrieving the fso", e); //$NON-NLS-1$
+        }
+        return null;
+    }
+
+    /**
+     * Method that creates a {@link FileSystemObject} from a {@link Document}
+     *
+     * @param parent The parent of the file/directory
+     * @param name The name of the file/directory
+     * @param providerPrefix The prefix to file path that represents a specific provider
+     * @return FileSystemObject The file system object reference
+     */
+    public static FileSystemObject createFileSystemObject(String parent, String name,
+            String providerPrefix) {
+        try {
+            // The user and group name of the files. Use the defaults one for sdcards
+            final String USER = "root"; //$NON-NLS-1$
+            final String GROUP = "sdcard_r"; //$NON-NLS-1$
+
+            // The user and group name of the files. In ChRoot, aosp give restrict access to
+            // this user and group. This applies for permission also. This has no really much
+            // interest if we not allow to change the permissions
+            AID userAID = AIDHelper.getAIDFromName(USER);
+            AID groupAID = AIDHelper.getAIDFromName(GROUP);
+            User user = new User(userAID.getId(), userAID.getName());
+            Group group = new Group(groupAID.getId(), groupAID.getName());
+            Permissions perm = Permissions.createDefaultFolderPermissions();
+
+            // Build a directory?
+            Date lastModified = new Date();
+            return new Directory(
+                    name,
+                    parent,
+                    providerPrefix,
+                    name,
+                    user, group, perm,
+                    lastModified, lastModified, lastModified); // TODO: Get real dates
         } catch (Exception e) {
             Log.e(TAG, "Exception retrieving the fso", e); //$NON-NLS-1$
         }
