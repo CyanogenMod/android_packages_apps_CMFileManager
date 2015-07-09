@@ -352,6 +352,19 @@ public class ShellExecutableCreator implements ExecutableCreator {
      * {@inheritDoc}
      */
     @Override
+    public MoveExecutable createMoveExecutable(String src, String dst, String name)
+            throws CommandNotFoundException {
+        try {
+            return new MoveCommand(src, dst);
+        } catch (InvalidCommandDefinitionException icdEx) {
+            throw new CommandNotFoundException("MoveCommand", icdEx); //$NON-NLS-1$
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ParentDirExecutable createParentDirExecutable(String fso)
             throws CommandNotFoundException {
         try {
