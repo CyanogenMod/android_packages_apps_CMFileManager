@@ -314,13 +314,16 @@ public interface ExecutableCreator {
      *
      * @param src The absolute path to the source file system object
      * @param dst The absolute path to the destination file system object
+     * @param name The name of the destination file system object
      * @return MoveExecutable A {@link MoveExecutable} executable implementation reference
      * @throws CommandNotFoundException If the executable can't be created
      * @throws NoSuchFileOrDirectory If the file or directory was not found
      * @throws InsufficientPermissionsException If an operation requires elevated permissions
      */
-    MoveExecutable createMoveExecutable(String src, String dst) throws CommandNotFoundException,
-            NoSuchFileOrDirectory, InsufficientPermissionsException;
+    MoveExecutable createMoveExecutable(String src, String dst, String name)
+            throws CommandNotFoundException, NoSuchFileOrDirectory,
+            InsufficientPermissionsException;
+
 
     /**
      * Method that creates an executable for retrieve the parent directory

@@ -2069,43 +2069,57 @@ public class NavigationFragment extends Fragment
      * @param item The path or the {@link FileSystemObject}
      * @param global If the menu to display is the one with global actions
      */
-    public void openActionsDialog(Object item, boolean global) {
-        // Resolve the full path
-        String path = String.valueOf(item);
-        if (item instanceof FileSystemObject) {
-            path = ((FileSystemObject)item).getFullPath();
-        }
-
-        // Prior to show the dialog, refresh the item reference
-        FileSystemObject fso = null;
-        try {
-            fso = CommandHelper.getFileInfo(getActivity(), path, false, null);
-            if (fso == null) {
-                throw new NoSuchFileOrDirectory(path);
-            }
-
-        } catch (Exception e) {
-            // Notify the user
-            ExceptionUtil.translateException(getActivity(), e);
-
-            // Remove the object
-            if (e instanceof FileNotFoundException || e instanceof NoSuchFileOrDirectory) {
-                // If have a FileSystemObject reference then there is no need to search
-                // the path (less resources used)
+    public void openActionsDialog(final Object item, final boolean global) {
+        final NavigationFragment backRef = this;
+        final OnRequestRefreshListener onRequestRefreshListener = this;
+        Thread asyncThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Resolve the full path
+                String path = String.valueOf(item);
                 if (item instanceof FileSystemObject) {
-                    getCurrentNavigationView().removeItem((FileSystemObject)item);
-                } else {
-                    getCurrentNavigationView().removeItem((String)item);
+                    path = ((FileSystemObject)item).getFullPath();
                 }
-            }
-            return;
-        }
 
-        // Show the dialog
-        ActionsDialog dialog = new ActionsDialog(getActivity(), this, fso, global, false);
-        dialog.setOnRequestRefreshListener(this);
-        dialog.setOnSelectionListener(getCurrentNavigationView());
-        dialog.show();
+                // Prior to show the dialog, refresh the item reference
+                final FileSystemObject fso;
+                try {
+                    fso = CommandHelper.getFileInfo(getActivity(), path, false, null);
+                    if (fso == null) {
+                        throw new NoSuchFileOrDirectory(path);
+                    }
+
+                } catch (Exception e) {
+                    // Notify the user
+                    ExceptionUtil.translateException(getActivity(), e);
+
+                    // Remove the object
+                    if (e instanceof FileNotFoundException || e instanceof NoSuchFileOrDirectory) {
+                        // If have a FileSystemObject reference then there is no need to search
+                        // the path (less resources used)
+                        if (item instanceof FileSystemObject) {
+                            getCurrentNavigationView().removeItem((FileSystemObject)item);
+                        } else {
+                            getCurrentNavigationView().removeItem((String)item);
+                        }
+                    }
+                    return;
+                }
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Show the dialog
+                        ActionsDialog dialog =
+                                new ActionsDialog(getActivity(), backRef, fso, global, false);
+                        dialog.setOnRequestRefreshListener(onRequestRefreshListener);
+                        dialog.setOnSelectionListener(getCurrentNavigationView());
+                        dialog.show();
+                    }
+                });
+            }
+        });
+        asyncThread.start();
     }
 
     /**

@@ -762,20 +762,22 @@ public final class CommandHelper {
      * @throws CancelledOperationException If the operation was cancelled
      * @see MoveExecutable
      */
-    public static boolean move(Context context, String src, String dst, Console console)
+    public static boolean move(Context context, String src, String dst, String name,
+            Console srcConsole, Console dstConsole)
             throws FileNotFoundException, IOException, ConsoleAllocException,
             NoSuchFileOrDirectory, InsufficientPermissionsException,
             CommandNotFoundException, OperationTimeoutException,
             ExecutionException, InvalidCommandDefinitionException, ReadOnlyFilesystemException,
             CancelledOperationException {
 
-        Console cSrc = ensureConsoleForFile(context, console, src);
-        Console cDst = ensureConsoleForFile(context, console, dst);
+        Console cSrc = ensureConsoleForFile(context, srcConsole, src);
+        Console cDst = ensureConsoleForFile(context, dstConsole, dst);
         boolean ret = true;
-        if (cSrc.equals(cDst) && !FileHelper.isSamePath(src, dst)) {
+        if (cSrc.equals(cDst) && (!FileHelper.isSamePath(src, dst) ||
+                cSrc instanceof StorageApiConsole || cDst instanceof StorageApiConsole)) {
             // Is safe to use the same console
             MoveExecutable executable =
-                    cSrc.getExecutableFactory().newCreator().createMoveExecutable(src, dst);
+                    cSrc.getExecutableFactory().newCreator().createMoveExecutable(src, dst, null);
             writableExecute(context, executable, cSrc);
             ret = executable.getResult().booleanValue();
         } else {
@@ -788,7 +790,7 @@ public final class CommandHelper {
             try {
                 MoveExecutable moveExecutable =
                         cSrc.getExecutableFactory().newCreator().createMoveExecutable(
-                                src, tmp.getAbsolutePath());
+                                src, tmp.getAbsolutePath(), null);
                 writableExecute(context, moveExecutable, cSrc);
                 if (!moveExecutable.getResult().booleanValue()) {
                     ret = false;
@@ -798,7 +800,7 @@ public final class CommandHelper {
                 if (ret) {
                     moveExecutable =
                             cDst.getExecutableFactory().newCreator().createMoveExecutable(
-                                    tmp.getAbsolutePath(), dst);
+                                    tmp.getAbsolutePath(), dst, name);
                     writableExecute(context, moveExecutable, cDst);
                     if (!moveExecutable.getResult().booleanValue()) {
                         ret = false;
@@ -891,7 +893,7 @@ public final class CommandHelper {
                 if (ret) {
                     MoveExecutable moveExecutable =
                             cDst.getExecutableFactory().newCreator().createMoveExecutable(
-                                    tmp.getAbsolutePath(), dst);
+                                    tmp.getAbsolutePath(), dst, null);
                     writableExecute(context, moveExecutable, cDst);
                     if (!moveExecutable.getResult().booleanValue()) {
                         ret = false;
