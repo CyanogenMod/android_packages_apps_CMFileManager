@@ -261,7 +261,16 @@ public class StorageApiExecutableCreator implements ExecutableCreator {
     @Override
     public MoveExecutable createMoveExecutable(String src, String dst)
             throws CommandNotFoundException {
-        throw new CommandNotFoundException("Not implemented"); //$NON-NLS-1$
+        return new MoveCommand(mConsole, src, dst, null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public MoveExecutable createMoveExecutable(String src, String dst, String name)
+            throws CommandNotFoundException {
+        return new MoveCommand(mConsole, src, dst, name);
     }
 
     /**

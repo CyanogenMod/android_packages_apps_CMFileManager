@@ -272,6 +272,15 @@ public class JavaExecutableCreator implements ExecutableCreator {
      * {@inheritDoc}
      */
     @Override
+    public MoveExecutable createMoveExecutable(String src, String dst, String name)
+            throws CommandNotFoundException {
+        return new MoveCommand(src, dst);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ParentDirExecutable createParentDirExecutable(String fso)
             throws CommandNotFoundException {
         return new ParentDirCommand(fso);
