@@ -22,6 +22,7 @@ import android.content.DialogInterface;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.ui.policy.CopyMoveActionPolicy;
 import com.cyanogenmod.filemanager.ui.policy.CopyMoveActionPolicy.LinkedResource;
+import com.cyanogenmod.filemanager.util.FileHelper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -87,11 +88,12 @@ public class SecureChoiceClickListener implements DialogInterface.OnClickListene
         if (!hiddenCacheDirectory.exists()) {
             hiddenCacheDirectory.mkdirs();
         }
-        final File tmpFso = new File(hiddenCacheDirectory, mFso.getName());
-        selection.add(new LinkedResource(new File(mFso.getFullPath()), tmpFso));
+        final File tmpFile = new File(hiddenCacheDirectory, mFso.getName());
+        final FileSystemObject tmpFso = FileHelper.createFileSystemObject(tmpFile);
+        selection.add(new LinkedResource(mFso, tmpFso));
         CopyMoveActionPolicy.copyFileSystemObjects(mContext, selection,
-                new SecureChoiceSelectionListener(tmpFso),
-                new SecureChoiceRefreshListener(tmpFso, mListener));
+                new SecureChoiceSelectionListener(tmpFile),
+                new SecureChoiceRefreshListener(tmpFile, mListener));
 
     }
 }
