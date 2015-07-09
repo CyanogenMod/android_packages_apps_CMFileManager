@@ -107,7 +107,7 @@ public class ShellExecutableCreator implements ExecutableCreator {
      * {@inheritDoc}
      */
     @Override
-    public CopyExecutable createCopyExecutable(String src, String dst)
+    public CopyExecutable createCopyExecutable(String src, String dst, String name)
             throws CommandNotFoundException {
         try {
             return new CopyCommand(src, dst);
@@ -339,7 +339,7 @@ public class ShellExecutableCreator implements ExecutableCreator {
      * {@inheritDoc}
      */
     @Override
-    public MoveExecutable createMoveExecutable(String src, String dst)
+    public MoveExecutable createMoveExecutable(String src, String dst, String name)
             throws CommandNotFoundException {
         try {
             return new MoveCommand(src, dst);
