@@ -367,7 +367,7 @@ public class PickerActivity extends Activity
         if (initialDir != null) {
             rootDirectory = initialDir.getAbsolutePath();
         } else {
-            rootDirectory = FileHelper.ROOT_DIRECTORY;
+            rootDirectory = FileHelper.ROOTS_LIST;
         }
 
         this.mHandler = new Handler();
@@ -605,6 +605,12 @@ public class PickerActivity extends Activity
     @Override
     public void onDirectoryChanged(FileSystemObject item) {
         this.mCurrentDirectory = item;
+        if (TextUtils.equals(mCurrentDirectory.getName(), FileHelper.ROOTS_LIST)
+                && mCurrentDirectory.getParent() == null) {
+            mDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+        } else {
+            mDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+        }
     }
 
     /**
