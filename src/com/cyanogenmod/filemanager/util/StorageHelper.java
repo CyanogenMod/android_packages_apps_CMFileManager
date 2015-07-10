@@ -16,28 +16,47 @@
 package com.cyanogenmod.filemanager.util;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
 
 import android.text.TextUtils;
+import android.util.Log;
+import com.cyanogen.ambient.common.api.PendingResult;
+import com.cyanogen.ambient.storage.StorageApi;
+import com.cyanogen.ambient.storage.provider.StorageProviderInfo;
+import com.cyanogen.ambient.storage.provider.StorageProviderInfo.ProviderInfoListResult;
 import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.console.VirtualMountPointConsole;
 import com.cyanogenmod.filemanager.console.storageapi.StorageApiConsole;
+import com.cyanogenmod.filemanager.model.Bookmark;
+import com.cyanogenmod.filemanager.model.Bookmark.BOOKMARK_TYPE;
+import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.model.MountPoint;
+import com.cyanogenmod.filemanager.model.NavigationDrawerItem.NavigationDrawerItemType;
+import com.cyanogenmod.filemanager.model.RootDirectory;
+import com.cyanogenmod.filemanager.preferences.AccessMode;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import static com.cyanogenmod.filemanager.model.Bookmark.BOOKMARK_TYPE.SDCARD;
+import static com.cyanogenmod.filemanager.model.Bookmark.BOOKMARK_TYPE.USB;
 
 /**
  * A helper class with useful methods for deal with storages.
  */
 public final class StorageHelper {
+    private static final String TAG = StorageHelper.class.getSimpleName();
+    private static boolean DEBUG = false;
     private static final String STR_USB = "usb"; // $NON-NLS-1$
+
     private static StorageVolume[] sStorageVolumes;
 
     /**
@@ -323,5 +342,194 @@ public final class StorageHelper {
             path = FileHelper.getAbsPath(volumes[0].getPath());
         }
         return path;
+    }
+
+    /**
+     * Returns the list of mounted volumes (local, sdcard, usb, storage providers, protected)
+     * NOTE: This is blocking and should be called asynchronously...
+     *
+     * @return files List of FileSystemObject representing each mounted volume
+     */
+    public static List<FileSystemObject> getStorageVolumesFileSystemObjectList(Context ctx) {
+        List<FileSystemObject> files = loadStorageVolumeList(ctx);
+        return files;
+    }
+
+    private static List<FileSystemObject> loadStorageVolumeList(Context ctx) {
+        List<FileSystemObject> storageVolumesList = new ArrayList<FileSystemObject>();
+
+        String title = null;
+        String summary = null;
+        int color;
+
+        // Determine display mode
+        boolean showRoot = FileManagerApplication.getAccessMode().compareTo(AccessMode.SAFE) != 0;
+        NavigationDrawerItemType itemType = showRoot ?
+                NavigationDrawerItemType.DOUBLE : NavigationDrawerItemType.SINGLE;
+
+        // Load Local Storage
+        title = ctx.getResources().getString(R.string.navigation_item_title_local);
+        summary = StorageHelper.getLocalStoragePath(ctx);
+        color = ctx.getResources().getColor(R.color.default_primary);
+        storageVolumesList.add(new RootDirectory(title, summary, summary,
+                R.drawable.ic_source_internal, color));
+
+        // Show/hide root
+        if (showRoot) {
+            title = ctx.getString(R.string.navigation_item_title_root);
+            summary = FileHelper.ROOT_DIRECTORY;
+            color = ctx.getResources().getColor(R.color.root_primary);
+            storageVolumesList.add(new RootDirectory(title, summary, summary,
+                    R.drawable.ic_source_root_d, color));
+        }
+
+        loadExternalStorageItems(ctx, storageVolumesList, itemType);
+
+        // Load storage Providers
+        loadStorageProviders(ctx, storageVolumesList);
+
+        loadSecureStorage(ctx, storageVolumesList);
+
+        return storageVolumesList;
+    }
+
+    /**
+     * Method that loads the secure digital card and usb storage menu items from the system.
+     */
+    private static void loadExternalStorageItems(Context ctx,
+            List<FileSystemObject> storageVolumesList, NavigationDrawerItemType itemType) {
+        List<Bookmark> sdBookmarks = new ArrayList<Bookmark>();
+        List<Bookmark> usbBookmarks = new ArrayList<Bookmark>();
+
+        try {
+            // Recovery sdcards and usb from storage manager
+            StorageVolume[] volumes =
+                    StorageHelper.getStorageVolumes(ctx, true);
+            for (StorageVolume volume: volumes) {
+                if (volume != null) {
+                    String mountedState = volume.getState();
+                    String path = volume.getPath();
+                    if (!Environment.MEDIA_MOUNTED.equalsIgnoreCase(mountedState) &&
+                            !Environment.MEDIA_MOUNTED_READ_ONLY.equalsIgnoreCase(mountedState)) {
+                        if (DEBUG) {
+                            Log.w(TAG, "Ignoring '" + path + "' with state of '"
+                                    + mountedState + "'");
+                        }
+                        continue;
+                    }
+                    if (!TextUtils.isEmpty(path)) {
+                        String lowerPath = path.toLowerCase(Locale.ROOT);
+                        if (lowerPath.contains(STR_USB)) {
+                            usbBookmarks.add(new Bookmark(USB, StorageHelper
+                                    .getStorageVolumeDescription(ctx,
+                                            volume), path));
+                        } else {
+                            sdBookmarks.add(new Bookmark(SDCARD, StorageHelper
+                                    .getStorageVolumeDescription(ctx,
+                                            volume), path));
+                        }
+                    }
+                }
+            }
+
+            String localStorage = ctx.getString(R.string.local_storage_path);
+
+            // Load the bookmarks
+            for (Bookmark b : sdBookmarks) {
+                if (TextUtils.equals(b.getPath(), localStorage)) continue;
+                int hash = b.hashCode();
+                int color = ctx.getResources().getColor(R.color.sdcard_primary);
+                storageVolumesList.add(new RootDirectory(b.getName(), b.getPath(), b.getPath(),
+                        R.drawable.ic_source_sd_card, color));
+            }
+            for (Bookmark b : usbBookmarks) {
+                int hash = b.hashCode();
+                int color = ctx.getResources().getColor(R.color.usb_primary);
+                storageVolumesList.add(new RootDirectory(b.getName(), b.getPath(), b.getPath(),
+                        R.drawable.ic_source_usb, color));
+            }
+        }
+        catch (Throwable ex) {
+            Log.e(TAG, "Load filesystem bookmarks failed", ex); //$NON-NLS-1$
+        }
+    }
+
+    /**
+     * Method that loads the secure storage mount point.
+     */
+    private static void loadSecureStorage(Context ctx, List<FileSystemObject> storageVolumesList) {
+        List<MountPoint> mps = VirtualMountPointConsole.getVirtualMountPoints();
+        for (MountPoint mp : mps) {
+            BOOKMARK_TYPE type = null;
+            String name = null;
+            if (mp.isSecure()) {
+                type = BOOKMARK_TYPE.SECURE;
+                name = ctx.getString(R.string.navigation_item_title_protected);
+                Bookmark b = new Bookmark(type, name, mp.getMountPoint());
+
+                int color = ctx.getResources().getColor(R.color.protected_primary);
+                storageVolumesList.add(new RootDirectory(b.getName(), b.getPath(), b.getPath(),
+                        R.drawable.ic_source_protected, color));
+                break;
+            } else {
+                continue;
+            }
+        }
+    }
+
+    private static void loadStorageProviders(Context ctx,
+            List<FileSystemObject> storageVolumesList) {
+        StorageApi storageApi = StorageApi.getInstance();
+        PendingResult<ProviderInfoListResult> pendingResult = storageApi.fetchProviders();
+        ProviderInfoListResult providerInfoListResult = pendingResult.await();
+        if (providerInfoListResult == null || !providerInfoListResult.getStatus().isSuccess()) {
+            Log.e(TAG, "Result: FAIL. No results returned."); //$NON-NLS-1$
+        } else {
+            List<StorageProviderInfo> providerInfoList =
+                    providerInfoListResult.getProviderInfoList();
+            if (providerInfoList == null) {
+                Log.e(TAG, "no results returned");
+                return;
+            }
+            if (DEBUG) Log.v(TAG, "got result(s)! " + providerInfoList.size());
+            // TODO: Add to Navigation Drawer alphabetically
+            for (StorageProviderInfo providerInfo : providerInfoList) {
+                StorageApi sapi = StorageApi.getInstance();
+
+                if (!providerInfo.needAuthentication() &&
+                        !TextUtils.isEmpty(providerInfo.getPackage()) &&
+                        !TextUtils.isEmpty(providerInfo.getTitle()) &&
+                        !TextUtils.isEmpty(providerInfo.getSummary())) {
+                    int providerHashCode = StorageApiConsole.getHashCodeFromProvider(providerInfo);
+
+                    // Verify console exists, or create one
+                    StorageApiConsole.registerStorageApiConsole(ctx, sapi, providerInfo);
+
+                    // Add to storage volume list
+                    addProviderInfoItem(ctx, storageVolumesList, providerHashCode, providerInfo);
+                }
+            }
+        }
+    }
+
+    private static void addProviderInfoItem(Context ctx, List<FileSystemObject> storageVolumesList,
+            int providerHashCode, StorageProviderInfo providerInfo) {
+        if (providerInfo == null) {
+            return;
+        }
+
+        String path = StorageApiConsole.constructStorageApiFilePathFromProvider(
+                providerInfo.getRootDocumentId(), providerHashCode);
+        Drawable icon = StorageProviderUtils.loadPackageIcon(ctx,
+                providerInfo.getAuthority(), providerInfo.getIcon());
+
+        int color = StorageProviderUtils.loadProviderColor(ctx, providerInfo.getAuthority(),
+                providerInfo.getPrimaryColor());
+
+        if (icon != null) {
+            FileSystemObject file = new RootDirectory(providerInfo.getTitle(),
+                    providerInfo.getSummary(), path, -1/*icon*/, color);
+            storageVolumesList.add(file);
+        }
     }
 }
