@@ -100,6 +100,12 @@ public final class FileHelper {
      * The root directory.
      * @hide
      */
+    public static final String ROOTS_LIST = "ROOTS_LIST";  //$NON-NLS-1$
+
+    /**
+     * The root directory.
+     * @hide
+     */
     public static final String ROOT_DIRECTORY = "/";  //$NON-NLS-1$
 
     /**
