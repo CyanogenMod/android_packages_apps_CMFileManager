@@ -367,7 +367,7 @@ public class PickerActivity extends Activity
         if (initialDir != null) {
             rootDirectory = initialDir.getAbsolutePath();
         } else {
-            rootDirectory = FileHelper.ROOT_DIRECTORY;
+            rootDirectory = FileHelper.ROOTS_LIST;
         }
 
         this.mHandler = new Handler();
