@@ -37,6 +37,7 @@ import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.console.NoSuchFileOrDirectory;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.model.ParentDirectory;
+import com.cyanogenmod.filemanager.model.RootDirectory;
 import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
 import com.cyanogenmod.filemanager.preferences.Preferences;
 import com.cyanogenmod.filemanager.ui.IconHolder;
@@ -247,6 +248,9 @@ public class FileSystemObjectAdapter
             StringBuilder sbSummary = new StringBuilder();
             if (fso instanceof ParentDirectory) {
                 sbSummary.append(res.getString(R.string.parent_dir));
+            } else if (fso instanceof RootDirectory) {
+                // TODO: fix fso adapter for root list directories
+                sbSummary.append("summary text here...");
             } else {
                 if (!FileHelper.isDirectory(fso)) {
                     sbSummary.append(FileHelper.getHumanReadableSize(fso));

@@ -44,6 +44,7 @@ import java.util.List;
  */
 public class ListCommand extends Program implements ListExecutable {
     private static final String TAG = ListCommand.class.getSimpleName();
+    private static boolean DEBUG = false;
 
     private final StorageApiConsole mConsole;
     private final String mSrc;
@@ -139,7 +140,7 @@ public class ListCommand extends Program implements ListExecutable {
         }
         int hash = StorageApiConsole.getHashCodeFromProvider(mConsole.getStorageProviderInfo());
         String providerPrefix = StorageApiConsole.constructStorageApiPrefixFromHash(hash);
-        if (this.mMode.compareTo(LIST_MODE.DIRECTORY) == 0) {
+        if (mMode.compareTo(LIST_MODE.DIRECTORY) == 0 || mMode.compareTo(LIST_MODE.PICKER) == 0) {
             List<Document> documents = current.getContents();
             if (documents != null && !documents.isEmpty()) {
                 for (Document document : documents) {
@@ -155,10 +156,15 @@ public class ListCommand extends Program implements ListExecutable {
             }
 
             // If current is not root, add parent directory to file list (..)
-            if (!TextUtils.equals(current.getId(), current.getParentId()) &&
-                    this.mMode.compareTo(LIST_MODE.DIRECTORY) == 0) {
-                Log.d(TAG,"Adding parentId=" + current.getParentId());
-                this.mFiles.add(0, new ParentDirectory(current.getParentId(), providerPrefix));
+            if (!TextUtils.equals(current.getId(), current.getParentId())) {
+                if (mMode.compareTo(LIST_MODE.DIRECTORY) == 0 ||
+                        mMode.compareTo(LIST_MODE.PICKER) == 0) {
+                    if (DEBUG) Log.d(TAG, "Adding parentId=" + current.getParentId());
+                    mFiles.add(0, new ParentDirectory(current.getParentId(), providerPrefix));
+                }
+
+            } else if (mMode.compareTo(LIST_MODE.PICKER) == 0) {
+                mFiles.add(0, new ParentDirectory(FileHelper.ROOTS_LIST));
             }
 
         } else {

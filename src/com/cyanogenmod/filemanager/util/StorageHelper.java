@@ -26,10 +26,12 @@ import com.cyanogenmod.filemanager.console.VirtualMountPointConsole;
 import com.cyanogenmod.filemanager.console.storageapi.StorageApiConsole;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.model.MountPoint;
+import com.cyanogenmod.filemanager.model.RootDirectory;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -257,5 +259,21 @@ public final class StorageHelper {
             path = FileHelper.getAbsPath(volumes[0].getPath());
         }
         return path;
+    }
+
+    public static List<FileSystemObject> getStorageVolumesFileSystemObjectList() {
+        // TODO: fill this in with the real roots
+        List<FileSystemObject> files = new ArrayList<FileSystemObject>();
+        files.add(new RootDirectory("Test root 0", "nope", "nope", "nope", 0, 0));
+        files.add(new RootDirectory("Test root 1", "nope", "nope", "nope", 0, 0));
+        files.add(new RootDirectory("Test root 2", "nope", "nope", "nope", 0, 0));
+        files.add(new RootDirectory("Test root 2", "nope", "nope", "nope", 0, 0));
+        files.add(new RootDirectory("Test root 3", "nope", "nope", "nope", 0, 0));
+        files.add(new RootDirectory("Test root 4", "nope", "nope", "nope", 0, 0));
+        files.add(new RootDirectory("Test root 5", "nope", "nope", "nope", 0, 0));
+        files.add(new RootDirectory("Test root 6", "nope", "nope", "nope", 0, 0));
+        files.add(new RootDirectory("Test root 7", "nope", "nope", "nope", 0, 0));
+        files.add(new RootDirectory("Test root 8", "nope", "nope", "nope", 0, 0));
+        return files;
     }
 }

@@ -38,7 +38,13 @@ public interface ListExecutable extends SyncResultExecutable {
          * This list mode retrieves information of a unique file system
          * objects.
          */
-        FILEINFO
+        FILEINFO,
+        /**
+         * This list mode retrieves information of a list of file system
+         * objects of a directory, plus adds a link to the roots list when
+         * the current directory has no parents.
+         */
+        PICKER
     }
 
     /**

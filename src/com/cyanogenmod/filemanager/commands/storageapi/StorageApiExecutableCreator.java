@@ -225,7 +225,7 @@ public class StorageApiExecutableCreator implements ExecutableCreator {
     @Override
     public ListExecutable createListExecutable(String src)
             throws CommandNotFoundException {
-        return new ListCommand(mConsole, src, LIST_MODE.DIRECTORY);
+        return new ListCommand(mConsole, src, LIST_MODE.PICKER/*LIST_MODE.DIRECTORY*/);
     }
 
     /**

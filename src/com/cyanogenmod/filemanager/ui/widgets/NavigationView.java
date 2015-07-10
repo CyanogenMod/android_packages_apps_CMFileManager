@@ -49,6 +49,7 @@ import com.cyanogenmod.filemanager.listeners.OnSelectionListener;
 import com.cyanogenmod.filemanager.model.Directory;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.model.ParentDirectory;
+import com.cyanogenmod.filemanager.model.RootDirectory;
 import com.cyanogenmod.filemanager.model.Symlink;
 import com.cyanogenmod.filemanager.parcelables.NavigationViewInfoParcelable;
 import com.cyanogenmod.filemanager.parcelables.SearchInfoParcelable;
@@ -251,9 +252,15 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
          */
         @Override
         protected List<FileSystemObject> doInBackground(String... params) {
-            // Check navigation security (don't allow to go outside the ChRooted environment if one
-            // is created)
-            mNewDirChecked = checkChRootedNavigation(params[0]);
+
+            if (TextUtils.equals(params[0], FileHelper.ROOTS_LIST)) {
+                // If new directory is "Roots list" don't check ChRooted evnironment
+                mNewDirChecked = params[0];
+            } else {
+                // Check navigation security (don't allow to go outside the ChRooted environment if one
+                // is created)
+                mNewDirChecked = checkChRootedNavigation(params[0]);
+            }
 
             //Check that it is really necessary change the directory
             if (!mReload && NavigationView.this.mCurrentDir != null &&
@@ -290,12 +297,17 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
                     }
                 }
 
-                //Get the files, resolve links and apply configuration
-                //(sort, hidden, ...)
-                List<FileSystemObject> files = NavigationView.this.mFiles;
-                if (!mUseCurrent) {
-                    files = CommandHelper.listFiles(getContext(), mNewDirChecked, null);
-                    mNewDirFSO = CommandHelper.getFileInfo(getContext(), mNewDirChecked, null);
+                List<FileSystemObject> files = null;
+                if (TextUtils.equals(mNewDirChecked, FileHelper.ROOTS_LIST)) {
+                    files = StorageHelper.getStorageVolumesFileSystemObjectList();
+                } else {
+                    //Get the files, resolve links and apply configuration
+                    //(sort, hidden, ...)
+                    files = NavigationView.this.mFiles;
+                    if (!mUseCurrent) {
+                        files = CommandHelper.listFiles(getContext(), mNewDirChecked, null);
+                        mNewDirFSO = CommandHelper.getFileInfo(getContext(), mNewDirChecked, null);
+                    }
                 }
                 return files;
 
@@ -1108,12 +1120,18 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
                 return;
             }
 
-            //Apply user preferences
-            List<FileSystemObject> sortedFiles =
-                    FileHelper.applyUserPreferences(files, this.mRestrictions, this.mChRooted);
+            List<FileSystemObject> sortedFiles = null;
+            if (!TextUtils.equals(FileHelper.ROOTS_LIST, newDir)) {
+                //Apply user preferences
+                sortedFiles =
+                        FileHelper.applyUserPreferences(files, this.mRestrictions, this.mChRooted);
+            } else {
+                sortedFiles = files;
+            }
 
             //Remove parent directory if we are in the root of a chrooted environment
-            if (this.mChRooted && StorageHelper.isStorageVolume(newDir)) {
+            if ((mNavigationMode.compareTo(NAVIGATION_MODE.BROWSABLE) == 0)
+                    && this.mChRooted && StorageHelper.isStorageVolume(newDir)) {
                 if (files.size() > 0 && files.get(0) instanceof ParentDirectory) {
                     files.remove(0);
                 }
@@ -1135,7 +1153,8 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
             }
 
             //Change the breadcrumb
-            if (this.mBreadcrumb != null) {
+            if (this.mBreadcrumb != null
+                    && (mNavigationMode.compareTo(NAVIGATION_MODE.BROWSABLE) == 0)) {
                 this.mBreadcrumb.changeBreadcrumbPath(newDir, this.mChRooted);
             }
 
@@ -1248,7 +1267,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
             if (fso instanceof ParentDirectory) {
                 changeCurrentDir(fso.getParent(), true, false, false, null, null);
                 return;
-            } else if (fso instanceof Directory) {
+            } else if (fso instanceof Directory || fso instanceof RootDirectory) {
                 changeCurrentDir(fso.getFullPath(), true, false, false, null, null);
                 return;
             } else if (fso instanceof Symlink) {
