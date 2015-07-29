@@ -22,10 +22,10 @@
 
   <com.cyanogenmod.filemanager.ui.widgets.FixedSizeImageView
     android:id="@+id/navigation_view_item_icon"
-    android:layout_width="@dimen/default_row_height"
-    android:layout_height="@dimen/default_row_height"
+    android:layout_width="40dp"
+    android:layout_height="40dp"
     android:layout_gravity="center_vertical"
-    android:scaleType="centerCrop"
+    android:scaleType="center"
     android:contentDescription="@null"
     android:src="@null" />
 

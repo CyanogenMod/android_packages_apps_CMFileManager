@@ -573,7 +573,6 @@ public class NavigationFragment extends Fragment
         initTitleActionBar();
         initStatusActionBar();
         initSelectionBar();
-        initBookmarks();
 
         // Apply the theme
         applyTheme();
@@ -625,7 +624,6 @@ public class NavigationFragment extends Fragment
             VirtualMountPointConsole vc = VirtualMountPointConsole.getVirtualConsoleForPath(
                     mNavigationViews[mCurrentNavigationView].getCurrentDir());
             if (vc != null && !vc.isMounted()) {
-                onRequestBookmarksRefresh();
                 removeUnmountedHistory();
                 removeUnmountedSelection();
 
@@ -893,9 +891,9 @@ public class NavigationFragment extends Fragment
         TextView directory = (TextView) view
                 .findViewById(R.id.history_item_directory);
 
-        Drawable icon = iconholder.getDrawable("ic_fso_folder_drawable"); //$NON-NLS-1$
+        Drawable icon = iconholder.getDrawable(R.drawable.ic_fso_folder_drawable);
         if (navigable instanceof SearchInfoParcelable) {
-            icon = iconholder.getDrawable("ic_history_search_drawable"); //$NON-NLS-1$
+            icon = iconholder.getDrawable(R.drawable.ic_history_search_drawable);
         }
         iconView.setImageDrawable(icon);
 
@@ -927,447 +925,6 @@ public class NavigationFragment extends Fragment
 
         // Show clear button if history tab is selected
         mClearHistory.setVisibility(mHistoryTab.isSelected() ? View.VISIBLE : View.GONE);
-    }
-
-    /**
-     * Method takes a bookmark as argument and adds it to mBookmarks and the
-     * list in the drawer
-     */
-    public void addBookmark(Bookmark bookmark) {
-        mBookmarks.add(bookmark);
-        addBookmarkToDrawer(bookmark);
-    }
-
-    /**
-     * Method takes a bookmark as argument and adds it to the bookmark list in
-     * the drawer
-     */
-    private void addBookmarkToDrawer(Bookmark bookmark) {
-        Theme theme = ThemeManager.getCurrentTheme(getActivity());
-        IconHolder iconholder = new IconHolder(getActivity(), false);
-
-        // inflate single bookmark layout item and fill it
-        LinearLayout view = (LinearLayout) mLayoutInflater.inflate(
-                R.layout.bookmarks_item, null);
-
-        ImageView icon = (ImageView) view
-                .findViewById(R.id.bookmarks_item_icon);
-        TextView name = (TextView) view.findViewById(R.id.bookmarks_item_name);
-        TextView path = (TextView) view.findViewById(R.id.bookmarks_item_path);
-        ImageButton actionButton = (ImageButton) view
-                .findViewById(R.id.bookmarks_item_action);
-
-        name.setText(bookmark.mName);
-        path.setText(bookmark.mPath);
-
-        theme.setTextColor(getActivity(), name, "text_color");
-        theme.setTextColor(getActivity(), path, "text_color");
-
-        icon.setImageDrawable(iconholder.getDrawable(BookmarksHelper
-                .getIcon(bookmark)));
-
-        Drawable action = null;
-        String actionCd = null;
-        if (bookmark.mType.compareTo(BOOKMARK_TYPE.HOME) == 0) {
-            action = iconholder.getDrawable("ic_config_drawable"); //$NON-NLS-1$
-            actionCd = getActivity().getApplicationContext().getString(
-                    R.string.bookmarks_button_config_cd);
-        }
-        else if (bookmark.mType.compareTo(BOOKMARK_TYPE.USER_DEFINED) == 0) {
-            action = iconholder.getDrawable("ic_close_drawable"); //$NON-NLS-1$
-            actionCd = getActivity().getApplicationContext().getString(
-                    R.string.bookmarks_button_remove_bookmark_cd);
-        }
-
-        actionButton.setImageDrawable(action);
-        actionButton.setVisibility(action != null ? View.VISIBLE : View.GONE);
-        actionButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final View v = (View) view.getParent();
-                final int index = mDrawerBookmarks.indexOfChild(v);
-                final Bookmark bookmark = mBookmarks.get(index);
-
-                // Configure home
-                if (bookmark.mType.compareTo(BOOKMARK_TYPE.HOME) == 0) {
-                    // Show a dialog for configure initial directory
-                    InitialDirectoryDialog dialog = new InitialDirectoryDialog(
-                            getActivity());
-                    dialog.setOnValueChangedListener(
-                            new InitialDirectoryDialog.OnValueChangedListener() {
-                        @Override
-                        public void onValueChanged(String newInitialDir) {
-                            bookmark.mPath = newInitialDir;
-
-                            // reset drawer bookmarks list
-                            initBookmarks();
-                        }
-                    });
-                    dialog.show();
-                    return;
-                }
-
-                // Remove bookmark
-                if (bookmark.mType.compareTo(BOOKMARK_TYPE.USER_DEFINED) == 0) {
-                    boolean result = Bookmarks.removeBookmark(
-                            getActivity().getApplicationContext(), bookmark);
-                    if (!result) { // Show warning
-                        DialogHelper.showToast(getActivity().getApplicationContext(),
-                                R.string.msgs_operation_failure,
-                                Toast.LENGTH_SHORT);
-                        return;
-                    }
-                    mBookmarks.remove(bookmark);
-                    mDrawerBookmarks.removeView(v);
-                    return;
-                }
-            }
-        });
-        actionButton.setContentDescription(actionCd);
-
-        // handle item click
-        view.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final int index = mDrawerBookmarks.indexOfChild(v);
-                final Bookmark bookmark = mBookmarks.get(index);
-
-                // try to navigate to the bookmark path
-                try {
-                    FileSystemObject fso = CommandHelper.getFileInfo(
-                            getActivity().getApplicationContext(), bookmark.mPath, null);
-                    if (fso != null) {
-                        getCurrentNavigationView().open(fso);
-                    }
-                    else {
-                        // The bookmark does not exist, delete the user-defined
-                        // bookmark
-                        try {
-                            Bookmarks.removeBookmark(getActivity().getApplicationContext(),
-                                    bookmark);
-
-                            // reset bookmarks list to default
-                            initBookmarks();
-                        }
-                        catch (Exception ex) {
-                        }
-                    }
-                }
-                catch (Exception e) { // Capture the exception
-                    ExceptionUtil
-                            .translateException(getActivity(), e);
-                    if (e instanceof NoSuchFileOrDirectory
-                            || e instanceof FileNotFoundException) {
-                        // The bookmark does not exist, delete the user-defined
-                        // bookmark
-                        try {
-                            Bookmarks.removeBookmark(getActivity().getApplicationContext(),
-                                    bookmark);
-
-                            // reset bookmarks list to default
-                            initBookmarks();
-                        }
-                        catch (Exception ex) {
-                        }
-                    }
-                    return;
-                }
-            }
-        });
-
-        mDrawerBookmarks.addView(view);
-    }
-
-    /**
-     * Method that initializes the bookmarks.
-     */
-    private synchronized void initBookmarks() {
-        // TODO: Move into MainActivity or remove altogether.
-        /*if (mBookmarksTask != null &&
-                !mBookmarksTask.getStatus().equals(AsyncTask.Status.FINISHED)) {
-            return;
-        }
-
-        // Retrieve the loading view
-        final View waiting = mView.findViewById(
-                R.id.bookmarks_loading);
-
-        // Load bookmarks in background
-        mBookmarksTask = new android.os.AsyncTask<Void, Void, Boolean>() {
-            Exception mCause;
-
-            @Override
-            protected Boolean doInBackground(Void... params) {
-                try {
-                    mBookmarks = loadBookmarks();
-                    return Boolean.TRUE;
-
-                }
-                catch (Exception e) {
-                    this.mCause = e;
-                    return Boolean.FALSE;
-                }
-            }
-
-            @Override
-            protected void onPreExecute() {
-                waiting.setVisibility(View.VISIBLE);
-                mDrawerBookmarks.removeAllViews();
-            }
-
-            @Override
-            protected void onPostExecute(Boolean result) {
-                waiting.setVisibility(View.GONE);
-                if (result.booleanValue()) {
-                    for (Bookmark bookmark : mBookmarks) {
-                        addBookmarkToDrawer(bookmark);
-                    }
-                }
-                else {
-                    if (this.mCause != null) {
-                        ExceptionUtil.translateException(getActivity(), this.mCause);
-                    }
-                }
-                mBookmarksTask = null;
-            }
-
-            @Override
-            protected void onCancelled() {
-                waiting.setVisibility(View.GONE);
-                mBookmarksTask = null;
-            }
-        };
-        mBookmarksTask.execute(); */
-    }
-
-    /**
-     * Method that loads all kind of bookmarks and join in an array to be used
-     * in the listview adapter.
-     *
-     * @return List<Bookmark>
-     * @hide
-     */
-    List<Bookmark> loadBookmarks() {
-        // Bookmarks = HOME + FILESYSTEM + SD STORAGES + USER DEFINED
-        // In ChRooted mode = SD STORAGES + USER DEFINED (from SD STORAGES)
-        List<Bookmark> bookmarks = new ArrayList<Bookmark>();
-        if (!this.mChRooted) {
-            bookmarks.add(loadHomeBookmarks());
-            bookmarks.addAll(loadFilesystemBookmarks());
-        }
-        mSdBookmarks = loadSdStorageBookmarks();
-        bookmarks.addAll(mSdBookmarks);
-        bookmarks.addAll(loadVirtualBookmarks());
-        bookmarks.addAll(loadUserBookmarks());
-        return bookmarks;
-    }
-
-    /**
-     * Method that loads the home bookmark from the user preference.
-     *
-     * @return Bookmark The bookmark loaded
-     */
-    private Bookmark loadHomeBookmarks() {
-        String initialDir = Preferences.getSharedPreferences().getString(
-                FileManagerSettings.SETTINGS_INITIAL_DIR.getId(),
-                (String) FileManagerSettings.SETTINGS_INITIAL_DIR
-                        .getDefaultValue());
-        return new Bookmark(BOOKMARK_TYPE.HOME,
-                getString(R.string.bookmarks_home), initialDir);
-    }
-
-    /**
-     * Method that loads the filesystem bookmarks from the internal xml file.
-     * (defined by this application)
-     *
-     * @return List<Bookmark> The bookmarks loaded
-     */
-    private List<Bookmark> loadFilesystemBookmarks() {
-        try {
-            // Initialize the bookmarks
-            List<Bookmark> bookmarks = new ArrayList<Bookmark>();
-
-            // Read the command list xml file
-            XmlResourceParser parser = getResources().getXml(
-                    R.xml.filesystem_bookmarks);
-
-            try {
-                // Find the root element
-                XmlUtils.beginDocument(parser, TAG_BOOKMARKS);
-                while (true) {
-                    XmlUtils.nextElement(parser);
-                    String element = parser.getName();
-                    if (element == null) {
-                        break;
-                    }
-
-                    if (TAG_BOOKMARK.equals(element)) {
-                        CharSequence name = null;
-                        CharSequence directory = null;
-
-                        try {
-                            name = getString(parser.getAttributeResourceValue(
-                                    R.styleable.Bookmark_name, 0));
-                        }
-                        catch (Exception e) {
-                            /** NON BLOCK **/
-                        }
-                        try {
-                            directory = getString(parser
-                                    .getAttributeResourceValue(
-                                            R.styleable.Bookmark_directory, 0));
-                        }
-                        catch (Exception e) {
-                            /** NON BLOCK **/
-                        }
-                        if (directory == null) {
-                            directory = parser
-                                    .getAttributeValue(R.styleable.Bookmark_directory);
-                        }
-                        if (name != null && directory != null) {
-                            bookmarks.add(new Bookmark(
-                                    BOOKMARK_TYPE.FILESYSTEM, name.toString(),
-                                    directory.toString()));
-                        }
-                    }
-                }
-
-                // Return the bookmarks
-                return bookmarks;
-
-            }
-            finally {
-                parser.close();
-            }
-        }
-        catch (Throwable ex) {
-            Log.e(TAG, "Load filesystem bookmarks failed", ex); //$NON-NLS-1$
-        }
-
-        // No data
-        return new ArrayList<Bookmark>();
-    }
-
-    /**
-     * Method that loads the secure digital card storage bookmarks from the
-     * system.
-     *
-     * @return List<Bookmark> The bookmarks loaded
-     */
-    private List<Bookmark> loadSdStorageBookmarks() {
-        // Initialize the bookmarks
-        List<Bookmark> bookmarks = new ArrayList<Bookmark>();
-
-        try {
-            // Recovery sdcards from storage manager
-            StorageVolume[] volumes = StorageHelper
-                    .getStorageVolumes(getActivity().getApplication(), true);
-            for (StorageVolume volume: volumes) {
-                if (volume != null) {
-                    String mountedState = volume.getState();
-                    String path = volume.getPath();
-                    if (!Environment.MEDIA_MOUNTED.equalsIgnoreCase(mountedState) &&
-                            !Environment.MEDIA_MOUNTED_READ_ONLY.equalsIgnoreCase(mountedState)) {
-                        Log.w(TAG, "Ignoring '" + path + "' with state of '"+ mountedState + "'");
-                        continue;
-                    }
-                    if (!TextUtils.isEmpty(path)) {
-                        String lowerPath = path.toLowerCase(Locale.ROOT);
-                        Bookmark bookmark;
-                        if (lowerPath.contains(STR_USB)) {
-                            bookmark = new Bookmark(BOOKMARK_TYPE.USB, StorageHelper
-                                    .getStorageVolumeDescription(getActivity().getApplication(),
-                                            volume), path);
-                        } else {
-                            bookmark = new Bookmark(BOOKMARK_TYPE.SDCARD, StorageHelper
-                                    .getStorageVolumeDescription(getActivity().getApplication(),
-                                            volume), path);
-                        }
-                        bookmarks.add(bookmark);
-                    }
-                }
-            }
-
-            // Return the bookmarks
-            return bookmarks;
-        }
-        catch (Throwable ex) {
-            Log.e(TAG, "Load filesystem bookmarks failed", ex); //$NON-NLS-1$
-        }
-
-        // No data
-        return new ArrayList<Bookmark>();
-    }
-
-    /**
-     * Method that loads all virtual mount points.
-     *
-     * @return List<Bookmark> The bookmarks loaded
-     */
-    private List<Bookmark> loadVirtualBookmarks() {
-        // Initialize the bookmarks
-        List<Bookmark> bookmarks = new ArrayList<Bookmark>();
-        List<MountPoint> mps = VirtualMountPointConsole.getVirtualMountPoints();
-        for (MountPoint mp : mps) {
-            BOOKMARK_TYPE type = null;
-            String name = null;
-            if (mp.isSecure()) {
-                type = BOOKMARK_TYPE.SECURE;
-                name = getString(R.string.bookmarks_secure);
-            } else if (mp.isRemote()) {
-                type = BOOKMARK_TYPE.REMOTE;
-                name = getString(R.string.bookmarks_remote);
-            } else {
-                continue;
-            }
-            bookmarks.add(new Bookmark(type, name, mp.getMountPoint()));
-        }
-        return bookmarks;
-    }
-
-    /**
-     * Method that loads the user bookmarks (added by the user).
-     *
-     * @return List<Bookmark> The bookmarks loaded
-     */
-    private List<Bookmark> loadUserBookmarks() {
-        List<Bookmark> bookmarks = new ArrayList<Bookmark>();
-        Cursor cursor = Bookmarks.getAllBookmarks(getActivity().getContentResolver());
-        try {
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    Bookmark bm = new Bookmark(cursor);
-                    if (this.mChRooted
-                            && !StorageHelper.isPathInStorageVolume(bm.mPath)) {
-                        continue;
-                    }
-                    bookmarks.add(bm);
-                }
-                while (cursor.moveToNext());
-            }
-        }
-        finally {
-            try {
-                if (cursor != null) {
-                    cursor.close();
-                }
-            }
-            catch (Exception e) {
-                /** NON BLOCK **/
-            }
-        }
-
-        // Remove bookmarks from virtual storage if the filesystem is not mount
-        int c = bookmarks.size() - 1;
-        for (int i = c; i >= 0; i--) {
-            VirtualMountPointConsole vc =
-                    VirtualMountPointConsole.getVirtualConsoleForPath(bookmarks.get(i).mPath);
-            if (vc != null && !vc.isMounted()) {
-                bookmarks.remove(i);
-            }
-        }
-
-        return bookmarks;
     }
 
     /**
@@ -1602,9 +1159,6 @@ public class NavigationFragment extends Fragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == INTENT_REQUEST_SETTINGS) {
-            // reset bookmarks list to default as the user could changed the
-            // root mode which changes the system bookmarks
-            initBookmarks();
             return;
         }
 
@@ -1636,9 +1190,6 @@ public class NavigationFragment extends Fragment
                             getCurrentNavigationView().refresh(true);
                         }
                     }
-                    // reset bookmarks list to default as the user could have set a
-                    // new bookmark in the search activity
-                    initBookmarks();
                     break;
 
                 // Paste selection
@@ -1715,14 +1266,6 @@ public class NavigationFragment extends Fragment
         if (clearSelection) {
             this.getCurrentNavigationView().onDeselectAll();
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onRequestBookmarksRefresh() {
-        initBookmarks();
     }
 
     /**
@@ -2498,12 +2041,6 @@ public class NavigationFragment extends Fragment
                 (ImageView)v, "ab_selection_done_drawable"); //$NON-NLS-1$
         v = mView.findViewById(R.id.navigation_status_selection_label);
         theme.setTextColor(getActivity(), (TextView)v, "text_color"); //$NON-NLS-1$
-
-        //- NavigationView
-        int cc = this.mNavigationViews.length;
-        for (int i = 0; i < cc; i++) {
-            getNavigationView(i).applyTheme();
-        }
     }
 
     /**
