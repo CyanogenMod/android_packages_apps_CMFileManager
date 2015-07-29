@@ -73,6 +73,10 @@
     <!-- The default vertical grid spacing -->
     <dimen name="default_vertical_grid_spacing">8dp</dimen>
 
+    <!-- The navigation view details item row height -->
+    <dimen name="navigation_view_details_item_height">72dp</dimen>
+
+
     <!-- The navigation grid width -->
     <dimen name="navigation_grid_width">85dp</dimen>
     <!-- The navigation grid height -->
