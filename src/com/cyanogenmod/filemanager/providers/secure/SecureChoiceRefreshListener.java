@@ -60,11 +60,6 @@ import java.io.File;
     }
 
     @Override
-    public void onRequestBookmarksRefresh() {
-
-    }
-
-    @Override
     public void onRequestRemove(Object o, boolean clearSelection) {
 
     }

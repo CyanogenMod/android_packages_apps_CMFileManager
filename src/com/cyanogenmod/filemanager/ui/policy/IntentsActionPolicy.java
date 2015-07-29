@@ -578,17 +578,14 @@ public final class IntentsActionPolicy extends ActionsPolicy {
             shortcutIntent.putExtra(ShortcutActivity.EXTRA_FSO, fso.getFullPath());
 
             // Obtain the icon drawable (don't use here the themeable drawable)
-            String resid = MimeTypeHelper.getIcon(ctx, fso);
-            int dwid =
-                    ResourcesHelper.getIdentifier(
-                            ctx.getResources(), "drawable", resid); //$NON-NLS-1$
+            int resid = MimeTypeHelper.getIcon(ctx, fso);
 
             // The intent to send to broadcast for register the shortcut intent
             Intent intent = new Intent();
             intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
             intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, fso.getName());
             intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
-                    Intent.ShortcutIconResource.fromContext(ctx, dwid));
+                    Intent.ShortcutIconResource.fromContext(ctx, resid));
             intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT"); //$NON-NLS-1$
             ctx.sendBroadcast(intent);
 
