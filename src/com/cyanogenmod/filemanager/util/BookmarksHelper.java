@@ -16,6 +16,7 @@
 
 package com.cyanogenmod.filemanager.util;
 
+import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.model.Bookmark;
 
 /**
@@ -36,26 +37,27 @@ public final class BookmarksHelper {
      * @param bookmark The bookmark
      * @return String The associated icon resource name
      */
-    public static String getIcon(Bookmark bookmark) {
+    public static int getIcon(Bookmark bookmark) {
+        // TODO: redefine these when bookmarks are re-enabled
         if (bookmark.mType.compareTo(Bookmark.BOOKMARK_TYPE.HOME) == 0) {
-            return "ic_home_drawable"; //$NON-NLS-1$
+            return R.drawable.ic_home_drawable;
         }
         if (bookmark.mType.compareTo(Bookmark.BOOKMARK_TYPE.FILESYSTEM) == 0) {
-            return "ic_filesystem_drawable"; //$NON-NLS-1$
+            return R.drawable.ic_filesystem_drawable;
         }
         if (bookmark.mType.compareTo(Bookmark.BOOKMARK_TYPE.SDCARD) == 0) {
-            return "ic_sdcard_drawable"; //$NON-NLS-1$
+            return R.drawable.ic_sdcard_drawable;
         }
         if (bookmark.mType.compareTo(Bookmark.BOOKMARK_TYPE.USB) == 0) {
-            return "ic_usb_drawable"; //$NON-NLS-1$
+            return R.drawable.ic_usb_drawable;
         }
         if (bookmark.mType.compareTo(Bookmark.BOOKMARK_TYPE.SECURE) == 0) {
-            return "ic_secure_drawable"; //$NON-NLS-1$
+            return R.drawable.ic_secure_drawable;
         }
         if (bookmark.mType.compareTo(Bookmark.BOOKMARK_TYPE.REMOTE) == 0) {
-            return "ic_remote_drawable"; //$NON-NLS-1$
+            return R.drawable.ic_remote_drawable;
         }
         //Bookmark add by the user
-        return "ic_user_defined_bookmark_drawable"; //$NON-NLS-1$
+        return R.drawable.ic_user_defined_bookmark_drawable;
     }
 }

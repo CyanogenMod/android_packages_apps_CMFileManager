@@ -1323,14 +1323,6 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
      * {@inheritDoc}
      */
     @Override
-    public void onRequestBookmarksRefresh() {
-        // Ignore
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void onRequestRemove(Object o, boolean clearSelection) {
         if (o != null && o instanceof FileSystemObject) {
             removeItem((FileSystemObject)o);
@@ -1499,24 +1491,4 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
         }
         return newDir;
     }
-
-    /**
-     * Method that applies the current theme to the activity
-     */
-    public void applyTheme() {
-        //- Breadcrumb
-        if (getBreadcrumb() != null) {
-            getBreadcrumb().applyTheme();
-        }
-
-        //- Redraw the adapter view
-        Theme theme = ThemeManager.getCurrentTheme(getContext());
-        theme.setBackgroundDrawable(getContext(), this, "background_drawable"); //$NON-NLS-1$
-        if (this.mAdapterView instanceof ListView) {
-            ((ListView)this.mAdapterView).setDivider(
-                    theme.getDrawable(getContext(), "horizontal_divider_drawable")); //$NON-NLS-1$
-        }
-        refresh();
-    }
-
 }

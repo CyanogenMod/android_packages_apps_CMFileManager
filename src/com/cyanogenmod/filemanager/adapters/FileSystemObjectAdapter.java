@@ -18,7 +18,6 @@ package com.cyanogenmod.filemanager.adapters;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -144,14 +143,6 @@ public class FileSystemObjectAdapter
     }
 
     /**
-     * Method that loads the default icons (known icons and more common icons).
-     */
-    private void loadDefaultIcons() {
-        this.mIconHolder.getDrawable("ic_fso_folder_drawable"); //$NON-NLS-1$
-        this.mIconHolder.getDrawable("ic_fso_default_drawable"); //$NON-NLS-1$
-    }
-
-    /**
      * Method that dispose the elements of the adapter.
      */
     public void dispose() {
@@ -216,11 +207,10 @@ public class FileSystemObjectAdapter
 
         boolean selected = mSelectedItems.contains(fso);
         if (selected) {
-            viewHolder.mIvIcon.setImageResource(R.drawable.ic_check_selected);
+            mIconHolder.loadDrawable(viewHolder.mIvIcon, null, R.drawable.ic_check);
         } else {
-            String mimeTypeIcon = MimeTypeHelper.getIcon(getContext(), fso);
-            Drawable dwIcon = this.mIconHolder.getDrawable(mimeTypeIcon);
-            mIconHolder.loadDrawable(viewHolder.mIvIcon, getItem(position), dwIcon);
+            int mimeTypeIconId = MimeTypeHelper.getIcon(getContext(), fso);
+            mIconHolder.loadDrawable(viewHolder.mIvIcon, getItem(position), mimeTypeIconId);
         }
 
         viewHolder.mTvName.setText(fso.getName());
@@ -478,16 +468,15 @@ public class FileSystemObjectAdapter
                 if (animation == viewHolder.mAnimateOut) {
                     ImageView iv = (ImageView)view;
                     if (selected) {
-                        iv.setImageResource(R.drawable.ic_check_selected);
+                        mIconHolder.loadDrawable(viewHolder.mIvIcon, fso, R.drawable.ic_check);
                     } else {
-                        String mimeTypeIcon = MimeTypeHelper.getIcon(getContext(), fso);
-                        Drawable dwIcon = mIconHolder.getDrawable(mimeTypeIcon);
-                        mIconHolder.loadDrawable(iv, fso, dwIcon);
+                        int mimeTypeIconId = MimeTypeHelper.getIcon(getContext(), fso);
+                        mIconHolder.loadDrawable(viewHolder.mIvIcon, fso, mimeTypeIconId);
                     }
                     view.clearAnimation();
                     view.setAnimation(viewHolder.mAnimateIn);
                     view.startAnimation(viewHolder.mAnimateIn);
-                } else if (animation == viewHolder.mAnimateIn) {
+                    } else if (animation == viewHolder.mAnimateIn) {
                     view.clearAnimation();
 
                     //Communicate event

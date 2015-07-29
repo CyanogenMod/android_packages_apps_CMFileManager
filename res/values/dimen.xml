@@ -73,6 +73,11 @@
     <!-- The default vertical grid spacing -->
     <dimen name="default_vertical_grid_spacing">8dp</dimen>
 
+    <!-- The navigation view details item row height -->
+    <dimen name="navigation_view_details_item_icon_margin">16dp</dimen>
+    <!-- The navigation view details item row height -->
+    <dimen name="navigation_view_details_item_height">72dp</dimen>
+
     <!-- The navigation grid width -->
     <dimen name="navigation_grid_width">85dp</dimen>
     <!-- The navigation grid height -->
@@ -162,7 +167,9 @@
     <dimen name="legend_title_paddingStart">3dp</dimen>
     <dimen name="legend_padding">10dp</dimen>
 
-    <dimen name="easy_mode_type_icon_wh">40dp</dimen>
+    <!-- Icon width and height, with circle -->
+    <dimen name="circle_icon_wh">40dp</dimen>
+
     <dimen name="easy_mode_type_icon_margin_lr">16dp</dimen>
 
     <!-- intro circle indicators -->
