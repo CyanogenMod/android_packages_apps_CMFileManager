@@ -17,6 +17,7 @@
 package com.cyanogenmod.filemanager.adapters;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
@@ -103,7 +104,7 @@ public class FileSystemObjectAdapter
             super();
         }
         boolean mSelected;
-        Drawable mDwIcon;
+        int mIconId;
         Drawable mDwInfo;
         String mName;
         String mSummary;
@@ -168,14 +169,6 @@ public class FileSystemObjectAdapter
     public void setOnSelectionChangedListener(
             OnSelectionChangedListener onSelectionChangedListener) {
         this.mOnSelectionChangedListener = onSelectionChangedListener;
-    }
-
-    /**
-     * Method that loads the default icons (known icons and more common icons).
-     */
-    private void loadDefaultIcons() {
-        this.mIconHolder.getDrawable("ic_fso_folder_drawable"); //$NON-NLS-1$
-        this.mIconHolder.getDrawable("ic_fso_default_drawable"); //$NON-NLS-1$
     }
 
     /**
@@ -271,8 +264,7 @@ public class FileSystemObjectAdapter
             //Build the data holder
             this.mData[i] = new FileSystemObjectAdapter.DataHolder();
             this.mData[i].mSelected = this.mSelectedItems.contains(fso);
-            this.mData[i].mDwIcon =
-                    this.mIconHolder.getDrawable(MimeTypeHelper.getIcon(getContext(), fso));
+            this.mData[i].mIconId = MimeTypeHelper.getIcon(getContext(), fso);
             this.mData[i].mName = fso.getName();
             this.mData[i].mSummary = sbSummary.toString();
             this.mData[i].mSize = FileHelper.getHumanReadableSize(fso);
@@ -321,9 +313,13 @@ public class FileSystemObjectAdapter
 
         //Set the data
         if (dataHolder.mSelected) {
-            viewHolder.mIvIcon.setImageResource(R.drawable.ic_check_selected);
+            /*viewHolder.mIvIcon.setBackgroundResource(R.drawable.ic_icon_background);
+            viewHolder.mIvIcon.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
+                    new int[]{mRes.getColor(R.color.navigation_view_icon_selected)}));
+            viewHolder.mIvIcon.setImageResource(R.drawable.ic_check);*/
+            mIconHolder.loadDrawable(viewHolder.mIvIcon, null, R.drawable.ic_check);
         } else {
-            mIconHolder.loadDrawable(viewHolder.mIvIcon, getItem(position), dataHolder.mDwIcon);
+            mIconHolder.loadDrawable(viewHolder.mIvIcon, getItem(position), dataHolder.mIconId);
         }
 
         viewHolder.mTvName.setText(dataHolder.mName);
@@ -594,9 +590,12 @@ public class FileSystemObjectAdapter
                 if (animation == data.mAnimateOut) {
                     ImageView iv = (ImageView)view;
                     if (data.mSelected) {
-                        iv.setImageResource(R.drawable.ic_check_selected);
+                        iv.setBackgroundResource(R.drawable.ic_icon_background);
+                        iv.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
+                                new int[]{mRes.getColor(R.color.navigation_view_icon_selected)}));
+                        iv.setImageResource(R.drawable.ic_check);
                     } else {
-                        mIconHolder.loadDrawable(iv, fso, data.mDwIcon);
+                        mIconHolder.loadDrawable(iv, fso, data.mIconId);
                     }
                     view.clearAnimation();
                     view.setAnimation(data.mAnimateIn);

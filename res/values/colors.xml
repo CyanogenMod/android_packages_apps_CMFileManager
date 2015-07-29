@@ -32,6 +32,21 @@
     <!-- The default navigation drawer primary color. Used for settings etc. -->
     <color name="misc_primary">#ff000000</color>
 
+    <!-- The apps category color -->
+    <color name="category_apps">#8bc34a</color>
+    <!-- The archives category color -->
+    <color name="category_archives">#ef6c00</color>
+    <!-- The audio category color -->
+    <color name="category_audio">#3f51b5</color>
+    <!-- The docs category color -->
+    <color name="category_docs">#009688</color>
+    <!-- The images category color -->
+    <color name="category_images">#2196f3</color>
+    <!-- The misc category color -->
+    <color name="category_misc">#607d8b</color>
+    <!-- The video category color -->
+    <color name="category_video">#ef5350</color>
+
     <color name="cloud_fill">#1976d2</color>
     <color name="text_color">#ffffff</color>
     <color name="dark_button_blue">#0277bd</color>
@@ -64,6 +79,8 @@
     <!-- Navigation Drawer Selected Item Background Color -->
     <color name="navigation_drawer_selected">#e8e8e8</color>
 
+    <!-- Navigation View Item Details Icon -->
+    <color name="navigation_view_icon_selected">#455a64</color>
     <!-- Navigation View Item Details Icon -->
     <color name="navigation_view_item_detail_icon">#33000000</color>
 

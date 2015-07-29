@@ -1323,14 +1323,6 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
      * {@inheritDoc}
      */
     @Override
-    public void onRequestBookmarksRefresh() {
-        // Ignore
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void onRequestRemove(Object o, boolean clearSelection) {
         if (o != null && o instanceof FileSystemObject) {
             removeItem((FileSystemObject)o);
