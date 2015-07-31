@@ -32,6 +32,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -41,37 +42,50 @@ import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.activities.MainActivity;
 import com.cyanogenmod.filemanager.activities.MainActivity.FragmentType;
 import com.cyanogenmod.filemanager.activities.SearchActivity;
+import com.cyanogenmod.filemanager.ui.IconHolder;
 import com.cyanogenmod.filemanager.util.FileHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.APP;
 import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.AUDIO;
 import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.DOCUMENT;
 import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.IMAGE;
-import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.NONE;
+import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.COMPRESS;
 import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.VIDEO;
 
 public class HomeFragment extends Fragment {
 
     View mView;
     Toolbar mToolBar;
-    private android.widget.ArrayAdapter<MimeTypeCategory> mEasyModeAdapter;
+    private ArrayAdapter<MimeTypeCategory> mEasyModeAdapter;
     private static final List<MimeTypeCategory> EASY_MODE_LIST = new ArrayList<MimeTypeCategory>() {
         {
-            add(NONE);
             add(IMAGE);
-            add(VIDEO);
             add(AUDIO);
+            add(VIDEO);
             add(DOCUMENT);
             add(APP);
+            add(COMPRESS);
         }
     };
-    static java.util.Map<MimeTypeCategory, Drawable> EASY_MODE_ICONS = new
-            java.util.HashMap<MimeTypeCategory, Drawable>();
+
+    static Map<MimeTypeCategory, Integer> EASY_MODE_ICONS = new HashMap<MimeTypeCategory, Integer>();
+    static {
+        EASY_MODE_ICONS.put(MimeTypeCategory.IMAGE, R.drawable.ic_category_images);
+        EASY_MODE_ICONS.put(MimeTypeCategory.AUDIO, R.drawable.ic_category_audio);
+        EASY_MODE_ICONS.put(MimeTypeCategory.VIDEO, R.drawable.ic_category_video);
+        EASY_MODE_ICONS.put(MimeTypeCategory.DOCUMENT, R.drawable.ic_category_docs);
+        EASY_MODE_ICONS.put(MimeTypeCategory.APP, R.drawable.ic_category_apps);
+        EASY_MODE_ICONS.put(MimeTypeCategory.COMPRESS, R.drawable.ic_category_archives);
+    }
+
+
     static String MIME_TYPE_LOCALIZED_NAMES[];
     private OnClickListener mEasyModeItemClickListener = new OnClickListener() {
         @Override
@@ -80,9 +94,9 @@ public class HomeFragment extends Fragment {
             onClicked(position);
         }
     };
+    private IconHolder mIconHolder;
 
     LayoutInflater mLayoutInflater;
-
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -103,6 +117,7 @@ public class HomeFragment extends Fragment {
             Bundle savedInstanceState) {
 
         mLayoutInflater = inflater;
+        mIconHolder = new IconHolder(getActivity(), false);
 
         mView = inflater.inflate(R.layout.home_fragment, container, false);
 
@@ -122,7 +137,6 @@ public class HomeFragment extends Fragment {
                 // TODO: Save that the card has been dismissed
             }
         });
-
 
         return mView;
     }
@@ -156,29 +170,18 @@ public class HomeFragment extends Fragment {
 
     private void initEasyModePlus() {
 
-        MIME_TYPE_LOCALIZED_NAMES = MimeTypeCategory.getFriendlyLocalizedNames(getActivity());
-        EASY_MODE_ICONS.put(MimeTypeHelper.MimeTypeCategory.NONE, getResources().getDrawable(
-                R.drawable.ic_em_all));
-        EASY_MODE_ICONS.put(MimeTypeHelper.MimeTypeCategory.IMAGE, getResources().getDrawable(
-                R.drawable.ic_em_image));
-        EASY_MODE_ICONS.put(MimeTypeHelper.MimeTypeCategory.VIDEO, getResources().getDrawable(
-                R.drawable.ic_em_video));
-        EASY_MODE_ICONS.put(MimeTypeHelper.MimeTypeCategory.AUDIO, getResources().getDrawable(
-                R.drawable.ic_em_music));
-        EASY_MODE_ICONS.put(MimeTypeHelper.MimeTypeCategory.DOCUMENT, getResources().getDrawable(
-                R.drawable.ic_em_document));
-        EASY_MODE_ICONS.put(MimeTypeHelper.MimeTypeCategory.APP, getResources().getDrawable(
-                R.drawable.ic_em_application));
+        MIME_TYPE_LOCALIZED_NAMES = MimeTypeCategory.getDefinedLocalizedNames(getActivity());
+
 
         GridView gridview = (GridView) mView.findViewById(R.id.easy_modeView);
 
-        mEasyModeAdapter = new android.widget.ArrayAdapter<MimeTypeCategory>(getActivity(), R.layout
-                .navigation_view_simple_item) {
+        mEasyModeAdapter = new ArrayAdapter<MimeTypeCategory>(getActivity(), R.layout
+                .quick_search_item) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 convertView = (convertView == null) ?mLayoutInflater.inflate(
-                        R.layout
-                                .navigation_view_simple_item, parent, false) : convertView;
+                        R.layout.quick_search_item, parent, false) : convertView;
+
                 MimeTypeCategory item = getItem(position);
                 String typeTitle = MIME_TYPE_LOCALIZED_NAMES[item.ordinal()];
                 TextView typeTitleTV = (TextView) convertView
@@ -186,8 +189,9 @@ public class HomeFragment extends Fragment {
                 ImageView typeIconIV = (ImageView) convertView
                         .findViewById(R.id.navigation_view_item_icon);
 
+                mIconHolder.loadDrawable(typeIconIV, null, EASY_MODE_ICONS.get(item));
+
                 typeTitleTV.setText(typeTitle);
-                typeIconIV.setImageDrawable(EASY_MODE_ICONS.get(item));
                 convertView.setOnClickListener(mEasyModeItemClickListener);
                 convertView.setTag(position);
                 return convertView;
