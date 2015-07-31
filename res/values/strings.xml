@@ -909,4 +909,13 @@
     <!-- Snackbar messages -->
     <!-- Snackbar message - Storage volume unmounted -->
     <string name="snackbar_storage_volume_unmounted"><xliff:g id="characters">%1$s</xliff:g> was removed.</string>
+
+    <string name="quick_search">Quick Search</string>
+    <string name="images">Images</string>
+    <string name="audio">Audio</string>
+    <string name="videos">Videos</string>
+    <string name="docs">Docs</string>
+    <string name="apps">Apps</string>
+    <string name="archives">Archives</string>
+
 </resources>
