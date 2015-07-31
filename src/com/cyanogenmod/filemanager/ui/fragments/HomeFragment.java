@@ -32,6 +32,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -41,48 +42,62 @@ import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.activities.MainActivity;
 import com.cyanogenmod.filemanager.activities.MainActivity.FragmentType;
 import com.cyanogenmod.filemanager.activities.SearchActivity;
+import com.cyanogenmod.filemanager.ui.IconHolder;
 import com.cyanogenmod.filemanager.util.FileHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.APP;
 import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.AUDIO;
 import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.DOCUMENT;
 import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.IMAGE;
-import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.NONE;
+import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.COMPRESS;
 import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.VIDEO;
 
 public class HomeFragment extends Fragment {
 
     View mView;
     Toolbar mToolBar;
-    private android.widget.ArrayAdapter<MimeTypeCategory> mEasyModeAdapter;
-    private static final List<MimeTypeCategory> EASY_MODE_LIST = new ArrayList<MimeTypeCategory>() {
+    private ArrayAdapter<MimeTypeCategory> mQuickSearchAdapter;
+    private static final List<MimeTypeCategory> QUICK_SEARCH_LIST
+            = new ArrayList<MimeTypeCategory>() {
         {
-            add(NONE);
             add(IMAGE);
-            add(VIDEO);
             add(AUDIO);
+            add(VIDEO);
             add(DOCUMENT);
             add(APP);
+            add(COMPRESS);
         }
     };
-    static java.util.Map<MimeTypeCategory, Drawable> EASY_MODE_ICONS = new
-            java.util.HashMap<MimeTypeCategory, Drawable>();
+
+    static Map<MimeTypeCategory, Integer> QUICK_SEARCH_ICONS
+            = new HashMap<MimeTypeCategory, Integer>();
+    static {
+        QUICK_SEARCH_ICONS.put(MimeTypeCategory.IMAGE, R.drawable.ic_category_images);
+        QUICK_SEARCH_ICONS.put(MimeTypeCategory.AUDIO, R.drawable.ic_category_audio);
+        QUICK_SEARCH_ICONS.put(MimeTypeCategory.VIDEO, R.drawable.ic_category_video);
+        QUICK_SEARCH_ICONS.put(MimeTypeCategory.DOCUMENT, R.drawable.ic_category_docs);
+        QUICK_SEARCH_ICONS.put(MimeTypeCategory.APP, R.drawable.ic_category_apps);
+        QUICK_SEARCH_ICONS.put(MimeTypeCategory.COMPRESS, R.drawable.ic_category_archives);
+    }
+
     static String MIME_TYPE_LOCALIZED_NAMES[];
-    private OnClickListener mEasyModeItemClickListener = new OnClickListener() {
+    private OnClickListener mQuickSearchItemClickListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
             Integer position = (Integer) view.getTag();
             onClicked(position);
         }
     };
+    private IconHolder mIconHolder;
 
     LayoutInflater mLayoutInflater;
-
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -103,7 +118,7 @@ public class HomeFragment extends Fragment {
             Bundle savedInstanceState) {
 
         mLayoutInflater = inflater;
-
+        mIconHolder = new IconHolder(getActivity(), false);
         mView = inflater.inflate(R.layout.home_fragment, container, false);
 
         final CardView cV = (CardView)mView.findViewById(R.id.add_provider);
@@ -123,7 +138,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-
         return mView;
     }
 
@@ -139,7 +153,7 @@ public class HomeFragment extends Fragment {
         actionBarActivity.getSupportActionBar().setHomeButtonEnabled(true);
         actionBarActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
 
-        initEasyModePlus();
+        initQuickSearch();
     }
 
     @Override
@@ -154,31 +168,17 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private void initEasyModePlus() {
+    private void initQuickSearch() {
+        MIME_TYPE_LOCALIZED_NAMES = MimeTypeCategory.getDefinedLocalizedNames(getActivity());
+        GridView gridview = (GridView) mView.findViewById(R.id.quick_search_view);
 
-        MIME_TYPE_LOCALIZED_NAMES = MimeTypeCategory.getFriendlyLocalizedNames(getActivity());
-        EASY_MODE_ICONS.put(MimeTypeHelper.MimeTypeCategory.NONE, getResources().getDrawable(
-                R.drawable.ic_em_all));
-        EASY_MODE_ICONS.put(MimeTypeHelper.MimeTypeCategory.IMAGE, getResources().getDrawable(
-                R.drawable.ic_em_image));
-        EASY_MODE_ICONS.put(MimeTypeHelper.MimeTypeCategory.VIDEO, getResources().getDrawable(
-                R.drawable.ic_em_video));
-        EASY_MODE_ICONS.put(MimeTypeHelper.MimeTypeCategory.AUDIO, getResources().getDrawable(
-                R.drawable.ic_em_music));
-        EASY_MODE_ICONS.put(MimeTypeHelper.MimeTypeCategory.DOCUMENT, getResources().getDrawable(
-                R.drawable.ic_em_document));
-        EASY_MODE_ICONS.put(MimeTypeHelper.MimeTypeCategory.APP, getResources().getDrawable(
-                R.drawable.ic_em_application));
-
-        GridView gridview = (GridView) mView.findViewById(R.id.easy_modeView);
-
-        mEasyModeAdapter = new android.widget.ArrayAdapter<MimeTypeCategory>(getActivity(), R.layout
-                .navigation_view_simple_item) {
+        mQuickSearchAdapter = new ArrayAdapter<MimeTypeCategory>(getActivity(), R.layout
+                .quick_search_item) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 convertView = (convertView == null) ?mLayoutInflater.inflate(
-                        R.layout
-                                .navigation_view_simple_item, parent, false) : convertView;
+                        R.layout.quick_search_item, parent, false) : convertView;
+
                 MimeTypeCategory item = getItem(position);
                 String typeTitle = MIME_TYPE_LOCALIZED_NAMES[item.ordinal()];
                 TextView typeTitleTV = (TextView) convertView
@@ -186,17 +186,16 @@ public class HomeFragment extends Fragment {
                 ImageView typeIconIV = (ImageView) convertView
                         .findViewById(R.id.navigation_view_item_icon);
 
+                mIconHolder.loadDrawable(typeIconIV, null, QUICK_SEARCH_ICONS.get(item));
+
                 typeTitleTV.setText(typeTitle);
-                typeIconIV.setImageDrawable(EASY_MODE_ICONS.get(item));
-                convertView.setOnClickListener(mEasyModeItemClickListener);
+                convertView.setOnClickListener(mQuickSearchItemClickListener);
                 convertView.setTag(position);
                 return convertView;
             }
         };
-        mEasyModeAdapter.addAll(EASY_MODE_LIST);
-        gridview.setAdapter(mEasyModeAdapter);
-
-
+        mQuickSearchAdapter.addAll(QUICK_SEARCH_LIST);
+        gridview.setAdapter(mQuickSearchAdapter);
 
         gridview.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -222,7 +221,7 @@ public class HomeFragment extends Fragment {
 
         } else {
             ArrayList<MimeTypeCategory> searchCategories = new ArrayList<MimeTypeCategory>();
-            MimeTypeCategory selectedCategory = EASY_MODE_LIST.get(position);
+            MimeTypeCategory selectedCategory = QUICK_SEARCH_LIST.get(position);
             searchCategories.add(selectedCategory);
             // a one off case where we implicitly want to also search for TEXT mimetypes when the
             // DOCUMENTS category is selected

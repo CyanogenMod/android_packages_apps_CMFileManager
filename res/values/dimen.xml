@@ -189,4 +189,7 @@
     <dimen name="default_title_indicator_footer_line_height">2dp</dimen>
     <dimen name="default_title_indicator_clip_padding">4dp</dimen>
 
+    <!-- The quick search grid -->
+    <dimen name="quick_search_grid">80dp</dimen>
+
 </resources>
