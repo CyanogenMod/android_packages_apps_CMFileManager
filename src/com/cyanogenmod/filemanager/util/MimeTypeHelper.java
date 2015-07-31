@@ -142,6 +142,44 @@ public final class MimeTypeHelper {
 
             return localizedNames;
         }
+
+        public static String[] getDefinedLocalizedNames(Context context) {
+            MimeTypeCategory[] categories = values();
+            String[] localizedNames = new String[categories.length];
+
+            for (int i = 0; i < categories.length; i++) {
+                String description = getCategoryDescription(context, categories[i]);
+                switch (description) {
+                    case "IMAGE":
+                        description = context.getString(R.string.images);
+                        break;
+                    case "AUDIO":
+                        description = context.getString(R.string.audio);
+                        break;
+                    case "VIDEO":
+                        description = context.getString(R.string.videos);
+                        break;
+                    case "DOCUMENT":
+                        description = context.getString(R.string.docs);
+                        break;
+                    case "APP":
+                        description = context.getString(R.string.apps);
+                        break;
+                    case "COMPRESS":
+                        description = context.getString(R.string.archives);
+                        break;
+                    case "-":
+                        description = context.getString(R.string.category_all);
+                        break;
+                }
+                description = description.substring(0, 1).toUpperCase()
+                        + description.substring(1).toLowerCase();
+                localizedNames[i] = description;
+            }
+
+            return localizedNames;
+        }
+
     }
 
     /**

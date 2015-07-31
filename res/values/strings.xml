@@ -919,4 +919,13 @@
     <string name="snackbar_unable_to_complete">Unable to complete action</string>
     <string name="snackbar_retry">RETRY</string>
     <string name="snackbar_upgrade">UPGRADE</string>
+
+    <!--  Quick search strings -->
+    <string name="quick_search">Quick Search</string>
+    <string name="images">Images</string>
+    <string name="audio">Audio</string>
+    <string name="videos">Videos</string>
+    <string name="docs">Docs</string>
+    <string name="apps">Apps</string>
+    <string name="archives">Archives</string>
 </resources>
