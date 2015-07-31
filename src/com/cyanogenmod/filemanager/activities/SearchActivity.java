@@ -773,7 +773,7 @@ public class SearchActivity extends Activity
             ArrayList<String> localizedNames = new ArrayList<String>(mMimeTypeCategories.size());
             for (MimeTypeCategory category : mMimeTypeCategories) {
                 localizedNames
-                        .add(MainActivity.MIME_TYPE_LOCALIZED_NAMES[category.ordinal()]);
+                        .add(MimeTypeHelper.MimeTypeCategory.getFriendlyLocalizedNames(this)[category.ordinal()]);
             }
              this.mSearchTerms.setText(
                      Html.fromHtml(getString(R.string.search_terms, localizedNames)));
