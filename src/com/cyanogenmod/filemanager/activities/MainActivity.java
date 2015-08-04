@@ -57,7 +57,6 @@ import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
 import com.cyanogenmod.filemanager.preferences.PreferenceHelper;
 import com.cyanogenmod.filemanager.preferences.Preferences;
 import com.cyanogenmod.filemanager.ui.fragments.HomeFragment;
-import com.cyanogenmod.filemanager.ui.fragments.LoginFragment;
 import com.cyanogenmod.filemanager.ui.fragments.NavigationFragment;
 import com.cyanogenmod.filemanager.ui.fragments.NavigationFragment.OnGoHomeRequestListener;
 import com.cyanogenmod.filemanager.ui.widgets.NavigationView.OnBackRequestListener;
@@ -257,10 +256,9 @@ public class MainActivity extends ActionBarActivity
                 fragmentTag = fragmentType.name();
                 break;
             case LOGIN:
-                mPopBackStack = true;
-                currentFragment = LoginFragment.newInstance();
-                fragmentTag = fragmentType.name();
-                break;
+                Intent settingsIntent = new Intent("android.settings.CLOUD_STORAGE_LOGIN");
+                startActivity(settingsIntent);
+                return;
             case HOME:
             default:
                 mPopBackStack = false;
