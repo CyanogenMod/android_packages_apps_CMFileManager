@@ -17,6 +17,7 @@
 package com.cyanogenmod.filemanager.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
@@ -66,6 +67,7 @@ public final class StorageProviderUtils {
 
     public static final String CACHE_DIR = ".storage-provider-files";
     private static final String DEFAULT_MIMETYPE = "text/plain";
+    private static final String CLOUD_STORAGE_LOGIN = "android.settings.CLOUD_STORAGE_LOGIN";
 
     private static final String TAG = StorageProviderUtils.class.getSimpleName();
 
@@ -488,10 +490,11 @@ public final class StorageProviderUtils {
         editor.commit();
     }
 
-    public static void removeProvider(Context context, String providerHashCode) {
+    public static void removeProvider(Context context, StorageProviderInfo storageProviderInfo) {
         SharedPreferences sharedPreferences =
                 context.getSharedPreferences(Preferences.SETTINGS_FILENAME,
                         Context.MODE_PRIVATE);
+        final String providerHashCode = getHashCodeFromProvider(storageProviderInfo);
         final Set<String> addedProviders = sharedPreferences
                 .getStringSet(Preferences.ADDED_STORAGE_PROVIDERS, new LinkedHashSet<String>());
         final SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -512,7 +515,7 @@ public final class StorageProviderUtils {
 
     public static boolean isStorageProviderAdded(Context context, String providerHashCode) {
         SharedPreferences sharedPreferences =
-                context.getSharedPreferences(Preferences.SETTINGS_FILENAME,
+                context.getApplicationContext().getSharedPreferences(Preferences.SETTINGS_FILENAME,
                         Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean(providerHashCode, false);
     }
@@ -549,13 +552,13 @@ public final class StorageProviderUtils {
     public static List<StorageProviderInfo> getAddedProvidersFromCache(Context context) {
         final ArrayList<StorageProviderInfo> storageProviderInfos = new ArrayList<>();
         SharedPreferences sharedPreferences =
-                context.getSharedPreferences(Preferences.SETTINGS_FILENAME,
+                context.getApplicationContext().getSharedPreferences(Preferences.SETTINGS_FILENAME,
                         Context.MODE_PRIVATE);
         final Set<String> addedProviders = sharedPreferences
                 .getStringSet(Preferences.ADDED_STORAGE_PROVIDERS, new LinkedHashSet<String>());
         for (String providerHashCode : addedProviders) {
             StorageProviderInfo storageProviderInfo =
-                    getCachedStorageProvider(context, providerHashCode);
+                    getCachedStorageProvider(context.getApplicationContext(), providerHashCode);
             if (storageProviderInfo != null) {
                 storageProviderInfos.add(storageProviderInfo);
             }
@@ -576,5 +579,13 @@ public final class StorageProviderUtils {
             }
         }
         return title;
+    }
+
+    /*
+     * Start Intent for Provider Login
+     */
+    public static void loadProviderLogin(Context ctx) {
+        Intent settingsIntent = new Intent(CLOUD_STORAGE_LOGIN);
+        ctx.startActivity(settingsIntent);
     }
 }

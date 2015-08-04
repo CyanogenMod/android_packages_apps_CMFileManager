@@ -87,6 +87,12 @@
       </intent-filter>
     </service>
 
+    <receiver android:name=".receiver.CloudProviderReceiver">
+      <intent-filter>
+        <action android:name="com.android.settings.PROVIDER_UPDATED"/>
+      </intent-filter>
+    </receiver>
+
     <activity
       android:name=".activities.MainActivity"
       android:label="@string/app_name"
