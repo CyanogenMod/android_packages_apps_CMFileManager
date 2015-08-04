@@ -17,6 +17,7 @@
 package com.cyanogenmod.filemanager.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
@@ -66,6 +67,7 @@ public final class StorageProviderUtils {
 
     public static final String CACHE_DIR = ".storage-provider-files";
     private static final String DEFAULT_MIMETYPE = "text/plain";
+    private static final String CLOUD_STORAGE_LOGIN = "android.settings.CLOUD_STORAGE_LOGIN";
 
     private static final String TAG = StorageProviderUtils.class.getSimpleName();
 
@@ -576,5 +578,13 @@ public final class StorageProviderUtils {
             }
         }
         return title;
+    }
+
+    /*
+     * Start Intent for Provider Login
+     */
+    public static void loadProviderLogin(Context ctx) {
+        Intent settingsIntent = new Intent(CLOUD_STORAGE_LOGIN);
+        ctx.startActivity(settingsIntent);
     }
 }
