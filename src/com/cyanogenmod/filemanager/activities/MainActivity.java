@@ -257,10 +257,9 @@ public class MainActivity extends ActionBarActivity
                 fragmentTag = fragmentType.name();
                 break;
             case LOGIN:
-                mPopBackStack = true;
-                currentFragment = LoginFragment.newInstance();
-                fragmentTag = fragmentType.name();
-                break;
+                Intent settingsIntent = new Intent("android.settings.CLOUD_STORAGE_LOGIN");
+                startActivity(settingsIntent);
+                return;
             case HOME:
             default:
                 mPopBackStack = false;
