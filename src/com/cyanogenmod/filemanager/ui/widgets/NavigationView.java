@@ -452,6 +452,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
 
     private int mId;
     private String mCurrentDir;
+    private FileSystemObject mCurrentFileSystemObject;
     private NavigationLayoutMode mCurrentMode;
     /**
      * @hide
@@ -546,6 +547,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
         NavigationViewInfoParcelable parcel = new NavigationViewInfoParcelable();
         parcel.setId(this.mId);
         parcel.setCurrentDir(this.mCurrentDir);
+        parcel.setCurrentFso(this.mCurrentFileSystemObject);
         parcel.setChRooted(this.mChRooted);
         parcel.setSelectedFiles(this.mAdapter.getSelectedItems());
         parcel.setFiles(this.mFiles);
@@ -570,6 +572,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
         //Restore the data
         this.mId = info.getId();
         this.mCurrentDir = info.getCurrentDir();
+        this.mCurrentFileSystemObject = info.getCurrentFso();
         this.mChRooted = info.getChRooted();
         this.mFiles = info.getFiles();
         this.mAdapter.setSelectedItems(info.getSelectedFiles());
@@ -1024,6 +1027,15 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
     }
 
     /**
+     * Method that returns the current directory's {@link FileSystemObject}
+     *
+     * @return String The current directory
+     */
+    public FileSystemObject getCurrentFso() {
+        return this.mCurrentFileSystemObject;
+    }
+
+    /**
      * Method that changes the current directory of the view.
      *
      * @param newDir The new directory location
@@ -1166,6 +1178,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
 
             //The current directory is now the "newDir"
             this.mCurrentDir = newDir;
+            this.mCurrentFileSystemObject = newDirFSO;
             if (this.mOnDirectoryChangedListener != null) {
                 FileSystemObject dir = (newDirFSO != null) ?
                         newDirFSO : FileHelper.createFileSystemObject(new File(newDir));

@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
@@ -39,8 +40,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -165,6 +168,8 @@ public class MainActivity extends ActionBarActivity
      */
     @Override
     protected void onCreate(Bundle state) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
         //Save state
         super.onCreate(state);
 
@@ -268,6 +273,7 @@ public class MainActivity extends ActionBarActivity
                 currentFragment = HomeFragment.newInstance();
                 fragmentTag = fragmentType.name();
                 mNavigationDrawerController.setSelected(R.id.navigation_item_home);
+                getWindow().setStatusBarColor(Color.TRANSPARENT);
                 break;
         }
 
@@ -362,7 +368,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onResume() {
         super.onResume();
-        mNavigationDrawerController.loadNavigationDrawerItems();
+         mNavigationDrawerController.loadNavigationDrawerItems();
     }
 
     /**
@@ -453,20 +459,6 @@ public class MainActivity extends ActionBarActivity
 
             switch (view.getId()) {
                 //######################
-                //Navigation Custom Title
-                //######################
-                case com.cyanogenmod.filemanager.R.id.ab_configuration:
-                    //Show navigation view configuration toolbar
-                    ((NavigationFragment)currentFragment)
-                            .getCurrentNavigationView().getCustomTitle().showConfigurationView();
-                    break;
-                case com.cyanogenmod.filemanager.R.id.ab_close:
-                    //Hide navigation view configuration toolbar
-                    ((NavigationFragment)currentFragment)
-                            .getCurrentNavigationView().getCustomTitle().hideConfigurationView();
-                    break;
-
-                //######################
                 //Breadcrumb Actions
                 //######################
                 case com.cyanogenmod.filemanager.R.id.ab_filesystem_info:
@@ -483,7 +475,7 @@ public class MainActivity extends ActionBarActivity
                 //######################
                 //Navigation view options
                 //######################
-                case com.cyanogenmod.filemanager.R.id.ab_sort_mode:
+                /*case com.cyanogenmod.filemanager.R.id.ab_sort_mode:
                     SortViewOptions.createSortDialog(this,
                             FileManagerSettings.SETTINGS_SORT_MODE,
                             new SortViewOptions.OnClickListener() {
@@ -524,7 +516,7 @@ public class MainActivity extends ActionBarActivity
                     }
 
                     break;
-
+*/
                 //######################
                 //Selection Actions
                 //######################
@@ -533,21 +525,9 @@ public class MainActivity extends ActionBarActivity
                     ((NavigationFragment)currentFragment)
                             .getCurrentNavigationView().onDeselectAll();
                     break;
-
-                //######################
-                //Action Bar buttons
-                //######################
-                case com.cyanogenmod.filemanager.R.id.ab_actions:
-                    ((NavigationFragment)currentFragment).openActionsDialog(
-                            ((NavigationFragment)currentFragment)
-                                    .getCurrentNavigationView().getCurrentDir(),
-                            true);
-                    break;
-
-                case com.cyanogenmod.filemanager.R.id.ab_search:
-                    ((NavigationFragment)currentFragment).openSearch();
-                    break;
-
+                case R.id.ab_actions:
+                    // Show the actions dialog
+                    ((NavigationFragment) currentFragment).openActionsDialog(null, true);
                 default:
                     break;
             }
@@ -641,5 +621,9 @@ public class MainActivity extends ActionBarActivity
             final View view = findViewById(R.id.navigation_fragment_container);
             Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
         }
+    }
+
+    public int getColorForPath(String path) {
+        return mNavigationDrawerController.getColorForPath(path);
     }
 }
