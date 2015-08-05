@@ -32,6 +32,7 @@ import android.content.res.Configuration;
 import android.content.res.XmlResourceParser;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -45,6 +46,9 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -63,6 +67,7 @@ import android.widget.Toast;
 import com.android.internal.util.XmlUtils;
 import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
+import com.cyanogenmod.filemanager.activities.MainActivity;
 import com.cyanogenmod.filemanager.activities.SearchActivity;
 import com.cyanogenmod.filemanager.activities.preferences.SettingsPreferences;
 import com.cyanogenmod.filemanager.adapters.MenuSettingsAdapter;
@@ -73,6 +78,7 @@ import com.cyanogenmod.filemanager.console.InsufficientPermissionsException;
 import com.cyanogenmod.filemanager.console.NoSuchFileOrDirectory;
 import com.cyanogenmod.filemanager.console.VirtualMountPointConsole;
 import com.cyanogenmod.filemanager.console.storageapi.StorageApiConsole;
+import com.cyanogenmod.filemanager.dialogs.SortViewOptions;
 import com.cyanogenmod.filemanager.listeners.OnHistoryListener;
 import com.cyanogenmod.filemanager.listeners.OnRequestRefreshListener;
 import com.cyanogenmod.filemanager.model.Bookmark;
@@ -89,6 +95,7 @@ import com.cyanogenmod.filemanager.preferences.Bookmarks;
 import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
 import com.cyanogenmod.filemanager.preferences.NavigationLayoutMode;
 import com.cyanogenmod.filemanager.preferences.ObjectIdentifier;
+import com.cyanogenmod.filemanager.preferences.PreferenceHelper;
 import com.cyanogenmod.filemanager.preferences.Preferences;
 import com.cyanogenmod.filemanager.ui.IconHolder;
 import com.cyanogenmod.filemanager.ui.ThemeManager;
@@ -140,7 +147,8 @@ import static com.cyanogenmod.filemanager.activities.PickerActivity.EXTRA_FOLDER
  */
 public class NavigationFragment extends Fragment
         implements OnHistoryListener, OnRequestRefreshListener,
-        OnNavigationRequestMenuListener, OnNavigationSelectionChangedListener {
+        OnNavigationRequestMenuListener, OnNavigationSelectionChangedListener,
+        OnDirectoryChangedListener {
 
     private static final String TAG = "NavigationFragment"; //$NON-NLS-1$
 
@@ -203,7 +211,6 @@ public class NavigationFragment extends Fragment
 
     private Toolbar mToolBar;
     private SearchView mSearchView;
-    private NavigationCustomTitleView mCustomTitleView;
     private InputMethodManager mImm;
     private View mTitleLayout;
     private View mStatusBar;
@@ -385,77 +392,6 @@ public class NavigationFragment extends Fragment
         }
     };
 
-    private OnClickListener mOnClickDrawerTabListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.drawer_bookmarks_tab:
-                    if (!mBookmarksTab.isSelected()) {
-                        mBookmarksTab.setSelected(true);
-                        mHistoryTab.setSelected(false);
-                        mBookmarksTab.setTextAppearance(
-                                getActivity(), R.style.primary_text_appearance);
-                        mHistoryTab.setTextAppearance(
-                                getActivity(), R.style.secondary_text_appearance);
-                        mHistoryLayout.setVisibility(View.GONE);
-                        mBookmarksLayout.setVisibility(View.VISIBLE);
-                        applyTabTheme();
-
-                        try {
-                            Preferences.savePreference(FileManagerSettings.USER_PREF_LAST_DRAWER_TAB,
-                                    Integer.valueOf(0), true);
-                        } catch (Exception ex) {
-                            Log.e(TAG, "Can't save last drawer tab", ex); //$NON-NLS-1$
-                        }
-
-                        mClearHistory.setVisibility(View.GONE);
-                    }
-                    break;
-                case R.id.drawer_history_tab:
-                    if (!mHistoryTab.isSelected()) {
-                        mHistoryTab.setSelected(true);
-                        mBookmarksTab.setSelected(false);
-                        mHistoryTab.setTextAppearance(
-                                getActivity(), R.style.primary_text_appearance);
-                        mBookmarksTab.setTextAppearance(
-                                getActivity(), R.style.secondary_text_appearance);
-                        mBookmarksLayout.setVisibility(View.GONE);
-                        mHistoryLayout.setVisibility(View.VISIBLE);
-                        applyTabTheme();
-
-                        try {
-                            Preferences.savePreference(FileManagerSettings.
-                                    USER_PREF_LAST_DRAWER_TAB, Integer.valueOf(1), true);
-                        } catch (Exception ex) {
-                            Log.e(TAG, "Can't save last drawer tab", ex); //$NON-NLS-1$
-                        }
-
-                        mClearHistory.setVisibility(mHistory.size() > 0 ? View.VISIBLE : View.GONE);
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
-
-    private OnClickListener mOnClickDrawerActionBarListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.ab_settings:
-                    openSettings();
-                    break;
-                case R.id.ab_clear_history:
-                    clearHistory();
-                    mClearHistory.setVisibility(View.GONE);
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
-
     static String MIME_TYPE_LOCALIZED_NAMES[];
     /**
      * @hide
@@ -568,12 +504,11 @@ public class NavigationFragment extends Fragment
         actionBarActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         actionBarActivity.getSupportActionBar().setHomeButtonEnabled(true);
         actionBarActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
+        actionBarActivity.getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         //Initialize action bars
         initTitleActionBar();
-        initStatusActionBar();
         initSelectionBar();
-        initBookmarks();
 
         // Apply the theme
         applyTheme();
@@ -600,7 +535,54 @@ public class NavigationFragment extends Fragment
         }
         this.mOrientation = orientation;
 
+        setHasOptionsMenu(true);
+
         return mView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        System.out.println("RAJ - navigation fragment, oncreateoptionsmenu");
+        inflater.inflate(R.menu.navigation_menu, menu);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        System.out.println("RAJ - navigation fragment, onPrepareOptionsMenu");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.mnu_actions_select_all:
+                getCurrentNavigationView().onSelectAllVisibleItems();
+                return true;
+            case R.id.mnu_actions_search:
+                openSearch();
+                return true;
+            case R.id.mnu_actions_sort:
+                SortViewOptions.createSortDialog(getActivity(),
+                        FileManagerSettings.SETTINGS_SORT_MODE,
+                        new SortViewOptions.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which, int result) {
+                                if (which == DialogInterface.BUTTON_POSITIVE) {
+                                    if (PreferenceHelper.getIntPreference(
+                                            FileManagerSettings.SETTINGS_SORT_MODE) != result) {
+                                        updateSetting(
+                                                FileManagerSettings.SETTINGS_SORT_MODE, result);
+                                    }
+                                }
+                            }
+                        })
+                        .show();
+                return true;
+            case R.id.mnu_more_actions:
+                openActionsDialog(getCurrentNavigationView().getCurrentDir(), true);
+                return true;
+            default:
+                return false;
+        }
     }
 
     @Override
@@ -714,35 +696,21 @@ public class NavigationFragment extends Fragment
         //Inflate the view and associate breadcrumb
         mTitleLayout = mLayoutInflater.inflate(
                 R.layout.navigation_view_customtitle, null, false);
-        NavigationCustomTitleView title =
-                (NavigationCustomTitleView) mTitleLayout.
-                        findViewById(R.id.navigation_title_flipper);
-        title.setOnHistoryListener(this);
-        Breadcrumb breadcrumb = (Breadcrumb)title.findViewById(R.id.breadcrumb_view);
         int cc = this.mNavigationViews.length;
         for (int i = 0; i < cc; i++) {
-            this.mNavigationViews[i].setBreadcrumb(breadcrumb);
             this.mNavigationViews[i].setOnHistoryListener(this);
             this.mNavigationViews[i].setOnNavigationSelectionChangedListener(this);
             this.mNavigationViews[i].setOnNavigationOnRequestMenuListener(this);
-            this.mNavigationViews[i].setCustomTitle(title);
+            this.mNavigationViews[i].setOnDirectoryChangedListener(this);
         }
 
-        // Set the free disk space warning level of the breadcrumb widget
-        String fds = Preferences.getSharedPreferences().getString(
-                FileManagerSettings.SETTINGS_DISK_USAGE_WARNING_LEVEL.getId(),
-                (String) FileManagerSettings.SETTINGS_DISK_USAGE_WARNING_LEVEL.getDefaultValue());
-        breadcrumb.setFreeDiskSpaceWarningLevel(Integer.parseInt(fds));
-
         //Configure the action bar options
-        mToolBar.setBackgroundDrawable(
-                getResources().getDrawable(R.drawable.bg_material_titlebar));
         mToolBar.addView(mTitleLayout);
     }
 
-    /**
+    /*//**
      * Method that initializes the statusbar of the activity.
-     */
+     *//*
     private void initStatusActionBar() {
         //Performs a width calculation of buttons. Buttons exceeds the width
         //of the action bar should be hidden
@@ -779,7 +747,7 @@ public class NavigationFragment extends Fragment
         // Show the status bar
         View statusBar = mView.findViewById(R.id.navigation_statusbar_portrait_holder);
         statusBar.setVisibility(View.VISIBLE);
-    }
+    }*/
 
     /**
      * Method that initializes the selectionbar of the activity.
@@ -2123,13 +2091,15 @@ public class NavigationFragment extends Fragment
     public void openSearch() {
         mSearchView.setVisibility(View.VISIBLE);
         mSearchView.onActionViewExpanded();
-        mCustomTitleView.setVisibility(View.GONE);
+        mTitleLayout.findViewById(R.id.navigation_title_landscape_holder)
+                .setVisibility(View.GONE);
     }
 
     void closeSearch() {
         mSearchView.setVisibility(View.GONE);
         mSearchView.onActionViewCollapsed();
-        mCustomTitleView.setVisibility(View.VISIBLE);
+        mTitleLayout.findViewById(R.id.navigation_title_landscape_holder)
+                .setVisibility(View.VISIBLE);
     }
 
     /**
@@ -2284,65 +2254,6 @@ public class NavigationFragment extends Fragment
         int orientation = getResources().getConfiguration().orientation;
         if (this.mOrientation == orientation) return;
         this.mOrientation = orientation;
-
-        // Portrait mode
-        if (mStatusBar != null) {
-            if (mStatusBar.getParent() != null) {
-                ViewGroup parent = (ViewGroup) mStatusBar.getParent();
-                parent.removeView(mStatusBar);
-            }
-            if (this.mOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-                // Calculate the action button size (all the buttons must fit in the title bar)
-                int bw = (int)getResources().getDimension(R.dimen.default_buttom_width);
-                int abw = this.mActionBar.getChildCount() * bw;
-                int rbw = 0;
-                int cc = ((ViewGroup) mStatusBar).getChildCount();
-                for (int i = 0; i < cc; i++) {
-                    View child = ((ViewGroup) mStatusBar).getChildAt(i);
-                    if (child instanceof ButtonItem) {
-                        rbw += bw;
-                    }
-                }
-                // Currently there isn't overflow menu
-                int w = abw + rbw - bw;
-
-                // Add to the new location
-                ViewGroup newParent = (ViewGroup)mTitleLayout.findViewById(
-                        R.id.navigation_title_landscape_holder);
-                LinearLayout.LayoutParams params =
-                        new LinearLayout.LayoutParams(
-                                w,
-                                ViewGroup.LayoutParams.MATCH_PARENT);
-                mStatusBar.setLayoutParams(params);
-                newParent.addView(mStatusBar);
-
-                // Apply theme
-                mStatusBar.setBackgroundResource(R.drawable.titlebar_drawable);
-
-                // Hide holder
-                View holder = mView.findViewById(
-                        R.id.navigation_statusbar_portrait_holder);
-                holder.setVisibility(View.GONE);
-
-            } else {
-                // Add to the new location
-                ViewGroup newParent = (ViewGroup) mView.findViewById(
-                        R.id.navigation_statusbar_portrait_holder);
-                LinearLayout.LayoutParams params =
-                        new LinearLayout.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.MATCH_PARENT);
-                mStatusBar.setLayoutParams(params);
-                newParent.addView(mStatusBar);
-
-                // Apply theme
-                mStatusBar.setBackgroundResource(R.drawable.statusbar_drawable);
-
-                // Show holder
-                newParent.setVisibility(View.VISIBLE);
-            }
-        }
-
     }
 
     /**
@@ -2415,41 +2326,8 @@ public class NavigationFragment extends Fragment
                 .getComponentName()));
         mSearchView.setIconifiedByDefault(false);
 
-        mCustomTitleView = (NavigationCustomTitleView) mTitleLayout.findViewById(
-                R.id.navigation_title_flipper);
-        mCustomTitleView.setVisibility(View.VISIBLE);
-
-        //- StatusBar
-        mStatusBar = mView.findViewById(R.id.navigation_statusbar);
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            mStatusBar.setBackgroundResource(R.drawable.titlebar_drawable);
-        } else {
-            mStatusBar.setBackgroundResource(R.drawable.statusbar_drawable);
-        }
-        View v = mView.findViewById(R.id.ab_overflow);
-        theme.setImageDrawable(getActivity(), (ImageView)v, "ab_overflow_drawable"); //$NON-NLS-1$
-        v = mView.findViewById(R.id.ab_actions);
-        theme.setImageDrawable(getActivity(), (ImageView)v, "ab_actions_drawable"); //$NON-NLS-1$
-        v = mView.findViewById(R.id.ab_search);
-        theme.setImageDrawable(getActivity(), (ImageView)v, "ab_search_drawable"); //$NON-NLS-1$
-
-        //- Expanders
-        v = mTitleLayout.findViewById(R.id.ab_configuration);
-        theme.setImageDrawable(getActivity(), (ImageView)v, "expander_open_drawable"); //$NON-NLS-1$
-        v = mTitleLayout.findViewById(R.id.ab_close);
-        theme.setImageDrawable(getActivity(),
-                (ImageView)v, "expander_close_drawable"); //$NON-NLS-1$
-        v = mTitleLayout.findViewById(R.id.ab_sort_mode);
-        theme.setImageDrawable(getActivity(), (ImageView)v, "ab_sort_mode_drawable"); //$NON-NLS-1$
-        v = mTitleLayout.findViewById(R.id.ab_layout_mode);
-        theme.setImageDrawable(getActivity(),
-                (ImageView)v, "ab_layout_mode_drawable"); //$NON-NLS-1$
-        v = mTitleLayout.findViewById(R.id.ab_view_options);
-        theme.setImageDrawable(getActivity(),
-                (ImageView)v, "ab_view_options_drawable"); //$NON-NLS-1$
-
         //- SelectionBar
-        v = mView.findViewById(R.id.navigation_selectionbar);
+        View v = mView.findViewById(R.id.navigation_selectionbar);
         theme.setBackgroundDrawable(getActivity(), v, "selectionbar_drawable"); //$NON-NLS-1$
         v = mView.findViewById(R.id.ab_selection_done);
         theme.setImageDrawable(getActivity(),
@@ -2502,9 +2380,18 @@ public class NavigationFragment extends Fragment
     public void setOnDirectoryChangedListener(
             OnDirectoryChangedListener onDirectoryChangedListener) {
         mOnDirectoryChangedListener = onDirectoryChangedListener;
-        NavigationView current = getCurrentNavigationView();
-        if (current != null) {
-            current.setOnDirectoryChangedListener(mOnDirectoryChangedListener);
-        }
+    }
+
+
+    @Override
+    public void onDirectoryChanged(FileSystemObject item) {
+        ActionBarActivity actionBarActivity = (ActionBarActivity) getActivity();
+        TextView title = (TextView) mTitleLayout.findViewById(R.id.drawer_title);
+        title.setText(item.getName());
+        mToolBar.setBackgroundColor(getResources().getColor(R.color.default_primary));
+        actionBarActivity.getWindow().setStatusBarColor(getResources()
+                .getColor(R.color.default_primary));
+
+        mOnDirectoryChangedListener.onDirectoryChanged(item);
     }
 }
