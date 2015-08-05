@@ -27,14 +27,6 @@
       android:showAsAction="ifRoom"
       android:title="@string/actions_menu_refresh"/>
     <item
-      android:id="@+id/mnu_actions_new_directory"
-      android:showAsAction="ifRoom"
-      android:title="@string/actions_menu_new_directory"/>
-    <item
-      android:id="@+id/mnu_actions_new_file"
-      android:showAsAction="ifRoom"
-      android:title="@string/actions_menu_new_file"/>
-    <item
       android:id="@+id/mnu_actions_select_all"
       android:showAsAction="ifRoom"
       android:title="@string/actions_menu_select_all"/>

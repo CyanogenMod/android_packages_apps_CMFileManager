@@ -63,9 +63,7 @@ public class NavigationCustomTitleView extends ViewFlipper {
      * in the breadcrumb view.
      */
     public void restoreView() {
-        if (getCurrentView().getId() != R.id.tb_breadcrumb) {
-            hideConfigurationView();
-        }
+        hideConfigurationView();
     }
 
     /**
@@ -99,7 +97,7 @@ public class NavigationCustomTitleView extends ViewFlipper {
      * @return boolean If the breadcrumb view is visible
      */
     public boolean isConfigurationViewShowing() {
-        return getCurrentView().getId() != R.id.tb_breadcrumb;
+        return Boolean.TRUE;
     }
 
 }
