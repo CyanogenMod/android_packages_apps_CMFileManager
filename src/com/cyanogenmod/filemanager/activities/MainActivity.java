@@ -26,6 +26,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
@@ -34,16 +36,29 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
+import android.support.v4.graphics.ColorUtils;
+import android.support.v7.widget.CardView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.SearchView;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.cyanogen.ambient.storage.provider.ProviderCapabilities;
 import com.cyanogen.ambient.storage.provider.StorageProviderInfo;
 import com.cyanogenmod.filemanager.FileManagerApplication;
@@ -63,6 +78,7 @@ import com.cyanogenmod.filemanager.ui.fragments.NavigationFragment;
 import com.cyanogenmod.filemanager.ui.fragments.NavigationFragment.OnGoHomeRequestListener;
 import com.cyanogenmod.filemanager.ui.widgets.NavigationView.OnBackRequestListener;
 import com.cyanogenmod.filemanager.util.FileHelper;
+import com.cyanogenmod.filemanager.util.MimeTypeHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
 import com.cyanogenmod.filemanager.util.StorageHelper;
 
@@ -70,6 +86,13 @@ import java.io.File;
 import java.io.InvalidClassException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.APP;
+import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.AUDIO;
+import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.DOCUMENT;
+import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.IMAGE;
+import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.NONE;
+import static com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory.VIDEO;
 
 /**
  * The main navigation activity. This activity is the center of the application.
@@ -125,6 +148,32 @@ public class MainActivity extends ActionBarActivity
     public static final String EXTRA_ADD_TO_HISTORY =
             "extra_add_to_history"; //$NON-NLS-1$
 
+    static java.util.Map<MimeTypeCategory, Drawable> EASY_MODE_ICONS = new
+            java.util.HashMap<MimeTypeCategory, Drawable>();
+
+    private static final List<MimeTypeCategory> EASY_MODE_LIST = new ArrayList<MimeTypeCategory>() {
+        {
+            add(NONE);
+            add(IMAGE);
+            add(VIDEO);
+            add(AUDIO);
+            add(DOCUMENT);
+            add(APP);
+        }
+    };
+
+    private Toolbar mToolBar;
+
+    private ArrayAdapter<MimeTypeCategory> mEasyModeAdapter;
+
+    private View.OnClickListener mEasyModeItemClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Integer position = (Integer) view.getTag();
+            onClicked(position);
+        }
+    };
+
     /**
      * Fragment types
      */
@@ -165,6 +214,8 @@ public class MainActivity extends ActionBarActivity
      */
     @Override
     protected void onCreate(Bundle state) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
         //Save state
         super.onCreate(state);
 
@@ -196,7 +247,27 @@ public class MainActivity extends ActionBarActivity
                 }
             }
         });
-        setCurrentFragment(FragmentType.HOME);
+
+        final CardView cV = (CardView) findViewById(R.id.add_provider);
+        cV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setCurrentFragment(FragmentType.LOGIN);
+            }
+        });
+
+        Button dismiss =(Button) findViewById(R.id.dismiss_card);
+        dismiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cV.setVisibility(View.GONE);
+                // TODO: Save that the card has been dismissed
+            }
+        });
+
+        handleSearchBar();
+
+        setHomeStatusBarColor();
 
         //Initialize nfc adapter
         NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -225,6 +296,51 @@ public class MainActivity extends ActionBarActivity
                 }
             }, this);
         }
+    }
+
+    private void handleSearchBar() {
+        SearchView searchView = (SearchView) findViewById(R.id.homepage_search_bar);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(false);
+
+        int searchPlateId = searchView.getContext().getResources()
+                .getIdentifier("android:id/search_plate", null, null);
+        View searchPlate = searchView.findViewById(searchPlateId);
+        if (searchPlate != null) {
+            int searchTextId = searchPlate.getContext().getResources()
+                    .getIdentifier("android:id/search_src_text", null, null);
+            TextView searchText = (TextView) searchPlate.findViewById(searchTextId);
+            if (searchText != null) {
+                int searchColor = getResources().getColor(R.color.search_bar_hint_text_color);
+                searchText.setTextColor(searchColor);
+                searchText.setHintTextColor(searchColor);
+            }
+
+            // Update all the image views to our assets
+            int imageViewId = getResources().getIdentifier("android:id/search_button", null, null);
+            ImageView imageView = (ImageView) searchView.findViewById(imageViewId);
+            if (imageView != null) {
+                imageView.setImageResource(R.drawable.ic_search);
+            }
+            imageViewId = getResources().getIdentifier("android:id/search_mag_icon", null, null);
+            imageView = (ImageView) searchView.findViewById(imageViewId);
+            if (imageView != null) {
+                imageView.setImageResource(R.drawable.ic_search);
+            }
+            imageViewId = getResources().getIdentifier("android:id/search_voice_btn", null, null);
+            imageView = (ImageView) searchView.findViewById(imageViewId);
+            if (imageView != null) {
+                imageView.setImageResource(R.drawable.ic_search_voice);
+            }
+            imageViewId = getResources().getIdentifier("android:id/search_close_btn", null, null);
+            imageView = (ImageView) searchView.findViewById(imageViewId);
+            if (imageView != null) {
+                imageView.setImageResource(R.drawable.ic_cancel_close);
+            }
+        }
+
+        searchView.setFocusable(false);
     }
 
     /**
@@ -265,10 +381,19 @@ public class MainActivity extends ActionBarActivity
             case HOME:
             default:
                 mPopBackStack = false;
-                currentFragment = HomeFragment.newInstance();
-                fragmentTag = fragmentType.name();
+                currentFragment = null;
+                List<Fragment> fragments = fragmentManager.getFragments();
+                if (fragments != null && fragments.size() > 0) {
+                    for (Fragment fragment : fragments) {
+                        fragmentManager.beginTransaction()
+                                .remove(fragment)
+                                .commitAllowingStateLoss();
+                    }
+                }
                 mNavigationDrawerController.setSelected(R.id.navigation_item_home);
-                break;
+                setHomeStatusBarColor();
+
+                return;
         }
 
         if (noBackStack) {
@@ -285,18 +410,36 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
+    private void setHomeStatusBarColor() {
+        int foregroundColor = getResources().getColor(R.color.status_bar_multiplier);
+        int backgroundColor = getResources().getColor(R.color.default_primary);
+        int statusBarColor = ColorUtils.compositeColors(foregroundColor, backgroundColor);
+        getWindow().setStatusBarColor(statusBarColor);
+    }
+
     private void updateCurrentFragment() {
-        for (FragmentType type : FragmentType.values()) {
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(type.name());
-            if (fragment != null && fragment.isVisible()) {
-                currentFragment = fragment;
-            }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            FragmentManager.BackStackEntry backEntry = fragmentManager.getBackStackEntryAt(
+                    fragmentManager.getBackStackEntryCount() - 1);
+            backEntry.getName();
+            currentFragment = fragmentManager.findFragmentByTag(backEntry.getName());
+        } else {
+            // current fragment is Home
+            currentFragment = null;
+            mNavigationDrawerController.setSelected(R.id.navigation_item_home);
+            setHomeStatusBarColor();
         }
     }
 
     private boolean isCurrentFragment(FragmentType fragmentType) {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(fragmentType.name());
-        return (fragment != null && fragment.isVisible());
+        if (fragmentType == FragmentType.HOME) {
+            return getSupportFragmentManager().getFragments().size() <= 0;
+        } else {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(fragmentType.name());
+            return (fragment != null && fragment.isVisible());
+        }
     }
 
     public void navigateToPath(String path) {
@@ -360,9 +503,101 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        mToolBar = (Toolbar) findViewById(R.id.material_toolbar);
+        setSupportActionBar(mToolBar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
+
+        initEasyModePlus();
+    }
+
+    private void initEasyModePlus() {
+
+        MIME_TYPE_LOCALIZED_NAMES = MimeTypeCategory.getFriendlyLocalizedNames(this);
+        EASY_MODE_ICONS.put(MimeTypeHelper.MimeTypeCategory.NONE, getResources().getDrawable(
+                R.drawable.ic_em_all));
+        EASY_MODE_ICONS.put(MimeTypeHelper.MimeTypeCategory.IMAGE, getResources().getDrawable(
+                R.drawable.ic_em_image));
+        EASY_MODE_ICONS.put(MimeTypeHelper.MimeTypeCategory.VIDEO, getResources().getDrawable(
+                R.drawable.ic_em_video));
+        EASY_MODE_ICONS.put(MimeTypeHelper.MimeTypeCategory.AUDIO, getResources().getDrawable(
+                R.drawable.ic_em_music));
+        EASY_MODE_ICONS.put(MimeTypeHelper.MimeTypeCategory.DOCUMENT, getResources().getDrawable(
+                R.drawable.ic_em_document));
+        EASY_MODE_ICONS.put(MimeTypeHelper.MimeTypeCategory.APP, getResources().getDrawable(
+                R.drawable.ic_em_application));
+
+        GridView gridview = (GridView) findViewById(R.id.easy_modeView);
+
+        mEasyModeAdapter = new android.widget.ArrayAdapter<MimeTypeCategory>(this, R.layout
+                .navigation_view_simple_item) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                convertView = (convertView == null) ? getLayoutInflater().inflate(R.layout
+                        .navigation_view_simple_item, parent, false) : convertView;
+                MimeTypeCategory item = getItem(position);
+                String typeTitle = MIME_TYPE_LOCALIZED_NAMES[item.ordinal()];
+                TextView typeTitleTV = (TextView) convertView
+                        .findViewById(R.id.navigation_view_item_name);
+                ImageView typeIconIV = (ImageView) convertView
+                        .findViewById(R.id.navigation_view_item_icon);
+
+                typeTitleTV.setText(typeTitle);
+                typeIconIV.setImageDrawable(EASY_MODE_ICONS.get(item));
+                convertView.setOnClickListener(mEasyModeItemClickListener);
+                convertView.setTag(position);
+                return convertView;
+            }
+        };
+        mEasyModeAdapter.addAll(EASY_MODE_LIST);
+        gridview.setAdapter(mEasyModeAdapter);
+
+        gridview.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                Toast.makeText(MainActivity.this, "" + position, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void onClicked(int position) {
+        Intent intent = new Intent(this, SearchActivity.class);
+        intent.setAction(Intent.ACTION_SEARCH);
+        intent.putExtra(SearchActivity.EXTRA_SEARCH_DIRECTORY, FileHelper.ROOT_DIRECTORY);
+        intent.putExtra(SearchManager.QUERY, "*"); // Use wild-card '*'
+
+        if (position == 0) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            fragmentManager.beginTransaction()
+                    .replace(R.id.navigation_fragment_container, new NavigationFragment())
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
+            return;
+
+        } else {
+            ArrayList<MimeTypeCategory> searchCategories = new ArrayList<MimeTypeCategory>();
+            MimeTypeCategory selectedCategory = EASY_MODE_LIST.get(position);
+            searchCategories.add(selectedCategory);
+            // a one off case where we implicitly want to also search for TEXT mimetypes when the
+            // DOCUMENTS category is selected
+            if (selectedCategory == MimeTypeCategory.DOCUMENT) {
+                searchCategories.add(
+                        MimeTypeCategory.TEXT);
+            }
+            intent.putExtra(SearchActivity.EXTRA_SEARCH_MIMETYPE, searchCategories);
+        }
+
+        startActivity(intent);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        mNavigationDrawerController.loadNavigationDrawerItems();
+         mNavigationDrawerController.loadNavigationDrawerItems();
     }
 
     /**
@@ -453,20 +688,6 @@ public class MainActivity extends ActionBarActivity
 
             switch (view.getId()) {
                 //######################
-                //Navigation Custom Title
-                //######################
-                case com.cyanogenmod.filemanager.R.id.ab_configuration:
-                    //Show navigation view configuration toolbar
-                    ((NavigationFragment)currentFragment)
-                            .getCurrentNavigationView().getCustomTitle().showConfigurationView();
-                    break;
-                case com.cyanogenmod.filemanager.R.id.ab_close:
-                    //Hide navigation view configuration toolbar
-                    ((NavigationFragment)currentFragment)
-                            .getCurrentNavigationView().getCustomTitle().hideConfigurationView();
-                    break;
-
-                //######################
                 //Breadcrumb Actions
                 //######################
                 case com.cyanogenmod.filemanager.R.id.ab_filesystem_info:
@@ -479,52 +700,6 @@ public class MainActivity extends ActionBarActivity
                                     .getCurrentNavigationView().getBreadcrumb().getDiskUsageInfo();
                     ((NavigationFragment)currentFragment).showMountPointInfo(mp, du);
                     break;
-
-                //######################
-                //Navigation view options
-                //######################
-                case com.cyanogenmod.filemanager.R.id.ab_sort_mode:
-                    SortViewOptions.createSortDialog(this,
-                            FileManagerSettings.SETTINGS_SORT_MODE,
-                            new SortViewOptions.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which, int result) {
-                                    if (which == DialogInterface.BUTTON_POSITIVE) {
-                                        if (PreferenceHelper.getIntPreference(
-                                                FileManagerSettings.SETTINGS_SORT_MODE) != result) {
-                                            ((NavigationFragment) currentFragment).updateSetting(
-                                                    FileManagerSettings.SETTINGS_SORT_MODE, result);
-                                        }
-                                    }
-                                }
-                            })
-                            .show();
-                    break;
-                case com.cyanogenmod.filemanager.R.id.ab_layout_mode:
-                    ((NavigationFragment)currentFragment).showSettingsPopUp(view,
-                            java.util.Arrays.asList(
-                                    new FileManagerSettings[]{
-                                            FileManagerSettings.SETTINGS_LAYOUT_MODE}));
-                    break;
-                case com.cyanogenmod.filemanager.R.id.ab_view_options:
-                    // If we are in ChRooted mode, then don't show non-secure items
-                    if (((NavigationFragment)currentFragment).mChRooted) {
-                        ((NavigationFragment)currentFragment).showSettingsPopUp(view,
-                                java.util.Arrays
-                                        .asList(new FileManagerSettings[]{
-                                                FileManagerSettings.SETTINGS_SHOW_DIRS_FIRST}));
-                    } else {
-                        ((NavigationFragment)currentFragment).showSettingsPopUp(view,
-                                java.util.Arrays
-                                        .asList(new FileManagerSettings[]{
-                                                FileManagerSettings.SETTINGS_SHOW_DIRS_FIRST,
-                                                FileManagerSettings.SETTINGS_SHOW_HIDDEN,
-                                                FileManagerSettings.SETTINGS_SHOW_SYSTEM,
-                                                FileManagerSettings.SETTINGS_SHOW_SYMLINKS}));
-                    }
-
-                    break;
-
                 //######################
                 //Selection Actions
                 //######################
@@ -533,21 +708,9 @@ public class MainActivity extends ActionBarActivity
                     ((NavigationFragment)currentFragment)
                             .getCurrentNavigationView().onDeselectAll();
                     break;
-
-                //######################
-                //Action Bar buttons
-                //######################
-                case com.cyanogenmod.filemanager.R.id.ab_actions:
-                    ((NavigationFragment)currentFragment).openActionsDialog(
-                            ((NavigationFragment)currentFragment)
-                                    .getCurrentNavigationView().getCurrentDir(),
-                            true);
-                    break;
-
-                case com.cyanogenmod.filemanager.R.id.ab_search:
-                    ((NavigationFragment)currentFragment).openSearch();
-                    break;
-
+                case R.id.ab_actions:
+                    // Show the actions dialog
+                    ((NavigationFragment) currentFragment).openActionsDialog(null, true);
                 default:
                     break;
             }
@@ -619,7 +782,7 @@ public class MainActivity extends ActionBarActivity
                 return;
             }
         }
-        if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
             finish();
         }
         super.onBackPressed();
@@ -641,5 +804,9 @@ public class MainActivity extends ActionBarActivity
             final View view = findViewById(R.id.navigation_fragment_container);
             Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
         }
+    }
+
+    public int getColorForPath(String path) {
+        return mNavigationDrawerController.getColorForPath(path);
     }
 }

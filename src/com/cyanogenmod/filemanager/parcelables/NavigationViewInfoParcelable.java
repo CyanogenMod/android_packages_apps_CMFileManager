@@ -38,6 +38,7 @@ public class NavigationViewInfoParcelable extends HistoryNavigable {
 
     private int mId;
     private String mCurrentDir;
+    private FileSystemObject mCurrentFileSystemObject;
     private boolean mChRooted;
     private List<FileSystemObject> mFiles;
     private List<FileSystemObject> mSelectedFiles;
@@ -113,6 +114,24 @@ public class NavigationViewInfoParcelable extends HistoryNavigable {
      */
     public void setCurrentDir(String currentDir) {
         this.mCurrentDir = currentDir;
+    }
+
+    /**
+     * Method that returns the current directory's {@link FileSystemObject}.
+     *
+     * @return String The current directory
+     */
+    public FileSystemObject getCurrentFso() {
+        return this.mCurrentFileSystemObject;
+    }
+
+    /**
+     * Method that sets the current directory's {@link FileSystemObject}.
+     *
+     * @param currentFso The current directory
+     */
+    public void setCurrentFso(FileSystemObject currentFso) {
+        this.mCurrentFileSystemObject = currentFso;
     }
 
     /**

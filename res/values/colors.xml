@@ -56,6 +56,7 @@
 
     <!-- The text color of the ActionBar -->
     <color name="action_bar_text_color">@android:color/white</color>
+    <color name="action_bar_title_text_color">#deffffff</color>
 
     <!-- Breadcrumb text color -->
     <color name="breadcrumb_text_color">#deffffff</color>
@@ -147,4 +148,6 @@
 
     <!-- Search bar -->
     <color name="search_bar_hint_text_color">#df000000</color>
+
+    <color name="status_bar_multiplier">#33000000</color>
 </resources>
