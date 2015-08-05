@@ -214,16 +214,6 @@ public class ActionsDialog implements OnItemClickListener, OnItemLongClickListen
 
         //What action was selected?
         switch ((int)id) {
-            //- Create new object
-            case R.id.mnu_actions_new_directory:
-            case R.id.mnu_actions_new_file:
-                // Dialog is dismissed inside showInputNameDialog
-                if (this.mOnSelectionListener != null) {
-                    showInputNameDialog(menuItem);
-                    return;
-                }
-                break;
-
             //- Rename
             case R.id.mnu_actions_rename:
             case R.id.mnu_actions_rename_selection:
@@ -270,28 +260,11 @@ public class ActionsDialog implements OnItemClickListener, OnItemLongClickListen
                         null);
                 break;
 
-            //- Refresh
-            case R.id.mnu_actions_refresh:
-                if (this.mOnRequestRefreshListener != null) {
-                    this.mOnRequestRefreshListener.onRequestRefresh(null, false); //Refresh all
-                }
-                break;
-
             //- Select/Deselect
             case R.id.mnu_actions_select:
             case R.id.mnu_actions_deselect:
                 if (this.mOnSelectionListener != null) {
                     this.mOnSelectionListener.onToggleSelection(this.mFso);
-                }
-                break;
-            case R.id.mnu_actions_select_all:
-                if (this.mOnSelectionListener != null) {
-                    this.mOnSelectionListener.onSelectAllVisibleItems();
-                }
-                break;
-            case R.id.mnu_actions_deselect_all:
-                if (this.mOnSelectionListener != null) {
-                    this.mOnSelectionListener.onDeselectAllVisibleItems();
                 }
                 break;
 
@@ -455,37 +428,29 @@ public class ActionsDialog implements OnItemClickListener, OnItemLongClickListen
     /**
      * Method that show a new dialog for input a name.
      *
-     * @param menuItem The item menu associated
+     * @param context Context for showing dialog and creating file system object
+     * @param title The dialog title
+     * @param id The menu id to determine if creating a directory or file
+     * @param fileSystemObjects The list of file system objects in the current directory
+     * @param onSelectionListener
+     * @param onRequestRefreshListener
      */
-    private void showInputNameDialog(final MenuItem menuItem) {
-        //Hide the dialog
-        this.mDialog.hide();
-
+    public static void showInputNameDialog(final Context context, String title, final int id,
+            List <FileSystemObject> fileSystemObjects, final OnSelectionListener onSelectionListener,
+            final OnRequestRefreshListener onRequestRefreshListener) {
         //Show the input name dialog
         final InputNameDialog inputNameDialog =
                 new InputNameDialog(
-                        this.mContext,
-                        this.mOnSelectionListener.onRequestCurrentItems(),
-                        menuItem.getTitle().toString());
-        inputNameDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                //Show the menu again
-                DialogHelper.delegateDialogShow(
-                        ActionsDialog.this.mContext, ActionsDialog.this.mDialog);
-            }
-        });
+                        context,
+                        fileSystemObjects,
+                        title);
         inputNameDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 //Retrieve the name an execute the action
-                try {
-                    String name = inputNameDialog.getName();
-                    createNewFileSystemObject(menuItem.getItemId(), name);
-
-                } finally {
-                    ActionsDialog.this.mDialog.dismiss();
-                }
+                String name = inputNameDialog.getName();
+                createNewFileSystemObject(context, id, name, onSelectionListener,
+                        onRequestRefreshListener);
             }
         });
         inputNameDialog.show();
@@ -580,21 +545,24 @@ public class ActionsDialog implements OnItemClickListener, OnItemLongClickListen
     /**
      * Method that create the a new file system object.
      *
+     * @param context Context to use for creating File System object
      * @param menuId The menu identifier (need to determine the fso type)
      * @param name The name of the file system object
+     * @param onSelectionListener
+     * @param onRequestRefreshListener
      * @hide
      */
-    void createNewFileSystemObject(final int menuId, final String name) {
+    public static void createNewFileSystemObject(Context context, final int menuId,
+            final String name, OnSelectionListener onSelectionListener,
+            OnRequestRefreshListener onRequestRefreshListener) {
         switch (menuId) {
             case R.id.mnu_actions_new_directory:
                 NewActionPolicy.createNewDirectory(
-                        this.mContext, name,
-                        this.mOnSelectionListener, this.mOnRequestRefreshListener);
+                        context, name, onSelectionListener, onRequestRefreshListener);
                 break;
             case R.id.mnu_actions_new_file:
                 NewActionPolicy.createNewFile(
-                        this.mContext, name,
-                        this.mOnSelectionListener, this.mOnRequestRefreshListener);
+                        context, name, onSelectionListener, onRequestRefreshListener);
                 break;
             default:
                 break;

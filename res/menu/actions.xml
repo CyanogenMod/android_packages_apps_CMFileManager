@@ -23,26 +23,6 @@
       android:showAsAction="ifRoom"
       android:title="@string/actions_menu_properties_current_folder"/>
     <item
-      android:id="@+id/mnu_actions_refresh"
-      android:showAsAction="ifRoom"
-      android:title="@string/actions_menu_refresh"/>
-    <item
-      android:id="@+id/mnu_actions_new_directory"
-      android:showAsAction="ifRoom"
-      android:title="@string/actions_menu_new_directory"/>
-    <item
-      android:id="@+id/mnu_actions_new_file"
-      android:showAsAction="ifRoom"
-      android:title="@string/actions_menu_new_file"/>
-    <item
-      android:id="@+id/mnu_actions_select_all"
-      android:showAsAction="ifRoom"
-      android:title="@string/actions_menu_select_all"/>
-    <item
-      android:id="@+id/mnu_actions_deselect_all"
-      android:showAsAction="ifRoom"
-      android:title="@string/actions_menu_deselect_all"/>
-    <item
       android:id="@+id/mnu_actions_paste_selection"
       android:showAsAction="ifRoom"
       android:title="@string/actions_menu_paste_selection"/>

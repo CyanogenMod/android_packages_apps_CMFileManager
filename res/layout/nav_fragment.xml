@@ -35,7 +35,6 @@
         android:id="@+id/scrimInsetsFrameLayoutNavigation"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         app:insetForeground="@color/material_palette_blue_primary_dark">
 
         <!-- The main content view -->
@@ -68,9 +67,6 @@
                 android:layout_height="@dimen/small_row_height"
                 android:background="@drawable/bg_material_selectionbar"
                 android:visibility="invisible"/>
-
-            <!-- StatusBar -->
-            <include layout="@layout/navigation_view_statusbar"/>
 
         </LinearLayout>
 

@@ -46,4 +46,12 @@
     android:text="@null"
     android:textAppearance="@style/secondary_text_appearance" />
 
+  <Button
+    android:id="@+id/ab_actions"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:text="@string/actionbar_button_actions_cd"
+    android:onClick="onActionBarItemClick"
+    android:gravity="end"/>
+
 </LinearLayout>
