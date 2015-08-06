@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.text.InputFilter;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -571,6 +572,20 @@ public final class DialogHelper {
         popup.setContentWidth(context.getResources().getDimensionPixelSize(R.dimen.popup_width));
         popup.setAnchorView(anchor);
         popup.setModal(true);
+
+        // HACK: set the height to the size of the device screen width or height depending on
+        // which is smaller.
+        // Because we are handling the orientation change instead of letting
+        // android do its thing, this never redraws. If we remove the orientation
+        // change, then all the other popup dialogs break when rotating.
+        // This isn't perfect, but without some significant changes to this app we cannot
+        // properly do this.
+        // Get the screen size, determine what number is lower, use that for the height
+        DisplayMetrics dM = context.getResources().getDisplayMetrics();
+        float width = dM.widthPixels / dM.density;
+        float height = dM.heightPixels / dM.density;
+        popup.setHeight((int)Math.min(height, width));
+
         return popup;
     }
 
