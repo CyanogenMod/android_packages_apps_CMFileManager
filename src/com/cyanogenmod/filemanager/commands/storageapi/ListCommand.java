@@ -99,7 +99,9 @@ public class ListCommand extends Program implements ListExecutable {
 
         DocumentResult result = pendingResult.await();
         if (result == null || !result.getStatus().isSuccess()) {
-            Log.e(TAG, "Result: FAIL. No results returned."); //$NON-NLS-1$
+            if (isTrace()) {
+                Log.e(TAG, "Result: FAIL. No results returned."); //$NON-NLS-1$
+            }
             return;
         }
         try {
