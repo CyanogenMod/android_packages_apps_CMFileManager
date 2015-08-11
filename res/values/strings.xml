@@ -933,4 +933,10 @@
     <string name="docs">Docs</string>
     <string name="apps">Apps</string>
     <string name="archives">Archives</string>
+
+    <!-- Moving file notifications -->
+    <string name="moving_file_notification_title">Moving file</string>
+    <string name="move_complete_notification_title">Move complete</string>
+    <string name="move_complete_notification_description">Open location</string>
+    <string name="move_complete_notification_share_link">Share link</string>
 </resources>

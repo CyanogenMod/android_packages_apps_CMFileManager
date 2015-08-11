@@ -128,6 +128,15 @@
         <item name="android:homeAsUpIndicator">@drawable/material_ripple_up_arrow</item>
     </style>
 
+    <style name="FileManager.Theme.Transparent" parent="android:Theme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
     <!-- Action bar -->
     <style name="FileManager.Widget.ActionBar.White" parent="@android:style/Widget.Material.Light.ActionBar">
         <item name="android:textColorPrimary">@android:color/white</item>
