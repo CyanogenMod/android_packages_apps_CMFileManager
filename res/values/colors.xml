@@ -52,7 +52,7 @@
     <color name="dark_button_blue">#0277bd</color>
 
     <!-- The default background color -->
-    <color name="default_background">@android:color/white</color>
+    <color name="default_background">#fafafa</color>
     <!-- The default dissabled background color -->
     <color name="default_background_disabled">#f2f2f2</color>
 
@@ -178,4 +178,7 @@
     <color name="snackbar_upgrade_color">#def2b807</color>
 
     <color name="status_bar_foreground_color">#33000000</color>
+
+    <color name="open_file_progress_dialog_file_color">#de000000</color>
+    <color name="open_file_progress_dialog_message_color">#8b000000</color>
 </resources>
