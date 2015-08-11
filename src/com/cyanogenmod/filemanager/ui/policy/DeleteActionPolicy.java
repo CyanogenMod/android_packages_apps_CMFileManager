@@ -175,10 +175,27 @@ public final class DeleteActionPolicy extends ActionsPolicy {
                     public int getDialogTitle() {
                         return R.string.waiting_dialog_deleting_title;
                     }
+
+                    @Override
+                    public String getDialogMessage() {
+                        return null;
+                    }
+
+                    @Override
+                    public DialogType getDialogType() {
+                        return DialogType.MESSAGE_PROGRESS_DIALOG;
+                    }
+
                     @Override
                     public int getDialogIcon() {
                         return 0;
                     }
+
+                    @Override
+                    public int getDialogColor() {
+                        return 0;
+                    }
+
                     @Override
                     public boolean isDialogCancellable() {
                         return false;

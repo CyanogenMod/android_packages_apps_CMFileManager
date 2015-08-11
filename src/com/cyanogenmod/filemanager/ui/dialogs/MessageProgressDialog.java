@@ -33,20 +33,8 @@ import com.cyanogenmod.filemanager.util.DialogHelper;
 /**
  * A class that wraps a dialog for showing a progress with text message (non graphical).
  */
-public class MessageProgressDialog implements DialogInterface.OnClickListener {
-
-    /**
-     * A class for listen program cancellation events.
-     */
-    public interface OnCancelListener {
-        /**
-         * Fires when a cancel were requested.
-         *
-         *  @return boolean If the cancel can be done
-         */
-        boolean onCancel();
-    }
-
+public class MessageProgressDialog implements CustomProgressDialog,
+        DialogInterface.OnClickListener {
     /**
      * @hide
      */
@@ -150,6 +138,7 @@ public class MessageProgressDialog implements DialogInterface.OnClickListener {
      *
      * @param onCancelListener The cancel listener
      */
+    @Override
     public void setOnCancelListener(OnCancelListener onCancelListener) {
         this.mOnCancelListener = onCancelListener;
     }
@@ -159,6 +148,7 @@ public class MessageProgressDialog implements DialogInterface.OnClickListener {
      *
      * @param progress The progress of progress of the action
      */
+    @Override
     public void setProgress(Spanned progress) {
         this.mProgress.setText(progress);
     }
@@ -166,6 +156,7 @@ public class MessageProgressDialog implements DialogInterface.OnClickListener {
     /**
      * Method that shows the dialog.
      */
+    @Override
     public void show() {
         DialogHelper.delegateDialogShow(this.mContext, this.mDialog);
     }
@@ -173,6 +164,7 @@ public class MessageProgressDialog implements DialogInterface.OnClickListener {
     /**
      * Method that dismiss the dialog.
      */
+    @Override
     public void dismiss() {
         this.mDialog.dismiss();
     }

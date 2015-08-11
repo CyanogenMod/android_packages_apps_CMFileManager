@@ -199,4 +199,27 @@
     <dimen name="quick_search_text_margin_top">15dp</dimen>
     <dimen name="quick_search_text_height">16dp</dimen>
 
+    <!-- Open dialog icon size -->
+    <dimen name="open_dialog_icon_size">24dp</dimen>
+    <!-- Open dialog progress circle stroke size -->
+    <dimen name="open_dialog_progress_circle_size">40dp</dimen>
+    <!-- Open dialog progress circle stroke size -->
+    <dimen name="open_dialog_progress_circle_stroke_size">2dp</dimen>
+    <!-- Open dialog progress layout width -->
+    <dimen name="open_dialog_progress_layout_width">280dp</dimen>
+    <!-- Open dialog progress layout height -->
+    <dimen name="open_dialog_progress_layout_height">88dp</dimen>
+    <!-- Open dialog progressbar margin start -->
+    <dimen name="open_dialog_progressbar_margin_start">16dp</dimen>
+    <!-- Open dialog icon margin start -->
+    <dimen name="open_dialog_icon_margin_start">24dp</dimen>
+    <!-- Open dialog text min height -->
+    <dimen name="open_dialog_text_min_height">20dp</dimen>
+    <!-- Open dialog text margin start/end -->
+    <dimen name="open_dialog_text_margin_start_end">16dp</dimen>
+    <!-- Open dialog text margin top -->
+    <dimen name="open_dialog_text_margin_top">25dp</dimen>
+    <!-- Open dialog text padding bottom -->
+    <dimen name="open_dialog_text_padding_bottom">21dp</dimen>
+
 </resources>

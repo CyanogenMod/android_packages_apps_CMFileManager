@@ -19,13 +19,13 @@ package com.cyanogenmod.filemanager.ui.policy;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.Spanned;
-import android.view.View;
 import android.widget.Toast;
 
 import com.cyanogenmod.filemanager.R;
+import com.cyanogenmod.filemanager.ui.dialogs.CustomProgressDialog;
 import com.cyanogenmod.filemanager.ui.dialogs.MessageProgressDialog;
+import com.cyanogenmod.filemanager.ui.dialogs.OpenFileProgressDialog;
 import com.cyanogenmod.filemanager.util.DialogHelper;
-import com.cyanogenmod.filemanager.util.ExceptionUtil;
 
 
 /**
@@ -38,6 +38,10 @@ public abstract class ActionsPolicy {
      * a
      */
     protected interface BackgroundCallable {
+        enum DialogType {
+            MESSAGE_PROGRESS_DIALOG,
+            OPEN_FILE_PROGRESS_DIALOG,
+        }
         /**
          * Method that returns the resource identifier of the icon of the dialog
          *
@@ -46,11 +50,32 @@ public abstract class ActionsPolicy {
         int getDialogIcon();
 
         /**
+         * Method that returns the primary color to be used within the dialog
+         *
+         * @return int The color to be used for the dialog
+         */
+        int getDialogColor();
+
+        /**
          * Method that returns the resource identifier of the title of the dialog
          *
          * @return int The resource identifier of the title of the dialog
          */
         int getDialogTitle();
+
+        /**
+         * Method that returns the string message for use by the dialog
+         *
+         * @return string The string message for use by the dialog
+         */
+        String getDialogMessage();
+
+        /**
+         * Method that returns the string message for use by the dialog
+         *
+         * @return DialogType The type of dialog to use.
+         */
+        DialogType getDialogType();
 
         /**
          * Method that returns if the dialog is cancellable
@@ -102,7 +127,7 @@ public abstract class ActionsPolicy {
 
         private final Context mCtx;
         private final BackgroundCallable mCallable;
-        private MessageProgressDialog mDialog;
+        private CustomProgressDialog mDialog;
 
         /**
          * Constructor of <code>BackgroundAsyncTask</code>
@@ -120,12 +145,26 @@ public abstract class ActionsPolicy {
         protected void onPreExecute() {
             // Create the waiting dialog while doing some stuff on background
             final BackgroundAsyncTask task = this;
-            this.mDialog = new MessageProgressDialog(
-                    this.mCtx,
-                    this.mCallable.getDialogIcon(),
-                    this.mCallable.getDialogTitle(),
-                    R.string.waiting_dialog_msg,
-                    this.mCallable.isDialogCancellable());
+            switch (this.mCallable.getDialogType()) {
+                case MESSAGE_PROGRESS_DIALOG:
+                    this.mDialog = new MessageProgressDialog(
+                            this.mCtx,
+                            this.mCallable.getDialogIcon(),
+                            this.mCallable.getDialogTitle(),
+                            R.string.waiting_dialog_msg,
+                            this.mCallable.isDialogCancellable());
+                    Spanned progress = this.mCallable.requestProgress();
+                    this.mDialog.setProgress(progress);
+                    break;
+                case OPEN_FILE_PROGRESS_DIALOG:
+                    this.mDialog = new OpenFileProgressDialog(
+                            this.mCtx,
+                            this.mCallable.getDialogIcon(),
+                            this.mCallable.getDialogMessage(),
+                            this.mCallable.getDialogColor(),
+                            this.mCallable.isDialogCancellable());
+                    break;
+            }
             this.mDialog.setOnCancelListener(new MessageProgressDialog.OnCancelListener() {
                 @Override
                 public boolean onCancel() {
@@ -134,8 +173,6 @@ public abstract class ActionsPolicy {
                     return true;
                 }
             });
-            Spanned progress = this.mCallable.requestProgress();
-            this.mDialog.setProgress(progress);
             this.mDialog.show();
         }
 
