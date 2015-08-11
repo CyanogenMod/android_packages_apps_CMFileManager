@@ -391,6 +391,20 @@ public final class DialogHelper {
      * Method that creates a new {@link AlertDialog}.
      *
      * @param context The current context
+     * @param content The content layout
+     * @return AlertDialog The alert dialog reference
+     */
+    public static AlertDialog createDialog(Context context, View content) {
+        //Create the alert dialog
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setView(content);
+        return builder.create();
+    }
+
+    /**
+     * Method that creates a new {@link AlertDialog}.
+     *
+     * @param context The current context
      * @param icon The icon resource
      * @param title The resource identifier of the title of the alert dialog
      * @param content The content layout

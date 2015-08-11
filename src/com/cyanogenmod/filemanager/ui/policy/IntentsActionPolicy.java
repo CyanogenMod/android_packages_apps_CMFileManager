@@ -16,8 +16,10 @@
 
 package com.cyanogenmod.filemanager.ui.policy;
 
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
@@ -25,10 +27,9 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Html;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -41,6 +42,7 @@ import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.activities.ShortcutActivity;
 import com.cyanogenmod.filemanager.console.secure.SecureConsole;
 import com.cyanogenmod.filemanager.console.storageapi.StorageApiConsole;
+import com.cyanogenmod.filemanager.dialogs.OpenFileProgressDialog;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.model.RegularFile;
 import com.cyanogenmod.filemanager.providers.SecureResourceProvider;
@@ -51,11 +53,11 @@ import com.cyanogenmod.filemanager.providers.secure.SecureChoiceClickListener;
 import com.cyanogenmod.filemanager.ui.dialogs.AssociationsDialog;
 import com.cyanogenmod.filemanager.util.DialogHelper;
 import com.cyanogenmod.filemanager.util.ExceptionUtil;
+import com.cyanogenmod.filemanager.util.ExceptionUtil.OnRelaunchCommandResult;
 import com.cyanogenmod.filemanager.util.FileHelper;
 import com.cyanogenmod.filemanager.util.MediaHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
-import com.cyanogenmod.filemanager.util.ResourcesHelper;
 import com.cyanogenmod.filemanager.util.SnackbarHelper;
 import com.cyanogenmod.filemanager.util.StorageProviderUtils;
 
@@ -222,109 +224,19 @@ public final class IntentsActionPolicy extends ActionsPolicy {
                 if (TextUtils.isEmpty(prefix)) {
                     return;
                 }
-
-                final String path = StorageApiConsole.getProviderPathFromFullPath(fso.getFullPath());
+                final String fullPath = fso.getFullPath();
+                final String path = StorageApiConsole.getProviderPathFromFullPath(fullPath);
                 final String name = fso.getName();
-                final StorageApiConsole console = StorageApiConsole.getStorageApiConsoleForPath(
-                        prefix);
+                final int iconId = MimeTypeHelper.getIcon(ctx, fso);
+                final int colorId = MimeTypeHelper.getIconColorFromIconId(ctx, iconId);
+                final StorageApiConsole console =
+                        StorageApiConsole.getStorageApiConsoleForPath(prefix);
 
-                BackgroundCallable callable = new BackgroundCallable() {
-                    private File file;
-                    private StorageApi.DocumentInfo documentInfo;
+                OpenStorageProviderFileTask task =
+                        new OpenStorageProviderFileTask(ctx, path, name, iconId, colorId, console,
+                                container, onCancelListener, onDismissListener, choose,
+                                atomicRelaunchCommandResult);
 
-                    @Override
-                    public int getDialogIcon() {
-                        return 0;
-                    }
-
-                    @Override
-                    public int getDialogTitle() {
-                        return R.string.waiting_dialog_opening_storage_provider_title;
-                    }
-
-                    @Override
-                    public boolean isDialogCancellable() {
-                        return false;
-                    }
-
-                    @Override
-                    public Spanned requestProgress() {
-                        String progress = ctx.getResources().getString(
-                                R.string.waiting_dialog_opening_storage_provider_message, fso.getName(),
-                                console.getName());
-                        return Html.fromHtml(progress);
-                    }
-
-                    @Override
-                    public void doInBackground(Object... params) throws Throwable {
-                        OutputStream outputStream = null;
-                        try {
-                            File downloadDir = new File(ctx.getExternalCacheDir(),
-                                    StorageProviderUtils.CACHE_DIR);
-                            if (downloadDir.exists() || downloadDir.mkdirs()) {
-                                file = new File(downloadDir.getPath() + File.separator + name);
-                                if (file.exists() || file.createNewFile()) {
-                                    outputStream = new FileOutputStream(file);
-                                }
-                            } else {
-                                Log.e(TAG, "Cannot create cache directory"); //$NON-NLS-1$
-                            }
-                        } catch (Exception e) {
-                            Log.e(TAG, "Cannot create temp file", e); //$NON-NLS-1$
-                        }
-                        PendingResult<StorageApi.DocumentInfo.DocumentInfoResult> pendingResult =
-                                console.getStorageApi().getFile(console.getStorageProviderInfo(),path,
-                                        outputStream, null);
-
-                        // Since we're downloading a file, this can take a while, so don't specify a timeout
-                        StorageApi.DocumentInfo.DocumentInfoResult result = pendingResult.await();
-                        if (result == null
-                                || !result.getStatus().isSuccess()) {
-                            Log.e(TAG, "Cannot download file"); //$NON-NLS-1$
-                            throw new StorageException("Cannot open file",
-                                    result.getStatus().getStatusCode());
-                        }
-                        documentInfo = result.getDocumentInfo();
-                    }
-
-                    @Override
-                    public void onSuccess() {
-                        Intent intent = new Intent();
-                        intent.setAction(android.content.Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.fromFile(file), documentInfo.getMimeType());
-                        FileSystemObject cacheFso = FileHelper.createFileSystemObject(file);
-                        resolveIntent(
-                                ctx,
-                                intent,
-                                choose,
-                                createInternalIntents(ctx, cacheFso),
-                                0,
-                                R.string.associations_dialog_openwith_title,
-                                R.string.associations_dialog_openwith_action,
-                                true,
-                                onCancelListener,
-                                onDismissListener);
-                    }
-
-                    @Override
-                    public void onError(Throwable error) {
-                        if (container != null) {
-                            SnackbarHelper.showWithRetry(ctx, container,
-                                    ctx.getString(R.string.snackbar_unable_to_open),
-                                    atomicRelaunchCommandResult.get());
-                        } else {
-                            Toast.makeText(ctx,
-                                    ctx.getString(R.string.snackbar_unable_to_open),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        Toast.makeText(ctx, R.string.cancelled_message, Toast
-                                .LENGTH_SHORT).show();
-                    }
-                };
                 ExceptionUtil.OnRelaunchCommandResult onRelaunchCommandResult =
                         new ExceptionUtil.OnRelaunchCommandResult() {
                     @Override
@@ -345,13 +257,140 @@ public final class IntentsActionPolicy extends ActionsPolicy {
                     }
                 };
                 atomicRelaunchCommandResult.set(onRelaunchCommandResult);
-                BackgroundAsyncTask task =
-                        new BackgroundAsyncTask(ctx, callable);
-                task.execute(task);
+                task.execute();
             }
         };
         atomicRunnable.set(runnable);
         runnable.run();
+    }
+
+    private static class OpenStorageProviderFileTask extends AsyncTask<Object, Integer, Throwable>
+            implements OnCancelListener{
+        private final Context mCtx;
+        private final String mPath;
+        private final String mName;
+        private final int mIconId;
+        private final int mColorId;
+        private final StorageApiConsole mConsole;
+        private final View mContainer;
+        private final OnCancelListener mOnCancelListener;
+        private final OnDismissListener mOnDismissListener;
+        private final boolean mChoose;
+        private final AtomicReference<OnRelaunchCommandResult> mAtomicRelaunchCommandResult;
+        private AlertDialog mDialog;
+        private File mFile;
+        private StorageApi.DocumentInfo documentInfo;
+
+        public OpenStorageProviderFileTask(Context ctx, final String path, final String name,
+                final int iconId, final int colorId, final StorageApiConsole console,
+                final View container, final OnCancelListener onCancelListener,
+                final OnDismissListener onDismissListener, final boolean choose,
+                final AtomicReference<OnRelaunchCommandResult> atomicRelaunchCommandResult) {
+            super();
+            mCtx = ctx;
+            mPath = path;
+            mName = name;
+            mIconId = iconId;
+            mColorId = colorId;
+            mConsole = console;
+            mContainer = container;
+            mOnCancelListener = onCancelListener;
+            mOnDismissListener = onDismissListener;
+            mChoose = choose;
+            mAtomicRelaunchCommandResult = atomicRelaunchCommandResult;
+        }
+
+        @Override
+        protected Throwable doInBackground(Object[] params) {
+            OutputStream outputStream = null;
+            try {
+                File downloadDir = new File(mCtx.getExternalCacheDir(),
+                        StorageProviderUtils.CACHE_DIR);
+                if (downloadDir.exists() || downloadDir.mkdirs()) {
+                    mFile = new File(downloadDir.getPath() + File.separator + mName);
+                    if (mFile.exists() || mFile.createNewFile()) {
+                        outputStream = new FileOutputStream(mFile);
+                    }
+                } else {
+                    Log.e(TAG, "Cannot create cache directory"); //$NON-NLS-1$
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Cannot create temp file", e); //$NON-NLS-1$
+            }
+            PendingResult<StorageApi.DocumentInfo.DocumentInfoResult> pendingResult =
+                    mConsole.getStorageApi().getFile(mConsole.getStorageProviderInfo(), mPath,
+                            outputStream, null);
+
+            // Since we're downloading a file, this can take a while, so don't specify a timeout
+            StorageApi.DocumentInfo.DocumentInfoResult result = pendingResult.await();
+            if (result == null || !result.getStatus().isSuccess()) {
+                Log.e(TAG, "Cannot download file"); //$NON-NLS-1$
+                return new StorageException("Cannot open file",
+                        result.getStatus().getStatusCode());
+            }
+            documentInfo = result.getDocumentInfo();
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            mDialog = OpenFileProgressDialog.createOpenFileProgressDialog(mCtx, mName, mIconId,
+                    mColorId);
+            mDialog.setCanceledOnTouchOutside(false);
+            mDialog.setOnCancelListener(this);
+            mDialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Throwable result) {
+            // Close the dialog
+            mDialog.dismiss();
+
+            if (result != null) {
+                if (mContainer != null) {
+                    SnackbarHelper.showWithRetry(mCtx, mContainer,
+                            mCtx.getString(R.string.snackbar_unable_to_open),
+                            mAtomicRelaunchCommandResult.get());
+                } else {
+                    Toast.makeText(mCtx,
+                            mCtx.getString(R.string.snackbar_unable_to_open),
+                            Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                // Open file
+                Intent intent = new Intent();
+                intent.setAction(android.content.Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.fromFile(mFile), documentInfo.getMimeType());
+                FileSystemObject cacheFso = FileHelper.createFileSystemObject(mFile);
+                resolveIntent(
+                        mCtx,
+                        intent,
+                        mChoose,
+                        createInternalIntents(mCtx, cacheFso),
+                        0,
+                        R.string.associations_dialog_openwith_title,
+                        R.string.associations_dialog_openwith_action,
+                        true,
+                        mOnCancelListener,
+                        mOnDismissListener);
+            }
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            mDialog.dismiss();
+        }
+
+        @Override
+        public void onCancel(DialogInterface dialog) {
+            this.cancel(true);
+        }
     }
 
     /**

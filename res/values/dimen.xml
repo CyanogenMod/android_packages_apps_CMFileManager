@@ -199,4 +199,11 @@
     <dimen name="quick_search_text_margin_top">15dp</dimen>
     <dimen name="quick_search_text_height">16dp</dimen>
 
+    <!-- Open dialog icon size -->
+    <dimen name="open_dialog_icon_size">24dp</dimen>
+    <!-- Open dialog progress circle stroke size -->
+    <dimen name="open_dialog_progress_circle_size">40dp</dimen>
+    <!-- Open dialog progress circle stroke size -->
+    <dimen name="open_dialog_progress_circle_stroke_size">2dp</dimen>
+
 </resources>
