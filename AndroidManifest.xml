@@ -141,6 +141,7 @@
       android:label="@string/picker"
       android:uiOptions="none"
       android:configChanges="orientation|keyboardHidden|screenSize"
+      android:theme="@style/FileManager.Theme.Transparent"
       android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.GET_CONTENT" />
@@ -240,6 +241,11 @@
         <action android:name="android.intent.action.VIEW" />
       </intent-filter>
     </activity>
+
+    <activity android:name=".activities.MoveDownloadedFileActivity"
+      android:theme="@style/FileManager.Theme.Transparent"
+      android:exported="true"/>
+
     <service android:name=".providers.secure.SecureCacheCleanupService">
       <intent-filter>
         <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -247,6 +253,8 @@
         <action android:name="com.cyanogenmod.filemanager.ACTION_START_CLEANUP"/>
       </intent-filter>
     </service>
+
+    <service android:name=".service.MoveFileService" android:exported="false" />
 
   </application>
 

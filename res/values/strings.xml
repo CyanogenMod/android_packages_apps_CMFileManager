@@ -933,4 +933,17 @@
     <string name="docs">Docs</string>
     <string name="apps">Apps</string>
     <string name="archives">Archives</string>
+
+    <!-- Moving file notifications -->
+    <string name="moving_file_notification_title">Moving file</string>
+    <string name="move_complete_notification_title">Move complete</string>
+    <string name="move_complete_notification_description">Open location</string>
+    <string name="move_complete_notification_share_link">Share link</string>
+    <!-- Moving file error notifications -->
+    <string name="moving_file_failed_notification_title">Unable to move</string>
+    <string name="moving_file_failed_not_enough_space">Not enough space in source.  Free more space before retrying.</string>
+    <string name="moving_file_failed_no_provider_connection">Tap to check account connection</string>
+    <string name="moving_file_failed_no_data_connection">Check data connection and tap to retry</string>
+    <string name="moving_file_failed_retry_action">Retry</string>
+    <string name="moving_file_failed_upgrade_action">Upgrade</string>
 </resources>
