@@ -229,8 +229,7 @@ public final class IntentsActionPolicy extends ActionsPolicy {
                         prefix);
 
                 BackgroundCallable callable = new BackgroundCallable() {
-                    private File file;
-                    private StorageApi.DocumentInfo documentInfo;
+                    private Uri fileUri;
 
                     @Override
                     public int getDialogIcon() {
@@ -257,47 +256,25 @@ public final class IntentsActionPolicy extends ActionsPolicy {
 
                     @Override
                     public void doInBackground(Object... params) throws Throwable {
-                        OutputStream outputStream = null;
-                        try {
-                            File downloadDir = new File(ctx.getExternalCacheDir(),
-                                    StorageProviderUtils.CACHE_DIR);
-                            if (downloadDir.exists() || downloadDir.mkdirs()) {
-                                file = new File(downloadDir.getPath() + File.separator + name);
-                                if (file.exists() || file.createNewFile()) {
-                                    outputStream = new FileOutputStream(file);
-                                }
-                            } else {
-                                Log.e(TAG, "Cannot create cache directory"); //$NON-NLS-1$
-                            }
-                        } catch (Exception e) {
-                            Log.e(TAG, "Cannot create temp file", e); //$NON-NLS-1$
-                        }
-                        PendingResult<StorageApi.DocumentInfo.DocumentInfoResult> pendingResult =
-                                console.getStorageApi().getFile(console.getStorageProviderInfo(),path,
-                                        outputStream, null);
+                        fileUri = console.getStorageApi().getFile(console.getStorageProviderInfo(),
+                                path);
 
-                        // Since we're downloading a file, this can take a while, so don't specify a timeout
-                        StorageApi.DocumentInfo.DocumentInfoResult result = pendingResult.await();
-                        if (result == null
-                                || !result.getStatus().isSuccess()) {
+                        if (fileUri == null) {
                             Log.e(TAG, "Cannot download file"); //$NON-NLS-1$
-                            throw new StorageException("Cannot open file",
-                                    result.getStatus().getStatusCode());
+                            throw new StorageException("Cannot open file: " + path);
                         }
-                        documentInfo = result.getDocumentInfo();
                     }
 
                     @Override
                     public void onSuccess() {
                         Intent intent = new Intent();
                         intent.setAction(android.content.Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.fromFile(file), documentInfo.getMimeType());
-                        FileSystemObject cacheFso = FileHelper.createFileSystemObject(file);
+                        intent.setDataAndType(fileUri, MimeTypeHelper.getMimeType(ctx, fso));
                         resolveIntent(
                                 ctx,
                                 intent,
                                 choose,
-                                createInternalIntents(ctx, cacheFso),
+                                createInternalIntents(ctx, fso),
                                 0,
                                 R.string.associations_dialog_openwith_title,
                                 R.string.associations_dialog_openwith_action,
