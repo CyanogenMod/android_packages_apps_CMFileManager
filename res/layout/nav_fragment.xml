@@ -29,47 +29,37 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
+        android:theme="@style/FileManager.Theme.Material.NoActionBar"
         app:layout_collapseMode="pin" />
 
-    <com.cyanogenmod.filemanager.ui.widgets.ScrimInsetsFrameLayout
-        android:id="@+id/scrimInsetsFrameLayoutNavigation"
+    <!-- The main content view -->
+    <FrameLayout
+        android:id="@+id/navigation_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:insetForeground="@color/material_palette_blue_primary_dark">
+        android:clipChildren="true"
+        android:clipToPadding="true"
+        android:background="@drawable/background_drawable">
 
-        <!-- The main content view -->
-        <LinearLayout
-            android:id="@+id/navigation_layout"
+        <!-- Navigation View -->
+        <com.cyanogenmod.filemanager.ui.widgets.NavigationView
+            android:id="@+id/navigation_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_weight="1"
+            filemanager:navigation="browsable"
+            android:clipChildren="true"/>
 
-            <!-- Navigation View -->
-            <com.cyanogenmod.filemanager.ui.widgets.NavigationView
-                android:id="@+id/navigation_view"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                filemanager:navigation="browsable"/>
+        <!-- SelectionBar -->
+        <com.cyanogenmod.filemanager.ui.widgets.SelectionView
+            android:id="@+id/navigation_selectionbar"
+            android:layout_width="match_parent"
+            android:elevation="6dp"
+            android:layout_gravity="bottom"
+            android:layout_height="@dimen/selection_row_height"
+            android:background="@drawable/bg_material_selectionbar"
+            android:visibility="invisible"/>
 
-            <ListView
-                android:background="@android:color/white"
-                android:id="@+id/lv_easy_mode"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:visibility="gone"/>
-
-            <!-- SelectionBar -->
-            <com.cyanogenmod.filemanager.ui.widgets.SelectionView
-                android:id="@+id/navigation_selectionbar"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/small_row_height"
-                android:background="@drawable/bg_material_selectionbar"
-                android:visibility="invisible"/>
-
-        </LinearLayout>
-
-    </com.cyanogenmod.filemanager.ui.widgets.ScrimInsetsFrameLayout>
+    </FrameLayout>
 
 </LinearLayout>
