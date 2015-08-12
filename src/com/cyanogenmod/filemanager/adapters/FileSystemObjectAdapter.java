@@ -40,6 +40,7 @@ import android.widget.TextView;
 import com.cyanogen.ambient.storage.provider.StorageProviderInfo;
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.console.storageapi.StorageApiConsole;
+import com.cyanogenmod.filemanager.model.Directory;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.model.ParentDirectory;
 import com.cyanogenmod.filemanager.model.RootDirectory;
@@ -54,9 +55,12 @@ import com.cyanogenmod.filemanager.util.FileHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper;
 import com.cyanogenmod.filemanager.util.StorageProviderUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.WeakHashMap;
 
@@ -105,6 +109,7 @@ public class FileSystemObjectAdapter
     private Resources mRes;
     private OnSelectionChangedListener mOnSelectionChangedListener;
     private final ViewOutlineProvider mIconViewOutlineProvider;
+    private boolean mInSelectionMode;
 
     private int mPrimaryColor;
 
@@ -221,6 +226,7 @@ public class FileSystemObjectAdapter
             } else {
                 viewHolder.mBtInfo.setVisibility(View.GONE);
             }
+
             v.setTag(viewHolder);
         }
 
@@ -276,6 +282,10 @@ public class FileSystemObjectAdapter
             boolean selected = isSelected(position);
             v.setActivated(selected);
             viewHolder.mIvIcon.setSelected(selected);
+
+        }
+        if (mInSelectionMode) {
+            viewHolder.mBtInfo.setVisibility(View.GONE);
         }
 
         //Return the view
@@ -310,9 +320,12 @@ public class FileSystemObjectAdapter
     public void toggleSelection(View v, FileSystemObject fso) {
         if (DEBUG) Log.d(TAG,"toggleSelection("+fso.getName()+")");
         boolean selected = !mSelectedItems.remove(fso);
+
         if (selected) {
             mSelectedItems.add(fso);
         }
+        isSelectedParent(fso);
+
         if (v != null) {
             ((View) v.getParent()).setActivated(selected);
             v.setSelected(selected);
@@ -322,8 +335,32 @@ public class FileSystemObjectAdapter
             this.mOnSelectionChangedListener.onSelectionChanged(
                     new ArrayList<FileSystemObject>(mSelectedItems));
         }
+        mInSelectionMode = mSelectedItems.size() > 0;
 
         notifyDataSetChanged();
+    }
+
+    // check if the fso is a parent of the selected list currently existing
+    // return a cleaned list of people as a parent selection selects a child already.
+    public void isSelectedParent(FileSystemObject fso) {
+        Iterator it = mSelectedItems.iterator();
+        while (it.hasNext())
+        {
+            FileSystemObject item = (FileSystemObject)it.next();
+            try {
+                File oldFile = FileHelper.fileSystemObjectToFile(item).getCanonicalFile();
+                File newFile = FileHelper.fileSystemObjectToFile(fso).getCanonicalFile();
+                if (!oldFile.equals(newFile) && FileHelper.isChildof(newFile, oldFile)) {
+                    // this item's parent just got selected
+                    // riot, riot, riot
+                    it.remove();
+                    mSelectedItems.remove(item);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
     /**

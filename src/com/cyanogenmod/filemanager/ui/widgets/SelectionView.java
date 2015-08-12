@@ -18,7 +18,10 @@ package com.cyanogenmod.filemanager.ui.widgets;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -26,11 +29,20 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
+import android.widget.TextView;
 import com.cyanogenmod.filemanager.R;
+import com.cyanogenmod.filemanager.commands.AsyncResultListener;
+import com.cyanogenmod.filemanager.commands.FolderUsageExecutable;
+import com.cyanogenmod.filemanager.model.Directory;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
+import com.cyanogenmod.filemanager.model.FolderUsage;
+import com.cyanogenmod.filemanager.model.Symlink;
+import com.cyanogenmod.filemanager.ui.dialogs.FsoPropertiesDialog;
+import com.cyanogenmod.filemanager.ui.policy.PrintActionPolicy;
+import com.cyanogenmod.filemanager.util.CommandHelper;
 import com.cyanogenmod.filemanager.util.FileHelper;
+import com.cyanogenmod.filemanager.util.MimeTypeHelper;
 
 import java.util.List;
 
@@ -43,8 +55,11 @@ public class SelectionView extends LinearLayout {
      * @hide
      */
     int mViewHeight;
-    private TextView mStatus;
     private int mEffectDuration;
+    private Toolbar mToolbar;
+    private FolderUsageExecutable mFolderUsageExecutable;
+    private View mTitleLayout;
+    int mSize = 0;
 
     /**
      * Constructor of <code>SelectionView</code>.
@@ -90,19 +105,100 @@ public class SelectionView extends LinearLayout {
                         SelectionView.this.mViewHeight = getHeight();
                         getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         setVisibility(View.GONE);
-                        LayoutParams params = (LayoutParams)SelectionView.this.getLayoutParams();
+                        LayoutParams params = (LayoutParams) SelectionView.this.getLayoutParams();
                         params.height = 0;
                     }
-            });
+                });
 
         //Recovery all views
-        this.mStatus = (TextView)content.findViewById(R.id.navigation_status_selection_label);
+        this.mToolbar = (Toolbar)content.findViewById(R.id.selection_toolbar);
+
+        this.mToolbar.inflateMenu(R.menu.selection_menu);
+
+        mTitleLayout = inflate(getContext(), R.layout.selection_view_customtitle, null);
+
+        mToolbar.addView(mTitleLayout);
 
         // Obtain the duration of the effect
         this.mEffectDuration =
                 getContext().getResources().getInteger(android.R.integer.config_shortAnimTime);
 
         addView(content);
+    }
+
+    /**
+     * Method that configure the menu to show according the actual information,
+     * the kind of request, the file selection, the mount point, ...
+     *
+     */
+    private void configureMenu(List<FileSystemObject> selection) {
+        // Selection
+        mToolbar.getMenu().clear();
+        this.mToolbar.inflateMenu(R.menu.selection_menu);
+
+        Menu menu = mToolbar.getMenu();
+        // run only single file specific items
+        FileSystemObject fso = selection.get(0);
+        if (selection.size() == 1) {
+
+
+            // Print (only for text and image categories)
+            if (!PrintActionPolicy.isPrintedAllowed(getContext(), fso)) {
+                menu.removeItem(R.id.mnu_actions_print);
+            }
+
+            if (fso.isSecure() || fso.isRemote()) {
+                menu.removeItem(R.id.mnu_actions_add_shortcut);
+            }
+
+            //Execute only if mime/type category is EXEC
+            MimeTypeHelper.MimeTypeCategory category = MimeTypeHelper.getCategory(getContext(), fso);
+            if (category.compareTo(MimeTypeHelper.MimeTypeCategory.EXEC) != 0) {
+                menu.removeItem(R.id.mnu_actions_execute);
+            }
+
+            if (category.compareTo(MimeTypeHelper.MimeTypeCategory.COMPRESS) == 0) {
+                menu.removeItem(R.id.mnu_actions_compress);
+            } else {
+                menu.removeItem(R.id.mnu_actions_extract);
+            }
+
+
+            //- Open/Open with -> Only when the fso is not a folder
+            if (FileHelper.isDirectory(fso)) {
+                menu.removeItem(R.id.mnu_actions_open);
+                menu.removeItem(R.id.mnu_actions_open_with);
+                menu.removeItem(R.id.mnu_actions_send);
+            }
+
+        } else {
+            // run only global items
+            // Don't allow mass rename to avoid horrors.
+            menu.removeItem(R.id.mnu_actions_rename);
+
+            // TODO can we print multiple items? what voodoo is this
+            // does this feature even work?
+            menu.removeItem(R.id.mnu_actions_print);
+
+            // don't allow multiple shortcut adds
+            menu.removeItem(R.id.mnu_actions_add_shortcut);
+
+            // We don't compute multiple checksums at once
+            menu.removeItem(R.id.mnu_actions_compute_checksum);
+
+            // Don't execute all the things
+            menu.removeItem(R.id.mnu_actions_execute);
+
+            // open with sadness
+            menu.removeItem(R.id.mnu_actions_open);
+            menu.removeItem(R.id.mnu_actions_open_with);
+            menu.removeItem(R.id.mnu_actions_send);
+
+        }
+
+        // Not allowed if not in search
+        // TODO figure out search and what kind of things it likes to do.
+        menu.removeItem(R.id.mnu_actions_open_parent_folder);
     }
 
     /**
@@ -115,29 +211,46 @@ public class SelectionView extends LinearLayout {
         int folders = 0;
         int files = 0;
         int cc = selection.size();
-        for (int i = 0; i < cc; i++) {
-            FileSystemObject fso = selection.get(i);
-            if (FileHelper.isDirectory(fso)) {
-                folders++;
-            } else {
-                files++;
-            }
-        }
-
-        // Get the string
         final Resources res = getContext().getResources();
 
-        if (files == 0) {
-            return res.getQuantityString(R.plurals.selection_folders, folders, folders);
-        }
+        configureMenu(selection);
 
-        if (folders == 0) {
-            return res.getQuantityString(R.plurals.selection_files, files, files);
-        }
+        if (cc == 1) {
+            FileSystemObject fso = selection.get(0);
+            return fso.getName();
+        } else {
+            for (FileSystemObject fso : selection) {
+                if (FileHelper.isDirectory(fso)) {
+                    folders++;
+                } else {
+                    files++;
+                }
+            }
 
-        String nFoldersString = res.getQuantityString(R.plurals.n_folders, folders, folders);
-        String nFilesString = res.getQuantityString(R.plurals.n_files, files, files);
-        return res.getString(R.string.selection_folders_and_files, nFoldersString, nFilesString);
+            // Get the string
+            if (files == 0) {
+                return res.getQuantityString(R.plurals.selection_folders, folders, folders);
+            }
+
+            if (folders == 0) {
+                return res.getQuantityString(R.plurals.selection_files, files, files);
+            }
+
+            String nFoldersString = res.getQuantityString(R.plurals.n_folders, folders, folders);
+            String nFilesString = res.getQuantityString(R.plurals.n_files, files, files);
+            return res.getString(R.string.selection_folders_and_files, nFoldersString, nFilesString);
+        }
+    }
+
+    public void setMenuClickListener(Toolbar.OnMenuItemClickListener menuClickListener) {
+        mToolbar.setOnMenuItemClickListener(menuClickListener);
+    }
+
+    public String getFileSizes(List<FileSystemObject> selection) {
+        for (FileSystemObject fso : selection) {
+            mSize += fso.getSize();
+        }
+        return FileHelper.getHumanReadableSize(mSize);
     }
 
     /**
@@ -146,9 +259,18 @@ public class SelectionView extends LinearLayout {
      * @param newSelection The new selection list
      */
     public void setSelection(List<FileSystemObject> newSelection) {
+        // selection changed, wipe away old things
+        mSize = 0;
+        cancelFolderUsageCommand();
+
         // Compute the selection
-        if (newSelection != null && newSelection.size() > 0) {
-            this.mStatus.setText(computeSelection(newSelection));
+
+        TextView title = (TextView)mTitleLayout.findViewById(R.id.selector_title);
+        TextView subtitle = ((TextView)mTitleLayout.findViewById(R.id.selector_subtitle));
+
+        if (newSelection != null && newSelection.size() > 0 && title != null && subtitle != null) {
+            title.setText(computeSelection(newSelection));
+            subtitle.setText(getFileSizes(newSelection));
         }
 
         // Requires show the animation (expand or collapse)?
@@ -204,6 +326,41 @@ public class SelectionView extends LinearLayout {
         });
         animation.setInterpolator(new AccelerateDecelerateInterpolator());
         startAnimation(animation);
+    }
+
+    FolderUsage mFolderUsage;
+
+    public void getFolderUse(FileSystemObject folder) {
+        if (folder instanceof Directory) {
+
+        }
+    }
+
+
+    private void updateSizePostAsync() {
+        mSize += this.mFolderUsage.getTotalSize();
+
+        TextView subtitle = ((TextView)mTitleLayout.findViewById(R.id.selector_subtitle));
+
+        if (subtitle != null && this.mFolderUsage.getTotalSize() > 0) {
+            subtitle.setText(FileHelper.getHumanReadableSize(mSize));
+        }
+    }
+
+    /**
+     * Method that cancels the folder usage command execution
+     */
+    private void cancelFolderUsageCommand() {
+            try {
+                if (this.mFolderUsageExecutable != null &&
+                        this.mFolderUsageExecutable.isCancellable() &&
+                        !this.mFolderUsageExecutable.isCancelled()) {
+                    this.mFolderUsageExecutable.cancel();
+                    this.mFolderUsage = null;
+                }
+            } catch (Exception ex) {
+
+            }
     }
 
     /**

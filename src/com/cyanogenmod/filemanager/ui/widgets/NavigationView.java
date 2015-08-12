@@ -32,7 +32,6 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -60,9 +59,6 @@ import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
 import com.cyanogenmod.filemanager.preferences.NavigationLayoutMode;
 import com.cyanogenmod.filemanager.preferences.ObjectIdentifier;
 import com.cyanogenmod.filemanager.preferences.Preferences;
-import com.cyanogenmod.filemanager.ui.ThemeManager;
-import com.cyanogenmod.filemanager.ui.ThemeManager.Theme;
-import com.cyanogenmod.filemanager.ui.policy.ActionsPolicy;
 import com.cyanogenmod.filemanager.ui.policy.DeleteActionPolicy;
 import com.cyanogenmod.filemanager.ui.policy.IntentsActionPolicy;
 import com.cyanogenmod.filemanager.ui.widgets.FlingerListView.OnItemFlingerListener;
@@ -208,7 +204,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
                 FileSystemObjectAdapter adapter = (FileSystemObjectAdapter)parent.getAdapter();
                 FileSystemObject fso = adapter.getItem(position);
                 if (fso != null) {
-                    DeleteActionPolicy.removeFileSystemObject(
+                    DeleteActionPolicy.removeFileSystemObjects(
                             getContext(),
                             NavigationView.this,
                             fso,
@@ -1281,43 +1277,47 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        try {
-            FileSystemObject fso = ((FileSystemObjectAdapter)parent.getAdapter()).getItem(position);
-            if (fso instanceof ParentDirectory) {
-                changeCurrentDir(fso.getParent(), true, false, false, null, null);
-                return;
-            } else if (fso instanceof Directory) {
-                changeCurrentDir(fso.getFullPath(), true, false, false, null, null);
-                return;
-            } else if (fso instanceof Symlink) {
-                Symlink symlink = (Symlink)fso;
-                if (symlink.getLinkRef() != null && symlink.getLinkRef() instanceof Directory) {
-                    changeCurrentDir(
-                            symlink.getLinkRef().getFullPath(), true, false, false, null, null);
+        FileSystemObject fso = ((FileSystemObjectAdapter) parent.getAdapter()).getItem(position);
+        if (!((FileSystemObjectAdapter) parent.getAdapter()).isSelected(position)) {
+            try {
+                if (fso instanceof ParentDirectory) {
+                    changeCurrentDir(fso.getParent(), true, false, false, null, null);
+                    return;
+                } else if (fso instanceof Directory) {
+                    changeCurrentDir(fso.getFullPath(), true, false, false, null, null);
+                    return;
+                } else if (fso instanceof Symlink) {
+                    Symlink symlink = (Symlink) fso;
+                    if (symlink.getLinkRef() != null && symlink.getLinkRef() instanceof Directory) {
+                        changeCurrentDir(
+                                symlink.getLinkRef().getFullPath(), true, false, false, null, null);
+                        return;
+                    }
+
+                    // Open the link ref
+                    fso = symlink.getLinkRef();
+                } else if (fso instanceof RootDirectory) {
+                    RootDirectory rootDirectory = (RootDirectory) fso;
+                    changeCurrentDir(rootDirectory.getRootPath(), true);
                     return;
                 }
 
-                // Open the link ref
-                fso = symlink.getLinkRef();
-            } else if (fso instanceof RootDirectory) {
-                RootDirectory rootDirectory = (RootDirectory)fso;
-                changeCurrentDir(rootDirectory.getRootPath(), true);
-                return;
-            }
-
-            // Open the file (edit or pick)
-            if (this.mNavigationMode.compareTo(NAVIGATION_MODE.BROWSABLE) == 0) {
-                // Open the file with the preferred registered app
-                IntentsActionPolicy.openFileSystemObject(getContext(),
-                        NavigationView.this, fso, false, null, null);
-            } else {
-                // Request a file pick selection
-                if (this.mOnFilePickedListener != null) {
-                    this.mOnFilePickedListener.onFilePicked(fso);
+                // Open the file (edit or pick)
+                if (this.mNavigationMode.compareTo(NAVIGATION_MODE.BROWSABLE) == 0) {
+                    // Open the file with the preferred registered app
+                    IntentsActionPolicy.openFileSystemObject(getContext(),
+                            NavigationView.this, fso, false, null, null);
+                } else {
+                    // Request a file pick selection
+                    if (this.mOnFilePickedListener != null) {
+                        this.mOnFilePickedListener.onFilePicked(fso);
+                    }
                 }
+            } catch (Throwable ex) {
+                ExceptionUtil.translateException(getContext(), ex);
             }
-        } catch (Throwable ex) {
-            ExceptionUtil.translateException(getContext(), ex);
+        } else {
+            onToggleSelection(fso);
         }
     }
 
@@ -1327,7 +1327,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
     @Override
     public void onRequestRefresh(Object o, boolean clearSelection) {
         if (o instanceof FileSystemObject) {
-            refresh((FileSystemObject)o);
+            refresh((FileSystemObject) o);
         } else if (o == null) {
             refresh();
         }
@@ -1383,24 +1383,15 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
     }
 
     /**
-     * Method invoked when a request to show the menu associated
-     * with an item is started.
-     *
-     * @param item The item for which the request was started
-     */
-    public void onRequestMenu(final FileSystemObject item) {
-        if (this.mOnNavigationRequestMenuListener != null) {
-            this.mOnNavigationRequestMenuListener.onRequestMenu(this, item);
-        }
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
     public void onToggleSelection(FileSystemObject fso) {
         if (this.mAdapter != null) {
             this.mAdapter.toggleSelection(fso);
+            if (mAdapter.getSelectedItems().size() > 0) {
+
+            }
         }
     }
 

@@ -24,7 +24,6 @@ import android.system.OsConstants;
 import android.text.format.DateUtils;
 import android.util.Log;
 
-import com.cyanogen.ambient.storage.StorageApi;
 import com.cyanogen.ambient.storage.StorageApi.Document;
 import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
@@ -71,6 +70,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -373,6 +373,22 @@ public final class FileHelper {
             return true;
         }
         return false;
+    }
+
+    public static boolean isChildof(File newFile, File oldFile) {
+
+        if (oldFile == null) {
+            return false;
+        }
+        if (oldFile.equals(newFile)){
+            return true;
+        }
+
+        return isChildof(newFile, oldFile.getParentFile());
+    }
+
+    public static File fileSystemObjectToFile(FileSystemObject file) {
+        return new File(file.getFullPath());
     }
 
     /**

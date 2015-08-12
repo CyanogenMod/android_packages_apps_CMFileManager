@@ -172,7 +172,7 @@ public class ActionsDialog implements OnItemClickListener, OnItemLongClickListen
         this.mDialog.setButton(
                 DialogInterface.BUTTON_NEGATIVE,
                 this.mContext.getString(android.R.string.cancel),
-                (DialogInterface.OnClickListener)null);
+                (DialogInterface.OnClickListener) null);
     }
 
     /**
@@ -252,7 +252,7 @@ public class ActionsDialog implements OnItemClickListener, OnItemLongClickListen
 
             //- Delete
             case R.id.mnu_actions_delete:
-                DeleteActionPolicy.removeFileSystemObject(
+                DeleteActionPolicy.removeFileSystemObjects(
                         this.mContext,
                         mListView,
                         this.mFso,
@@ -266,41 +266,6 @@ public class ActionsDialog implements OnItemClickListener, OnItemLongClickListen
             case R.id.mnu_actions_deselect:
                 if (this.mOnSelectionListener != null) {
                     this.mOnSelectionListener.onToggleSelection(this.mFso);
-                }
-                break;
-
-            //- Open
-            case R.id.mnu_actions_open:
-                IntentsActionPolicy.openFileSystemObject(
-                        this.mContext, parent, this.mFso, false, null, null);
-                break;
-            //- Open with
-            case R.id.mnu_actions_open_with:
-                IntentsActionPolicy.openFileSystemObject(
-                        this.mContext, parent, this.mFso, true, null, null);
-                break;
-
-            //- Execute
-            case R.id.mnu_actions_execute:
-                ExecutionActionPolicy.execute(this.mContext, this.mFso);
-                break;
-
-            //- Send
-            case R.id.mnu_actions_send:
-                IntentsActionPolicy.sendFileSystemObject(
-                        this.mContext, this.mFso, null, null);
-                break;
-            case R.id.mnu_actions_send_selection:
-                if (this.mOnSelectionListener != null) {
-                    List<FileSystemObject> selection =
-                            this.mOnSelectionListener.onRequestSelectedFiles();
-                    if (selection.size() == 1) {
-                        IntentsActionPolicy.sendFileSystemObject(
-                                this.mContext, selection.get(0), null, null);
-                    } else {
-                        IntentsActionPolicy.sendMultipleFileSystemObject(
-                                this.mContext, selection, null, null);
-                    }
                 }
                 break;
 
@@ -337,67 +302,8 @@ public class ActionsDialog implements OnItemClickListener, OnItemLongClickListen
                 }
                 break;
 
-            //- Uncompress
-            case R.id.mnu_actions_extract:
-                CompressActionPolicy.uncompress(
-                            this.mContext,
-                            this.mFso,
-                            this.mOnRequestRefreshListener);
-                break;
-            //- Compress
-            case R.id.mnu_actions_compress:
-                if (this.mOnSelectionListener != null) {
-                    CompressActionPolicy.compress(
-                            this.mContext,
-                            this.mFso,
-                            this.mOnSelectionListener,
-                            this.mOnRequestRefreshListener);
-                }
-                break;
-            case R.id.mnu_actions_compress_selection:
-                if (this.mOnSelectionListener != null) {
-                    CompressActionPolicy.compress(
-                            this.mContext,
-                            this.mOnSelectionListener,
-                            this.mOnRequestRefreshListener);
-                }
-                break;
 
-            //- Create copy
-            case R.id.mnu_actions_create_copy:
-            case R.id.mnu_actions_create_copy_from_selection:
-                fso = mFso;
-                // Create a copy of the fso
-                if (this.mOnSelectionListener != null) {
-                    List<FileSystemObject> selection = this.mOnSelectionListener
-                            .onRequestSelectedFiles();
-                    if (selection.size() == 1) {
-                        fso = selection.get(0);
-                    }
-                    CopyMoveActionPolicy.createCopyFileSystemObject(
-                                this.mContext,
-                                mListView,
-                                fso,
-                                this.mOnSelectionListener,
-                                this.mOnRequestRefreshListener);
-                }
-                break;
 
-            //- Add shortcut
-            case R.id.mnu_actions_add_shortcut:
-            case R.id.mnu_actions_add_shortcut_current_folder:
-                IntentsActionPolicy.createShortcut(this.mContext, this.mFso);
-                break;
-
-            //- Compute checksum
-            case R.id.mnu_actions_compute_checksum:
-                InfoActionPolicy.showComputeChecksumDialog(this.mContext, this.mFso);
-                break;
-
-            //- Print
-            case R.id.mnu_actions_print:
-                PrintActionPolicy.printDocument(this.mContext, this.mFso);
-                break;
 
             //- Properties
             case R.id.mnu_actions_properties:

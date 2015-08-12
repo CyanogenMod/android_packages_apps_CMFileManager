@@ -72,6 +72,7 @@
     <!-- The text color of the ActionBar -->
     <color name="action_bar_text_color">@android:color/white</color>
     <color name="action_bar_title_text_color">#deffffff</color>
+    <color name="action_bar_subtitle_text_color">#8bffffff</color>
 
     <!-- Breadcrumb text color -->
     <color name="breadcrumb_text_color">#deffffff</color>

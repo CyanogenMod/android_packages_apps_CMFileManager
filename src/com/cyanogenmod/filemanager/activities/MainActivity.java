@@ -581,15 +581,15 @@ public class MainActivity extends ActionBarActivity
                 //######################
                 //Selection Actions
                 //######################
-                case R.id.ab_selection_done:
-                    //Show information of the filesystem
-                    navigationFragment.getCurrentNavigationView().onDeselectAll();
-                    break;
-                case R.id.ab_actions:
+                //case R.id.ab_selection_done:
+                //    //Show information of the filesystem
+                //    navigationFragment.getCurrentNavigationView().onDeselectAll();
+                //    break;
+                //case R.id.ab_actions:
                     // Show the actions dialog
-                    navigationFragment.openActionsDialog(null, true);
-                default:
-                    break;
+                //    navigationFragment.openActionsDialog(null, true);
+                //default:
+                //    break;
             }
         }
     }
