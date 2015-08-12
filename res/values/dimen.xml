@@ -51,6 +51,8 @@
     <dimen name="small_margin">2dp</dimen>
     <!-- The minimal margin -->
     <dimen name="min_margin">1dp</dimen>
+    <!-- The default row height -->
+    <dimen name="selection_row_height">72dp</dimen>
 
     <!-- The breadcrumb item margin space -->
     <dimen name="breadcrumb_item_margin_space">3dp</dimen>

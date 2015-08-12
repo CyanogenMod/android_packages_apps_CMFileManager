@@ -63,7 +63,7 @@ public final class DeleteActionPolicy extends ActionsPolicy {
      * @param onItemFlingerResponder The flinger responder, only if the action was initialized
      * by a flinger gesture (optional)
      */
-    public static void removeFileSystemObject(
+    public static void removeFileSystemObjects(
             final Context ctx, final View container, final FileSystemObject fso,
             final OnSelectionListener onSelectionListener,
             final OnRequestRefreshListener onRequestRefreshListener,

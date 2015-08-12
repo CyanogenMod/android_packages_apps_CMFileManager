@@ -27,12 +27,11 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -60,9 +59,6 @@ import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
 import com.cyanogenmod.filemanager.preferences.NavigationLayoutMode;
 import com.cyanogenmod.filemanager.preferences.ObjectIdentifier;
 import com.cyanogenmod.filemanager.preferences.Preferences;
-import com.cyanogenmod.filemanager.ui.ThemeManager;
-import com.cyanogenmod.filemanager.ui.ThemeManager.Theme;
-import com.cyanogenmod.filemanager.ui.policy.ActionsPolicy;
 import com.cyanogenmod.filemanager.ui.policy.DeleteActionPolicy;
 import com.cyanogenmod.filemanager.ui.policy.IntentsActionPolicy;
 import com.cyanogenmod.filemanager.ui.widgets.FlingerListView.OnItemFlingerListener;
@@ -102,21 +98,6 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
          * @param selectedItems The new selected items
          */
         void onSelectionChanged(NavigationView navView, List<FileSystemObject> selectedItems);
-    }
-
-    /**
-     * An interface to communicate a request for show the menu associated
-     * with an item.
-     */
-    public interface OnNavigationRequestMenuListener {
-        /**
-         * Method invoked when a request to show the menu associated
-         * with an item is started.
-         *
-         * @param navView The navigation view that generate the event
-         * @param item The item for which the request was started
-         */
-        void onRequestMenu(NavigationView navView, FileSystemObject item);
     }
 
     /**
@@ -188,10 +169,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
 
                 FileSystemObject fso = adapter.getItem(position);
                 if (fso != null) {
-                    if (fso instanceof ParentDirectory) {
-                        return false;
-                    }
-                    return true;
+                    return !(fso instanceof ParentDirectory);
                 }
             } catch (Exception e) {
                 ExceptionUtil.translateException(getContext(), e, true, false);
@@ -208,7 +186,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
                 FileSystemObjectAdapter adapter = (FileSystemObjectAdapter)parent.getAdapter();
                 FileSystemObject fso = adapter.getItem(position);
                 if (fso != null) {
-                    DeleteActionPolicy.removeFileSystemObject(
+                    DeleteActionPolicy.removeFileSystemObjects(
                             getContext(),
                             NavigationView.this,
                             fso,
@@ -276,21 +254,6 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
             mIsNewHistory = (NavigationView.this.mCurrentDir != null);
 
             try {
-                //Reset the custom title view and returns to breadcrumb
-                if (NavigationView.this.mTitle != null) {
-                    NavigationView.this.mTitle.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                NavigationView.this.mTitle.restoreView();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                }
-
-
                 //Start of loading data
                 if (NavigationView.this.mBreadcrumb != null) {
                     try {
@@ -300,7 +263,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
                     }
                 }
 
-                List<FileSystemObject> files = null;
+                List<FileSystemObject> files;
                 if (TextUtils.equals(mNewDirChecked, FileHelper.ROOTS_LIST)) {
                     files = StorageHelper.getStorageVolumesFileSystemObjectList(getContext());
                 } else {
@@ -394,7 +357,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
                     }
                     private void done() {
                         // Do animation
-                        fadeEfect(false);
+                        fadeEffect(false);
                     }
                 };
                 ExceptionUtil.translateException(
@@ -417,11 +380,30 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
         @Override
         protected void onPostExecute(List<FileSystemObject> files) {
             // This means an exception. This method will be recalled then
-            onPostExecuteTask(files, mAddToHistory, mIsNewHistory, mHasChanged,
+            if (files != null) {
+                // Do animation
+                fadeEffect(true);
+
+                onPostExecuteTask(files, mAddToHistory, mIsNewHistory, mHasChanged,
                         mSearchInfo, mNewDirChecked, mNewDirFSO, mScrollTo);
 
-            // Do animation
-            fadeEfect(false);
+
+            } else {
+                if (TextUtils.isEmpty(mCurrentDir)) {
+                    if (mOnBackRequestListener != null) {
+                        // Go back to previous view
+                        post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mOnBackRequestListener.onBackRequested();
+                            }
+                        });
+                    }
+                } else {
+                    // Reload current directory
+                    changeCurrentDir(mCurrentDir);
+                }
+            }
         }
 
         /**
@@ -429,7 +411,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
          *
          * @param out Fade out (true); Fade in (false)
          */
-        void fadeEfect(final boolean out) {
+        void fadeEffect(final boolean out) {
             Activity activity = (Activity)getContext();
             activity.runOnUiThread(new Runnable() {
                 @Override
@@ -437,14 +419,127 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
                     Animation fadeAnim = out ?
                             new AlphaAnimation(1, 0) :
                                 new AlphaAnimation(0, 1);
-                            fadeAnim.setDuration(50L);
+                            fadeAnim.setDuration(400L);
                             fadeAnim.setFillAfter(true);
-                            fadeAnim.setInterpolator(new AccelerateInterpolator());
+                            fadeAnim.setInterpolator(new AccelerateDecelerateInterpolator());
                             NavigationView.this.startAnimation(fadeAnim);
                 }
             });
         }
-    };
+
+        /**
+         * Method invoked when a execution ends.
+         *
+         * @param files The files obtains from the list
+         * @param addToHistory If add path to history
+         * @param isNewHistory If is new history
+         * @param hasChanged If current directory was changed
+         * @param searchInfo The search information (if calling activity is {@link "SearchActivity"})
+         * @param newDir The new directory
+         * @param newDirFSO the new directory in FSO form
+         * @param scrollTo If not null, then listview must scroll to this item
+         * @hide
+         */
+        void onPostExecuteTask(
+                List<FileSystemObject> files, boolean addToHistory, boolean isNewHistory,
+                boolean hasChanged, SearchInfoParcelable searchInfo,
+                String newDir, final FileSystemObject newDirFSO, final FileSystemObject scrollTo) {
+            try {
+                //Check that there is not errors and have some data
+                if (files == null) {
+                    return;
+                }
+
+                if (!TextUtils.equals(FileHelper.ROOTS_LIST, newDir)) {
+                    //Apply user preferences
+                    files = FileHelper.applyUserPreferences(files, mRestrictions, mChRooted);
+                }
+
+                //Remove parent directory if we are in the root of a chrooted environment
+                if (mChRooted && StorageHelper.isStorageVolume(newDir) ||
+                        TextUtils.equals(newDir, FileHelper.ROOT_DIRECTORY)) {
+                    if (files.size() > 0 && files.get(0) instanceof ParentDirectory) {
+                        files.remove(0);
+                    }
+                    if (mNavigationMode.compareTo(NAVIGATION_MODE.PICKABLE) == 0) {
+                        files.add(0, new ParentDirectory(FileHelper.ROOTS_LIST));
+                    }
+                } else if (!TextUtils.equals(FileHelper.ROOTS_LIST, newDir) &&
+                        files.size() > 0 && !(files.get(0) instanceof ParentDirectory)) {
+                    if (mNavigationMode.compareTo(NAVIGATION_MODE.PICKABLE) == 0) {
+                        files.add(0, new ParentDirectory(FileHelper.ROOTS_LIST));
+                    }
+                }
+
+                //Add to history?
+                if (addToHistory && hasChanged && isNewHistory) {
+                    if (mOnHistoryListener != null) {
+                        //Communicate the need of a history change
+                        mOnHistoryListener.onNewHistory(onSaveState());
+                    }
+                }
+
+                //Load the data
+                loadData(files);
+                mFiles = files;
+                if (searchInfo != null) {
+                    searchInfo.setSuccessNavigation(true);
+                }
+
+                //Change the breadcrumb
+                if (mBreadcrumb != null) {
+                    mBreadcrumb.changeBreadcrumbPath(newDir, mChRooted);
+                }
+
+                //If scrollTo is null, the position will be set to 0
+                scrollTo(scrollTo);
+
+                //The current directory is now the "newDir"
+                mCurrentDir = newDir;
+                mCurrentFileSystemObject = newDirFSO;
+                if (mOnDirectoryChangedListener != null) {
+                    FileSystemObject dir = (newDirFSO != null) ?
+                            newDirFSO : FileHelper.createFileSystemObject(new File(newDir));
+                    mOnDirectoryChangedListener.onDirectoryChanged(dir);
+                }
+            } finally {
+                //If calling activity is search, then save the search history
+                if (searchInfo != null) {
+                    mOnHistoryListener.onNewHistory(searchInfo);
+                }
+
+                //End of loading data
+                try {
+                    mBreadcrumb.endLoading();
+                } catch (Throwable ex) {
+                    /**NON BLOCK**/
+                }
+
+                fadeEffect(false);
+
+            }
+        }
+
+        /**
+         * Method that ensures that the user don't go outside the ChRooted environment
+         *
+         * @param newDir The new directory to navigate to
+         * @return String
+         */
+        private String checkChRootedNavigation(String newDir) {
+            // If we aren't in ChRooted environment, then there is nothing to check
+            if (!mChRooted) return newDir;
+
+            // Check if the path is owned by one of the storage volumes
+            if (!StorageHelper.isPathInStorageVolume(newDir)) {
+                StorageVolume[] volumes = StorageHelper.getStorageVolumes(getContext(), false);
+                if (volumes != null && volumes.length > 0) {
+                    return volumes[0].getPath();
+                }
+            }
+            return newDir;
+        }
+    }
 
     private int mId;
     private String mCurrentDir;
@@ -459,7 +554,6 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
 
     private OnHistoryListener mOnHistoryListener;
     private OnNavigationSelectionChangedListener mOnNavigationSelectionChangedListener;
-    private OnNavigationRequestMenuListener mOnNavigationRequestMenuListener;
     private OnFilePickedListener mOnFilePickedListener;
     private OnDirectoryChangedListener mOnDirectoryChangedListener;
     private OnBackRequestListener mOnBackRequestListener;
@@ -477,10 +571,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
      * @hide
      */
     Breadcrumb mBreadcrumb;
-    /**
-     * @hide
-     */
-    NavigationCustomTitleView mTitle;
+
     /**
      * @hide
      */
@@ -665,24 +756,6 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
     }
 
     /**
-     * Method that returns the custom title fragment associated with this navigation view.
-     *
-     * @return NavigationCustomTitleView The custom title view fragment
-     */
-    public NavigationCustomTitleView getCustomTitle() {
-        return this.mTitle;
-    }
-
-    /**
-     * Method that associates the custom title fragment with this navigation view.
-     *
-     * @param title The custom title view fragment
-     */
-    public void setCustomTitle(NavigationCustomTitleView title) {
-        this.mTitle = title;
-    }
-
-    /**
      * Method that returns the breadcrumb associated with this navigation view.
      *
      * @return Breadcrumb The breadcrumb view fragment
@@ -718,16 +791,6 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
     public void setOnNavigationSelectionChangedListener(
             OnNavigationSelectionChangedListener onNavigationSelectionChangedListener) {
         this.mOnNavigationSelectionChangedListener = onNavigationSelectionChangedListener;
-    }
-
-    /**
-     * Method that sets the listener for menu item requests.
-     *
-     * @param onNavigationRequestMenuListener The listener reference
-     */
-    public void setOnNavigationOnRequestMenuListener(
-            OnNavigationRequestMenuListener onNavigationRequestMenuListener) {
-        this.mOnNavigationRequestMenuListener = onNavigationRequestMenuListener;
     }
 
     /**
@@ -913,25 +976,17 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
                     RESOURCE_MODE_SIMPLE_LAYOUT, this, false);
             itemResourceId = RESOURCE_MODE_SIMPLE_ITEM;
 
-            // Set the flinger listener (only when navigate)
-            if (this.mNavigationMode.compareTo(NAVIGATION_MODE.BROWSABLE) == 0) {
-                if (useFlinger && newView instanceof FlingerListView) {
-                    ((FlingerListView)newView).
-                    setOnItemFlingerListener(this.mOnItemFlingerListener);
-                }
-            }
-
         } else if (newMode.compareTo(NavigationLayoutMode.DETAILS) == 0) {
             newView = (AdapterView<ListAdapter>)LayoutInflater.from(getContext()).inflate(
                     RESOURCE_MODE_DETAILS_LAYOUT, this, false);
             itemResourceId = RESOURCE_MODE_DETAILS_ITEM;
+        }
 
-            // Set the flinger listener (only when navigate)
-            if (this.mNavigationMode.compareTo(NAVIGATION_MODE.BROWSABLE) == 0) {
-                if (useFlinger && newView instanceof FlingerListView) {
-                    ((FlingerListView)newView).
-                    setOnItemFlingerListener(this.mOnItemFlingerListener);
-                }
+        // Set the flinger listener (only when navigate)
+        if (this.mNavigationMode.compareTo(NAVIGATION_MODE.BROWSABLE) == 0) {
+            if (useFlinger && newView instanceof FlingerListView) {
+                ((FlingerListView)newView).
+                        setOnItemFlingerListener(this.mOnItemFlingerListener);
             }
         }
 
@@ -1110,107 +1165,6 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
         // listener itself
     }
 
-
-    /**
-     * Method invoked when a execution ends.
-     *
-     * @param files The files obtains from the list
-     * @param addToHistory If add path to history
-     * @param isNewHistory If is new history
-     * @param hasChanged If current directory was changed
-     * @param searchInfo The search information (if calling activity is {@link "SearchActivity"})
-     * @param newDir The new directory
-     * @param newDirFSO the new directory in FSO form
-     * @param scrollTo If not null, then listview must scroll to this item
-     * @hide
-     */
-    void onPostExecuteTask(
-            List<FileSystemObject> files, boolean addToHistory, boolean isNewHistory,
-            boolean hasChanged, SearchInfoParcelable searchInfo,
-            String newDir, final FileSystemObject newDirFSO, final FileSystemObject scrollTo) {
-        try {
-            //Check that there is not errors and have some data
-            if (files == null) {
-                this.mCurrentDir = this.mPreviousDir;
-                if (TextUtils.isEmpty(mCurrentDir)) {
-                    if (mOnBackRequestListener != null) {
-                        // Go back to previous view
-                        post(new Runnable() {
-                            @Override
-                            public void run() {
-                                mOnBackRequestListener.onBackRequested();
-                            }
-                        });
-                    }
-                }
-                return;
-            }
-
-            //Remove parent directory if we are in the root of a chrooted environment
-            if (this.mChRooted && StorageHelper.isStorageVolume(newDir) ||
-                    TextUtils.equals(newDir, FileHelper.ROOT_DIRECTORY)) {
-                if (files.size() > 0 && files.get(0) instanceof ParentDirectory) {
-                    files.remove(0);
-                }
-                if (mNavigationMode.compareTo(NAVIGATION_MODE.PICKABLE) == 0) {
-                    files.add(0, new ParentDirectory(FileHelper.ROOTS_LIST));
-                }
-            } else if (!TextUtils.equals(FileHelper.ROOTS_LIST, newDir) &&
-                    files.size() > 0 && !(files.get(0) instanceof ParentDirectory)) {
-                if (mNavigationMode.compareTo(NAVIGATION_MODE.PICKABLE) == 0) {
-                    files.add(0, new ParentDirectory(FileHelper.ROOTS_LIST));
-                }
-            }
-
-            //Add to history?
-            if (addToHistory && hasChanged && isNewHistory) {
-                if (this.mOnHistoryListener != null) {
-                    //Communicate the need of a history change
-                    this.mOnHistoryListener.onNewHistory(onSaveState());
-                }
-            }
-
-            //Load the data
-            loadData(files);
-            this.mFiles = files;
-            if (searchInfo != null) {
-                searchInfo.setSuccessNavigation(true);
-            }
-
-            //Change the breadcrumb
-            if (this.mBreadcrumb != null) {
-                this.mBreadcrumb.changeBreadcrumbPath(newDir, this.mChRooted);
-            }
-
-            //If scrollTo is null, the position will be set to 0
-            scrollTo(scrollTo);
-
-            //The current directory is now the "newDir"
-            this.mCurrentFileSystemObject = newDirFSO;
-            if (this.mOnDirectoryChangedListener != null) {
-                FileSystemObject dir = (newDirFSO != null) ?
-                        newDirFSO : FileHelper.createFileSystemObject(new File(newDir));
-                this.mOnDirectoryChangedListener.onDirectoryChanged(dir);
-            }
-
-        } finally {
-            //If calling activity is search, then save the search history
-            if (searchInfo != null) {
-                this.mOnHistoryListener.onNewHistory(searchInfo);
-            }
-
-            this.mPreviousDir = null;
-            mNavigationTask = null;
-
-            //End of loading data
-            try {
-                NavigationView.this.mBreadcrumb.endLoading();
-            } catch (Throwable ex) {
-                /**NON BLOCK**/
-            }
-        }
-    }
-
     /**
      * Method that loads the files in the adapter.
      *
@@ -1290,43 +1244,47 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        try {
-            FileSystemObject fso = ((FileSystemObjectAdapter)parent.getAdapter()).getItem(position);
-            if (fso instanceof ParentDirectory) {
-                changeCurrentDir(fso.getParent(), true, false, false, null, null);
-                return;
-            } else if (fso instanceof Directory) {
-                changeCurrentDir(fso.getFullPath(), true, false, false, null, null);
-                return;
-            } else if (fso instanceof Symlink) {
-                Symlink symlink = (Symlink)fso;
-                if (symlink.getLinkRef() != null && symlink.getLinkRef() instanceof Directory) {
-                    changeCurrentDir(
-                            symlink.getLinkRef().getFullPath(), true, false, false, null, null);
+        FileSystemObject fso = ((FileSystemObjectAdapter) parent.getAdapter()).getItem(position);
+        if (!((FileSystemObjectAdapter) parent.getAdapter()).isSelected(position)) {
+            try {
+                if (fso instanceof ParentDirectory) {
+                    changeCurrentDir(fso.getParent(), true, false, false, null, null);
+                    return;
+                } else if (fso instanceof Directory) {
+                    changeCurrentDir(fso.getFullPath(), true, false, false, null, null);
+                    return;
+                } else if (fso instanceof Symlink) {
+                    Symlink symlink = (Symlink) fso;
+                    if (symlink.getLinkRef() != null && symlink.getLinkRef() instanceof Directory) {
+                        changeCurrentDir(
+                                symlink.getLinkRef().getFullPath(), true, false, false, null, null);
+                        return;
+                    }
+
+                    // Open the link ref
+                    fso = symlink.getLinkRef();
+                } else if (fso instanceof RootDirectory) {
+                    RootDirectory rootDirectory = (RootDirectory) fso;
+                    changeCurrentDir(rootDirectory.getRootPath(), true);
                     return;
                 }
 
-                // Open the link ref
-                fso = symlink.getLinkRef();
-            } else if (fso instanceof RootDirectory) {
-                RootDirectory rootDirectory = (RootDirectory)fso;
-                changeCurrentDir(rootDirectory.getRootPath(), true);
-                return;
-            }
-
-            // Open the file (edit or pick)
-            if (this.mNavigationMode.compareTo(NAVIGATION_MODE.BROWSABLE) == 0) {
-                // Open the file with the preferred registered app
-                IntentsActionPolicy.openFileSystemObject(getContext(),
-                        NavigationView.this, fso, false, null, null);
-            } else {
-                // Request a file pick selection
-                if (this.mOnFilePickedListener != null) {
-                    this.mOnFilePickedListener.onFilePicked(fso);
+                // Open the file (edit or pick)
+                if (this.mNavigationMode.compareTo(NAVIGATION_MODE.BROWSABLE) == 0) {
+                    // Open the file with the preferred registered app
+                    IntentsActionPolicy.openFileSystemObject(getContext(),
+                            NavigationView.this, fso, false, null, null);
+                } else {
+                    // Request a file pick selection
+                    if (this.mOnFilePickedListener != null) {
+                        this.mOnFilePickedListener.onFilePicked(fso);
+                    }
                 }
+            } catch (Throwable ex) {
+                ExceptionUtil.translateException(getContext(), ex);
             }
-        } catch (Throwable ex) {
-            ExceptionUtil.translateException(getContext(), ex);
+        } else {
+            onToggleSelection(fso);
         }
     }
 
@@ -1336,7 +1294,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
     @Override
     public void onRequestRefresh(Object o, boolean clearSelection) {
         if (o instanceof FileSystemObject) {
-            refresh((FileSystemObject)o);
+            refresh((FileSystemObject) o);
         } else if (o == null) {
             refresh();
         }
@@ -1389,18 +1347,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
         if (this.mOnNavigationSelectionChangedListener != null) {
             this.mOnNavigationSelectionChangedListener.onSelectionChanged(this, selectedItems);
         }
-    }
-
-    /**
-     * Method invoked when a request to show the menu associated
-     * with an item is started.
-     *
-     * @param item The item for which the request was started
-     */
-    public void onRequestMenu(final FileSystemObject item) {
-        if (this.mOnNavigationRequestMenuListener != null) {
-            this.mOnNavigationRequestMenuListener.onRequestMenu(this, item);
-        }
+        mAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -1507,25 +1454,5 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
 
         // Refresh
         refresh();
-    }
-
-    /**
-     * Method that ensures that the user don't go outside the ChRooted environment
-     *
-     * @param newDir The new directory to navigate to
-     * @return String
-     */
-    private String checkChRootedNavigation(String newDir) {
-        // If we aren't in ChRooted environment, then there is nothing to check
-        if (!this.mChRooted) return newDir;
-
-        // Check if the path is owned by one of the storage volumes
-        if (!StorageHelper.isPathInStorageVolume(newDir)) {
-            StorageVolume[] volumes = StorageHelper.getStorageVolumes(getContext(), false);
-            if (volumes != null && volumes.length > 0) {
-                return volumes[0].getPath();
-            }
-        }
-        return newDir;
     }
 }

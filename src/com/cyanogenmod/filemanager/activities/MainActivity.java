@@ -24,9 +24,12 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -41,8 +44,10 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -72,6 +77,8 @@ import com.cyanogenmod.filemanager.util.StorageProviderUtils;
 
 import java.io.File;
 import java.io.InvalidClassException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -566,32 +573,6 @@ public class MainActivity extends ActionBarActivity
 
     public List<StorageProviderInfo> getProviderList() {
         return mNavigationDrawerController.getProviderList();
-    }
-
-    /**
-     * Method invoked when an action item is clicked.
-     *
-     * @param view The button pushed
-     */
-    public void onActionBarItemClick(android.view.View view) {
-
-        if (currentFragment instanceof NavigationFragment) {
-            NavigationFragment navigationFragment = ((NavigationFragment)currentFragment);
-            switch (view.getId()) {
-                //######################
-                //Selection Actions
-                //######################
-                case R.id.ab_selection_done:
-                    //Show information of the filesystem
-                    navigationFragment.getCurrentNavigationView().onDeselectAll();
-                    break;
-                case R.id.ab_actions:
-                    // Show the actions dialog
-                    navigationFragment.openActionsDialog(null, true);
-                default:
-                    break;
-            }
-        }
     }
 
     /**
