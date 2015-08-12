@@ -16,22 +16,30 @@
 
 package com.cyanogenmod.filemanager.ui.widgets;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
-import android.view.animation.Transformation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+
 import android.widget.TextView;
-
 import com.cyanogenmod.filemanager.R;
+import com.cyanogenmod.filemanager.commands.FolderUsageExecutable;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
+import com.cyanogenmod.filemanager.ui.policy.PrintActionPolicy;
 import com.cyanogenmod.filemanager.util.FileHelper;
+import com.cyanogenmod.filemanager.util.MimeTypeHelper;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -43,14 +51,17 @@ public class SelectionView extends LinearLayout {
      * @hide
      */
     int mViewHeight;
-    private TextView mStatus;
     private int mEffectDuration;
+    private Toolbar mToolbar;
+    private View mTitleLayout;
+    int mSize = 0;
+    private NavigationView mNavigationView;
 
     /**
      * Constructor of <code>SelectionView</code>.
      *
      * @param context The current context
-     * @param attrs The attributes of the XML tag that is inflating the view.
+     * @param attrs   The attributes of the XML tag that is inflating the view.
      */
     public SelectionView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -60,12 +71,12 @@ public class SelectionView extends LinearLayout {
     /**
      * Constructor of <code>SelectionView</code>.
      *
-     * @param context The current context
-     * @param attrs The attributes of the XML tag that is inflating the view.
+     * @param context  The current context
+     * @param attrs    The attributes of the XML tag that is inflating the view.
      * @param defStyle The default style to apply to this view. If 0, no style
-     *        will be applied (beyond what is included in the theme). This may
-     *        either be an attribute resource, whose value will be retrieved
-     *        from the current theme, or an explicit style resource.
+     *                 will be applied (beyond what is included in the theme). This may
+     *                 either be an attribute resource, whose value will be retrieved
+     *                 from the current theme, or an explicit style resource.
      */
     public SelectionView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -90,19 +101,112 @@ public class SelectionView extends LinearLayout {
                         SelectionView.this.mViewHeight = getHeight();
                         getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         setVisibility(View.GONE);
-                        LayoutParams params = (LayoutParams)SelectionView.this.getLayoutParams();
+                        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)
+                                SelectionView.this.getLayoutParams();
                         params.height = 0;
                     }
-            });
+                });
 
         //Recovery all views
-        this.mStatus = (TextView)content.findViewById(R.id.navigation_status_selection_label);
+        this.mToolbar = (Toolbar) content.findViewById(R.id.selection_toolbar);
+
+        this.mToolbar.inflateMenu(R.menu.selection_menu);
+
+        mTitleLayout = inflate(getContext(), R.layout.selection_view_customtitle, null);
+
+        mToolbar.addView(mTitleLayout);
 
         // Obtain the duration of the effect
         this.mEffectDuration =
-                getContext().getResources().getInteger(android.R.integer.config_shortAnimTime);
+                getContext().getResources().getInteger(android.R.integer.config_mediumAnimTime);
 
         addView(content);
+    }
+
+    /**
+     * Method that configure the menu to show according the actual information,
+     * the kind of request, the file selection, the mount point, ...
+     */
+    private void configureMenu(List<FileSystemObject> selection) {
+        // Selection
+        mToolbar.getMenu().clear();
+        this.mToolbar.inflateMenu(R.menu.selection_menu);
+
+        Menu menu = mToolbar.getMenu();
+        // run only single file specific items
+        FileSystemObject fso = selection.get(0);
+        if (selection.size() == 1) {
+
+            // Print (only for text and image categories)
+            if (!PrintActionPolicy.isPrintedAllowed(getContext(), fso)) {
+                menu.removeItem(R.id.mnu_actions_print);
+            }
+
+            if (fso.isSecure() || fso.isRemote()) {
+                menu.removeItem(R.id.mnu_actions_add_shortcut);
+            }
+
+            //Execute only if mime/type category is EXEC
+            MimeTypeHelper.MimeTypeCategory category = MimeTypeHelper.getCategory(getContext(), fso);
+            if (category.compareTo(MimeTypeHelper.MimeTypeCategory.EXEC) != 0) {
+                menu.removeItem(R.id.mnu_actions_execute);
+            }
+
+            if (category.compareTo(MimeTypeHelper.MimeTypeCategory.COMPRESS) == 0) {
+                menu.removeItem(R.id.mnu_actions_compress);
+            } else {
+                menu.removeItem(R.id.mnu_actions_extract);
+            }
+
+
+            //- Open/Open with -> Only when the fso is not a folder
+            if (FileHelper.isDirectory(fso)) {
+                menu.removeItem(R.id.mnu_actions_open);
+                menu.removeItem(R.id.mnu_actions_open_with);
+                menu.removeItem(R.id.mnu_actions_send);
+            }
+
+        } else {
+            // run only global items
+            // Don't allow mass rename to avoid horrors.
+            menu.removeItem(R.id.mnu_actions_rename);
+
+            // TODO can we print multiple items? what voodoo is this
+            // does this feature even work?
+            menu.removeItem(R.id.mnu_actions_print);
+
+            // don't allow multiple shortcut adds
+            menu.removeItem(R.id.mnu_actions_add_shortcut);
+
+            // We don't compute multiple checksums at once
+            menu.removeItem(R.id.mnu_actions_compute_checksum);
+
+            // Don't execute all the things
+            menu.removeItem(R.id.mnu_actions_execute);
+
+            // open with sadness
+            menu.removeItem(R.id.mnu_actions_open);
+            menu.removeItem(R.id.mnu_actions_open_with);
+            menu.removeItem(R.id.mnu_actions_send);
+
+        }
+
+        // Not allowed if not in search
+        // TODO figure out search and what kind of things it likes to do.
+        menu.removeItem(R.id.mnu_actions_open_parent_folder);
+
+        // dark magic to show icons in the overflow menu
+        if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
+            try {
+                Field field = menu.getClass().getDeclaredField("mOptionalIconsVisible");
+                field.setAccessible(true);
+                field.setBoolean(menu, true);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -112,11 +216,25 @@ public class SelectionView extends LinearLayout {
      * @return String The computed text from the selection
      */
     private String computeSelection(List<FileSystemObject> selection) {
+        int cc = selection.size();
+        final Resources res = getContext().getResources();
+
+        configureMenu(selection);
+
+        if (cc == 1) {
+            FileSystemObject fso = selection.get(0);
+            return fso.getName();
+        } else {
+            return res.getQuantityString(R.plurals.selection, cc, cc);
+        }
+    }
+
+    private String getSubtitle(List<FileSystemObject> selection) {
         int folders = 0;
         int files = 0;
-        int cc = selection.size();
-        for (int i = 0; i < cc; i++) {
-            FileSystemObject fso = selection.get(i);
+        final Resources res = getContext().getResources();
+
+        for (FileSystemObject fso : selection) {
             if (FileHelper.isDirectory(fso)) {
                 folders++;
             } else {
@@ -125,30 +243,51 @@ public class SelectionView extends LinearLayout {
         }
 
         // Get the string
-        final Resources res = getContext().getResources();
-
         if (files == 0) {
-            return res.getQuantityString(R.plurals.selection_folders, folders, folders);
+            return res.getQuantityString(R.plurals.folders, folders, folders);
         }
 
         if (folders == 0) {
-            return res.getQuantityString(R.plurals.selection_files, files, files);
+            return getFileSizes(selection);
         }
 
         String nFoldersString = res.getQuantityString(R.plurals.n_folders, folders, folders);
         String nFilesString = res.getQuantityString(R.plurals.n_files, files, files);
-        return res.getString(R.string.selection_folders_and_files, nFoldersString, nFilesString);
+        return res.getString(R.string.selection_folders_and_files, nFilesString, nFoldersString);
     }
+
+    public String getFileSizes(List<FileSystemObject> selection) {
+        for (FileSystemObject fso : selection) {
+            mSize += fso.getSize();
+        }
+        return FileHelper.getHumanReadableSize(mSize);
+    }
+
+    public void setMenuClickListener(Toolbar.OnMenuItemClickListener menuClickListener) {
+        mToolbar.setOnMenuItemClickListener(menuClickListener);
+    }
+
+    public void setNavigationView(NavigationView currentNavigationView) {
+        mNavigationView = currentNavigationView;
+    }
+
 
     /**
      * Method that sets the {@link FileSystemObject} selection list
      *
      * @param newSelection The new selection list
      */
-    public void setSelection(List<FileSystemObject> newSelection) {
+    public void setSelection(final List<FileSystemObject> newSelection) {
+        // selection changed, wipe away old things
+        mSize = 0;
+
         // Compute the selection
-        if (newSelection != null && newSelection.size() > 0) {
-            this.mStatus.setText(computeSelection(newSelection));
+        TextView title = (TextView) mTitleLayout.findViewById(R.id.selector_title);
+        TextView subtitle = ((TextView) mTitleLayout.findViewById(R.id.selector_subtitle));
+
+        if (newSelection != null && newSelection.size() > 0 && title != null && subtitle != null) {
+            title.setText(computeSelection(newSelection));
+            subtitle.setText(getSubtitle(newSelection));
         }
 
         // Requires show the animation (expand or collapse)?
@@ -162,119 +301,58 @@ public class SelectionView extends LinearLayout {
             return;
         }
 
-        // Need some animation
-        final ExpandCollapseAnimation.ANIMATION_TYPE effect =
-                (newSelection != null && newSelection.size() > 0) ?
-                        ExpandCollapseAnimation.ANIMATION_TYPE.EXPAND :
-                        ExpandCollapseAnimation.ANIMATION_TYPE.COLLAPSE;
-        ExpandCollapseAnimation animation =
-                                    new ExpandCollapseAnimation(
-                                            this,
-                                            this.mViewHeight,
-                                            this.mEffectDuration,
-                                            effect);
-        animation.setAnimationListener(new Animation.AnimationListener() {
+        int animation = newSelection != null && newSelection.size() > 0 ? R.anim.slide_in : R.anim.slide_out;
+        Animation anim = AnimationUtils.loadAnimation(getContext(), animation);
+        anim.setInterpolator(new AccelerateDecelerateInterpolator());
+        anim.setDuration(250L);
+        anim.setAnimationListener(new Animation.AnimationListener() {
+
             @Override
-            public void onAnimationStart(Animation anim) {
-                LayoutParams params = (LayoutParams)getLayoutParams();
-                if (effect.compareTo(ExpandCollapseAnimation.ANIMATION_TYPE.EXPAND) == 0) {
-                    params.height = 0;
-                } else if (effect.compareTo(ExpandCollapseAnimation.ANIMATION_TYPE.COLLAPSE) == 0) {
-                    params.height = SelectionView.this.mViewHeight;
+            public void onAnimationEnd(Animation animation) {
+                if (newSelection != null && newSelection.size() > 0) {
+                    setVisibility(View.VISIBLE);
                 }
-                SelectionView.this.setVisibility(View.VISIBLE);
             }
 
             @Override
-            public void onAnimationRepeat(Animation anim) {/**NON BLOCK**/}
+            public void onAnimationRepeat(Animation animation) {
+            }
 
             @Override
-            public void onAnimationEnd(Animation anim) {
-                LayoutParams params = (LayoutParams)getLayoutParams();
-                if (effect.compareTo(ExpandCollapseAnimation.ANIMATION_TYPE.COLLAPSE) == 0) {
-                    params.height = 0;
-                    requestLayout();
-                    SelectionView.this.setVisibility(View.GONE);
+            public void onAnimationStart(Animation animation) {
+                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) getLayoutParams();
+
+                if (newSelection != null && newSelection.size() > 0) {
+                    params.height = SelectionView.this.mViewHeight;
+                    navView(false);
                 } else {
-                    params.height = SelectionView.this.mViewHeight;
-                    requestLayout();
-                    SelectionView.this.setVisibility(View.VISIBLE);
+                    params.height = 0;
+                    setVisibility(View.GONE);
+                    navView(true);
                 }
+
             }
+
         });
-        animation.setInterpolator(new AccelerateDecelerateInterpolator());
-        startAnimation(animation);
+
+        startAnimation(anim);
+
     }
 
-    /**
-     * An animation effect for expand or collapse the view
-     *
-     */
-    private static class ExpandCollapseAnimation extends Animation {
-
-        /**
-         * The enumeration of the types of animation effects
-         */
-        public enum ANIMATION_TYPE {
-            EXPAND,
-            COLLAPSE
-        }
-
-        private final View mView;
-        private final LayoutParams mViewLayoutParams;
-        private final int mViewHeight;
-        private final ANIMATION_TYPE mEffect;
-
-        /**
-         * Constructor of <code>ExpandCollapseAnimation</code>
-         *
-         * @param view The view to animate
-         * @param viewHeight The maximum height of view. Used to compute the animation translation
-         * @param duration The duration of the animation
-         * @param effect The effect of the animation
-         */
-        public ExpandCollapseAnimation(
-                View view, int viewHeight, int duration, ANIMATION_TYPE effect) {
-            super();
-            this.mView = view;
-            this.mViewHeight = viewHeight;
-            this.mEffect = effect;
-            this.mViewLayoutParams = (LayoutParams) view.getLayoutParams();
-            setDuration(duration);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void applyTransformation(float interpolatedTime, Transformation t) {
-            super.applyTransformation(interpolatedTime, t);
-            if (interpolatedTime < 1.0f) {
-                int height = (int)(this.mViewHeight * interpolatedTime);
-                if (this.mEffect.compareTo(ANIMATION_TYPE.EXPAND) == 0) {
-                    this.mViewLayoutParams.height = height;
-                } else {
-                    this.mViewLayoutParams.height = this.mViewHeight - height;
-                }
-                this.mView.setLayoutParams(this.mViewLayoutParams);
-                this.mView.requestLayout();
+    public void navView(boolean isReversed) {
+        ValueAnimator va = ValueAnimator.ofInt(0, SelectionView.this.mViewHeight);
+        va.setDuration(400L);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mNavigationView.getLayoutParams();
+                params.bottomMargin = (Integer) animation.getAnimatedValue();
+                mNavigationView.requestLayout();
             }
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void initialize(int width, int height, int parentWidth, int parentHeight) {
-            super.initialize(width, height, parentWidth, parentHeight);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean willChangeBounds() {
-            return true;
+        });
+        if (isReversed) {
+            va.reverse();
+        } else {
+            va.start();
         }
     }
 

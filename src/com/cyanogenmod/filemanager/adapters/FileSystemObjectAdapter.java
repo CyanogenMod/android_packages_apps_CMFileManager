@@ -16,6 +16,7 @@
 
 package com.cyanogenmod.filemanager.adapters;
 
+import android.animation.*;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -32,10 +33,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.*;
 
 import com.cyanogen.ambient.storage.provider.StorageProviderInfo;
 import com.cyanogenmod.filemanager.R;
@@ -47,16 +45,17 @@ import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
 import com.cyanogenmod.filemanager.preferences.Preferences;
 import com.cyanogenmod.filemanager.ui.IconHolder;
 import com.cyanogenmod.filemanager.ui.IconHolder.ICallback;
-import com.cyanogenmod.filemanager.ui.ThemeManager;
-import com.cyanogenmod.filemanager.ui.ThemeManager.Theme;
 import com.cyanogenmod.filemanager.ui.policy.InfoActionPolicy;
 import com.cyanogenmod.filemanager.util.FileHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper;
 import com.cyanogenmod.filemanager.util.StorageProviderUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.WeakHashMap;
 
@@ -105,6 +104,7 @@ public class FileSystemObjectAdapter
     private Resources mRes;
     private OnSelectionChangedListener mOnSelectionChangedListener;
     private final ViewOutlineProvider mIconViewOutlineProvider;
+    private boolean mInSelectionMode;
 
     private int mPrimaryColor;
 
@@ -203,7 +203,6 @@ public class FileSystemObjectAdapter
     public View getView(int position, View convertView, ViewGroup parent) {
         //Check to reuse view
         View v = convertView;
-        Theme theme = ThemeManager.getCurrentTheme(getContext());
 
         if (v == null) {
             //Create the view holder
@@ -218,9 +217,11 @@ public class FileSystemObjectAdapter
             if (!mPickable) {
                 viewHolder.mIvIcon.setOnClickListener(this);
                 viewHolder.mBtInfo.setOnClickListener(this);
-            } else {
-                viewHolder.mBtInfo.setVisibility(View.GONE);
-            }
+            } //else {
+                //viewHolder.mBtInfo.setVisibility(View.GONE);
+            //}
+
+
             v.setTag(viewHolder);
         }
 
@@ -236,7 +237,7 @@ public class FileSystemObjectAdapter
         }
 
         viewHolder.mTvName.setText(fso.getName());
-        theme.setTextColor(getContext(), viewHolder.mTvName, "text_color"); //$NON-NLS-1$
+        viewHolder.mTvName.setTextColor(R.color.text_color);
 
         if (viewHolder.mTvSummary != null) {
             Resources res = getContext().getResources();
@@ -261,7 +262,7 @@ public class FileSystemObjectAdapter
                                         DateUtils.FORMAT_SHOW_YEAR));
             }
             viewHolder.mTvSummary.setText(sbSummary);
-            theme.setTextColor(getContext(), viewHolder.mTvSummary, "text_color"); //$NON-NLS-1$
+            viewHolder.mTvSummary.setTextColor(R.color.text_color);
         }
 
         if (!this.mPickable) {
@@ -269,7 +270,9 @@ public class FileSystemObjectAdapter
                     TextUtils.equals(fso.getName(), FileHelper.PARENT_DIRECTORY) ?
                             View.INVISIBLE : View.VISIBLE);
 
-            viewHolder.mBtInfo.setImageResource(R.drawable.ic_details);
+            if (mSelectedItems.size() == 0) {
+                viewHolder.mBtInfo.setImageResource(R.drawable.info_item);
+            }
             viewHolder.mBtInfo.setTag(position);
             viewHolder.mIvIcon.setTag(position);
 
@@ -277,8 +280,12 @@ public class FileSystemObjectAdapter
             v.setActivated(selected);
             viewHolder.mIvIcon.setSelected(selected);
         }
-
-        //Return the view
+        viewHolder.mBtInfo.setSelected(mSelectedItems.size() > 0);
+        if (viewHolder.mBtInfo.isSelected()) {
+            viewHolder.mBtInfo.setVisibility(View.GONE);
+        } else {
+            viewHolder.mBtInfo.setVisibility(View.VISIBLE);
+        }
         return v;
     }
 
@@ -313,6 +320,7 @@ public class FileSystemObjectAdapter
         if (selected) {
             mSelectedItems.add(fso);
         }
+        isSelectedParent(fso);
         if (v != null) {
             ((View) v.getParent()).setActivated(selected);
             v.setSelected(selected);
@@ -322,8 +330,31 @@ public class FileSystemObjectAdapter
             this.mOnSelectionChangedListener.onSelectionChanged(
                     new ArrayList<FileSystemObject>(mSelectedItems));
         }
-
         notifyDataSetChanged();
+    }
+
+    /**
+     * Method to check if the fso is a parent of the selected list currently existing
+     * return a cleaned list of people as a parent selection selects a child already.
+     * @param fso
+     */
+    public void isSelectedParent(FileSystemObject fso) {
+        Iterator it = mSelectedItems.iterator();
+        while (it.hasNext())
+        {
+            FileSystemObject item = (FileSystemObject)it.next();
+            try {
+                File oldFile = FileHelper.fileSystemObjectToFile(item).getCanonicalFile();
+                File newFile = FileHelper.fileSystemObjectToFile(fso).getCanonicalFile();
+                if (!oldFile.equals(newFile) && FileHelper.isChildof(newFile, oldFile)) {
+                    // this item's parent just got selected
+                    it.remove();
+                    mSelectedItems.remove(item);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**

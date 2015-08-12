@@ -15,43 +15,18 @@
  -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:orientation="horizontal" >
+  android:orientation="vertical" >
 
-  <com.cyanogenmod.filemanager.ui.widgets.ButtonItem
-    android:id="@+id/ab_selection_done"
-    android:layout_width="@dimen/small_buttom_width"
-    android:layout_height="@dimen/small_buttom_width"
-    android:width="@dimen/smallest_buttom_width"
-    android:height="@dimen/smallest_buttom_width"
-    android:contentDescription="@string/actionbar_button_selection_done_cd"
-    android:onClick="onActionBarItemClick"
-    android:scaleType="fitCenter"
-    android:src="@drawable/ic_material_light_accept" />
-
-  <include layout="@layout/horizontal_divider"
-    android:layout_marginEnd="@dimen/default_margin" />
-
-  <TextView
-    android:id="@+id/navigation_status_selection_label"
-    android:layout_width="0dp"
-    android:layout_height="match_parent"
-    android:layout_weight="1"
-    android:layout_marginStart="@dimen/default_margin"
-    android:layout_marginEnd="@dimen/default_margin"
-    android:singleLine="true"
-    android:ellipsize="end"
-    android:gravity="start|center_vertical"
-    android:text="@null"
-    android:textAppearance="@style/secondary_text_appearance" />
-
-  <Button
-    android:id="@+id/ab_actions"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:text="@string/actionbar_button_actions_cd"
-    android:onClick="onActionBarItemClick"
-    android:gravity="end"/>
-
+    <android.support.v7.widget.Toolbar
+            android:id="@+id/selection_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/selection_row_height"
+            android:minHeight="@dimen/selection_row_height"
+            android:background="#455a64"
+            android:theme="@style/Base.SelectionToolbar"
+            app:popupTheme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:elevation="6dp" />
 </LinearLayout>
