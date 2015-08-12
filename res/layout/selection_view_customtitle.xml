@@ -15,18 +15,16 @@
  -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical" >
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:animateLayoutChanges="true"
+              android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-            android:id="@+id/selection_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/selection_row_height"
-            android:minHeight="@dimen/selection_row_height"
-            android:background="#455a64"
-            android:theme="@style/Base.SelectionToolbar"
-            app:popupTheme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:elevation="6dp" />
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/selector_title"
+                android:textSize="16sp"
+                android:textColor="@color/action_bar_title_text_color"/>
+
 </LinearLayout>

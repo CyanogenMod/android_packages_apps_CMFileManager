@@ -24,9 +24,12 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -581,15 +584,15 @@ public class MainActivity extends ActionBarActivity
                 //######################
                 //Selection Actions
                 //######################
-                case R.id.ab_selection_done:
-                    //Show information of the filesystem
-                    navigationFragment.getCurrentNavigationView().onDeselectAll();
-                    break;
-                case R.id.ab_actions:
+                //case R.id.ab_selection_done:
+                //    //Show information of the filesystem
+                //    navigationFragment.getCurrentNavigationView().onDeselectAll();
+                //    break;
+                //case R.id.ab_actions:
                     // Show the actions dialog
-                    navigationFragment.openActionsDialog(null, true);
-                default:
-                    break;
+                //    navigationFragment.openActionsDialog(null, true);
+                //default:
+                //    break;
             }
         }
     }
