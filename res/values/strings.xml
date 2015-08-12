@@ -514,9 +514,9 @@
     <!-- Actions Dialog - Menu - Execute -->
     <string name="actions_menu_execute">Execute</string>
     <!-- Actions Dialog - Menu - Send -->
-    <string name="actions_menu_send">Send</string>
+    <string name="actions_menu_send">Share</string>
     <!-- Actions Dialog - Menu - Send selection -->
-    <string name="actions_menu_send_selection">Send selection</string>
+    <string name="actions_menu_send_selection">Share selection</string>
     <!-- Actions Dialog - Menu - Compress -->
     <string name="actions_menu_compress">Compress</string>
     <!-- Actions Dialog - Menu - Extract -->
@@ -541,6 +541,8 @@
     <string name="actions_menu_print">Print</string>
     <!-- Actions Dialog - Menu - Set as home -->
     <string name="actions_menu_set_as_home">Set as home</string>
+    <!-- Selection Dialog -->
+    <string name="actions_deselect_all">Clear selection</string>
 
     <!-- Actions - Ask user prior to do an undone operation. Dialog message -->
     <string name="actions_ask_undone_operation_msg">This action cannot be undone. Do you want to continue?</string>
@@ -612,7 +614,7 @@
 
     <!-- Selection -->
     <!-- For example "2 folders and 1 file selected." -->
-    <string name="selection_folders_and_files"><xliff:g id="folders">%1$s</xliff:g> and <xliff:g id="files">%2$s</xliff:g> selected.</string>
+    <string name="selection_folders_and_files"><xliff:g id="folders">%1$s</xliff:g>, <xliff:g id="files">%2$s</xliff:g></string>
 
     <!-- Category descriptions -->
     <string name="category_system">SYSTEM</string>

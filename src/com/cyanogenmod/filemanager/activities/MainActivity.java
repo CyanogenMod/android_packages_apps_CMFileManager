@@ -569,32 +569,6 @@ public class MainActivity extends ActionBarActivity
     }
 
     /**
-     * Method invoked when an action item is clicked.
-     *
-     * @param view The button pushed
-     */
-    public void onActionBarItemClick(android.view.View view) {
-
-        if (currentFragment instanceof NavigationFragment) {
-            NavigationFragment navigationFragment = ((NavigationFragment)currentFragment);
-            switch (view.getId()) {
-                //######################
-                //Selection Actions
-                //######################
-                case R.id.ab_selection_done:
-                    //Show information of the filesystem
-                    navigationFragment.getCurrentNavigationView().onDeselectAll();
-                    break;
-                case R.id.ab_actions:
-                    // Show the actions dialog
-                    navigationFragment.openActionsDialog(null, true);
-                default:
-                    break;
-            }
-        }
-    }
-
-    /**
      * Method that opens the settings activity.
      *
      * @hide
