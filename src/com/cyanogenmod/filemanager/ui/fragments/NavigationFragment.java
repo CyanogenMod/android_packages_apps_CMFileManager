@@ -19,29 +19,16 @@ package com.cyanogenmod.filemanager.ui.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
-import android.content.res.XmlResourceParser;
-import android.database.Cursor;
-import android.graphics.BitmapShader;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.os.storage.StorageVolume;
@@ -56,91 +43,74 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListPopupWindow;
-import android.widget.PopupWindow;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.internal.util.XmlUtils;
 import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.activities.MainActivity;
 import com.cyanogenmod.filemanager.activities.SearchActivity;
-import com.cyanogenmod.filemanager.activities.preferences.SettingsPreferences;
-import com.cyanogenmod.filemanager.adapters.MenuSettingsAdapter;
 import com.cyanogenmod.filemanager.console.Console;
 import com.cyanogenmod.filemanager.console.ConsoleAllocException;
 import com.cyanogenmod.filemanager.console.ConsoleBuilder;
 import com.cyanogenmod.filemanager.console.InsufficientPermissionsException;
-import com.cyanogenmod.filemanager.console.NoSuchFileOrDirectory;
 import com.cyanogenmod.filemanager.console.VirtualMountPointConsole;
 import com.cyanogenmod.filemanager.console.storageapi.StorageApiConsole;
 import com.cyanogenmod.filemanager.dialogs.SortViewOptions;
 import com.cyanogenmod.filemanager.listeners.OnHistoryListener;
 import com.cyanogenmod.filemanager.listeners.OnRequestRefreshListener;
-import com.cyanogenmod.filemanager.model.Bookmark;
 import com.cyanogenmod.filemanager.model.DiskUsage;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.model.History;
 import com.cyanogenmod.filemanager.model.MountPoint;
-import com.cyanogenmod.filemanager.model.Bookmark.BOOKMARK_TYPE;
 import com.cyanogenmod.filemanager.parcelables.HistoryNavigable;
 import com.cyanogenmod.filemanager.parcelables.NavigationViewInfoParcelable;
 import com.cyanogenmod.filemanager.parcelables.SearchInfoParcelable;
 import com.cyanogenmod.filemanager.preferences.AccessMode;
-import com.cyanogenmod.filemanager.preferences.Bookmarks;
 import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
 import com.cyanogenmod.filemanager.preferences.NavigationLayoutMode;
 import com.cyanogenmod.filemanager.preferences.ObjectIdentifier;
 import com.cyanogenmod.filemanager.preferences.PreferenceHelper;
 import com.cyanogenmod.filemanager.preferences.Preferences;
 import com.cyanogenmod.filemanager.tasks.FileSystemInfoTask;
-import com.cyanogenmod.filemanager.tasks.FilesystemAsyncTask;
-import com.cyanogenmod.filemanager.ui.IconHolder;
-import com.cyanogenmod.filemanager.ui.ThemeManager;
-import com.cyanogenmod.filemanager.ui.ThemeManager.Theme;
 import com.cyanogenmod.filemanager.ui.dialogs.ActionsDialog;
 import com.cyanogenmod.filemanager.ui.dialogs.FilesystemInfoDialog;
-import com.cyanogenmod.filemanager.ui.dialogs.InitialDirectoryDialog;
 import com.cyanogenmod.filemanager.ui.dialogs.FilesystemInfoDialog.OnMountListener;
+import com.cyanogenmod.filemanager.ui.dialogs.InputNameDialog;
+import com.cyanogenmod.filemanager.ui.policy.CompressActionPolicy;
 import com.cyanogenmod.filemanager.ui.policy.CopyMoveActionPolicy;
+import com.cyanogenmod.filemanager.ui.policy.DeleteActionPolicy;
+import com.cyanogenmod.filemanager.ui.policy.ExecutionActionPolicy;
 import com.cyanogenmod.filemanager.ui.policy.InfoActionPolicy;
+import com.cyanogenmod.filemanager.ui.policy.IntentsActionPolicy;
+import com.cyanogenmod.filemanager.ui.policy.NewActionPolicy;
+import com.cyanogenmod.filemanager.ui.policy.PrintActionPolicy;
 import com.cyanogenmod.filemanager.ui.widgets.Breadcrumb;
-import com.cyanogenmod.filemanager.ui.widgets.ButtonItem;
-import com.cyanogenmod.filemanager.ui.widgets.NavigationCustomTitleView;
 import com.cyanogenmod.filemanager.ui.widgets.NavigationView;
 import com.cyanogenmod.filemanager.ui.widgets.NavigationView.OnBackRequestListener;
 import com.cyanogenmod.filemanager.ui.widgets.NavigationView.OnDirectoryChangedListener;
-import com.cyanogenmod.filemanager.ui.widgets.NavigationView.OnNavigationRequestMenuListener;
 import com.cyanogenmod.filemanager.ui.widgets.NavigationView.OnNavigationSelectionChangedListener;
 import com.cyanogenmod.filemanager.ui.widgets.SelectionView;
 import com.cyanogenmod.filemanager.util.AndroidHelper;
-import com.cyanogenmod.filemanager.util.BookmarksHelper;
 import com.cyanogenmod.filemanager.util.CommandHelper;
 import com.cyanogenmod.filemanager.util.DialogHelper;
 import com.cyanogenmod.filemanager.util.ExceptionUtil;
 import com.cyanogenmod.filemanager.util.FileHelper;
-import com.cyanogenmod.filemanager.util.MimeTypeHelper.MimeTypeCategory;
 import com.cyanogenmod.filemanager.util.StorageHelper;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
+import static com.cyanogenmod.filemanager.activities.PickerActivity.ACTION_MODE.COPY;
+import static com.cyanogenmod.filemanager.activities.PickerActivity.ACTION_MODE.MOVE;
+import static com.cyanogenmod.filemanager.activities.PickerActivity.EXTRA_ACTION;
 import static com.cyanogenmod.filemanager.activities.PickerActivity.EXTRA_FOLDER_PATH;
+import static com.cyanogenmod.filemanager.activities.PickerActivity.INTENT_FOLDER_SELECT;
 
 /**
  * The main navigation activity. This activity is the center of the application.
@@ -156,18 +126,12 @@ import static com.cyanogenmod.filemanager.activities.PickerActivity.EXTRA_FOLDER
  */
 public class NavigationFragment extends Fragment
         implements OnHistoryListener, OnRequestRefreshListener,
-        OnNavigationRequestMenuListener, OnNavigationSelectionChangedListener,
-        OnDirectoryChangedListener {
+        OnNavigationSelectionChangedListener, OnDirectoryChangedListener,
+        Toolbar.OnMenuItemClickListener{
 
     private static final String TAG = "NavigationFragment"; //$NON-NLS-1$
 
     private static boolean DEBUG = false;
-
-    // Bookmark list XML tags
-    private static final String TAG_BOOKMARKS = "Bookmarks"; //$NON-NLS-1$
-    private static final String TAG_BOOKMARK = "bookmark"; //$NON-NLS-1$
-
-    private static final String STR_USB = "usb"; // $NON-NLS-1$
 
     /**
      * Intent code for request a search.
@@ -213,18 +177,9 @@ public class NavigationFragment extends Fragment
     public static final String EXTRA_ADD_TO_HISTORY =
             "extra_add_to_history"; //$NON-NLS-1$
 
-    // The timeout needed to reset the exit status for back button
-    // After this time user need to tap 2 times the back button to
-    // exit, and the toast is shown again after the first tap.
-    private static final int RELEASE_EXIT_CHECK_TIMEOUT = 3500;
-
     private Toolbar mToolBar;
     private SearchView mSearchView;
-    private InputMethodManager mImm;
     private View mTitleLayout;
-    private View mStatusBar;
-
-    private AsyncTask mOpenActionsDialogAsyncTask;
 
     private OnBackRequestListener mOnBackRequestListener;
     private OnGoHomeRequestListener mOnGoHomeRequestListener;
@@ -258,9 +213,11 @@ public class NavigationFragment extends Fragment
                             Breadcrumb breadcrumb = getCurrentNavigationView().getBreadcrumb();
                             if (breadcrumb != null) {
                                 String fds = Preferences.getSharedPreferences().getString(
-                                        FileManagerSettings.SETTINGS_DISK_USAGE_WARNING_LEVEL.getId(),
+                                        FileManagerSettings.SETTINGS_DISK_USAGE_WARNING_LEVEL
+                                                .getId(),
                                         (String)FileManagerSettings.
-                                                SETTINGS_DISK_USAGE_WARNING_LEVEL.getDefaultValue());
+                                                SETTINGS_DISK_USAGE_WARNING_LEVEL
+                                                .getDefaultValue());
                                 mFreeDiskSpaceWarningLevel = Integer.parseInt(fds);
                                 breadcrumb.setFreeDiskSpaceWarningLevel(mFreeDiskSpaceWarningLevel);
                                 breadcrumb.updateMountPointInfo();
@@ -298,9 +255,9 @@ public class NavigationFragment extends Fragment
                             boolean useFlinger =
                                     Preferences.getSharedPreferences().getBoolean(
                                             FileManagerSettings.SETTINGS_USE_FLINGER.getId(),
-                                                ((Boolean)FileManagerSettings.
-                                                        SETTINGS_USE_FLINGER.
-                                                        getDefaultValue()).booleanValue());
+                                            (Boolean) FileManagerSettings.
+                                                    SETTINGS_USE_FLINGER.
+                                                    getDefaultValue());
                             getCurrentNavigationView().setUseFlinger(useFlinger);
                             return;
                         }
@@ -405,13 +362,6 @@ public class NavigationFragment extends Fragment
         }
     };
 
-    static String MIME_TYPE_LOCALIZED_NAMES[];
-    /**
-     * @hide
-     */
-    static Map<MimeTypeCategory, Drawable> EASY_MODE_ICONS = new
-            HashMap<MimeTypeCategory, Drawable>();
-
     /**
      * @hide
      */
@@ -422,25 +372,8 @@ public class NavigationFragment extends Fragment
     private List<History> mHistory;
 
     private ViewGroup mActionBar;
+
     private SelectionView mSelectionBar;
-
-    private LinearLayout mDrawerHistory;
-    private TextView mDrawerHistoryEmpty;
-
-    private TextView mBookmarksTab;
-    private TextView mHistoryTab;
-    private View mBookmarksLayout;
-    private View mHistoryLayout;
-
-    private ButtonItem mSettings;
-    private ButtonItem mClearHistory;
-
-    private List<Bookmark> mBookmarks;
-    private List<Bookmark> mSdBookmarks;
-    private LinearLayout mDrawerBookmarks;
-
-    private boolean mExitFlag = false;
-    private long mExitBackTimeout = -1;
 
     private Dialog mActiveDialog = null;
 
@@ -461,7 +394,6 @@ public class NavigationFragment extends Fragment
      */
     Handler mHandler;
 
-    private AsyncTask<Void, Void, Boolean> mBookmarksTask;
     View mView;
     LayoutInflater mLayoutInflater;
 
@@ -496,14 +428,6 @@ public class NavigationFragment extends Fragment
         newFilter.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
         newFilter.addDataScheme(ContentResolver.SCHEME_FILE);
         getActivity().registerReceiver(mNotificationReceiver, newFilter);
-
-        //the input manager service
-        mImm = (InputMethodManager) getActivity().getSystemService(
-                Context.INPUT_METHOD_SERVICE);
-
-        // Set the theme before setContentView
-        ThemeManager.Theme theme = ThemeManager.getCurrentTheme(getActivity());
-        theme.setBaseThemeNoActionBar(getActivity());
 
         //Set the main layout of the activity
         mView = inflater.inflate(R.layout.nav_fragment, container, false);
@@ -558,58 +482,8 @@ public class NavigationFragment extends Fragment
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.mnu_actions_select_all:
-                getCurrentNavigationView().onSelectAllVisibleItems();
-                return true;
-            case R.id.mnu_actions_refresh:
-                onRequestRefresh(null, false);
-                return true;
-            case R.id.mnu_actions_search:
-                toggleSearch();
-                return true;
-            case R.id.mnu_actions_sort:
-                SortViewOptions.createSortDialog(getActivity(),
-                        FileManagerSettings.SETTINGS_SORT_MODE,
-                        new SortViewOptions.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which, int result) {
-                                if (which == DialogInterface.BUTTON_POSITIVE) {
-                                    if (PreferenceHelper.getIntPreference(
-                                            FileManagerSettings.SETTINGS_SORT_MODE) != result) {
-                                        updateSetting(
-                                                FileManagerSettings.SETTINGS_SORT_MODE, result);
-                                    }
-                                }
-                            }
-                        })
-                        .show();
-                return true;
-            case R.id.mnu_actions_new_directory:
-                ActionsDialog.showInputNameDialog(getActivity(),
-                        getString(R.string.actions_menu_new_directory), item.getItemId(),
-                        getCurrentNavigationView().getFiles(), getCurrentNavigationView(), this);
-                return true;
-            case R.id.mnu_actions_new_file:
-                ActionsDialog.showInputNameDialog(getActivity(),
-                        getString(R.string.actions_menu_new_file), item.getItemId(),
-                        getCurrentNavigationView().getFiles(), getCurrentNavigationView(), this);
-                return true;
-            case R.id.mnu_actions_properties_current_folder:
-                InfoActionPolicy.showPropertiesDialog(getActivity(),
-                        getCurrentNavigationView().getCurrentFso(), this);
-                return true;
-            case R.id.mnu_actions_file_system_info:
-                if (mMountPoint != null && mDiskUsage != null) {
-                    showMountPointInfo(mMountPoint, mDiskUsage);
-                } else {
-                    Toast.makeText(getActivity(), getString(R.string.file_system_info_unavailable),
-                            Toast.LENGTH_SHORT).show();
-                }
-                return true;
-            default:
-                return false;
-        }
+        fileActions(item, null);
+        return true;
     }
 
     @Override
@@ -736,144 +610,8 @@ public class NavigationFragment extends Fragment
      */
     private void initSelectionBar() {
         this.mSelectionBar = (SelectionView) mView.findViewById(R.id.navigation_selectionbar);
-    }
-
-    /**
-     * Method that initializes the navigation drawer of the activity.
-     */
-    private void initDrawer() {
-        // TODO: Move into MainActivity or remove altogether.
-        /*mDrawerLayout = (android.support.v4.widget.DrawerLayout) mView.findViewById(
-                R.id.drawer_layout);
-        //Set our status bar color
-        mDrawerLayout.setStatusBarBackgroundColor(R.color.material_palette_blue_primary_dark);
-        mDrawer = (ViewGroup) mView.findViewById(
-                R.id.drawer);
-        mDrawerBookmarks = (android.widget.LinearLayout) mView.findViewById(
-                R.id.bookmarks_list);
-        mDrawerHistory = (android.widget.LinearLayout) mView.findViewById(
-                R.id.history_list);
-        mDrawerHistoryEmpty = (TextView) mView.findViewById(
-                R.id.history_empty);
-
-        mBookmarksLayout = mView.findViewById(R.id.drawer_bookmarks);
-        mHistoryLayout = mView.findViewById(R.id.drawer_history);
-        mBookmarksTab = (TextView) mView.findViewById(
-                R.id.drawer_bookmarks_tab);
-        mHistoryTab = (TextView) mView.findViewById(
-                R.id.drawer_history_tab);
-        mBookmarksTab.setOnClickListener(mOnClickDrawerTabListener);
-        mHistoryTab.setOnClickListener(mOnClickDrawerTabListener);
-
-        mSettings = (cButtonItem) mView.findViewById(
-                R.id.ab_settings);
-        mSettings.setOnClickListener(mOnClickDrawerActionBarListener);
-        mClearHistory = (cButtonItem) mView.findViewById(
-                R.id.ab_clear_history);
-        mClearHistory.setOnClickListener(mOnClickDrawerActionBarListener);
-
-        // Restore the last tab pressed
-        Integer lastTab = Preferences.getSharedPreferences().getInt(
-                FileManagerSettings.USER_PREF_LAST_DRAWER_TAB.getId(),
-                (Integer) FileManagerSettings.USER_PREF_LAST_DRAWER_TAB
-                        .getDefaultValue());
-        mOnClickDrawerTabListener.onClick(lastTab == 0 ? mBookmarksTab : mHistoryTab);
-
-        // Set the navigation drawer "hamburger" icon
-        mDrawerToggle = new android.support.v4.app.ActionBarDrawerToggle(getActivity(),
-                mDrawerLayout,
-                R.drawable.ic_material_light_navigation_drawer,
-                R.string.drawer_open, R.string.drawer_close) {
-
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                onDrawerLayoutOpened(drawerView);
-                super.onDrawerOpened(drawerView);
-            }
-        };
-        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-
-        // Set the drawer toggle as the DrawerListener
-        mDrawerLayout.setDrawerListener(mDrawerToggle);*/
-    }
-
-    /***
-     * Method that do something when the DrawerLayout opened.
-     */
-    private void onDrawerLayoutOpened(View drawerView){
-        if (mSearchView != null && mSearchView.getVisibility() == View.VISIBLE) {
-            closeSearch();
-            hideSoftInput(drawerView);
-        }
-    }
-
-    /**
-     * Method that hide the software when the software showing.
-     *
-     * */
-    private void hideSoftInput(View view){
-        if (mImm != null) {
-            mImm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-    }
-
-    /**
-     * Method that adds a history entry to the history list in the drawer
-     */
-    private void addHistoryToDrawer(int index, HistoryNavigable navigable) {
-        // hide empty message
-        mDrawerHistoryEmpty.setVisibility(View.GONE);
-
-        Theme theme = ThemeManager.getCurrentTheme(getActivity());
-        IconHolder iconholder = new IconHolder(getActivity(), false);
-
-        // inflate single bookmark layout item and fill it
-        LinearLayout view = (LinearLayout) mLayoutInflater.inflate(
-                R.layout.history_item, null);
-
-        ImageView iconView = (ImageView) view
-                .findViewById(R.id.history_item_icon);
-        TextView name = (TextView) view.findViewById(R.id.history_item_name);
-        TextView directory = (TextView) view
-                .findViewById(R.id.history_item_directory);
-
-        int iconResId = R.drawable.ic_folder;
-        if (navigable instanceof SearchInfoParcelable) {
-            iconResId = R.drawable.ic_history_search_drawable;
-        }
-        iconView.setImageResource(iconResId);
-
-        String title = navigable.getTitle();
-        if (title == null || title.trim().length() == 0) {
-            title = getString(R.string.root_directory_name);
-        }
-
-        name.setText(title);
-        directory.setText(navigable.getDescription());
-
-        theme.setTextColor(getActivity(), name, "text_color");
-        theme.setTextColor(getActivity(), directory, "text_color");
-
-        // handle item click
-        view.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final int index = mDrawerHistory.indexOfChild(v);
-                final int count = mDrawerHistory.getChildCount();
-                final History history = mHistory.get(count - index - 1);
-
-                navigateToHistory(history);
-            }
-        });
-
-        // add as first child
-        mDrawerHistory.addView(view, 0);
-
-        // Show clear button if history tab is selected
-        mClearHistory.setVisibility(mHistoryTab.isSelected() ? View.VISIBLE : View.GONE);
+        this.mSelectionBar.setMenuClickListener(this);
+        this.mSelectionBar.setNavigationView(getCurrentNavigationView());
     }
 
     /**
@@ -890,7 +628,6 @@ public class NavigationFragment extends Fragment
     private void attachNavigationViewListeners() {
         this.mNavigationView.setOnHistoryListener(this);
         this.mNavigationView.setOnNavigationSelectionChangedListener(this);
-        this.mNavigationView.setOnNavigationOnRequestMenuListener(this);
         this.mNavigationView.setOnDirectoryChangedListener(this);
         this.mNavigationView.setOnBackRequestListener(mOnBackRequestListener);
     }
@@ -901,7 +638,6 @@ public class NavigationFragment extends Fragment
     private void removeNavigationViewListeners() {
         this.mNavigationView.setOnHistoryListener(null);
         this.mNavigationView.setOnNavigationSelectionChangedListener(null);
-        this.mNavigationView.setOnNavigationOnRequestMenuListener(null);
         this.mNavigationView.setOnDirectoryChangedListener(null);
         this.mNavigationView.setOnBackRequestListener(null);
     }
@@ -1090,7 +826,7 @@ public class NavigationFragment extends Fragment
         if (data != null) {
             switch (requestCode) {
                 case INTENT_REQUEST_SEARCH:
-                    if (resultCode == getActivity().RESULT_OK) {
+                    if (resultCode == Activity.RESULT_OK) {
                         //Change directory?
                         Bundle bundle = data.getExtras();
                         if (bundle != null) {
@@ -1103,7 +839,7 @@ public class NavigationFragment extends Fragment
                                 getCurrentNavigationView().open(fso, searchInfo);
                             }
                         }
-                    } else if (resultCode == getActivity().RESULT_CANCELED) {
+                    } else if (resultCode == Activity.RESULT_CANCELED) {
                         SearchInfoParcelable searchInfo =
                                 data.getParcelableExtra(EXTRA_SEARCH_LAST_SEARCH_DATA);
                         if (searchInfo != null && searchInfo.isSuccessNavigation()) {
@@ -1185,7 +921,7 @@ public class NavigationFragment extends Fragment
     public void onRequestRefresh(Object o, boolean clearSelection) {
         if (o instanceof FileSystemObject) {
             // Refresh only the item
-            this.getCurrentNavigationView().refresh((FileSystemObject)o);
+            this.getCurrentNavigationView().refresh((FileSystemObject) o);
         } else if (o == null) {
             // Refresh all
             getCurrentNavigationView().refresh();
@@ -1227,21 +963,15 @@ public class NavigationFragment extends Fragment
         // nop
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onSelectionChanged(NavigationView navView, List<FileSystemObject> selectedItems) {
-        this.mSelectionBar.setSelection(selectedItems);
-    }
+    private List<FileSystemObject> mCurrentSelection;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void onRequestMenu(NavigationView navView, FileSystemObject item) {
-        // Show the actions dialog
-        openActionsDialog(item, false);
+    public void onSelectionChanged(NavigationView navView, List<FileSystemObject> selectedItems) {
+        mCurrentSelection = selectedItems;
+        this.mSelectionBar.setSelection(selectedItems);
     }
 
     /**
@@ -1272,8 +1002,8 @@ public class NavigationFragment extends Fragment
                             Preferences.getSharedPreferences().
                                     getBoolean(
                                             setting.getId(),
-                                            ((Boolean)setting.getDefaultValue()).booleanValue());
-                    Preferences.savePreference(setting, Boolean.valueOf(!newval), false);
+                                            (Boolean) setting.getDefaultValue());
+                    Preferences.savePreference(setting, !newval, false);
                 }
                 getCurrentNavigationView().refresh();
             }
@@ -1289,39 +1019,6 @@ public class NavigationFragment extends Fragment
             });
 
         }
-    }
-
-    /**
-     * Method that shows a popup with a menu associated a {@link FileManagerSettings}.
-     *
-     * @param anchor The action button that was pressed
-     * @param settings The array of settings associated with the action button
-     */
-    public void showSettingsPopUp(View anchor, List<FileManagerSettings> settings) {
-        //Create the adapter
-        final MenuSettingsAdapter adapter = new MenuSettingsAdapter(getActivity(), settings);
-
-        //Create a show the popup menu
-        final ListPopupWindow popup = DialogHelper
-                .createListPopupWindow(getActivity(), adapter, anchor);
-        popup.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                FileManagerSettings setting =
-                        ((MenuSettingsAdapter)parent.getAdapter()).getSetting(position);
-                final int value = ((MenuSettingsAdapter)parent.getAdapter()).getId(position);
-                popup.dismiss();
-                updateSetting(setting, value);
-                adapter.dispose();
-            }
-        });
-        popup.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                adapter.dispose();
-            }
-        });
-        popup.show();
     }
 
     /**
@@ -1384,49 +1081,6 @@ public class NavigationFragment extends Fragment
         mDiskUsage = ds;
     }
 
-    /**
-     * Method that checks the action that must be realized when the
-     * back button is pushed.
-     *
-     * @return boolean Indicates if the action must be intercepted
-     */
-    private boolean checkBackAction() {
-        // We need a basic structure to check this
-        if (getCurrentNavigationView() == null) return false;
-
-        if (mSearchView.getVisibility() == View.VISIBLE) {
-            closeSearch();
-        }
-
-        //Check if the configuration view is showing. In this case back
-        //action must be "close configuration"
-        if (getCurrentNavigationView().getCustomTitle().isConfigurationViewShowing()) {
-            getCurrentNavigationView().getCustomTitle().restoreView();
-            return true;
-        }
-
-        //Do back operation over the navigation history
-        boolean flag = this.mExitFlag;
-
-        this.mExitFlag = !back();
-
-        // Retrieve if the exit status timeout has expired
-        long now = System.currentTimeMillis();
-        boolean timeout = (this.mExitBackTimeout == -1 ||
-                            (now - this.mExitBackTimeout) > RELEASE_EXIT_CHECK_TIMEOUT);
-
-        //Check if there no history and if the user was advised in the last back action
-        if (this.mExitFlag && (this.mExitFlag != flag || timeout)) {
-            //Communicate the user that the next time the application will be closed
-            this.mExitBackTimeout = System.currentTimeMillis();
-            DialogHelper.showToast(getActivity(), R.string.msgs_push_again_to_exit,
-                    Toast.LENGTH_SHORT);
-        }
-
-        //Back action not applied
-        return !this.mExitFlag;
-    }
-
     @Override
     public void startActivity(Intent intent) {
         // check if search intent
@@ -1443,8 +1097,6 @@ public class NavigationFragment extends Fragment
      */
     private void clearHistory() {
         this.mHistory.clear();
-        mDrawerHistory.removeAllViews();
-        mDrawerHistoryEmpty.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -1460,12 +1112,9 @@ public class NavigationFragment extends Fragment
                 //Navigation
                 NavigationViewInfoParcelable info =
                         (NavigationViewInfoParcelable)history.getItem();
-                int viewId = info.getId();
                 // Selected items must not be restored from on history navigation
                 info.setSelectedFiles(mNavigationView.getSelectedFiles());
-                if (!mNavigationView.onRestoreState(info)) {
-                    return true;
-                }
+                mNavigationView.onRestoreState(info);
 
             } else if (history.getItem() instanceof SearchInfoParcelable) {
                 //Search (open search with the search results)
@@ -1491,7 +1140,7 @@ public class NavigationFragment extends Fragment
             if (history != null) {
                 Log.e(TAG,
                         String.format("Failed to navigate to history %d: %s", //$NON-NLS-1$
-                                Integer.valueOf(history.getPosition()),
+                                history.getPosition(),
                                 history.getItem().getTitle()), ex);
             } else {
                 Log.e(TAG,
@@ -1599,17 +1248,6 @@ public class NavigationFragment extends Fragment
         mSearchView.onActionViewCollapsed();
         mTitleLayout.findViewById(R.id.navigation_title_landscape_holder)
                 .setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * Method that opens the settings activity.
-     *
-     * @hide
-     */
-    void openSettings() {
-        Intent settingsIntent = new Intent(getActivity(),
-                SettingsPreferences.class);
-        startActivityForResult(settingsIntent, INTENT_REQUEST_SETTINGS);
     }
 
     /**
@@ -1772,14 +1410,6 @@ public class NavigationFragment extends Fragment
      * @hide
      */
     void applyTheme() {
-        int orientation = getResources().getConfiguration().orientation;
-        Theme theme = ThemeManager.getCurrentTheme(getActivity());
-        applyTabTheme();
-
-        //- Layout
-        View navLayout = mView.findViewById(R.id.navigation_layout);
-        navLayout.setBackgroundResource(R.drawable.background_drawable);
-
         // Hackery to theme search view
         mSearchView = (SearchView) mTitleLayout.findViewById(R.id.navigation_search_bar);
         int searchPlateId = mSearchView.getContext().getResources()
@@ -1806,27 +1436,6 @@ public class NavigationFragment extends Fragment
         mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity()
                 .getComponentName()));
         mSearchView.setIconifiedByDefault(false);
-
-        //- SelectionBar
-        View v = mView.findViewById(R.id.navigation_selectionbar);
-        theme.setBackgroundDrawable(getActivity(), v, "selectionbar_drawable"); //$NON-NLS-1$
-        v = mView.findViewById(R.id.ab_selection_done);
-        theme.setImageDrawable(getActivity(),
-                (ImageView)v, "ab_selection_done_drawable"); //$NON-NLS-1$
-        v = mView.findViewById(R.id.navigation_status_selection_label);
-        theme.setTextColor(getActivity(), (TextView)v, "text_color"); //$NON-NLS-1$
-    }
-
-    /**
-     * Method that applies the current theme to the tab host
-     */
-    private void applyTabTheme() {
-        // Apply the theme
-        Theme theme = ThemeManager.getCurrentTheme(getActivity());
-    }
-
-    public void updateActiveDialog(Dialog dialog) {
-        mActiveDialog = dialog;
     }
 
     /*
@@ -1877,6 +1486,271 @@ public class NavigationFragment extends Fragment
 
         if (mOnDirectoryChangedListener != null) {
             mOnDirectoryChangedListener.onDirectoryChanged(item);
+        }
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+
+        if (mSelectionBar != null && mCurrentSelection != null) {
+            fileActions(menuItem, mCurrentSelection);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Method that show a new dialog for input a name for an existing fso.
+     *
+     * @param menuItem The item menu associated
+     * @param fso The file system object
+     * @param allowFsoName If allow that the name of the fso will be returned
+     */
+    private void showFsoInputNameDialog(
+            final MenuItem menuItem, final FileSystemObject fso, final boolean allowFsoName) {
+
+        //Show the input name dialog
+        final InputNameDialog inputNameDialog =
+                new InputNameDialog(
+                        getActivity(),
+                        mCurrentSelection,
+                        fso,
+                        allowFsoName,
+                        menuItem.getTitle().toString());
+        inputNameDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                /// TODO: turn down for what
+            }
+        });
+        inputNameDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                //Retrieve the name an execute the action
+                String name = inputNameDialog.getName();
+                switch (menuItem.getItemId()) {
+                    case R.id.mnu_actions_rename:
+                    case R.id.mnu_actions_rename_selection:
+                        // Rename the fso
+                        if (getCurrentNavigationView() != null) {
+                            CopyMoveActionPolicy.renameFileSystemObject(
+                                    getActivity(),
+                                    getCurrentNavigationView(),
+                                    inputNameDialog.mFso,
+                                    name,
+                                    getCurrentNavigationView(),
+                                    getCurrentNavigationView());
+                        }
+                        break;
+
+                    case R.id.mnu_actions_create_link:
+                    case R.id.mnu_actions_create_link_global:
+                        // Create a link to the fso
+                        if (getCurrentNavigationView() != null) {
+                            NewActionPolicy.createSymlink(
+                                    getActivity(),
+                                    inputNameDialog.mFso,
+                                    name,
+                                    getCurrentNavigationView(),
+                                    getCurrentNavigationView());
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+
+            }
+        });
+        inputNameDialog.show();
+    }
+
+    private void fileActions(MenuItem item, List<FileSystemObject> selection) {
+        switch (item.getItemId()) {
+
+            // Uncompress
+            case R.id.mnu_actions_extract:
+                // make this recursivly uncompress
+                CompressActionPolicy.uncompress(
+                        getActivity(),
+                        selection.get(0),
+                        this);
+                break;
+
+            // Compress
+            case R.id.mnu_actions_compress:
+                if (getCurrentNavigationView() != null) {
+                    CompressActionPolicy.compress(
+                            getActivity(),
+                            selection,
+                            getCurrentNavigationView(),
+                            this);
+                }
+                break;
+
+            // Paste
+            case R.id.mnu_actions_paste:
+                if (getCurrentNavigationView() != null) {
+                    // Select destination
+                    Intent intent = new Intent(INTENT_FOLDER_SELECT);
+                    intent.putExtra(EXTRA_ACTION, COPY.ordinal());
+                    startActivityForResult(intent, INTENT_REQUEST_COPY);
+                }
+                break;
+
+            // Move
+            case R.id.mnu_actions_move:
+                if (getCurrentNavigationView() != null) {
+                    // Select destination
+                    Intent intent = new Intent(INTENT_FOLDER_SELECT);
+                    intent.putExtra(EXTRA_ACTION, MOVE.ordinal());
+                    startActivityForResult(intent, INTENT_REQUEST_MOVE);
+                }
+                break;
+
+            // Add shortcut
+            case R.id.mnu_actions_add_shortcut:
+                IntentsActionPolicy.createShortcut(getActivity(), selection.get(0));
+                break;
+
+            // Compute checksum
+            case R.id.mnu_actions_compute_checksum:
+                InfoActionPolicy.showComputeChecksumDialog(getActivity(), selection.get(0));
+                break;
+
+            // Print
+            case R.id.mnu_actions_print:
+                PrintActionPolicy.printDocument(getActivity(), selection.get(0));
+                break;
+
+            // Create copy
+            case R.id.mnu_actions_create_copy:
+                // copy all the things
+                for (FileSystemObject fso : selection) {
+                    CopyMoveActionPolicy.createCopyFileSystemObject(
+                            getActivity(),
+                            getCurrentNavigationView(),
+                            fso,
+                            getCurrentNavigationView(),
+                            this);
+                }
+                break;
+
+            // Delete
+            case R.id.mnu_actions_delete:
+                DeleteActionPolicy.removeFileSystemObjects(
+                        getActivity(),
+                        getCurrentNavigationView(),
+                        selection,
+                        getCurrentNavigationView(),
+                        getCurrentNavigationView(),
+                        null);
+                break;
+
+            // Open
+            case R.id.mnu_actions_open:
+                IntentsActionPolicy.openFileSystemObject(
+                        getActivity(),
+                        getCurrentNavigationView(),
+                        selection.get(0),
+                        false, null, null);
+                break;
+
+            // Open with
+            case R.id.mnu_actions_open_with:
+                IntentsActionPolicy.openFileSystemObject(
+                        getActivity(),
+                        getCurrentNavigationView(),
+                        selection.get(0),
+                        true, null, null);
+                break;
+
+            // Execute
+            case R.id.mnu_actions_execute:
+                ExecutionActionPolicy.execute(getActivity(), selection.get(0));
+                break;
+
+            // Send
+            case R.id.mnu_actions_send:
+                IntentsActionPolicy.sendMultipleFileSystemObject(
+                        getActivity(), selection, null, null);
+                break;
+
+            // Rename
+            case R.id.mnu_actions_rename:
+                if (getCurrentNavigationView() != null) {
+                    showFsoInputNameDialog(item, selection.get(0), false);
+                }
+                break;
+
+            // select all
+            case R.id.mnu_actions_select_all:
+                getCurrentNavigationView().onSelectAllVisibleItems();
+                break;
+
+            // refresh
+            case R.id.mnu_actions_refresh:
+                onRequestRefresh(null, false);
+                break;
+
+            // search
+            case R.id.mnu_actions_search:
+                toggleSearch();
+                break;
+
+            // sort
+            case R.id.mnu_actions_sort:
+                SortViewOptions.createSortDialog(getActivity(),
+                        FileManagerSettings.SETTINGS_SORT_MODE,
+                        new SortViewOptions.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which, int result) {
+                                if (which == DialogInterface.BUTTON_POSITIVE) {
+                                    if (PreferenceHelper.getIntPreference(
+                                            FileManagerSettings.SETTINGS_SORT_MODE) != result) {
+                                        updateSetting(
+                                                FileManagerSettings.SETTINGS_SORT_MODE, result);
+                                    }
+                                }
+                            }
+                        })
+                        .show();
+                break;
+
+            // new directory
+            case R.id.mnu_actions_new_directory:
+                ActionsDialog.showInputNameDialog(getActivity(),
+                        getString(R.string.actions_menu_new_directory), item.getItemId(),
+                        getCurrentNavigationView().getFiles(), getCurrentNavigationView(), this);
+                break;
+
+            // new file
+            case R.id.mnu_actions_new_file:
+                ActionsDialog.showInputNameDialog(getActivity(),
+                        getString(R.string.actions_menu_new_file), item.getItemId(),
+                        getCurrentNavigationView().getFiles(), getCurrentNavigationView(), this);
+                break;
+
+            // get properties
+            case R.id.mnu_actions_properties_current_folder:
+                InfoActionPolicy.showPropertiesDialog(getActivity(),
+                        getCurrentNavigationView().getCurrentFso(), this);
+                break;
+
+            // get file system info
+            case R.id.mnu_actions_file_system_info:
+                if (mMountPoint != null && mDiskUsage != null) {
+                    showMountPointInfo(mMountPoint, mDiskUsage);
+                } else {
+                    Toast.makeText(getActivity(), getString(R.string.file_system_info_unavailable),
+                            Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            case R.id.mnu_actions_deselect_all:
+                getCurrentNavigationView().onDeselectAll();
+                break;
         }
     }
 }

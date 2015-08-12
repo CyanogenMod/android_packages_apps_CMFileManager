@@ -37,8 +37,6 @@ import com.cyanogenmod.filemanager.preferences.ObjectStringIdentifier;
 import com.cyanogenmod.filemanager.preferences.Preferences;
 import com.cyanogenmod.filemanager.providers.secure.SecureCacheCleanupService;
 import com.cyanogenmod.filemanager.service.MimeTypeIndexService;
-import com.cyanogenmod.filemanager.ui.ThemeManager;
-import com.cyanogenmod.filemanager.ui.ThemeManager.Theme;
 import com.cyanogenmod.filemanager.util.AIDHelper;
 import com.cyanogenmod.filemanager.util.AndroidHelper;
 import com.cyanogenmod.filemanager.util.MimeTypeHelper;
@@ -110,63 +108,6 @@ public final class FileManagerApplication extends Application {
         }
     };
 
-    // A broadcast receiver for detect the install/uninstall of apps (for themes, AIDs, ...)
-    private final BroadcastReceiver mUninstallReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent != null) {
-                if (intent.getAction().compareTo(Intent.ACTION_PACKAGE_REMOVED) == 0 ||
-                    intent.getAction().compareTo(Intent.ACTION_PACKAGE_FULLY_REMOVED) == 0) {
-                    // Check that the remove package is not the current theme
-                    if (intent.getData() != null) {
-                        // --- AIDs
-                        try {
-                            AIDHelper.getAIDs(getApplicationContext(), true);
-                        } catch (Exception e) {
-                            Log.w(TAG, "Failed to reload AIDs", e); //$NON-NLS-1$
-                        }
-
-                        // --- Themes
-                        try {
-                            // Get the package name and remove the schema
-                            String apkPackage = intent.getData().toString();
-                            apkPackage = apkPackage.substring("package:".length()); //$NON-NLS-1$
-
-                            Theme currentTheme = ThemeManager.getCurrentTheme(context);
-                            if (currentTheme.getPackage().compareTo(apkPackage) == 0) {
-                                // The apk that contains the current theme was remove, change
-                                // to default theme
-                                String composedId =
-                                    (String)FileManagerSettings.SETTINGS_THEME.getDefaultValue();
-                                ThemeManager.setCurrentTheme(getApplicationContext(), composedId);
-                                try {
-                                    Preferences.savePreference(
-                                            FileManagerSettings.SETTINGS_THEME, composedId, true);
-                                } catch (Throwable ex) {
-                                    Log.w(TAG, "can't save theme preference", ex); //$NON-NLS-1$
-                                }
-
-                                // Notify the changes to activities
-                                try {
-                                    Intent broadcastIntent =
-                                            new Intent(FileManagerSettings.INTENT_THEME_CHANGED);
-                                    broadcastIntent.putExtra(
-                                            FileManagerSettings.EXTRA_THEME_ID, composedId);
-                                    sendBroadcast(broadcastIntent);
-                                } catch (Throwable ex) {
-                                    Log.w(TAG, "notify of theme change failed", ex); //$NON-NLS-1$
-                                }
-                            }
-                        } catch (Exception e) {
-                            Log.w(TAG, "Failed to reload themes", e); //$NON-NLS-1$
-                        }
-                    }
-                }
-            }
-        }
-    };
-
-
     /**
      * {@inheritDoc}
      */
@@ -203,11 +144,6 @@ public final class FileManagerApplication extends Application {
             /**NON BLOCK**/
         }
         try {
-            unregisterReceiver(this.mUninstallReceiver);
-        } catch (Throwable ex) {
-            /**NON BLOCK**/
-        }
-        try {
             destroyBackgroundConsole();
         } catch (Throwable ex) {
             /**NON BLOCK**/
@@ -228,13 +164,6 @@ public final class FileManagerApplication extends Application {
         IntentFilter filter = new IntentFilter();
         filter.addAction(FileManagerSettings.INTENT_SETTING_CHANGED);
         registerReceiver(this.mNotificationReceiver, filter);
-
-        // Register the uninstall broadcast receiver
-        IntentFilter unfilter = new IntentFilter();
-        unfilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
-        unfilter.addAction(Intent.ACTION_PACKAGE_FULLY_REMOVED);
-        unfilter.addDataScheme("package"); //$NON-NLS-1$
-        registerReceiver(this.mUninstallReceiver, unfilter);
     }
 
     /**
@@ -263,27 +192,6 @@ public final class FileManagerApplication extends Application {
 
         // Read AIDs
         AIDHelper.getAIDs(getApplicationContext(), true);
-
-        // Allocate the default and current themes
-        String defaultValue = ((String)FileManagerSettings.
-                SETTINGS_THEME.getDefaultValue());
-        String value = Preferences.getSharedPreferences().getString(
-                FileManagerSettings.SETTINGS_THEME.getId(),
-                defaultValue);
-        ThemeManager.getDefaultTheme(getApplicationContext());
-        if (!ThemeManager.setCurrentTheme(getApplicationContext(), value)) {
-            //The current theme was not found. Mark the default setting as default theme
-            ThemeManager.setCurrentTheme(getApplicationContext(), defaultValue);
-            try {
-                Preferences.savePreference(
-                        FileManagerSettings.SETTINGS_THEME, defaultValue, true);
-            } catch (Throwable ex) {
-                Log.w(TAG, "can't save theme preference", ex); //$NON-NLS-1$
-            }
-        }
-        // Set the base theme
-        Theme theme = ThemeManager.getCurrentTheme(getApplicationContext());
-        theme.setBaseTheme(getApplicationContext(), false);
 
         //Create a console for background tasks. Register the virtual console prior to
         // the real console so mount point can be listed properly
@@ -342,10 +250,7 @@ public final class FileManagerApplication extends Application {
      * @return boolean If the command is present
      */
     public static boolean hasOptionalCommand(String commandId) {
-        if (!sOptionalCommandsMap.containsKey(commandId)) {
-            return false;
-        }
-        return sOptionalCommandsMap.get(commandId).booleanValue();
+        return sOptionalCommandsMap.containsKey(commandId) && sOptionalCommandsMap.get(commandId);
     }
 
     /**
@@ -461,9 +366,7 @@ public final class FileManagerApplication extends Application {
                 ((ObjectStringIdentifier)FileManagerSettings.
                             SETTINGS_ACCESS_MODE.getDefaultValue()).getId();
         String id = FileManagerSettings.SETTINGS_ACCESS_MODE.getId();
-        AccessMode mode =
-                AccessMode.fromId(Preferences.getSharedPreferences().getString(id, defaultValue));
-        return mode;
+        return AccessMode.fromId(Preferences.getSharedPreferences().getString(id, defaultValue));
     }
 
     public static boolean isRestrictSecondaryUsersAccess(Context context) {
@@ -532,8 +435,8 @@ public final class FileManagerApplication extends Application {
                 Log.w(TAG, "No shell commands."); //$NON-NLS-1$
                 return false;
             }
-            for (int i = 0; i < cc; i++) {
-                String c = commands[i].trim();
+            for (String command : commands) {
+                String c = command.trim();
                 if (c.length() == 0) continue;
                 File cmd = new File(c);
                 if (!cmd.exists() || !cmd.isFile()) {
@@ -593,10 +496,10 @@ public final class FileManagerApplication extends Application {
                 Log.w(TAG, "No optional commands."); //$NON-NLS-1$
                 return;
             }
-            for (int i = 0; i < cc; i++) {
-                String c = commands[i].trim();
+            for (String command : commands) {
+                String c = command.trim();
                 String key = c.substring(0, c.indexOf("=")).trim(); //$NON-NLS-1$
-                c = c.substring(c.indexOf("=")+1).trim(); //$NON-NLS-1$
+                c = c.substring(c.indexOf("=") + 1).trim(); //$NON-NLS-1$
                 if (c.length() == 0) continue;
                 File cmd = new File(c);
                 Boolean found = Boolean.valueOf(cmd.exists() && cmd.isFile());

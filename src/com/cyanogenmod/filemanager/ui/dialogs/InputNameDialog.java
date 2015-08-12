@@ -63,7 +63,7 @@ public class InputNameDialog
     /**
      * @hide
      */
-    final FileSystemObject mFso;
+    public final FileSystemObject mFso;
     private final boolean mAllowFsoName;
 
     private DialogInterface.OnCancelListener mOnCancelListener;

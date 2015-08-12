@@ -204,7 +204,7 @@ public class SearchActivity extends Activity
                 SearchResultAdapter adapter = (SearchResultAdapter)parent.getAdapter();
                 SearchResult result = adapter.getItem(position);
                 if (result != null && result.getFso() != null) {
-                    DeleteActionPolicy.removeFileSystemObject(
+                    DeleteActionPolicy.removeFileSystemObjects(
                             SearchActivity.this,
                             mSearchListView,
                             result.getFso(),
