@@ -16,60 +16,51 @@
 -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:filemanager="http://schemas.android.com/apk/res/com.cyanogenmod.filemanager"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/material_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        app:layout_collapseMode="pin" />
-
-    <com.cyanogenmod.filemanager.ui.widgets.ScrimInsetsFrameLayout
-        android:id="@+id/scrimInsetsFrameLayoutNavigation"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:filemanager="http://schemas.android.com/apk/res/com.cyanogenmod.filemanager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:insetForeground="@color/material_palette_blue_primary_dark">
+        android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+            android:id="@+id/material_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/FileManager.Theme.Material.NoActionBar"
+            app:layout_collapseMode="pin" />
 
         <!-- The main content view -->
-        <LinearLayout
-            android:id="@+id/navigation_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+        <FrameLayout
+                android:id="@+id/navigation_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipChildren="true"
+                android:clipToPadding="true"
+                android:background="@drawable/background_drawable">
+
 
             <!-- Navigation View -->
             <com.cyanogenmod.filemanager.ui.widgets.NavigationView
-                android:id="@+id/navigation_view"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                filemanager:navigation="browsable"/>
-
-            <ListView
-                android:background="@android:color/white"
-                android:id="@+id/lv_easy_mode"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:visibility="gone"/>
+                    android:id="@+id/navigation_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    filemanager:navigation="browsable"
+                    android:clipChildren="true"/>
 
             <!-- SelectionBar -->
             <com.cyanogenmod.filemanager.ui.widgets.SelectionView
-                android:id="@+id/navigation_selectionbar"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/small_row_height"
-                android:background="@drawable/bg_material_selectionbar"
-                android:visibility="invisible"/>
+                    android:id="@+id/navigation_selectionbar"
+                    android:layout_width="match_parent"
+                    android:elevation="6dp"
+                    android:layout_gravity="bottom"
+                    android:layout_height="@dimen/selection_row_height"
+                    android:background="@drawable/bg_material_selectionbar"
+                    android:visibility="invisible"/>
 
-        </LinearLayout>
-
-    </com.cyanogenmod.filemanager.ui.widgets.ScrimInsetsFrameLayout>
+        </FrameLayout>
 
 </LinearLayout>

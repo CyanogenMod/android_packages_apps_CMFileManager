@@ -42,6 +42,14 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="Base.SelectionToolbar" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:textColorPrimary">@color/action_bar_text_color</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColorPrimaryInverse">@color/action_bar_text_color</item>
+        <item name="actionMenuTextColor">@color/text_color</item>
+        <item name="android:textColorSecondary">@color/action_bar_text_color</item>
+    </style>
+
     <style name="Widget.FileManager.ActionBar" parent="Widget.AppCompat.ActionBar">
         <item name="android:background">@color/material_palette_blue_primary</item>
         <item name="android:theme">@style/ThemeOverlay.FileManager.ActionBar</item>
