@@ -24,6 +24,16 @@
         <item quantity="other"><xliff:g id="files">%1$d</xliff:g> files</item>
     </plurals>
 
+    <plurals name="folders">
+        <item quantity="one">Folder</item>
+        <item quantity="other">Folders</item>
+    </plurals>
+
+    <!-- Statusbar text if there are selected files or folders -->
+    <plurals name="selection">
+        <item quantity="other"><xliff:g id="folders">%1$d</xliff:g> selected</item>
+    </plurals>
+
     <!-- Search - Found items -->
     <plurals name="search_found_items">
         <item quantity="one"><xliff:g id="count">%1$d</xliff:g> item found</item>

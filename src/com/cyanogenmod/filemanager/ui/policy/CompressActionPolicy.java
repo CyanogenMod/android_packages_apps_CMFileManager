@@ -137,19 +137,33 @@ public final class CompressActionPolicy extends ActionsPolicy {
      * Method that compresses an uncompressed file.
      *
      * @param ctx The current context
-     * @param fso The compressed file
+     * @param fso The compressed file system object
+     * @param onSelectionListener The listener for obtain selection information (required)
+     * @param onRequestRefreshListener The listener for request a refresh (optional)
+     * @hide
+     */
+    public static void compress(final Context ctx, final FileSystemObject fso,
+                                final OnSelectionListener onSelectionListener,
+                                final OnRequestRefreshListener onRequestRefreshListener) {
+        // Create a list with the item
+        final List<FileSystemObject> items = new ArrayList<FileSystemObject>();
+        items.add(fso);
+        compress(ctx, items, onSelectionListener, onRequestRefreshListener);
+    }
+
+    /**
+     * Method that compresses an uncompressed file.
+     *
+     * @param ctx The current context
+     * @param items The compressed files
      * @param onSelectionListener The listener for obtain selection information (required)
      * @param onRequestRefreshListener The listener for request a refresh (optional)
      * @hide
      */
     public static void compress(
-            final Context ctx, final FileSystemObject fso,
+            final Context ctx, final List<FileSystemObject> items,
             final OnSelectionListener onSelectionListener,
             final OnRequestRefreshListener onRequestRefreshListener) {
-
-        // Create a list with the item
-        final List<FileSystemObject> items = new ArrayList<FileSystemObject>();
-        items.add(fso);
 
         // Show a dialog to allow the user make the compression mode choice
         final String[] labels = getSupportedCompressionModesLabels(ctx, items);
