@@ -17,14 +17,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/navigation_view_details_item"
   android:layout_width="match_parent"
-  android:layout_height="@dimen/navigation_view_simple_item_height"
+  android:layout_height="@dimen/navigation_view_simple_item_small_height"
   android:orientation="horizontal"
   android:background="@drawable/navigation_item_background">
 
   <com.cyanogenmod.filemanager.ui.widgets.FixedSizeImageView
     android:id="@+id/navigation_view_item_icon"
-    android:layout_marginStart="@dimen/navigation_view_simple_item_icon_margin"
-    android:layout_marginEnd="@dimen/navigation_view_simple_item_icon_margin"
+    android:layout_marginStart="@dimen/navigation_view_simple_item_small_icon_margin"
+    android:layout_marginEnd="@dimen/navigation_view_simple_item_small_icon_margin"
     android:layout_width="@dimen/circle_icon_wh"
     android:layout_height="@dimen/circle_icon_wh"
     android:layout_gravity="center_vertical"
@@ -41,12 +41,5 @@
     android:singleLine="true"
     android:ellipsize="middle"
     android:textAppearance="@style/primary_text_appearance" />
-
-  <com.cyanogenmod.filemanager.ui.widgets.TransparentNonFocusableButtonItem
-    android:id="@+id/navigation_view_item_info"
-    android:layout_width="@dimen/item_menu_row_button_width"
-    android:layout_height="match_parent"
-    android:contentDescription="@null"
-    android:src="@drawable/ic_details" />
 
 </LinearLayout>
