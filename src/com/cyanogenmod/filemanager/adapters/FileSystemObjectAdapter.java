@@ -216,10 +216,16 @@ public class FileSystemObjectAdapter
             viewHolder.mTvSummary = (TextView)v.findViewById(RESOURCE_ITEM_SUMMARY);
             viewHolder.mBtInfo = (ImageButton) v.findViewById(RESOURCE_ITEM_INFO);
             if (!mPickable) {
-                viewHolder.mIvIcon.setOnClickListener(this);
-                viewHolder.mBtInfo.setOnClickListener(this);
+                if (viewHolder.mIvIcon != null) {
+                    viewHolder.mIvIcon.setOnClickListener(this);
+                }
+                if (viewHolder.mBtInfo != null) {
+                    viewHolder.mBtInfo.setOnClickListener(this);
+                }
             } else {
-                viewHolder.mBtInfo.setVisibility(View.GONE);
+                if (viewHolder.mBtInfo != null) {
+                    viewHolder.mBtInfo.setVisibility(View.GONE);
+                }
             }
             v.setTag(viewHolder);
         }

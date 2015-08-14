@@ -19,16 +19,15 @@ package com.cyanogenmod.filemanager.activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -42,23 +41,25 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.ListPopupWindow;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cyanogenmod.filemanager.R;
 import com.cyanogenmod.filemanager.adapters.CheckableListAdapter;
 import com.cyanogenmod.filemanager.adapters.CheckableListAdapter.CheckableItem;
+import com.cyanogenmod.filemanager.adapters.FileSystemObjectAdapter;
+import com.cyanogenmod.filemanager.adapters.PickerAdapter;
 import com.cyanogenmod.filemanager.console.ConsoleBuilder;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
+import com.cyanogenmod.filemanager.model.RootDirectory;
 import com.cyanogenmod.filemanager.preferences.DisplayRestrictions;
-import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
-import com.cyanogenmod.filemanager.preferences.Preferences;
 import com.cyanogenmod.filemanager.ui.ThemeManager;
 import com.cyanogenmod.filemanager.ui.ThemeManager.Theme;
-import com.cyanogenmod.filemanager.ui.widgets.Breadcrumb;
-import com.cyanogenmod.filemanager.ui.widgets.ButtonItem;
 import com.cyanogenmod.filemanager.ui.widgets.NavigationView;
 import com.cyanogenmod.filemanager.ui.widgets.NavigationView.OnDirectoryChangedListener;
 import com.cyanogenmod.filemanager.ui.widgets.NavigationView.OnFilePickedListener;
+import com.cyanogenmod.filemanager.ui.widgets.ToggleSwipeViewPager;
 import com.cyanogenmod.filemanager.util.DialogHelper;
 import com.cyanogenmod.filemanager.util.ExceptionUtil;
 import com.cyanogenmod.filemanager.util.FileHelper;
@@ -67,17 +68,20 @@ import com.cyanogenmod.filemanager.util.MimeTypeHelper;
 import com.cyanogenmod.filemanager.util.StorageHelper;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.cyanogenmod.filemanager.adapters.PickerAdapter.ListType;
+
 /**
  * The activity for allow to use a {@link NavigationView} like, to pick a file from other
  * application.
  */
-public class PickerActivity extends Activity
-        implements OnCancelListener, OnDismissListener, OnFilePickedListener, OnDirectoryChangedListener {
+public class PickerActivity extends Activity implements OnCancelListener, OnDismissListener,
+        OnFilePickedListener, OnDirectoryChangedListener {
 
     private static final String TAG = "PickerActivity"; //$NON-NLS-1$
 
@@ -137,7 +141,12 @@ public class PickerActivity extends Activity
      * @hide
      */
     NavigationView mNavigationView;
+    /**
+     * @hide
+     */
+    ListView mRootListView;
     private View mRootView;
+    private ToggleSwipeViewPager mViewPager;
 
     /**
      * {@inheritDoc}
@@ -262,21 +271,34 @@ public class PickerActivity extends Activity
             }
         });
 
-        // Breadcrumb
-        Breadcrumb breadcrumb = (Breadcrumb)this.mRootView.findViewById(R.id.breadcrumb_view);
-        // Set the free disk space warning level of the breadcrumb widget
-        String fds = Preferences.getSharedPreferences().getString(
-                FileManagerSettings.SETTINGS_DISK_USAGE_WARNING_LEVEL.getId(),
-                (String)FileManagerSettings.SETTINGS_DISK_USAGE_WARNING_LEVEL.getDefaultValue());
-        breadcrumb.setFreeDiskSpaceWarningLevel(Integer.parseInt(fds));
+        // Get the viewPager
+        this.mViewPager = (ToggleSwipeViewPager)this.mRootView.findViewById(R.id.picker_viewpager);
+        this.mViewPager.setAdapter(new PickerAdapter());
+        this.mViewPager.setSwipeEnabled(false);
+
+        // Roots listview
+        mRootListView = (ListView)this.mRootView.findViewById(R.id.roots_listview);
+        mRootListView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(final AdapterView<?> parent, View view, final int position,
+                    long id) {
+                // Navigate to new directory
+                final FileSystemObject fso =
+                        ((FileSystemObjectAdapter)parent.getAdapter()).getItem(position);
+                final RootDirectory rootDir = (RootDirectory)fso;
+                PickerActivity.this.mNavigationView.setPrimaryColor(rootDir.getPrimaryColor());
+                PickerActivity.this.mNavigationView.changeCurrentDir(rootDir.getRootPath());
+            }
+        });
+        GetStorageVolumesTask task =
+                new GetStorageVolumesTask(this.getApplicationContext(), mRootListView);
+        task.execute();
 
         // Navigation view
-        this.mNavigationView =
-                (NavigationView)this.mRootView.findViewById(R.id.navigation_view);
+        this.mNavigationView = (NavigationView)this.mRootView.findViewById(R.id.navigation_view);
         this.mNavigationView.setRestrictions(restrictions);
         this.mNavigationView.setOnFilePickedListener(this);
         this.mNavigationView.setOnDirectoryChangedListener(this);
-        this.mNavigationView.setBreadcrumb(breadcrumb);
 
         // Get dialog title and positive button, default to picker_title and select respectively
         ACTION_MODE pickerMode = ACTION_MODE.SELECT;
@@ -304,7 +326,6 @@ public class PickerActivity extends Activity
         // Create the dialog
         this.mDialog = DialogHelper.createDialog(
                 this, R.mipmap.ic_launcher_filemanager, titleId, this.mRootView);
-
         this.mDialog.setButton(
                 DialogInterface.BUTTON_NEGATIVE,
                 getString(R.string.cancel),
@@ -314,6 +335,14 @@ public class PickerActivity extends Activity
                 dlg.cancel();
             }
         });
+        View titleView = getLayoutInflater().inflate(R.layout.picker_header, null);
+        if (titleView != null) {
+            TextView textView = (TextView)titleView.findViewById(R.id.header_text);
+            if (textView != null) {
+                textView.setText(titleId);
+                this.mDialog.setCustomTitle(titleView);
+            }
+        }
         if (pickingDirectory) {
             this.mDialog.setButton(
                     DialogInterface.BUTTON_POSITIVE,
@@ -331,27 +360,17 @@ public class PickerActivity extends Activity
         this.mDialog.setOnDismissListener(this);
         DialogHelper.delegateDialogShow(this, this.mDialog);
 
-        // Set content description of storage volume button
-        ButtonItem fs = (ButtonItem)this.mRootView.findViewById(R.id.ab_filesystem_info);
-        fs.setContentDescription(getString(R.string.actionbar_button_storage_cd));
-
         final File initialDir = getInitialDirectoryFromIntent(getIntent());
         final String rootDirectory;
 
-        if (initialDir != null) {
-            rootDirectory = initialDir.getAbsolutePath();
+        if (initialDir == null) {
+            mViewPager.setCurrentItem(ListType.ROOTS_LISTVIEW.ordinal(), false);
         } else {
-            rootDirectory = FileHelper.ROOTS_LIST;
-        }
+            rootDirectory = initialDir.getAbsolutePath();
 
-        this.mHandler = new Handler();
-        this.mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                // Navigate to. The navigation view will redirect to the appropriate directory
-                PickerActivity.this.mNavigationView.changeCurrentDir(rootDirectory);
-            }
-        });
+            // Navigate to. The navigation view will redirect to the appropriate directory
+            PickerActivity.this.mNavigationView.changeCurrentDir(rootDirectory);
+        }
 
     }
 
@@ -578,18 +597,15 @@ public class PickerActivity extends Activity
      */
     @Override
     public void onDirectoryChanged(FileSystemObject item) {
-        int visibility = View.VISIBLE;
         this.mCurrentDirectory = item;
         if (TextUtils.equals(mCurrentDirectory.getName(), FileHelper.ROOTS_LIST)
                 && mCurrentDirectory.getParent() == null) {
             mDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-            visibility = View.GONE;
+            // show roots list
+            changeListView(ListType.ROOTS_LISTVIEW);
         } else {
+            changeListView(ListType.NAVIGATION_VIEW);
             mDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
-        }
-        View breadView = mRootView.findViewById(R.id.breadcrumb_view);
-        if (breadView != null && breadView.getVisibility() != visibility) {
-            breadView.setVisibility(visibility);
         }
     }
 
@@ -619,6 +635,12 @@ public class PickerActivity extends Activity
     private void cancel() {
         setResult(Activity.RESULT_CANCELED);
         finish();
+    }
+
+    private void changeListView(ListType type) {
+        if (mViewPager.getCurrentItem() != type.ordinal()) {
+            mViewPager.setCurrentItem(type.ordinal(), false);
+        }
     }
 
     /**
@@ -667,5 +689,32 @@ public class PickerActivity extends Activity
             }
         });
         popup.show();
+    }
+
+    private static class GetStorageVolumesTask
+            extends AsyncTask<Void, String, List<FileSystemObject>> {
+        private Context mContext;
+        private WeakReference<ListView> mView;
+
+        public GetStorageVolumesTask(final Context context, final ListView view) {
+            mContext = context.getApplicationContext();
+            mView = new WeakReference<ListView>(view);
+        }
+
+        @Override
+        protected List<FileSystemObject> doInBackground(Void... params) {
+            List<FileSystemObject> volumes =
+                    StorageHelper.getStorageVolumesFileSystemObjectList(mContext);
+            return volumes;
+        }
+
+        @Override
+        protected void onPostExecute(List<FileSystemObject> volumes) {
+            FileSystemObjectAdapter fsoAdapter = new FileSystemObjectAdapter(mContext, volumes,
+                    R.layout.navigation_view_simple_item, true);
+            if (mView != null && mView.get() != null) {
+                mView.get().setAdapter(fsoAdapter);
+            }
+        }
     }
 }
