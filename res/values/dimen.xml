@@ -19,9 +19,9 @@
     <!-- The primary text size -->
     <dimen name="title_text_size">16sp</dimen>
     <!-- The primary text size -->
-    <dimen name="primary_text_size">14sp</dimen>
+    <dimen name="primary_text_size">16sp</dimen>
     <!-- The secondary text size -->
-    <dimen name="secondary_text_size">12sp</dimen>
+    <dimen name="secondary_text_size">14sp</dimen>
     <!-- The dialog_title text size -->
     <dimen name="dialog_title_text_size">16sp</dimen>
     <!-- The note text size -->
@@ -73,10 +73,22 @@
     <!-- The default vertical grid spacing -->
     <dimen name="default_vertical_grid_spacing">8dp</dimen>
 
-    <!-- The navigation view details item row height -->
+    <!-- The navigation view details item icon margin -->
     <dimen name="navigation_view_details_item_icon_margin">16dp</dimen>
     <!-- The navigation view details item row height -->
     <dimen name="navigation_view_details_item_height">72dp</dimen>
+
+    <!-- The navigation view simple item icon margint -->
+    <dimen name="navigation_view_simple_item_icon_margin">24dp</dimen>
+    <!-- The navigation view simple view  item height -->
+    <dimen name="navigation_view_simple_item_height">72dp</dimen>
+    <!-- The navigation view simple item small icon margint -->
+    <dimen name="navigation_view_simple_item_small_icon_margin">16dp</dimen>
+    <!-- The navigation view simple view (small) item height -->
+    <dimen name="navigation_view_simple_item_small_height">56dp</dimen>
+    <!-- The navigation view simple view (small) icon size -->
+    <dimen name="navigation_view_simple_item_small_icon_size">24dp</dimen>
+    <dimen name="small_icon_size">24dp</dimen>
 
     <!-- The navigation grid width -->
     <dimen name="navigation_grid_width">85dp</dimen>
@@ -161,6 +173,11 @@
     <dimen name="drawer_header_height">180dp</dimen>
     <!-- Drawer header background (image) height -->
     <dimen name="drawer_header_backgound_height">172dp</dimen>
+
+    <!-- Picker header height -->
+    <dimen name="picker_header_height">72dp</dimen>
+    <!-- Picker left margin -->
+    <dimen name="picker_default_margin">24dp</dimen>
 
     <!-- usage graph stuff -->
     <dimen name="legend_title_textSize">9sp</dimen>

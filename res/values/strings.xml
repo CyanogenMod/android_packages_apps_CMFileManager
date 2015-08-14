@@ -355,8 +355,8 @@
     <!-- Picker Activity -->
     <string name="picker" translatable="false">@string/app_name</string>
     <!-- Picker Activity - Dialog title -->
-    <string name="picker_title">Pick a file</string>
-    <string name="directory_picker_title">Pick a directory</string>
+    <string name="picker_title">Open from</string>
+    <string name="directory_picker_title">Open from</string>
     <string name="picker_copy_title">Copy to</string>
     <string name="picker_move_title">Move to</string>
 
@@ -921,7 +921,7 @@
     <string name="snackbar_unable_to_complete">Unable to complete action</string>
     <string name="snackbar_retry">RETRY</string>
     <string name="snackbar_upgrade">UPGRADE</string>
-    
+
     <!-- File System info -->
     <string name="file_system_info_unavailable">Unable to fetch file system info for this path</string>
 
