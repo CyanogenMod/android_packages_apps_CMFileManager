@@ -32,7 +32,6 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -50,7 +49,6 @@ import com.cyanogenmod.filemanager.listeners.OnSelectionListener;
 import com.cyanogenmod.filemanager.model.Directory;
 import com.cyanogenmod.filemanager.model.FileSystemObject;
 import com.cyanogenmod.filemanager.model.ParentDirectory;
-import com.cyanogenmod.filemanager.model.RootDirectory;
 import com.cyanogenmod.filemanager.model.Symlink;
 import com.cyanogenmod.filemanager.parcelables.NavigationViewInfoParcelable;
 import com.cyanogenmod.filemanager.parcelables.SearchInfoParcelable;
@@ -60,9 +58,6 @@ import com.cyanogenmod.filemanager.preferences.FileManagerSettings;
 import com.cyanogenmod.filemanager.preferences.NavigationLayoutMode;
 import com.cyanogenmod.filemanager.preferences.ObjectIdentifier;
 import com.cyanogenmod.filemanager.preferences.Preferences;
-import com.cyanogenmod.filemanager.ui.ThemeManager;
-import com.cyanogenmod.filemanager.ui.ThemeManager.Theme;
-import com.cyanogenmod.filemanager.ui.policy.ActionsPolicy;
 import com.cyanogenmod.filemanager.ui.policy.DeleteActionPolicy;
 import com.cyanogenmod.filemanager.ui.policy.IntentsActionPolicy;
 import com.cyanogenmod.filemanager.ui.widgets.FlingerListView.OnItemFlingerListener;
@@ -260,15 +255,9 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
          */
         @Override
         protected List<FileSystemObject> doInBackground(String... params) {
-
-            if (TextUtils.equals(params[0], FileHelper.ROOTS_LIST)) {
-                // If new directory is "Roots list" don't check ChRooted evnironment
-                mNewDirChecked = params[0];
-            } else {
-                // Check navigation security (don't allow to go outside the ChRooted environment if one
-                // is created)
-                mNewDirChecked = checkChRootedNavigation(params[0]);
-            }
+            // Check navigation security (don't allow to go outside the ChRooted environment if one
+            // is created)
+            mNewDirChecked = checkChRootedNavigation(params[0]);
 
             //Check that it is really necessary change the directory
             mHasChanged = !(NavigationView.this.mCurrentDir != null &&
@@ -301,26 +290,17 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
                 }
 
                 List<FileSystemObject> files = null;
-                if (TextUtils.equals(mNewDirChecked, FileHelper.ROOTS_LIST)) {
-                    files = StorageHelper.getStorageVolumesFileSystemObjectList(getContext());
-                } else {
-                    //Get the files, resolve links and apply configuration
-                    //(sort, hidden, ...)
-                    files = NavigationView.this.mFiles;
-                    if (!mUseCurrent) {
-                        files = CommandHelper.listFiles(getContext(), mNewDirChecked, null);
-                        mNewDirFSO = CommandHelper.getFileInfo(getContext(), mNewDirChecked, null);
-                    }
+                //Get the files, resolve links and apply configuration
+                //(sort, hidden, ...)
+                files = NavigationView.this.mFiles;
+                if (!mUseCurrent) {
+                    files = CommandHelper.listFiles(getContext(), mNewDirChecked, null);
+                    mNewDirFSO = CommandHelper.getFileInfo(getContext(), mNewDirChecked, null);
                 }
 
-                List<FileSystemObject> sortedFiles = null;
-                if (!TextUtils.equals(FileHelper.ROOTS_LIST, mNewDirChecked)) {
-                    //Apply user preferences
-                    sortedFiles = FileHelper.applyUserPreferences(files, this.mRestrictions,
-                            this.mChRooted);
-                } else {
-                    sortedFiles = files;
-                }
+                //Apply user preferences
+                List<FileSystemObject> sortedFiles =
+                        FileHelper.applyUserPreferences(files, this.mRestrictions, this.mChRooted);
 
                 return sortedFiles;
 
@@ -486,14 +466,11 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
      */
     AdapterView<?> mAdapterView;
 
-    //The layout for icons mode
-    private static final int RESOURCE_MODE_ICONS_LAYOUT = R.layout.navigation_view_icons;
-    private static final int RESOURCE_MODE_ICONS_ITEM = R.layout.navigation_view_icons_item;
     //The layout for simple mode
-    private static final int RESOURCE_MODE_SIMPLE_LAYOUT = R.layout.navigation_view_simple;
-    private static final int RESOURCE_MODE_SIMPLE_ITEM = R.layout.navigation_view_simple_item;
+    private static final int RESOURCE_MODE_LAYOUT = R.layout.navigation_view;
+    private static final int RESOURCE_MODE_SIMPLE_ITEM_small =
+            R.layout.navigation_view_simple_item_small;
     //The layout for details mode
-    private static final int RESOURCE_MODE_DETAILS_LAYOUT = R.layout.navigation_view_details;
     private static final int RESOURCE_MODE_DETAILS_ITEM = R.layout.navigation_view_details_item;
 
     //The current layout identifier (is shared for all the mode layout)
@@ -910,8 +887,8 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
 
         } else */if (newMode.compareTo(NavigationLayoutMode.SIMPLE) == 0) {
             newView = (AdapterView<ListAdapter>)LayoutInflater.from(getContext()).inflate(
-                    RESOURCE_MODE_SIMPLE_LAYOUT, this, false);
-            itemResourceId = RESOURCE_MODE_SIMPLE_ITEM;
+                    RESOURCE_MODE_LAYOUT, this, false);
+            itemResourceId = RESOURCE_MODE_SIMPLE_ITEM_small;
 
             // Set the flinger listener (only when navigate)
             if (this.mNavigationMode.compareTo(NAVIGATION_MODE.BROWSABLE) == 0) {
@@ -923,7 +900,7 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
 
         } else if (newMode.compareTo(NavigationLayoutMode.DETAILS) == 0) {
             newView = (AdapterView<ListAdapter>)LayoutInflater.from(getContext()).inflate(
-                    RESOURCE_MODE_DETAILS_LAYOUT, this, false);
+                    RESOURCE_MODE_LAYOUT, this, false);
             itemResourceId = RESOURCE_MODE_DETAILS_ITEM;
 
             // Set the flinger listener (only when navigate)
@@ -1147,16 +1124,14 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
             }
 
             //Remove parent directory if we are in the root of a chrooted environment
-            if (this.mChRooted && StorageHelper.isStorageVolume(newDir) ||
-                    TextUtils.equals(newDir, FileHelper.ROOT_DIRECTORY)) {
+            if (this.mChRooted && StorageHelper.isStorageVolume(newDir)) {
                 if (files.size() > 0 && files.get(0) instanceof ParentDirectory) {
                     files.remove(0);
                 }
                 if (mNavigationMode.compareTo(NAVIGATION_MODE.PICKABLE) == 0) {
                     files.add(0, new ParentDirectory(FileHelper.ROOTS_LIST));
                 }
-            } else if (!TextUtils.equals(FileHelper.ROOTS_LIST, newDir) &&
-                    files.size() > 0 && !(files.get(0) instanceof ParentDirectory)) {
+            } else if (files.size() > 0 && !(files.get(0) instanceof ParentDirectory)) {
                 if (mNavigationMode.compareTo(NAVIGATION_MODE.PICKABLE) == 0) {
                     files.add(0, new ParentDirectory(FileHelper.ROOTS_LIST));
                 }
@@ -1293,7 +1268,15 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
         try {
             FileSystemObject fso = ((FileSystemObjectAdapter)parent.getAdapter()).getItem(position);
             if (fso instanceof ParentDirectory) {
-                changeCurrentDir(fso.getParent(), true, false, false, null, null);
+                if (TextUtils.equals(fso.getParent(), FileHelper.ROOTS_LIST)) {
+                    if (this.mOnDirectoryChangedListener != null) {
+                        FileSystemObject dir =
+                                FileHelper.createFileSystemObject(new File(FileHelper.ROOTS_LIST));
+                        this.mOnDirectoryChangedListener.onDirectoryChanged(dir);
+                    }
+                } else {
+                    changeCurrentDir(fso.getParent(), true, false, false, null, null);
+                }
                 return;
             } else if (fso instanceof Directory) {
                 changeCurrentDir(fso.getFullPath(), true, false, false, null, null);
@@ -1308,10 +1291,6 @@ BreadcrumbListener, OnSelectionChangedListener, OnSelectionListener, OnRequestRe
 
                 // Open the link ref
                 fso = symlink.getLinkRef();
-            } else if (fso instanceof RootDirectory) {
-                RootDirectory rootDirectory = (RootDirectory)fso;
-                changeCurrentDir(rootDirectory.getRootPath(), true);
-                return;
             }
 
             // Open the file (edit or pick)
