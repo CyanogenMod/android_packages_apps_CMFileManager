@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012 The CyanogenMod Project
+<!-- Copyright (C) 2015 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,32 +15,40 @@
  -->
 
 <LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:filemanager="http://schemas.android.com/apk/res/com.cyanogenmod.filemanager"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="@color/default_background"
-  android:orientation="vertical">
-
-  <!-- Breadcrumb -->
-  <com.cyanogenmod.filemanager.ui.widgets.DialogBreadcrumbView
-    android:id="@+id/breadcrumb_view"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:filemanager="http://schemas.android.com/apk/res/com.cyanogenmod.filemanager"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/default_row_height"
-    android:layout_marginStart="@dimen/extra_large_margin"
-    android:layout_marginEnd="@dimen/extra_large_margin"
-    android:visibility="gone"/>
+    android:layout_height="match_parent"
+    android:background="@color/default_background"
+    android:orientation="vertical">
 
-  <include layout="@layout/vertical_divider" />
+    <com.cyanogenmod.filemanager.ui.widgets.PickerHeaderView
+        android:id="@+id/picker_header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/picker_header_height"
+        android:background="@color/picker_header_color" />
 
-  <!-- Picker Navigation View -->
-  <com.cyanogenmod.filemanager.ui.widgets.NavigationView
-    android:id="@+id/navigation_view"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:layout_marginStart="@dimen/extra_margin"
-    android:layout_marginEnd="@dimen/extra_margin"
-    filemanager:navigation="pickable" />
+    <com.cyanogenmod.filemanager.ui.widgets.ToggleSwipeViewPager
+        android:id="@+id/picker_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/default_background">
+
+        <!-- Roots View -->
+        <ListView
+            android:id="@+id/roots_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/default_background"
+            android:divider="@null" />
+
+        <!-- Picker Navigation View -->
+        <com.cyanogenmod.filemanager.ui.widgets.NavigationView
+            android:id="@+id/navigation_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            filemanager:navigation="pickable" />
+
+    </com.cyanogenmod.filemanager.ui.widgets.ToggleSwipeViewPager>
 
 </LinearLayout>
