@@ -15,28 +15,54 @@
     limitations under the License.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="272dp"
-    android:height="96dp"
-    android:viewportWidth="272"
-    android:viewportHeight="96">
+    android:width="224dp"
+    android:height="106dp"
+    android:viewportWidth="224"
+    android:viewportHeight="106">
 
-    <group>
+    <group
+        android:name="flying_folder"
+        android:pivotX="112"
+        android:pivotY="48">
+
         <path
+            android:name="folder_back_path"
             android:fillColor="#BBDEFB"
-            android:pathData="M180,10.1h-37.1l-5.8-8.4c-0.7-1.1-2-1.7-3.3-1.7H92c-2.2,0-4,1.8-4,4v16c0-2.2,1.8-4,4-4h88
-c2.2,0,4,1.8,4,4v-5.9C184,11.9,182.2,10.1,180,10.1z" />
+            android:pathData="M156,10.1h-37.1l-5.8-8.4c-0.7-1.1-2-1.7-3.3-1.7H68c-2.2,0-4,1.8-4,4v16c0-2.2,1.8-4,4-4h88
+c2.2,0,4,1.8,4,4v-5.9C160,11.9,158.2,10.1,156,10.1z" />
+
         <path
+            android:name="folder_front_path"
             android:fillColor="#90CAF9"
-            android:pathData="M180,16H92c-2.2,0-4,1.8-4,4v72c0,2.2,1.8,4,4,4h88c2.2,0,4-1.8,4-4V20
-C184,17.8,182.2,16,180,16z" />
-        <path
-            android:fillColor="#FFFFFF"
-            android:pathData="M0,36L0,36c0,4.4,3.6,8,8,8h39c0.6,0,1,0.4,1,1l0,0c0,0.6-0.4,1-1,1H16v0c0,4.4,3.6,8,8,8h31
-c0.6,0,1,0.4,1,1l0,0c0,0.6-0.4,1-1,1H32v0c0,4.4,3.6,8,8,8h30c1.1,0,2-0.9,2-2v-2c0-13.3-10.7-24-24-24H0z" />
-        <path
-            android:fillColor="#FFFFFF"
-            android:pathData="M272,36L272,36c0,4.4-3.6,8-8,8h-39c-0.6,0-1,0.4-1,1l0,0c0,0.6,0.4,1,1,1h31v0
-c0,4.4-3.6,8-8,8h-31c-0.6,0-1,0.4-1,1l0,0c0,0.6,0.4,1,1,1h23v0c0,4.4-3.6,8-8,8h-30c-1.1,0-2-0.9-2-2v-2c0-13.3,10.7-24,24-24
-H272z" />
+            android:pathData="M156,16H68c-2.2,0-4,1.8-4,4v72c0,2.2,1.8,4,4,4h88c2.2,0,4-1.8,4-4V20
+C160,17.8,158.2,16,156,16z" />
+
+        <group
+            android:name="left_wing"
+            android:pivotX="52"
+            android:pivotY="50">
+
+            <path
+                android:name="left_wing_path"
+                android:fillColor="#FFFFFF"
+                android:pathData="M36,40H0c0,3.3,2.7,6,6,6h6c0,3.3,2.7,6,6,6h6c0,3.3,2.7,6,6,6h16c1.1,0,2-0.9,2-2v-4
+C48,45.4,42.6,40,36,40z" />
+
+        </group>
+
+        <group
+            android:name="right_wing"
+            android:pivotX="172"
+            android:pivotY="50">
+
+            <path
+                android:name="right_wing_path"
+                android:fillColor="#FFFFFF"
+                android:pathData="M188,40c-6.6,0-12,5.4-12,12v4c0,1.1,0.9,2,2,2h16c3.3,0,6-2.7,6-6h6c3.3,0,6-2.7,6-6h6
+c3.3,0,6-2.7,6-6H188z" />
+
+        </group>
+
     </group>
+
 </vector>
