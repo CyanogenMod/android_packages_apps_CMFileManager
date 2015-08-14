@@ -144,4 +144,18 @@
     <color name="default_title_indicator_selected_color">#FFFFFFFF</color>
     <color name="default_title_indicator_text_color">#BBFFFFFF</color>
     <color name="default_underline_indicator_selected_color">#FF33B5E5</color>
+
+    <!--OOBE-->
+    <color name="oobe_background_green">#009688</color>
+    <color name="oobe_background_blue">#2196F3</color>
+    <color name="oobe_card_icon">#40000000</color>
+    <color name="cloud_background">#1976D2</color>
+    <color name="colorPrimary">#149284</color>
+    <color name="colorPrimaryDark">#158d7f</color>
+    <color name="colorAccent">#2291e8</color>
+    <color name="textColorPrimary">#d9000000</color>
+    <color name="textColorSecondary">#8c000000</color>
+    <color name="icon_selected">#34000000</color>
+    <color name="icon_unselected">#80ffffff</color>
+    <color name="status_bar_color">#56000000</color>
 </resources>

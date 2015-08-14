@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2015 The CyanogenMod Project
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+          http://www.apache.org/licenses/LICENSE-2.0
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="572dp"
+    android:height="450.1dp"
+    android:viewportWidth="572"
+    android:viewportHeight="450.1">
+
+    <path
+        android:fillColor="#000000"
+        android:fillAlpha=".08"
+        android:strokeAlpha=".08"
+        android:pathData="M178.2,434.5L44.3,300.5l176.2-176.2l7,7L58.3,300.5 l126.9,126.9L178.2,434.5
+M206.4,434.5L72.4,300.5l176.2-176.2l133.9,133.9L206.4,434.5
+M150,434.5L16.1,300.5l176.2-176.2l7.1,7.1 L30.2,300.5L157,427.4L150,434.5
+M248.7,110.2l-14.1,14.1l-14.1-14.1l-14.1,14.1l-14.1-14.1L2,300.5l148,148l14.1-14.1l14.1,14.1
+l14.1-14.1l14.1,14.1l190.3-190.3L248.7,110.2" />
+    <path
+        android:fillColor="#000000"
+        android:fillAlpha=".08"
+        android:strokeAlpha=".08"
+        android:pathData="M557.1,94.6l-77.5-77.5l3.5-3.5c0.9-0.9,2.2-1.5,3.5-1.5
+c1.3,0,2.6,0.5,3.5,1.5L560.6,84c0.9,0.9,1.5,2.2,1.5,3.5c0,1.3-0.5,2.6-1.5,3.5L557.1,94.6
+M458.4,193.3l-77.5-77.5l91.6-91.6 l77.5,77.5L458.4,193.3
+M453.4,103.7l-16.2-16.2l16.2-16.2V103.7
+M444.3,205.3c-1.3,0-2.6-0.5-3.5-1.4l-70.5-70.5
+c-1.9-1.9-1.9-5.1,0-7.1l3.5-3.5l77.5,77.5l-3.5,3.5C446.9,204.8,445.6,205.3,444.3,205.3
+M463.4,47.3l-40.2,40.2l40.2,40.2V47.3
+M486.6,2.1c-4,0-7.7,1.6-10.6,4.4L363.2,119.3c-5.8,5.8-5.8,15.3,0,21.1l70.5,70.5c2.8,2.8,6.6,4.4,10.6,4.4c4,0,7.7-1.6,10.6-4.4
+L567.6,98.1c2.8-2.8,4.4-6.6,4.4-10.6c0-4-1.6-7.8-4.4-10.6L497.1,6.5C494.3,3.7,490.6,2.1,486.6,2.1" />
+</vector>

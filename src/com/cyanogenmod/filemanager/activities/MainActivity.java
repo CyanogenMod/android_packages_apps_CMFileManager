@@ -537,12 +537,14 @@ public class MainActivity extends ActionBarActivity
             Intent intent = new Intent(this, WelcomeActivity.class);
             startActivity(intent);
 
-            try {
-                Preferences.savePreference(FileManagerSettings.SETTINGS_FIRST_USE, Boolean.FALSE,
-                        true);
-            } catch (InvalidClassException e) {
-                e.printStackTrace();
-            }
+
+            // TODO uncomment this to make it a single run for the oobe
+//            try {
+//                Preferences.savePreference(FileManagerSettings.SETTINGS_FIRST_USE, Boolean.FALSE,
+//                        true);
+//            } catch (InvalidClassException e) {
+//                e.printStackTrace();
+//            }
         }
     }
 

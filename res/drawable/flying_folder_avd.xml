@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/flying_folder">
+
+    <target
+        android:name="left_wing"
+        android:animation="@anim/left_wing_rotate"/>
+
+    <target
+        android:name="right_wing"
+        android:animation="@anim/right_wing_rotate"/>
+
+    <target
+        android:name="flying_folder"
+        android:animation="@anim/flying_folder_y"/>
+
+</animated-vector>

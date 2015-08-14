@@ -894,17 +894,48 @@
 
     <string name="activity_not_found_exception">Couldn\'t find an app to open this file</string>
 
-    <string name="add_cloud_storage">Add cloud storage</string>
-    <string name="add_cloud_storage_desc">Important files are a tap away when you link cloud storage to your device. Tap here to set up.</string>
-    <string name="oobe_add_cloud_storage_desc">Important files are a tap away when you link cloud storage to your device.</string>
+    <!--Welcome page 1-->
     <string name="welcome_to">Welcome to</string>
     <string name="file">File</string>
     <string name="manager">Manager</string>
     <string name="welcome_desc">Simple, powerful access to all your data from anywhere.</string>
+
+    <!--Welcome Page 2-->
+    <string name="try_it">Try it</string>
+    <string name="select_a_file">Select a file</string>
+    <string name="select_desc">Selecting files is easy - simply tap an item‘s icon.</string>
+
+    <!--Welcome Page 3-->
+    <string name="take_action">Take action</string>
+    <string name="action_desc">Use the details panel to share, favorite, and more. Special cloud storage options are also available here.</string>
+
+    <!--Welcome Page 4-->
+    <string name="add_cloud_storage">Add cloud storage</string>
+    <string name="cloud_desc">Important files are a tap away when you link cloud storage to your device.</string>
+    <string name="connect_button">CONNECT NOW</string>
 
     <string name="safe_mode_not_allowed">Setting not available in safe mode</string>
 
     <!-- Snackbar messages -->
     <!-- Snackbar message - Storage volume unmounted -->
     <string name="snackbar_storage_volume_unmounted"><xliff:g id="characters">%1$s</xliff:g> was removed.</string>
+
+    <!--Welcome - Device Illustration-->
+    <string name="illustration_item1_title">Party</string>
+    <string name="illustration_item1_info">2 weeks ago</string>
+
+    <string name="illustration_item2_title">Attendees.csv</string>
+    <string name="illustration_item2_info">11KB - 1 week ago</string>
+
+    <string name="illustration_item3_title">Food Menu.pdf</string>
+    <string name="illustration_item3_info">120KB - 1 week ago</string>
+
+    <string name="illustration_item4_title">Movie list.pdf</string>
+    <string name="illustration_item4_info">20KB - 1 week ago</string>
+
+    <string name="share_icon_text">Share</string>
+    <string name="share_link_icon_text">Share\nlink</string>
+    <string name="favorite_icon_text">Favorite</string>
+    <string name="rename_icon_text">Rename</string>
+
 </resources>

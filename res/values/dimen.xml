@@ -180,4 +180,14 @@
     <dimen name="default_title_indicator_footer_line_height">2dp</dimen>
     <dimen name="default_title_indicator_clip_padding">4dp</dimen>
 
+    <!--Welcome-->
+    <dimen name="oobe_background_height">800dp</dimen>
+    <dimen name="oobe_background_width">1007dp</dimen>
+    <dimen name="default_row_height">56dp</dimen>
+
+    <!-- default indicator sizes-->
+    <dimen name="selected_indicator_size">12dp</dimen>
+    <dimen name="unselected_indicator_size">8dp</dimen>
+    <dimen name="indicator_margin">2dp</dimen>
+
 </resources>
