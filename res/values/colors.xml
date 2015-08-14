@@ -52,12 +52,13 @@
     <color name="dark_button_blue">#0277bd</color>
 
     <!-- The default background color -->
-    <color name="default_background">@android:color/white</color>
+    <color name="default_background">#fafafa</color>
     <!-- The default dissabled background color -->
     <color name="default_background_disabled">#f2f2f2</color>
 
     <!-- A black color with some transparency -->
     <color name="black_transparent">#8a000000</color>
+    <color name="black_60">#96000000</color>
 
     <!-- Default navigation drawer colors -->
     <color name="navigation_drawer_title_default">#df000000</color>
@@ -72,6 +73,9 @@
     <!-- The text color of the ActionBar -->
     <color name="action_bar_text_color">@android:color/white</color>
     <color name="action_bar_title_text_color">#deffffff</color>
+
+    <!-- Picker header color -->
+    <color name="picker_header_color">#607d8b</color>
 
     <!-- Breadcrumb text color -->
     <color name="breadcrumb_text_color">#deffffff</color>
