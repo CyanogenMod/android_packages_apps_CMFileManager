@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012 The CyanogenMod Project
+<!-- Copyright (C) 2015 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,11 +13,11 @@
      See the License for the specific language governing permissions and
      limitations under the License.
  -->
-
-<com.cyanogenmod.filemanager.ui.widgets.FlingerListView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/navigation_view_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/navigation_view_item_default_fill"
-    android:divider="@null" />
+    android:layout_height="match_parent">
+
+    <include layout="@layout/picker_header_root" />
+
+</FrameLayout>

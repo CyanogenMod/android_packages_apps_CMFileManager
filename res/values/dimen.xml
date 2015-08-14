@@ -78,6 +78,11 @@
     <!-- The navigation view details item row height -->
     <dimen name="navigation_view_details_item_height">72dp</dimen>
 
+    <!-- The navigation view simple view (small) item height -->
+    <dimen name="navigation_view_simple_item_small_height">56dp</dimen>
+    <!-- The navigation view simple view (small) icon size -->
+    <dimen name="navigation_view_simple_item_small_icon_size">24dp</dimen>
+
     <!-- The navigation grid width -->
     <dimen name="navigation_grid_width">85dp</dimen>
     <!-- The navigation grid height -->
@@ -161,6 +166,11 @@
     <dimen name="drawer_header_height">180dp</dimen>
     <!-- Drawer header background (image) height -->
     <dimen name="drawer_header_backgound_height">172dp</dimen>
+
+    <!-- Picker header height -->
+    <dimen name="picker_header_height">72dp</dimen>
+    <!-- Picker left margin -->
+    <dimen name="picker_default_margin">24dp</dimen>
 
     <!-- usage graph stuff -->
     <dimen name="legend_title_textSize">9sp</dimen>
