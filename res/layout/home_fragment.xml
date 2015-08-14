@@ -120,7 +120,7 @@
                         android:layout_height="wrap_content"/>
 
                     <TextView
-                        android:text="@string/add_cloud_storage_desc"
+                        android:text="@string/cloud_desc"
                         android:id="@+id/cardChildText"
                         android:textColor="@android:color/white"
                         android:textSize="14sp"

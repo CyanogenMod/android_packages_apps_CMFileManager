@@ -87,4 +87,14 @@
         <!-- View background -->
         <attr name="android:background"/>
     </declare-styleable>
+
+    <declare-styleable name="SimplePageIndicator">
+        <attr name="scaleable" format="boolean"/>
+        <attr name="setDrawable" format="reference"/>
+        <attr name="setAlphaSelected" format="float"/>
+        <attr name="setAlphaUnSelected" format="float"/>
+        <attr name="setCount" format="integer"/>
+        <attr name="setSelectedSize" format="dimension"/>
+        <attr name="setUnselectedSize" format="dimension"/>
+    </declare-styleable>
 </resources>

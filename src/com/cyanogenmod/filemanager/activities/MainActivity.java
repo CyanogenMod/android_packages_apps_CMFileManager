@@ -620,7 +620,6 @@ public class MainActivity extends ActionBarActivity
 
             Intent intent = new Intent(this, WelcomeActivity.class);
             startActivity(intent);
-
             try {
                 Preferences.savePreference(FileManagerSettings.SETTINGS_FIRST_USE, Boolean.FALSE,
                         true);
