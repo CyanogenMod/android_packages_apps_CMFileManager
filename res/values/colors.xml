@@ -160,6 +160,9 @@
     <color name="material_palette_pink_3">#C2185B</color>
     <color name="material_palette_pink_4">#880E4F</color>
 
+    <!-- Color of ripples used for views with dark backgrounds -->
+    <color name="ripple_material_dark">#a0ffffff</color>
+
     <!-- intro circles -->
     <color name="default_circle_indicator_fill_color">#FFFFFFFF</color>
     <color name="default_circle_indicator_page_color">#00000000</color>

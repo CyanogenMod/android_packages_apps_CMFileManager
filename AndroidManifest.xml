@@ -200,6 +200,13 @@
     </activity>
 
     <activity
+        android:name=".activities.FileDetailActivity"
+        android:launchMode="singleTop"
+        android:configChanges="keyboardHidden|screenSize"
+        android:theme="@style/FileDetailStyle">
+    </activity>
+
+    <activity
       android:name=".activities.EditorActivity"
       android:label="@string/editor"
       android:configChanges="orientation|keyboardHidden|screenSize">

@@ -207,6 +207,39 @@ public final class StorageHelper {
         return volumePath;
     }
 
+    public static StorageVolume getStorageVolumeForPath(String path) {
+        String volumePath = null;
+        if (StorageApiConsole.getStorageApiConsoleForPath(path) != null) {
+            return null;
+        }
+
+        String fso = FileHelper.getAbsPath(path);
+
+        // Check root
+        volumePath = fileStartsWithPath(fso, FileHelper.ROOT_DIRECTORY, volumePath);
+
+        // Check virtual mount points (secure storage)
+        List<MountPoint> mps = VirtualMountPointConsole.getVirtualMountPoints();
+        for (MountPoint mp : mps) {
+            if (mp.isSecure()) {
+                volumePath = fileStartsWithPath(fso, mp.getMountPoint(), volumePath);
+            }
+        }
+
+        // Check storage volumes (sdcard, usb, etc)
+        StorageVolume[] volumes =
+                getStorageVolumes(FileManagerApplication.getInstance().getApplicationContext(),
+                        false);
+        int cc = volumes.length;
+        for (int i = 0; i < cc; i++) {
+            StorageVolume vol = volumes[i];
+            if (fso.startsWith(vol.getPath())) {
+                return vol;
+            }
+        }
+        return null;
+    }
+
     /**
      * Method returns volume root path closer related to file specified
      *

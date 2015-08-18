@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2014 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<com.cyanogenmod.filemanager.ui.widgets.TouchlessScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:id="@+id/content_scroller"
+    android:background="#fff">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/card_container" >
+
+        <com.cyanogenmod.filemanager.ui.widgets.WrappedGridView
+            android:id="@+id/file_detail_actions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnWidth="@dimen/file_detail_grid_width"
+            android:numColumns="auto_fit"
+            android:verticalSpacing="10dp"
+            android:horizontalSpacing="10dp"
+            android:paddingTop="25dp"
+            android:paddingBottom="0dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:gravity="center" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#50000000"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:padding="12dp"
+            android:textSize="14sp"
+            android:text="@string/fso_properties_dialog_title"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
+
+            <TextView
+                android:layout_width="64dp"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@string/sort_by_type"/>
+
+            <TextView
+                android:id="@+id/type_value"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:textSize="14sp"
+                android:textColor="#000"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
+
+            <TextView
+                android:layout_width="64dp"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@string/file_detail_location_label"/>
+
+            <TextView
+                android:id="@+id/location_value"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:textSize="14sp"
+                android:textColor="#000"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
+
+            <TextView
+                android:layout_width="64dp"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@string/file_detail_path_label"/>
+
+            <TextView
+                android:id="@+id/path_value"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:textSize="14sp"
+                android:textColor="#000"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
+
+            <TextView
+                android:layout_width="64dp"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@string/sort_by_size"/>
+
+            <TextView
+                android:id="@+id/size_value"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:textSize="14sp"
+                android:textColor="#000"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
+
+            <TextView
+                android:layout_width="64dp"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@string/file_detail_modified_label"/>
+
+            <TextView
+                android:id="@+id/modified_value"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:textSize="14sp"
+                android:textColor="#000"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#50000000"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:padding="12dp"
+            android:textSize="14sp"
+            android:text="@string/pref_general_advanced_settings_category"/>
+
+
+    </LinearLayout>
+
+</com.cyanogenmod.filemanager.ui.widgets.TouchlessScrollView>

@@ -933,4 +933,13 @@
     <string name="docs">Docs</string>
     <string name="apps">Apps</string>
     <string name="archives">Archives</string>
+
+    <string name="file_detail_transparent_view_description">Click to return to previous screen</string>
+    <string name="file_detail_share">Share</string>
+    <string name="file_detail_share_link">Share link</string>
+    <string name="file_detail_favorite">Favorite</string>
+    <string name="file_detail_backup">Backup</string>
+    <string name="file_detail_location_label">Location</string>
+    <string name="file_detail_path_label">Path</string>
+    <string name="file_detail_modified_label">Modified</string>
 </resources>

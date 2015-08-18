@@ -199,4 +199,26 @@
     <dimen name="quick_search_text_margin_top">15dp</dimen>
     <dimen name="quick_search_text_height">16dp</dimen>
 
+    <!-- Initial height of transparent space above File Detail -->
+    <dimen name="file_detail_starting_empty_height">150dp</dimen>
+    <!-- Initial size of File Detail's title size -->
+    <dimen name="file_detail_maximum_title_size">36dp</dimen>
+    <!-- When FD is uncollapsed, the title has this much margin on its left, right and bottom -->
+    <dimen name="file_detail_title_initial_margin">16dp</dimen>
+    <!-- The ratio of width:height for the files's photo in landscape -->
+    <item name="file_detail_landscape_photo_ratio" type="dimen" format="float">0.7</item>
+    <!-- How far File Detail can be dragged and released from the top of the window before we dismiss it. -->
+    <dimen name="file_detail_dismiss_distance_on_release">40dp</dimen>
+    <!-- How far File Detail can be dragged from the top of the window before we dismiss it. -->
+    <dimen name="file_detail_dismiss_distance_on_scroll">100dp</dimen>
+    <!-- When first flinging File Detail towards the top of the window if the fling is
+        predicted to scroll past the window top by less than this amount, then File Detail
+        snaps to the top of the window. -->
+    <dimen name="file_detail_snap_to_top_slop_height">33dp</dimen>
+
+    <!-- Elevation of the File Detail's Toolbar, for the sake of shadow casting -->
+    <dimen name="file_detail_toolbar_elevation">4.5dp</dimen>
+
+    <dimen name="file_detail_grid_width">64dp</dimen>
+    <dimen name="file_detail_grid_height">80dp</dimen>
 </resources>
