@@ -18,6 +18,7 @@ package com.cyanogenmod.filemanager.parcelables;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import com.cyanogenmod.filemanager.FileManagerApplication;
 import com.cyanogenmod.filemanager.R;
@@ -64,7 +65,7 @@ public class NavigationViewInfoParcelable extends HistoryNavigable {
      */
     @Override
     public String getTitle() {
-        if (this.mCurrentDir.compareTo(FileHelper.ROOT_DIRECTORY) == 0) {
+        if (TextUtils.equals(mCurrentDir, FileHelper.ROOT_DIRECTORY)) {
             FileManagerApplication.getInstance().getResources().getString(
                     R.string.root_directory_name);
         }
