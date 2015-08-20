@@ -667,8 +667,12 @@ public class NavigationActivity extends Activity
      */
     @Override
     protected void onNewIntent(Intent intent) {
+        // If no directory specified, restore current directory
+        final String navigateTo = intent.getStringExtra(EXTRA_NAVIGATE_TO);
+        final boolean restore = TextUtils.isEmpty(navigateTo);
+
         //Initialize navigation
-        initNavigation(this.mCurrentNavigationView, true, intent);
+        initNavigation(this.mCurrentNavigationView, restore, intent);
 
         //Check the intent action
         checkIntent(intent);
