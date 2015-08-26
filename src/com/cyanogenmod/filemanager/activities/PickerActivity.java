@@ -347,7 +347,7 @@ public class PickerActivity extends Activity
         final int height = displaymetrics.heightPixels;
 
         Configuration config = getResources().getConfiguration();
-        int percent = config.orientation == Configuration.ORIENTATION_LANDSCAPE ? 55 : 70;
+        int percent = config.orientation == Configuration.ORIENTATION_LANDSCAPE ? 50 : 70;
 
         FrameLayout.LayoutParams params =
                 new FrameLayout.LayoutParams(
