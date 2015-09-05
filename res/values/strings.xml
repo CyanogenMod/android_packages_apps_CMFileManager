@@ -334,7 +334,7 @@
     <!-- Editor - File not found message -->
     <string name="editor_file_not_found_msg">File not found.</string>
     <!-- Editor - File size exceed the limit -->
-    <string name="editor_file_exceed_size_msg">The file is too big to be open inside this device.</string>
+    <string name="editor_file_exceed_size_msg">The file is too big to be opened on this device.</string>
     <!-- Editor - Editor is dirty, ask the user - Dialog title -->
     <string name="editor_dirty_ask_title">Confirm exit</string>
     <!-- Editor - Editor is dirty, ask the user - Dialog message -->
