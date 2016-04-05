@@ -305,7 +305,7 @@
   <string name="pref_case_sensitive_sort_summary">Учитывать регистр при навигации или сортировке результатов поиска</string>
   <string name="pref_filetime_format_mode">Формат даты/времени</string>
   <string name="pref_disk_usage_warning_level">Уровень предупреждения исп. памяти</string>
-  <string name="pref_disk_usage_warning_level_summary" formatted="false">Отмечать красным индикатор занятого места, если диск заполнен на <xliff:g id="level">%1$s</xliff:g> %</string>
+  <string name="pref_disk_usage_warning_level_summary" formatted="false">Отмечать красным индикатор занятого места, если диск заполнен на <xliff:g id="level">%1$s</xliff:g> процентов</string>
   <string name="pref_compute_folder_statistics">Показывать число объектов в папках</string>
   <string name="pref_compute_folder_statistics_on">Внимание! Анализ содержимого папок может увеличить время обработки их свойств</string>
   <string name="pref_display_thumbs">Показывать эскизы</string>
