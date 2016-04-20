@@ -847,4 +847,10 @@
     <string name="storage_permissions_explanation">Go to Settings, and tap Permissions to grant permission.</string>
     <string name="snackbar_settings">Settings</string>
 
+<!--Adding missing button labels to improve the accessibility-->
+<!--Label for button id [ab_close] in file [navigation_view_customtitle_configuration]-->
+  <string name="ab_close">Close viewer options</string>
+<!--Label for button id [ab_configuration] in file [navigation_view_customtitle_breadcrumb]-->
+  <string name="ab_configuration">Viewer options</string>
+
 </resources>
