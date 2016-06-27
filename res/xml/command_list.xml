@@ -67,7 +67,7 @@
   <!-- Usage -->
   <command commandId="diskusage" commandPath="/system/bin/df" commandArgs="-h %1$s" />
   <command commandId="diskusageall" commandPath="/system/bin/df" commandArgs="-h" />
-  <command commandId="folderusage" commandPath="/system/bin/ls" commandArgs="-alR %1$s 2&gt; /dev/null" />
+  <command commandId="folderusage" commandPath="/system/bin/toybox" commandArgs="ls -alR %1$s 2&gt; /dev/null" />
 
   <!-- I/O -->
   <command commandId="read" commandPath="/system/bin/cat" commandArgs="%1$s" />
