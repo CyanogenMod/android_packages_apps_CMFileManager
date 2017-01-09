@@ -58,7 +58,7 @@
   <string name="msgs_file_not_found">未找到檔案或資料夾。</string>
   <string name="msgs_command_not_found">找不到此動作的命令或命令帶有無效的定義。</string>
   <string name="msgs_io_failed">讀寫失敗</string>
-  <string name="msgs_operation_timeout">動作超時。</string>
+  <string name="msgs_operation_timeout">動作逾時。</string>
   <string name="msgs_operation_failure">動作失敗。</string>
   <string name="msgs_console_alloc_failure">發生內部錯誤。</string>
   <string name="msgs_operation_can_not_be_cancelled">無法取消此動作。</string>
@@ -168,7 +168,7 @@
   <string name="dumping_message">正在生成十六進位制轉儲\u2026</string>
   <string name="displaying_message">正在顯示\u2026</string>
   <string name="bookmarks">書籤</string>
-  <string name="bookmarks_home">家</string>
+  <string name="bookmarks_home">首頁</string>
   <string name="bookmarks_root_folder">根目錄</string>
   <string name="bookmarks_system_folder">系統資料夾</string>
   <string name="bookmarks_secure">安全儲存</string>
